@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Visa Services | ASTours International</title>
+  <link rel="icon" type="image/png" href="/image/astourlogo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    /* Navbar */
+    .navbar {
+      padding: 0.7rem 1rem;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    .navbar-brand img {
+      width: 120px;
+      height: auto;
+    }
+    .navbar-nav .nav-link {
+      color: #0077b6;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
+      color: #023e8a;
+    }
+
+    /* Hero Banner */
+    .hero {
+      background: linear-gradient(135deg, #0077b6, #00b4d8);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+    .hero p {
+      font-size: 1.2rem;
+    }
+
+    /* Sections */
+    .section {
+      padding: 50px 20px;
+      text-align: center;
+    }
+    .section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #0077b6;
+    }
+
+    /* Visa Dropdown */
+    .visa-assistance {
+      max-width: 900px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .visa-assistance select {
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 300px;
+      margin-top: 20px;
+    }
+    #visaInfo {
+      text-align: left;
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* Visa Buttons */
+    .visa-buttons-wrapper {
+      max-width: 800px;
+      margin: 40px auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+    .visa-buttons-wrapper a {
+      padding: 10px 20px;
+      background: #0077b6;
+      color: #fff;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .visa-buttons-wrapper a:hover {
+      background: #023e8a;
+    }
+
+    /* Cards */
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      margin-top: 30px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      max-width: 320px;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 20px;
+    }
+    .card-content h3 {
+      margin-bottom: 10px;
+      color: #0077b6;
+    }
+    .card-content p {
+      color: #555;
+      margin-bottom: 15px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      background: #0077b6;
+      color: #fff;
+      border-radius: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .btn:hover { background: #023e8a; }
+
+    /* Footer */
+    footer {
+      background: #fff;
+      border-top: 1px solid #ccc;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+
+    @media (max-width: 700px) {
+      .visa-buttons-wrapper {
+        flex-direction: column;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container">
+    <a class="navbar-brand" href="/index.html">
+      <img src="/image/astourlogo.png" alt="ASTours Logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+        <!-- <li class="nav-item"><a class="nav-link" href="/index.html#services">Services</a></li> -->
+        <li class="nav-item"><a class="nav-link" href="globalvisa.html#destinations">Global_Visa</a></li>
+        <li class="nav-item"><a class="nav-link" href="/packages/packages.html">Packages</a></li>
+        <li class="nav-item"><a class="nav-link active fw-bold" href="#">Visa</a></li>
+        <li class="nav-item"><a class="nav-link" href="/templates/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <h1>Visa Services</h1>
+  <p>Quickly access visa information for any country and apply through ASTours International</p>
+</section>
+
+<!-- Visa Assistance Dropdown -->
+<section class="section">
+  <div class="visa-assistance">
+    <h2>🌏 All Visa Assistance</h2>
+    <label for="countrySelect">Select a Country:</label>
+    <select id="countrySelect">
+      <option value="">-- Choose Country --</option>
+    </select>
+    <div id="visaInfo"></div>
+    <p><a href="applynow.html" class="btn">Apply Now for Visa</a></p>
+  </div>
+</section>
+
+<!-- Visa Type Buttons -->
+<section class="section">
+  <div class="visa-buttons-wrapper">
+    <a href="e-visa.html">Check E-Visa</a>
+    <a href="schengen.html">Check Schengen Visa</a>
+    <a href="GCC.html">GCC Visa</a>
+    <a href="freevisacountries.html">Visa Free Countries</a>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section">
+  <h2>What Our Clients Say</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-content">
+        <p>"Super fast service for my UK visa — got it in less than a week! Highly recommend ASTours International."</p>
+        <h3>- Ramesh P.</h3>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-content">
+        <p>"The team guided me through Canada visitor visa documents smoothly. Very professional and responsive."</p>
+        <h3>- Meena D.</h3>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-content">
+        <p>"ASTours handled my Schengen visa application perfectly. Seamless process from start to finish."</p>
+        <h3>- Arvind S.</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Popular Visa Assistance -->
+<section class="section">
+  <h2>Popular Visa Assistance</h2>
+  <div class="grid">
+    <div class="card">
+      <img src="https://flagcdn.com/w320/gb.png" alt="UK Flag">
+      <div class="card-content">
+        <h3>UK Visa</h3>
+        <p>Get hassle-free tourist, business, and student visa processing for the UK with expert support.</p>
+        <a href="applynow.html?country=UK" class="btn">Apply Now</a>
+      </div>
+    </div>
+    <div class="card">
+      <img src="https://flagcdn.com/w320/gr.png" alt="Greece Flag">
+      <div class="card-content">
+        <h3>Greece Visa</h3>
+        <p>Apply for Greek tourist and visitor visas with smooth documentation guidance.</p>
+        <a href="applynow.html?country=Greece" class="btn">Apply Now</a>
+      </div>
+    </div>
+    <div class="card">
+      <img src="https://flagcdn.com/w320/au.png" alt="Australia Flag">
+      <div class="card-content">
+        <h3>Australia Visa</h3>
+        <p>Instant Australia tourist visa with minimal documentation and fast processing.</p>
+        <a href="applynow.html?country=Australia" class="btn">Apply Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  &copy; 2025 ASTours International | Designed by 
+  <a href="https://solo2ceo.info" target="_blank" style="color: #0077b6; text-decoration: none;">Solo2Ceo</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const apiUrl = 'https://raw.githubusercontent.com/Armankhan2001/visaDatabase/refs/heads/main/visaDatabase.json';
+let visaDatabase = [];
+
+async function fetchData() {
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    visaDatabase = data.visaDatabase;
+    populateCountrySelect();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    document.getElementById('visaInfo').innerHTML = "<p style='color:red'>Failed to load visa data.</p>";
+  }
+}
+
+function populateCountrySelect() {
+  const select = document.getElementById('countrySelect');
+  visaDatabase.forEach(item => {
+    const option = document.createElement('option');
+    option.value = item.country;
+    option.textContent = item.country;
+    select.appendChild(option);
+  });
+
+  select.addEventListener('change', showVisaInfo);
+}
+
+function showVisaInfo() {
+  const selectedCountry = document.getElementById('countrySelect').value;
+  const infoDiv = document.getElementById('visaInfo');
+  infoDiv.innerHTML = '';
+
+  if (!selectedCountry) return;
+
+  const countryData = visaDatabase.find(item => item.country === selectedCountry);
+  if (!countryData) {
+    infoDiv.innerHTML = "<p>No visa information found for this country.</p>";
+    return;
+  }
+
+  countryData.visaTypes.forEach(visa => {
+    const visaTypeDiv = document.createElement('div');
+    visaTypeDiv.className = 'category';
+    visaTypeDiv.innerHTML = `<h3>${visa.type}</h3>`;
+
+    visa.categories.forEach(cat => {
+      visaTypeDiv.innerHTML += `
+        <p><strong>${cat.name}</strong><br>
+        Max Stay: ${cat.maxStay}<br>
+        Visa Validity: ${cat.visaValidity}<br>
+        Processing Time: ${cat.processingTime}<br>
+        Fees: ${cat.fees}</p>
+      `;
+
+      cat.documentsRequired.forEach(docCat => {
+        let docList = `<h4>${docCat.category}</h4><ul>`;
+        docCat.documents.forEach(doc => {
+          docList += `<li><strong>${doc.name}</strong>: ${doc.description}</li>`;
+        });
+        docList += '</ul>';
+        visaTypeDiv.innerHTML += docList;
+      });
+    });
+
+    infoDiv.appendChild(visaTypeDiv);
+  });
+}
+
+fetchData();
+</script>
+
+</body>
+</html>

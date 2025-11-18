@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Visa Tools - Solo2CEO</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      margin: 0;
+      padding: 20px;
+    }
+    h2, h3 { text-align: center; margin-bottom: 15px; }
+    .tabs {
+      display: flex; justify-content: center; margin-bottom: 20px;
+    }
+    .tab {
+      padding: 12px 25px; margin: 0 10px; cursor: pointer;
+      border-radius: 15px; background: #fff; font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: 0.3s;
+    }
+    .tab.active { background: #1976d2; color: #fff; }
+    .card {
+      background: #fff; border-radius: 20px; padding: 25px;
+      max-width: 850px; margin: auto;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    label { font-weight: 600; margin: 8px 0 4px; display: block; }
+    input, textarea {
+      width: 100%; padding: 10px;
+      border-radius: 10px; border: 1px solid #ccc;
+      margin-bottom: 10px; font-size: 15px;
+    }
+    .btn {
+      padding: 12px 20px; border: none; border-radius: 12px;
+      margin: 5px; cursor: pointer; font-size: 14px; font-weight: bold;
+      color: #fff; transition: 0.3s;
+    }
+    .btn-download { background: linear-gradient(45deg,#43a047,#66bb6a); }
+    .btn-share { background: linear-gradient(45deg,#1976d2,#42a5f5); }
+    .btn-copy { background: linear-gradient(45deg,#f57c00,#ff9800); }
+    .btn:hover { transform: scale(1.05); }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 15px;
+      border-radius: 12px; overflow: hidden;
+    }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f5f5f5; }
+    ul { list-style: none; padding-left: 0; }
+    ul li {
+      background: #f9f9f9; margin: 5px 0; padding: 10px 12px;
+      border-radius: 8px; border: 1px solid #eee;
+    }
+    .hidden { display: none; }
+    .header {
+      text-align: center; margin-bottom: 20px;
+    }
+    .header img { max-height: 70px; margin-bottom: 8px; }
+    .doc-row { display: flex; margin-bottom: 8px; }
+    .doc-row input { flex: 1; margin-right: 8px; }
+    .doc-row button {
+      background: #e53935; color:#fff; border: none;
+      padding: 8px 12px; border-radius: 8px; cursor: pointer;
+    }
+    .doc-row button:hover { opacity: 0.8; }
+    .add-doc-btn {
+      background: #43a047; color: #fff; border: none;
+      padding: 8px 15px; border-radius: 10px; cursor: pointer;
+    }
+    .add-doc-btn:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+
+  <h2>🛂 Solo2CEO Visa Tools</h2>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('quotation')">Visa Quotation</div>
+    <div class="tab" onclick="switchTab('checklist')">Document Checklist</div>
+  </div>
+
+  <!-- Quotation Tab -->
+  <div id="quotationTab" class="card">
+    <label>Company Name:</label>
+    <input type="text" id="qCompany" placeholder="Enter your company name">
+
+    <label>Upload Logo:</label>
+    <input type="file" id="qLogo" accept="image/*">
+
+    <label>Country Name:</label>
+    <input type="text" id="qCountry" placeholder="e.g. UK">
+
+    <label>Visa Type:</label>
+    <input type="text" id="qVisaType" placeholder="e.g. Tourist Visa">
+
+    <label>Visa Fees:</label>
+    <input type="number" id="visaFees">
+
+    <label>Insurance:</label>
+    <input type="number" id="insurance">
+
+    <label>Service Charge:</label>
+    <input type="number" id="serviceCharge">
+
+    <label>Doc Scanning / Uploading:</label>
+    <input type="number" id="docCharge">
+
+    <label>VFS Fees:</label>
+    <input type="number" id="vfsFees">
+
+    <label>If We Submit Charges:</label>
+    <input type="number" id="submitCharges">
+
+    <label>Courier Charges:</label>
+    <input type="number" id="courierCharges">
+
+    <label>Premium Lounge Appointment Booking:</label>
+    <input type="number" id="loungeCharges">
+
+    <button class="btn btn-download" onclick="generateQuotation()">Generate Quotation</button>
+
+    <div id="quotationPreview" class="hidden">
+      <div id="quotationContent">
+        <div class="header">
+          <img id="qLogoPreview" class="hidden">
+          <h3 id="qCompanyName"></h3>
+          <h2 id="qTitle"></h2>
+        </div>
+        <table>
+          <thead><tr><th>Particulars</th><th>Amount (Rs)</th></tr></thead>
+          <tbody id="quotationBody"></tbody>
+        </table>
+      </div>
+      <div style="text-align:center; margin-top:15px;">
+        <button class="btn btn-download" onclick="downloadPDF('quotationContent')">📥 Download</button>
+        <button class="btn btn-share" onclick="shareContent('quotationContent')">📤 Share</button>
+        <button class="btn btn-copy" onclick="copyContent('quotationContent')">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checklist Tab -->
+  <div id="checklistTab" class="card hidden">
+    <label>Company Name:</label>
+    <input type="text" id="cCompany" placeholder="Enter your company name">
+
+    <label>Upload Logo:</label>
+    <input type="file" id="cLogo" accept="image/*">
+
+    <label>Country Name:</label>
+    <input type="text" id="cCountry" placeholder="e.g. UK">
+
+    <label>Visa Type:</label>
+    <input type="text" id="cVisaType" placeholder="e.g. Tourist Visa">
+
+    <label>Documents Required:</label>
+    <div id="docContainer"></div>
+    <button class="add-doc-btn" onclick="addDocField()">+ Add Document</button>
+
+    <button class="btn btn-download" onclick="generateChecklist()">Generate Checklist</button>
+
+    <div id="checklistPreview" class="hidden">
+      <div id="checklistContent">
+        <div class="header">
+          <img id="cLogoPreview" class="hidden">
+          <h3 id="cCompanyName"></h3>
+          <h2 id="cTitle"></h2>
+        </div>
+        <ul id="docItems"></ul>
+      </div>
+      <div style="text-align:center; margin-top:15px;">
+        <button class="btn btn-download" onclick="downloadPDF('checklistContent')">📥 Download</button>
+        <button class="btn btn-share" onclick="shareContent('checklistContent')">📤 Share</button>
+        <button class="btn btn-copy" onclick="copyContent('checklistContent')">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.card').forEach(el => el.classList.add('hidden'));
+      if(tab === 'quotation') {
+        document.querySelector('.tab:nth-child(1)').classList.add('active');
+        document.getElementById('quotationTab').classList.remove('hidden');
+      } else {
+        document.querySelector('.tab:nth-child(2)').classList.add('active');
+        document.getElementById('checklistTab').classList.remove('hidden');
+      }
+    }
+
+    function loadLogo(inputId, previewId) {
+      const fileInput = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      if(fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.classList.remove("hidden");
+        }
+        reader.readAsDataURL(fileInput.files[0]);
+      }
+    }
+
+    document.getElementById("qLogo").addEventListener("change", () => loadLogo("qLogo", "qLogoPreview"));
+    document.getElementById("cLogo").addEventListener("change", () => loadLogo("cLogo", "cLogoPreview"));
+
+    function generateQuotation() {
+      let company = document.getElementById('qCompany').value.trim();
+      let country = document.getElementById('qCountry').value.trim();
+      let visaType = document.getElementById('qVisaType').value.trim();
+
+      document.getElementById("qCompanyName").innerText = company;
+      document.getElementById("qTitle").innerText = `${country} ${visaType} Quotation`;
+
+      let fields = [
+        ["Visa Fees", 'visaFees'],
+        ["Insurance", 'insurance'],
+        ["Service Charge", 'serviceCharge'],
+        ["Doc Scanning/Uploading", 'docCharge'],
+        ["VFS Fees", 'vfsFees'],
+        ["If We Submit Charges", 'submitCharges'],
+        ["Courier Charges", 'courierCharges'],
+        ["Premium Lounge Appointment", 'loungeCharges']
+      ];
+
+      let rows = "";
+      let total = 0;
+      fields.forEach(([label,id]) => {
+        let val = parseFloat(document.getElementById(id).value) || 0;
+        if(val > 0) {
+          rows += `<tr><td>${label}</td><td>Rs ${val}</td></tr>`;
+          total += val;
+        }
+      });
+      rows += `<tr><td><b>Total Charges</b></td><td><b>Rs ${total} /-</b></td></tr>`;
+
+      document.getElementById("quotationBody").innerHTML = rows;
+      document.getElementById("quotationPreview").classList.remove("hidden");
+    }
+
+    function addDocField() {
+      let container = document.getElementById("docContainer");
+      let div = document.createElement("div");
+      div.className = "doc-row";
+      div.innerHTML = `<input type="text" placeholder="Enter document"> <button onclick="this.parentElement.remove()">X</button>`;
+      container.appendChild(div);
+    }
+
+    function generateChecklist() {
+      let company = document.getElementById('cCompany').value.trim();
+      let country = document.getElementById('cCountry').value.trim();
+      let visaType = document.getElementById('cVisaType').value.trim();
+
+      document.getElementById("cCompanyName").innerText = company;
+      document.getElementById("cTitle").innerText = `${country} ${visaType} Document Checklist`;
+
+      let inputs = document.querySelectorAll("#docContainer input");
+      let items = "";
+      inputs.forEach(input => {
+        if(input.value.trim()) items += `<li>${input.value.trim()}</li>`;
+      });
+      document.getElementById("docItems").innerHTML = items;
+      document.getElementById("checklistPreview").classList.remove("hidden");
+    }
+
+    function downloadPDF(elementId) {
+      const element = document.getElementById(elementId);
+      const opt = {
+        margin: [15, 15, 15, 15],
+        filename: element.querySelector('h2').innerText.replace(/\s+/g,'_') + ".pdf",
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 3, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    async function shareContent(elementId) {
+      const element = document.getElementById(elementId);
+      const opt = {
+        margin: [15, 15, 15, 15],
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 3, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+      const title = element.querySelector('h2').innerText;
+      const file = new File([pdfBlob], title.replace(/\s+/g,'_') + ".pdf", { type: "application/pdf" });
+
+      if(navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: title,
+          text: `Here is your ${title} from Solo2CEO`,
+          files: [file]
+        });
+      } else {
+        alert("Sharing not supported on this device. Please download manually.");
+      }
+    }
+
+    function copyContent(elementId) {
+      let text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copied to clipboard ✅");
+      });
+    }
+  </script>
+</body>
+</html>

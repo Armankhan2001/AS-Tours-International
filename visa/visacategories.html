@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Visa Types | Sanskruti Travels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Poppins', sans-serif; background: #fdfdfd; }
+    header { background: linear-gradient(45deg, #FF8C00, #FF4500); padding: 30px 20px; color: #fff; text-align: center; }
+    header h1 { margin: 0; font-size: 2.5rem; }
+    header p { margin-top: 8px; font-size: 1.1rem; }
+
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 15px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    nav a { text-decoration: none; color: #ff5f6d; font-weight: 600; padding: 8px 14px; transition: 0.3s; border-radius: 6px; }
+    nav a:hover, nav a.active { background: #ff5f6d; color: #fff; }
+
+    .section { padding: 50px 20px; text-align: center; }
+    .section h2 { font-size: 2.2rem; margin-bottom: 20px; }
+
+    .visa-type-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; margin-top: 30px; }
+    .visa-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; transition: 0.3s; }
+    .visa-card:hover { transform: translateY(-5px); }
+    .visa-card img { width: 100%; height: 200px; object-fit: cover; }
+    .visa-card h3 { margin: 0; padding: 15px; font-size: 1.3rem; color: #333; }
+    .visa-card p { padding: 0 15px 15px; color: #555; font-size: 0.95rem; }
+    .visa-card a { display: inline-block; margin: 0 0 15px; padding: 10px 20px; background: #ffc371; color: #333; border-radius: 25px; text-decoration: none; font-weight: 600; }
+
+    footer { padding: 20px; text-align: center; background: #333; color: #fff; margin-top: 50px; }
+    footer a { color: #ffc371; text-decoration: none; }
+
+    @media(max-width: 768px) {
+      .visa-type-grid { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Sanskruti Travels</h1>
+  <p>Your Trusted Visa & Travel Experts</p>
+</header>
+
+<nav>
+  <a href="../index.html">Home</a>
+  <a href="../about.html">About</a>
+  <a href="../tours/packages.html">Packages</a>
+  <a href="visa.html" class="active">Visa</a>
+  <a href="../flights.html">Flights</a>
+  <a href="../hotels.html">Hotels</a>
+  <a href="../contact.html">Contact</a>
+</nav>
+
+<div class="section">
+  <h2>Our Visa Services</h2>
+  <p style="max-width: 700px; margin: 0 auto; font-size: 1rem; color: #555;">
+    Sanskruti Travels offers a wide range of visa services for destinations across the globe. From hassle-free e-visas to embassy appointments — we’ve got your journey covered.
+  </p>
+
+  <div class="visa-type-grid">
+
+    <div class="visa-card">
+      <img src="../images/hero-bg.jpg" alt="E-Visa">
+      <h3>E-Visa</h3>
+      <p>Apply online for your destination with minimal documentation and fast processing. Best for short trips and holidays.</p>
+      <a href="e-visa.html">Apply Now</a>
+    </div>
+
+    <div class="visa-card">
+      <img src="../images/dubai.jpg" alt="Arrival Card">
+      <h3>Digital Arrival Card</h3>
+      <p>Secure your arrival card before landing. Quick, easy and ensures smooth immigration clearance on arrival.</p>
+      <a href="arrival-card.html">Apply Now</a>
+    </div>
+
+    <div class="visa-card">
+      <img src="../images/manali.jpg" alt="Passport Visa">
+      <h3>Passport Stamp Visa</h3>
+      <p>Complete embassy assistance for stamped visas — UK, Canada, USA, Schengen and more with expert document handling.</p>
+      <a href="passport-stamp.html">Apply Now</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Sanskruti Travels. All rights reserved. | <a href="tel:7977527874">Call: +91 79775 27874</a></p>
+</footer>
+
+</body>
+</html>

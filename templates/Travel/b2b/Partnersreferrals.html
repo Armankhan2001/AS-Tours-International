@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partner Referrals | ASTours International</title>
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #e0f2ff, #ffffff);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: #fff !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-brand img {
+      height: 60px;
+      width: auto;
+    }
+    .navbar-nav .nav-link {
+      color: #0d6efd;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: #084298;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 60px 15px 30px;
+    }
+    .header h1 {
+      font-weight: 700;
+      color: #0d6efd;
+      font-size: 2rem;
+    }
+    .header p {
+      color: #555;
+      font-size: 1rem;
+    }
+
+    /* Card & Table */
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      background: #fff;
+    }
+    .discount-box {
+      background: linear-gradient(135deg, #007bff, #00bcd4);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      margin-bottom: 30px;
+    }
+    .discount-box h5 {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .table {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    #loading {
+      display: none;
+      text-align: center;
+      padding: 25px;
+    }
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px 10px;
+      color: #666;
+      font-size: 14px;
+      border-top: 1px solid #ddd;
+      margin-top: 40px;
+      background-color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="../../../image/astourlogo.png" alt="ASTours Logo" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto text-center">
+          <li class="nav-item"><a class="nav-link" href="../../../templates/Admin/admin.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../b2b/Visa/b2b.html">B2B Services</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#">Partner Referrals</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="header">
+    <h1>🤝 Partner Referral Dashboard</h1>
+    <p>Track all clients referred by your company and enjoy exclusive 50% B2B partner discounts.</p>
+  </section>
+
+  <!-- Referral Section -->
+  <div class="container pb-5">
+    <div class="card p-4">
+      <div class="mb-3">
+        <label for="clientId" class="form-label fw-semibold">Enter Your Partner ID</label>
+        <input type="text" id="clientId" class="form-control" placeholder="e.g. 11025">
+      </div>
+
+      <div class="text-center mb-4">
+        <button class="btn btn-primary px-4" onclick="fetchReferral()">Show My Referrals</button>
+      </div>
+
+      <div id="loading">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Loading your referral data, please wait...</p>
+      </div>
+
+      <div id="resultSection" style="display:none;">
+        <div class="discount-box">
+          <h5>🎁 Exclusive 50% B2B Partner Discount</h5>
+          <p class="mb-0">
+            We provide <strong>50% discounted rates</strong> for all clients who connect through you —
+            whether via referrals, social media, or direct mentions of your company name.
+            Your genuine client data is displayed below.
+          </p>
+        </div>
+
+        <div class="mb-3">
+          <h5 class="fw-bold text-secondary mb-2">Partner Information</h5>
+          <p><strong>Client ID:</strong> <span id="clientIdDisplay"></span></p>
+          <p><strong>Company Name:</strong> <span id="companyName"></span></p>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Description</th>
+                <th>Client Name</th>
+                <th>Location</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Visa Country</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="referralTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <!-- ✅ Bank Details Modal -->
+<div class="modal fade" id="bankModal" tabindex="-1" aria-labelledby="bankModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-4">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="bankModalLabel">Add Your Bank Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="bankForm">
+          <!-- ✅ Must have 'name' attributes matching Google Apps Script parameter names -->
+          <div class="mb-3">
+            <label class="form-label">Client ID</label>
+            <input type="text" class="form-control" id="bankClientId" name="clientId" readonly />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Account Holder Name</label>
+            <input type="text" class="form-control" id="holderName" name="holderName" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Bank Name</label>
+            <input type="text" class="form-control" id="bankName" name="bankName" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Account Number</label>
+            <input type="text" class="form-control" id="accountNumber" name="accountNumber" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">IFSC Code</label>
+            <input type="text" class="form-control" id="ifscCode" name="ifscCode" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">UPI ID (optional)</label>
+            <input type="text" class="form-control" id="upiId" name="upiId" placeholder="e.g. name@bank" />
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-success px-4" id="submitBankBtn">Submit Details</button>
+            <div id="bankLoading" class="mt-3 text-primary fw-semibold" style="display:none;">
+              <i class="fa fa-spinner fa-spin"></i> Submitting your details...
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="bankAction" class="text-center mt-3"></div>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2025 ASTours International — Building Global Travel Connections 🌍
+  </footer>
+ <!-- ✅ Script -->
+<script>
+const sheet1URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRo6-BtopCTAxjdLY2iY08PhtfTpYrOI0AovFYRye9F2Qi7rM9Dp5pDpSwzBSEYi93Uh3LwLHgG9in3/pub?gid=0&single=true&output=csv";
+const sheet2URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRo6-BtopCTAxjdLY2iY08PhtfTpYrOI0AovFYRye9F2Qi7rM9Dp5pDpSwzBSEYi93Uh3LwLHgG9in3/pub?gid=1560195772&single=true&output=csv";
+const bankSheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRo6-BtopCTAxjdLY2iY08PhtfTpYrOI0AovFYRye9F2Qi7rM9Dp5pDpSwzBSEYi93Uh3LwLHgG9in3/pub?gid=940535614&single=true&output=csv";
+const scriptURL = "https://script.google.com/macros/s/AKfycbzvK476S4FL5QL6siPAeRbSfqhxbtj-6NgmAdq5128ahWTgUEoUzsjpl39W5tcPWTJcEA/exec";
+
+// ✅ FETCH CLIENT REFERRAL DATA
+async function fetchReferral() {
+  const clientId = document.getElementById("clientId").value.trim();
+  if (!clientId) {
+    alert("⚠️ Please enter a valid Client ID");
+    return;
+  }
+
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("resultSection").style.display = "none";
+
+  try {
+    const [sheet1, sheet2, bankSheet] = await Promise.all([
+      fetch(sheet1URL).then(r => r.text()),
+      fetch(sheet2URL).then(r => r.text()),
+      fetch(bankSheetURL).then(r => r.text())
+    ]);
+
+    const parseCSV = (csv) => {
+      const rows = csv.split(/\r?\n/).filter(r => r.trim() !== "");
+      const headers = rows.shift().split(",").map(h => h.trim().toLowerCase());
+      return rows.map(r => {
+        const values = r.split(",");
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = (values[i] || "").trim());
+        return obj;
+      });
+    };
+
+    const data1 = parseCSV(sheet1);
+    const data2 = parseCSV(sheet2);
+    const bankData = parseCSV(bankSheet);
+
+    const partner = data1.find(p => p["client id"] === clientId || p["clientid"] === clientId);
+    if (!partner) {
+      alert("❌ Client ID not found. Please check again.");
+      document.getElementById("loading").style.display = "none";
+      return;
+    }
+
+    // ✅ Display Partner Info
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("resultSection").style.display = "block";
+    document.getElementById("clientIdDisplay").innerText = partner["client id"] || partner["clientid"];
+    document.getElementById("companyName").innerText = partner["company name"] || "N/A";
+
+    // ✅ Display Referral Table
+    const referrals = data2.filter(r => r["client id"] === clientId || r["clientid"] === clientId);
+    const table = document.getElementById("referralTable");
+    table.innerHTML = "";
+
+    if (referrals.length === 0) {
+      table.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No clients referred by you yet.</td></tr>`;
+    } else {
+      referrals.forEach(r => {
+        const desc = r["description"] && r["description"].trim() !== "" ? r["description"] : "No description available.";
+        table.innerHTML += `
+          <tr>
+            <td>${desc}</td>
+            <td>${r["client name"] || ""}</td>
+            <td>${r["location"] || ""}</td>
+            <td>${r["phone number"] || ""}</td>
+            <td>${r["email"] || ""}</td>
+            <td>${r["visa country"] || ""}</td>
+            <td>${r["status"] || ""}</td>
+          </tr>`;
+      });
+    }
+
+    // ✅ Prefill Bank Details if Exist
+    const existingBank = bankData.find(
+      b => b["client id"] === clientId || b["clientid"] === clientId
+    );
+
+    if (existingBank) {
+      document.getElementById("bankClientId").value = existingBank["client id"] || clientId;
+      document.getElementById("holderName").value = existingBank["holder name"] || "";
+      document.getElementById("bankName").value = existingBank["bank name"] || "";
+      document.getElementById("accountNumber").value = existingBank["account number"] || "";
+      document.getElementById("ifscCode").value = existingBank["ifsc code"] || "";
+      document.getElementById("upiId").value = existingBank["upi id"] || "";
+
+      document.getElementById("bankAction").innerHTML = `
+        <button class="btn btn-primary" onclick="openBankEditModal()">💳 View / Edit Bank Details</button>`;
+    } else {
+      document.getElementById("bankClientId").value = clientId;
+      const bankModal = new bootstrap.Modal(document.getElementById('bankModal'));
+      bankModal.show();
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("⚠️ Error loading referral data. Please try again later.");
+  } finally {
+    document.getElementById("loading").style.display = "none";
+  }
+}
+
+// ✅ BANK FORM SUBMISSION HANDLER (Professional Version)
+document.getElementById("bankForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(document.getElementById("bankForm"));
+  const data = Object.fromEntries(formData.entries());
+
+  document.getElementById("submitBankBtn").disabled = true;
+  document.getElementById("bankLoading").style.display = "block";
+
+  try {
+    const response = await fetch(scriptURL, {
+      method: "POST",
+      body: new URLSearchParams(data),
+    });
+
+    const result = await response.text().then(r => r.trim());
+
+    if (result.includes("Updated")) {
+      alert("✅ Bank details updated successfully!");
+    } else if (result.includes("Added")) {
+      alert("✅ Bank details added successfully!");
+    } else if (result.includes("Error")) {
+      alert("⚠️ " + result);
+    } else {
+      alert("✅ Bank details saved successfully!");
+    }
+
+    document.getElementById("bankForm").reset();
+    bootstrap.Modal.getInstance(document.getElementById('bankModal')).hide();
+
+  } catch (err) {
+    console.error(err);
+    alert("❌ Submission failed. Please try again later.");
+  } finally {
+    document.getElementById("submitBankBtn").disabled = false;
+    document.getElementById("bankLoading").style.display = "none";
+  }
+});
+
+
+// ✅ OPEN BANK MODAL MANUALLY
+function openBankEditModal() {
+  const bankModal = new bootstrap.Modal(document.getElementById('bankModal'));
+  bankModal.show();
+}
+</script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

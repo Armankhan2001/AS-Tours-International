@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B2B Partner Details | ASTours International</title>
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #e0f2ff, #ffffff);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: #fff !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-brand img {
+      height: 60px;
+      width: auto;
+    }
+    .navbar-nav .nav-link {
+      color: #0d6efd;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .navbar-nav .nav-link:hover {
+      color: #084298;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 60px 15px 20px;
+    }
+    .header h1 {
+      font-weight: 700;
+      color: #0d6efd;
+      font-size: 2rem;
+    }
+    .header p {
+      color: #555;
+      font-size: 1rem;
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .filters input,
+    .filters select {
+      width: 250px;
+      max-width: 90%;
+    }
+
+    /* Cards */
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      background: #fff;
+      overflow: hidden;
+      height: 100%;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .card h5 {
+      color: #0d6efd;
+      font-weight: 600;
+      font-size: 1.1rem;
+      word-break: break-word;
+    }
+    .card p {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      word-wrap: break-word;
+    }
+    .card a {
+      text-decoration: none;
+      color: inherit;
+      word-break: break-all;
+    }
+    .emoji {
+      font-size: 1.3rem;
+      margin-right: 6px;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px 10px;
+      color: #666;
+      font-size: 14px;
+      border-top: 1px solid #ddd;
+      margin-top: 40px;
+      background-color: #fff;
+    }
+
+    /* Spinner */
+    .spinner {
+      text-align: center;
+      margin-top: 50px;
+      color: #0d6efd;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="../../../image/astourlogo.png" alt="ASTours Logo" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto text-center">
+          <li class="nav-item"><a class="nav-link" href="../../../templates/Admin/admin.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../b2b/Visa/b2b.html">B2B Services</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#">Partners</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="header">
+    <h1>🤝 Our B2B Partners</h1>
+    <p>Here’s a quick look at all our valuable business partners collaborating with ASTours International.</p>
+  </section>
+
+  <!-- Filters -->
+  <div class="container mb-4">
+    <div class="filters text-center">
+      <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search by name, company, or email..." />
+      <select id="typeFilter" class="form-select">
+        <option value="">All Business Types</option>
+      </select>
+      <select id="sortFilter" class="form-select">
+        <option value="newest">📅 Sort by Newest</option>
+        <option value="oldest">📆 Sort by Oldest</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Cards Section -->
+  <div class="container mb-5">
+    <div id="partnersContainer" class="row g-4 justify-content-center">
+      <div class="spinner" id="loading">
+        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+        <p>Loading partner details...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2025 ASTours International — Building Global Travel Connections 🌍
+  </footer>
+
+  <script>
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRo6-BtopCTAxjdLY2iY08PhtfTpYrOI0AovFYRye9F2Qi7rM9Dp5pDpSwzBSEYi93Uh3LwLHgG9in3/pub?output=csv";
+    let partnersData = [];
+
+    async function loadPartners() {
+      try {
+        const response = await fetch(sheetURL);
+        const data = await response.text();
+        const rows = data.split("\n").slice(1);
+        const container = document.getElementById("partnersContainer");
+        const typeFilter = document.getElementById("typeFilter");
+        const typesSet = new Set();
+
+        container.innerHTML = "";
+
+        partnersData = [];
+        rows.forEach(row => {
+          const cols = row.split(",");
+          if (cols.length < 6) return;
+          const [timestamp, company, person, email, phone, type, message] = cols.map(c => c.trim());
+          if (!company) return;
+
+          partnersData.push({ timestamp, company, person, email, phone, type, message });
+          typesSet.add(type);
+        });
+
+        // Populate business type filter
+        typesSet.forEach(type => {
+          const option = document.createElement("option");
+          option.value = type;
+          option.textContent = type;
+          typeFilter.appendChild(option);
+        });
+
+        renderPartners(partnersData);
+      } catch (error) {
+        console.error("Error loading data:", error);
+        document.getElementById("partnersContainer").innerHTML =
+          `<p class='text-danger text-center'>❌ Unable to load partner details. Please try again later.</p>`;
+      }
+    }
+
+    function renderPartners(data) {
+      const container = document.getElementById("partnersContainer");
+      container.innerHTML = "";
+
+      if (data.length === 0) {
+        container.innerHTML = `<p class='text-muted text-center'>No matching partners found.</p>`;
+        return;
+      }
+
+      data.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "col-xl-3 col-lg-4 col-md-6 col-sm-10";
+        card.innerHTML = `
+          <div class="card h-100">
+            <div class="card-body">
+              <p><span class="emoji">🕒</span><small>${p.timestamp}</small></p>
+              <h5><span class="emoji">🏢</span>${p.company}</h5>
+              <p><span class="emoji">👤</span><strong>${p.person}</strong></p>
+              <p><span class="emoji">💼</span>${p.type}</p>
+              <p><span class="emoji">📧</span><a href="mailto:${p.email}">${p.email}</a></p>
+              <p><span class="emoji">📞</span><a href="tel:${p.phone}">${p.phone}</a></p>
+              <p><span class="emoji">💬</span>${p.message || "No message"}</p>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Filter + Sort functionality
+    function applyFilters() {
+      const searchValue = document.getElementById("searchInput").value.toLowerCase();
+      const typeValue = document.getElementById("typeFilter").value;
+      const sortValue = document.getElementById("sortFilter").value;
+
+      let filtered = partnersData.filter(p =>
+        (p.company.toLowerCase().includes(searchValue) ||
+         p.person.toLowerCase().includes(searchValue) ||
+         p.email.toLowerCase().includes(searchValue)) &&
+        (typeValue === "" || p.type === typeValue)
+      );
+
+      // Sort by newest or oldest
+      filtered.sort((a, b) => {
+        const dateA = new Date(a.timestamp);
+        const dateB = new Date(b.timestamp);
+        return sortValue === "newest" ? dateB - dateA : dateA - dateB;
+      });
+
+      renderPartners(filtered);
+    }
+
+    document.getElementById("searchInput").addEventListener("input", applyFilters);
+    document.getElementById("typeFilter").addEventListener("change", applyFilters);
+    document.getElementById("sortFilter").addEventListener("change", applyFilters);
+
+    document.addEventListener("DOMContentLoaded", loadPartners);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

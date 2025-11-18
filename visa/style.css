@@ -1,0 +1,49 @@
+/* #visa services.html */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f5f5;
+    color: #333;
+  }
+  
+  header {
+    background: #004080;
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  header h1 {
+    margin: 0;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    background: #0066cc;
+    border-radius: 5px;
+    transition: 0.3s;
+  }
+  
+  nav a:hover {
+    background: #005bb5;
+  }
+  
+  main {
+    padding: 2rem;
+  }
+  
+  .intro {
+    text-align: center;
+  }
+  
+  

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="../image/astourlogo.png">
+  <title>Visa Database Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background:#f9f9f9; }
+    h1 { text-align: center; }
+    .controls { margin-bottom: 15px; display: flex; flex-wrap: wrap; gap:10px; justify-content: center; }
+    input, button, select, textarea { padding: 8px; margin: 5px; }
+    button { cursor: pointer; border:none; border-radius:4px; }
+    .add { background: #4CAF50; color:white; }
+    .edit { background: #ffcc00; }
+    .delete { background: #ff6666; color:white; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background:white; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #f5f5f5; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+             background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+    .modal-content { background: white; padding: 20px; border-radius: 8px; width: 600px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display:flex; justify-content: space-between; align-items: center; }
+    .nested { margin-left: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>
+    <a href="adminvisa.html" class="text-decoration-none">🔑 Visa Database Admin Panel</a>
+</h1>
+
+<div class="controls">
+  <input type="text" id="searchBox" placeholder="Search by country, visa type or category...">
+  <button class="add" onclick="openForm()">➕ Add New Entry</button>
+  <button onclick="exportJSON()">📂 Export JSON</button>
+</div>
+
+<table id="visaTable">
+  <thead>
+    <tr>
+      <th>Country</th>
+      <th>Visa Types / Categories / Documents</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- Modal -->
+<div id="formModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="formTitle">Add Visa Entry</h2>
+      <button onclick="closeForm()">❌</button>
+    </div>
+    <form id="visaForm">
+      <label>Country:</label><br>
+      <input type="text" id="country" required><br>
+
+      <label>Visa Type:</label><br>
+      <input type="text" id="visaType" required><br>
+
+      <label>Category Name:</label><br>
+      <input type="text" id="categoryName" required><br>
+
+      <label>Max Stay:</label><br>
+      <input type="text" id="maxStay"><br>
+
+      <label>Visa Validity:</label><br>
+      <input type="text" id="visaValidity"><br>
+
+      <label>Processing Time:</label><br>
+      <input type="text" id="processingTime"><br>
+
+      <label>Fees:</label><br>
+      <input type="text" id="fees"><br>
+
+      <h3>Documents Required</h3>
+      <div id="documentsContainer"></div>
+      <button type="button" onclick="addDocumentField()">➕ Add Document</button><br><br>
+
+      <button type="submit" class="add">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<script>
+let visaData = { visaDatabase: [] };
+let editIndex = null;
+
+// Load live GitHub JSON
+async function loadData() {
+  try {
+    let res = await fetch("https://raw.githubusercontent.com/Armankhan2001/visaDatabase/refs/heads/main/visaDatabase.json");
+    visaData = await res.json();
+    renderTable();
+  } catch (e) {
+    alert("Error loading data: " + e);
+  }
+}
+
+function renderTable() {
+  const tbody = document.querySelector("#visaTable tbody");
+  tbody.innerHTML = "";
+  visaData.visaDatabase.forEach((entry, index) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><b>${entry.country}</b></td>
+      <td>
+        ${entry.visaTypes.map(vt => `
+          <div><b>${vt.type}</b>
+            <ul>
+              ${vt.categories.map(cat => `
+                <li>
+                  <b>${cat.name}</b> — Stay: ${cat.maxStay || "-"}, Validity: ${cat.visaValidity || "-"}, Processing: ${cat.processingTime || "-"}, Fees: ${cat.fees || "-"}
+                  <ul>
+                    ${cat.documentsRequired?.flatMap(docGroup => `
+                      <li><b>${docGroup.category}</b>
+                        <ul>
+                          ${docGroup.documents.map(d => `
+                            <li>${d.name} - ${d.description} (icon: ${d.icon})</li>
+                          `).join("")}
+                        </ul>
+                      </li>
+                    `).join("") || ""}
+                  </ul>
+                </li>
+              `).join("")}
+            </ul>
+          </div>
+        `).join("")}
+      </td>
+      <td>
+        <button class="edit" onclick="openForm(${index})">✏ Edit</button>
+        <button class="delete" onclick="deleteEntry(${index})">🗑 Delete</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function openForm(index=null) {
+  document.getElementById("formModal").style.display = "flex";
+  document.getElementById("visaForm").reset();
+  document.getElementById("documentsContainer").innerHTML = "";
+
+  if (index !== null) {
+    editIndex = index;
+    let entry = visaData.visaDatabase[index];
+    document.getElementById("formTitle").innerText = "Edit Visa Entry";
+
+    document.getElementById("country").value = entry.country;
+    document.getElementById("visaType").value = entry.visaTypes[0].type;
+    document.getElementById("categoryName").value = entry.visaTypes[0].categories[0].name;
+    document.getElementById("maxStay").value = entry.visaTypes[0].categories[0].maxStay;
+    document.getElementById("visaValidity").value = entry.visaTypes[0].categories[0].visaValidity;
+    document.getElementById("processingTime").value = entry.visaTypes[0].categories[0].processingTime;
+    document.getElementById("fees").value = entry.visaTypes[0].categories[0].fees;
+
+    // Load documents if exist
+    const docs = entry.visaTypes[0].categories[0].documentsRequired || [];
+    docs.forEach(docGroup => {
+      docGroup.documents.forEach(d => {
+        addDocumentField(d.name, d.description, d.icon, docGroup.category);
+      });
+    });
+
+  } else {
+    editIndex = null;
+    document.getElementById("formTitle").innerText = "Add Visa Entry";
+  }
+}
+
+function closeForm() {
+  document.getElementById("formModal").style.display = "none";
+}
+
+// Add dynamic document fields
+function addDocumentField(name="", description="", icon="", category="") {
+  const container = document.getElementById("documentsContainer");
+  const div = document.createElement("div");
+  div.innerHTML = `
+    <label>Category:</label><input type="text" value="${category}" class="docCategory"><br>
+    <label>Name:</label><input type="text" value="${name}" class="docName"><br>
+    <label>Description:</label><textarea class="docDesc">${description}</textarea><br>
+    <label>Icon:</label><input type="text" value="${icon}" class="docIcon"><br>
+    <hr>
+  `;
+  container.appendChild(div);
+}
+
+// Save form
+document.getElementById("visaForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  
+  let documents = [];
+  const docCategories = [...document.querySelectorAll(".docCategory")];
+  docCategories.forEach((catInput, i) => {
+    const cat = catInput.value;
+    if (!cat) return;
+    if (!documents.find(d => d.category === cat)) {
+      documents.push({ category: cat, documents: [] });
+    }
+    const parent = catInput.parentElement;
+    documents.find(d => d.category === cat).documents.push({
+      name: parent.querySelector(".docName").value,
+      description: parent.querySelector(".docDesc").value,
+      icon: parent.querySelector(".docIcon").value
+    });
+  });
+
+  let entry = {
+    country: document.getElementById("country").value,
+    visaTypes: [{
+      type: document.getElementById("visaType").value,
+      categories: [{
+        name: document.getElementById("categoryName").value,
+        maxStay: document.getElementById("maxStay").value,
+        visaValidity: document.getElementById("visaValidity").value,
+        processingTime: document.getElementById("processingTime").value,
+        fees: document.getElementById("fees").value,
+        documentsRequired: documents
+      }]
+    }]
+  };
+
+  if (editIndex !== null) {
+    visaData.visaDatabase[editIndex] = entry;
+  } else {
+    visaData.visaDatabase.push(entry);
+  }
+
+  closeForm();
+  renderTable();
+});
+
+function deleteEntry(index) {
+  if (confirm("Delete this entry?")) {
+    visaData.visaDatabase.splice(index, 1);
+    renderTable();
+  }
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(visaData, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "visaDatabase.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Search filter
+document.getElementById("searchBox").addEventListener("input", function () {
+  const term = this.value.toLowerCase();
+  document.querySelectorAll("#visaTable tbody tr").forEach(row => {
+    row.style.display = row.innerText.toLowerCase().includes(term) ? "" : "none";
+  });
+});
+
+loadData();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us | Solo2CEO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6a11cb;
+      --secondary: #2575fc;
+      --accent: #ffcc00;
+      --bg: #f4f7fc;
+      --text: #222;
+      --white: #fff;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      margin: 0;
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 100px 20px 80px;
+      text-align: center;
+      color: var(--white);
+    }
+
+    header h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3rem;
+      font-weight: 600;
+    }
+
+    header p {
+      font-size: 1.25rem;
+      margin-top: 10px;
+    }
+
+    .contact-section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .contact-section h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    .contact-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .contact-card {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      padding: 30px 20px;
+      width: 280px;
+      transition: transform 0.3s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .contact-card h4 {
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+
+    .contact-card p {
+      font-size: 1rem;
+      margin-bottom: 0;
+    }
+
+    .contact-card a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer {
+      background: #111;
+      color: var(--white);
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 1rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .contact-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📬 Get in Touch</h1>
+  <p>We'd love to hear from you — Let's build your brand together!</p>
+</header>
+
+<section class="contact-section">
+  <h2>Contact Options</h2>
+  <div class="contact-cards">
+    <div class="contact-card">
+      <h4>📩 Email Us</h4>
+      <p><a href="mailto:solo2ceoo@gmail.com">solo2ceoo@gmail.com</a></p>
+    </div>
+    <div class="contact-card">
+      <h4>📞 Call Us</h4>
+      <p>+91 7021360582</p>
+    </div>
+    <div class="contact-card">
+      <h4>💬 WhatsApp</h4>
+      <p><a href="https://wa.me/917021360582" target="_blank">Chat Now</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Solo2CEO. All rights reserved.</p>
+  <p><a href="https://www.instagram.com/solo2_ceo" target="_blank">📷 Follow us on Instagram</a></p>
+</footer>
+
+<script>
+  gsap.from("header h1", { opacity: 0, y: -30, duration: 1, ease: "power2.out" });
+  gsap.from(".contact-card", { opacity: 0, y: 20, duration: 1, stagger: 0.2 });
+</script>
+
+</body>
+</html>

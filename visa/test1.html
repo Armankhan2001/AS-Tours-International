@@ -1,0 +1,585 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>E-Visa Rates (Pages 9-12)</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body{padding:20px;background:#f5f7fa}
+.card{border-radius:12px}
+</style>
+</head>
+<body>
+    <!-- Search Box -->
+<div class="search-box mb-3">
+  <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country...">
+</div>
+
+<!-- Cards -->
+<div id="cardsContainer" class="row g-4 mt-3"></div>
+  <!-- <div class="container">
+    <h1 class="mb-4">E-VISA RATES (Extracted Pages 9–12)</h1>
+    <div class="row"><div class="col-md-4 mb-3"> -->
+  <!-- <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Azerbaijan</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist 30 Days Stay, Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹2950</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Egypt</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Stay, 3 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹3350</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Ethopia</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist 30 Days Single Entry, 3 Months Validity 6000Antigua Barbuda 30 Days Stay and 6 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹9350</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Benin</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Stay Single Entry, 30 Days Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹5500</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Botswana</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist 30 Days Stay Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹2500</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Burkina Faso</h5>
+    <p class="card-text"><strong>Visa Type:</strong> As Per Itinerary Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹6800</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Cambodia</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Stay , 3 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹3100</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Djibouti</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 14 Days Stay Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹1600</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Georgia</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Multiple Entry, 120 Days Validity 4100East Arica 90 Days Stay Single Entry, 3 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹10200</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">India</h5>
+    <p class="card-text"><strong>Visa Type:</strong> E Tourist Visa, 30 Days</p>
+    <p class="card-text"><strong>Rate:</strong> ₹2800</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Jordan</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 3 Months Single Entry 5800Indonesia Tourist (Visa On Arrival) 30 Days  Stay, 3 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹3000</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Ivory Coast</h5>
+    <p class="card-text"><strong>Visa Type:</strong> As Per Itinerary</p>
+    <p class="card-text"><strong>Rate:</strong> ₹7800</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Hong Kong</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Pre Arrival Registration 350Guinea 90 Days Stay Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹7700</p>
+    <p class="card-text"><small>Source page: 9</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Kenya</h5>
+    <p class="card-text"><strong>Visa Type:</strong> ETA 90 Days Stay Single Entry, 3 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹3350</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Laos</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Stay Single Entry, 60 Days Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹5200</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Morocco</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Stay Single Entry, 06 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹8200</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Myanmar</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 28 Days Stay, 3 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹4900</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Malaysia</h5>
+    <p class="card-text"><strong>Visa Type:</strong> MDAC 30 Days</p>
+    <p class="card-text"><strong>Rate:</strong> ₹200</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Madagascar</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 15 Days Single, 60 Days Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹1500</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Uzbekistan</h5>
+    <p class="card-text"><strong>Visa Type:</strong> E-Visa, 30 Days Stay Single Entry, 3 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹2300</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Vietnam</h5>
+    <p class="card-text"><strong>Visa Type:</strong> E-Visa, 90 Days Stay Single Entry, 30 Days Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹2500</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Zambia–Zimbabwe</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist/Business Single Entry 2600Tanzania TurkeyTourist, 90 Days Stay Single Entry, 3 Months Stay Validity E-Visa, 30 Days Stay Single Entry, 3 Months Validity5000</p>
+    <p class="card-text"><strong>Rate:</strong> ₹4850</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Uganda</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist, 30 Days Stay Single Entry, 3 Months ValidityTajikistan Tourist, 60 Days Stay Single Entry, 2 Months Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹3000</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Russia</h5>
+    <p class="card-text"><strong>Visa Type:</strong> E-Visa (60 Days Validity From DOI, Up to 16 Days Stay)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹5500</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Sri Lanka</h5>
+    <p class="card-text"><strong>Visa Type:</strong> ETA Double Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹250</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Sri Lanka Buisness Double</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Entry  3000Malawi Tourist / Business Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹5400</p>
+    <p class="card-text"><small>Source page: 10</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Oman</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 26N - Tourist 10 days (Valid USA, UK)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹1600</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Oman</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 26M - Tourist  30 days (Valid USA, UK)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹4900</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Oman</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist 10 Days</p>
+    <p class="card-text"><strong>Rate:</strong> ₹2150</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Oman</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist 30 Days</p>
+    <p class="card-text"><strong>Rate:</strong> ₹5650</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Oman</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist 10 Days (Risk-Free)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹2150</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Oman</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist 30 Days (Risk-Free)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹6100</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Qatar</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist Entry (A1) Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹500</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Saudi Arabia</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 90 Days Stay 30 Days Visa Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹12500</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 5 years Multiple Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹14700</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Pre Arrival Permit (USA / UK / EU)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹5600</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹6400</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Single Entry Child 1200Country Visa Type Rates INR UAE 60 Days Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹10800</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Risk Free Visa</p>
+    <p class="card-text"><strong>Rate:</strong> ₹9100</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Child Risk Free Visa</p>
+    <p class="card-text"><strong>Rate:</strong> ₹9100</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 60 Days Risk Free Visa</p>
+    <p class="card-text"><strong>Rate:</strong> ₹15500</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 60 Days Child Risk Free Visa</p>
+    <p class="card-text"><strong>Rate:</strong> ₹8500</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Multiple</p>
+    <p class="card-text"><strong>Rate:</strong> ₹12500</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Child Multiple</p>
+    <p class="card-text"><strong>Rate:</strong> ₹5500</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 60 Days Multiple</p>
+    <p class="card-text"><strong>Rate:</strong> ₹17300</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 60 Days Child Multiple</p>
+    <p class="card-text"><strong>Rate:</strong> ₹8500</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 48 Hours Transit Visa (Only Emirates)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹1500</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 96 Hours Transit Visa (Only Emirates) 4200UAE 60 Days Single Entry Child</p>
+    <p class="card-text"><strong>Rate:</strong> ₹2200</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UAE</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 30 Days Same Sponsor (Inside Country Extension)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹23000</p>
+    <p class="card-text"><small>Source page: 11</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Bangladesh</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist 30 days Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹5000</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Bangladesh Business</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 60 days Single Entry</p>
+    <p class="card-text"><strong>Rate:</strong> ₹7500</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Brazil</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 3 Month Validity 30 Day Stay  885 (SC) Canada (As Passport Expiry) Up to 6 Months Stay Validity</p>
+    <p class="card-text"><strong>Rate:</strong> ₹13060</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">China Normal</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist/Business  885 (SC) Egypt Tourist (3 Month Validity 30 Day Stay)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹3600</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Egypt Business</h5>
+    <p class="card-text"><strong>Visa Type:</strong> (3 Month Validity 30 Day Stay)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹6685</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Ghana</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 3 Month Validity 30 Day Stay</p>
+    <p class="card-text"><strong>Rate:</strong> ₹14700</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Japan</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist/Business (3 Month Validity 30 Day Stay)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹1100</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Saudi Arabia</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist | Business Visa (Under 40 Years) 1180 (SC) Schengen Countries Normal 885 (SC)Country Visa Type Rates INR Singapore Tourist/Business/Family</p>
+    <p class="card-text"><strong>Rate:</strong> ₹2667</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">South Africa</h5>
+    <p class="card-text"><strong>Visa Type:</strong> 3 Month Validity 30 Day Stay</p>
+    <p class="card-text"><strong>Rate:</strong> ₹3160</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">South Korea</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist/Business (3 Month Validity 30 Day Stay)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹5530</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">Turkey</h5>
+    <p class="card-text"><strong>Visa Type:</strong> Tourist/Business Single Entry (3 Month Validity 30 Day Stay)</p>
+    <p class="card-text"><strong>Rate:</strong> ₹19900</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div>
+<div class="col-md-4 mb-3">
+  <div class="card shadow border-0 h-100 p-3">
+    <h5 class="card-title">UK/USA</h5>
+    <p class="card-text"><strong>Visa Type:</strong> /Ireland Normal 885 (SC) New Zealand Tourist</p>
+    <p class="card-text"><strong>Rate:</strong> ₹24000</p>
+    <p class="card-text"><small>Source page: 12</small></p>
+  </div>
+</div> -->
+<!-- </div> -->
+    <!-- <div class="alert alert-warning mt-4"><strong>Note:</strong> Rates are subject to change without prior notice. Including GST/AVS Service Charge. Excluding courier charges INR 500/- (one way).</div>
+    <p>Source PDF: <a href="https://drive.google.com/file/d/1qcGXJjXpqNj-7MGbO5tJOeoJGQu1XDmO/view" target="_blank">Atlas rate sheet july 2025.pdf</a></p>
+  </div> -->
+</body>
+<script>
+let pdfVisaData = []; // Store all JSON rows
+let filteredData = [];
+
+// Load PDF JSON data
+async function loadPdfEvisaRates() {
+  const res = await fetch("evisa_pages_9_12_clean.json"); // ✅ correct path to your JSON file
+  pdfVisaData = await res.json();
+  filteredData = pdfVisaData; 
+  renderPdfCards(filteredData);
+}
+
+// Render function
+function renderPdfCards(data) {
+  const container = document.getElementById("cardsContainer");
+  container.innerHTML = "";
+
+  if (!data.length) {
+    container.innerHTML = `<p class="text-center text-muted">No matching records</p>`;
+    return;
+  }
+
+  data.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "col-md-4";
+
+    // Try to guess country code (example: UAE → ae). You can extend this mapping
+    const code = (item.country || "").toLowerCase().slice(0,2);
+
+    card.innerHTML = `
+      <div class="card h-100 p-3 position-relative">
+        <h5 class="country-name">
+          ${item.country ? `<img src="https://flagcdn.com/w40/${code}.png" alt="flag">` : ""}
+          ${item.country || "Unknown Country"}
+        </h5>
+        <p class="info-line"><i class="fa-solid fa-passport"></i> <strong>Visa Type:</strong> ${item.visaType || ''}</p>
+        <p class="info-line"><i class="fa-solid fa-coins"></i> <strong>Rate:</strong> ₹${item.rate || 'N/A'}</p>
+        <p class="small text-muted">📄 Source: Page ${item.page}</p>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  // Add note
+  container.insertAdjacentHTML("beforeend", `
+    <div class="col-12 mt-4">
+      <div class="alert alert-warning">
+        <strong>Note:</strong><br>
+        Rates are subject to change without prior notice.<br>
+        Including GST/AVS Service Charge.<br>
+        Excluding courier charges INR 500/- (one way).
+      </div>
+    </div>
+  `);
+}
+
+// 🔎 Search filter
+document.getElementById("searchInput").addEventListener("input", e => {
+  const searchText = e.target.value.toLowerCase();
+  filteredData = pdfVisaData.filter(row => 
+    (row.country || "").toLowerCase().includes(searchText) ||
+    (row.visaType || "").toLowerCase().includes(searchText)
+  );
+  renderPdfCards(filteredData);
+});
+
+// Load on startup (or when tab clicked)
+loadPdfEvisaRates();
+</script>
+
+</html>

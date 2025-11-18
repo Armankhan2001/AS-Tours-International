@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Australia Tourist Visa (Subclass 600) Questionnaire</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    p.note {
+      text-align: center;
+      color: #555;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    section {
+      margin-bottom: 25px;
+    }
+    section h2 {
+      font-size: 18px;
+      color: #34495e;
+      border-left: 5px solid #3498db;
+      padding-left: 10px;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: 600;
+      margin-top: 12px;
+      display: block;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    input:focus, textarea:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 5px rgba(52,152,219,0.3);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      background: #3498db;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .options {
+      display: none;
+      margin-top: 25px;
+      text-align: center;
+    }
+    .options h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    .options button {
+      width: auto;
+      margin: 10px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .download { background: #27ae60; }
+    .whatsapp { background: #25D366; }
+    .email { background: #e67e22; }
+    .download:hover { background: #1e8449; }
+    .whatsapp:hover { background: #1ebd5a; }
+    .email:hover { background: #ca6f1e; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Australia Tourist Visa (Subclass 600)</h1>
+  <p class="note">Please answer all questions carefully.</p>
+
+  <form id="visaForm">
+
+    <section>
+      <h2>Personal & Identity Details</h2>
+      <label>Aadhar Number & Intended Date of Travel</label>
+      <input type="text" name="Aadhar & Travel Date">
+
+      <label>Relationship Status (Single / Married)</label>
+      <input type="text" name="Relationship Status">
+
+      <label>Known by any other Name?</label>
+      <input type="text" name="Other Name">
+
+      <label>Citizen of any other country?</label>
+      <input type="text" name="Other Citizenship">
+
+      <label>Any other Passport or Travel Document?</label>
+      <input type="text" name="Other Passport">
+
+      <label>Other Identity Documents (PAN, etc.)</label>
+      <input type="text" name="Identity Documents">
+    </section>
+
+    <section>
+      <h2>Visa History</h2>
+      <label>Previous Travel to Australia?</label>
+      <input type="text" name="Previous Travel to Australia">
+
+      <label>Previously applied for Visa to Australia?</label>
+      <input type="text" name="Previous Visa Application">
+
+      <label>Australian Visa Grant Number (if any)</label>
+      <input type="text" name="Visa Grant Number">
+
+      <label>Has the applicant held/holding a visa to Australia or any other country? (Give details)</label>
+      <textarea name="Other Visas"></textarea>
+
+      <label>Ever been in any country and not complied with visa conditions?</label>
+      <input type="text" name="Non Compliance">
+
+      <label>Ever refused a visa from any country?</label>
+      <input type="text" name="Visa Refused">
+    </section>
+
+    <section>
+      <h2>Health & Travel Companions</h2>
+      <label>Health Examination in last 12 months?</label>
+      <input type="text" name="Health Exam">
+
+      <label>Any other persons travelling with applicant?</label>
+      <input type="text" name="Travelling Companions">
+    </section>
+
+    <section>
+      <h2>Contact Information</h2>
+      <label>Home Phone</label>
+      <input type="text" name="Home Phone">
+
+      <label>Business Phone</label>
+      <input type="text" name="Business Phone">
+
+      <label>Mobile / Cell Phone</label>
+      <input type="text" name="Mobile Phone">
+
+      <label>Postal address same as Residential? (Yes/No)</label>
+      <input type="text" name="Postal Address Same">
+
+      <label>Email Address</label>
+      <input type="email" name="Email">
+    </section>
+
+    <section>
+      <h2>Family Information</h2>
+      <label>Any family unit members not travelling to Australia (not PR or Citizens)?</label>
+      <textarea name="Family Not Travelling"></textarea>
+
+      <label>Visiting any friends, relatives, or contacts in Australia?</label>
+      <input type="text" name="Friends or Relatives in Australia">
+    </section>
+
+    <section>
+      <h2>Employment & Financial Details</h2>
+      <label>Current Employment Status (Employed / Self-Employed / Unemployed / Other)</label>
+      <input type="text" name="Employment Status">
+
+      <label>Occupation Grouping (Manager / Professional / Labour / Other)</label>
+      <input type="text" name="Occupation Group">
+
+      <label>How will applicant's stay in Australia be funded? (Self-funded / Supported by other)</label>
+      <input type="text" name="Funding Source">
+
+      <label>Available Funds to support stay</label>
+      <input type="text" name="Available Funds">
+    </section>
+
+    <section>
+      <h2>Travel History & Character</h2>
+      <label>In last 5 years, visited/lived outside country of passport for more than 3 months? (Yes/No, give details)</label>
+      <textarea name="Travel History 5 Years"></textarea>
+
+      <label>Ever convicted of an offence in any country?</label>
+      <input type="text" name="Convictions">
+
+      <label>Ever charged with an offence currently awaiting legal action?</label>
+      <input type="text" name="Charges Pending">
+    </section>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Options after submit -->
+  <div class="options" id="options">
+    <h3>Choose an action:</h3>
+    <button class="download" id="downloadBtn">📥 Download</button>
+    <button class="whatsapp" id="whatsappBtn">💬 WhatsApp</button>
+    <button class="email" id="emailBtn">✉️ Email</button>
+  </div>
+</div>
+
+<script>
+  let finalMessage = "";
+
+  document.getElementById("visaForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    finalMessage = "Australia Tourist Visa (Subclass 600) Questionnaire:\n\n";
+    formData.forEach((value, key) => {
+      finalMessage += `${key}: ${value}\n`;
+    });
+
+    document.getElementById("options").style.display = "block";
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  });
+
+  // Download as text file
+  document.getElementById("downloadBtn").addEventListener("click", function() {
+    const blob = new Blob([finalMessage], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "Australia_Tourist_Visa_Questionnaire.txt";
+    link.click();
+  });
+
+  // WhatsApp Share
+  document.getElementById("whatsappBtn").addEventListener("click", function() {
+    const phone = "918169313795"; 
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(finalMessage)}`;
+    window.open(url, "_blank");
+  });
+
+  // Email Share
+  document.getElementById("emailBtn").addEventListener("click", function() {
+    const subject = "Australia Visa Questionnaire Submission";
+    const body = encodeURIComponent(finalMessage);
+    const url = `mailto:?subject=${subject}&body=${body}`;
+    window.location.href = url;
+  });
+</script>
+
+</body>
+</html>

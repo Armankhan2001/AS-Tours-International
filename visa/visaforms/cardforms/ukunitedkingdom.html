@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Visa Questionnaire</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    p.note {
+      text-align: center;
+      color: #555;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    section {
+      margin-bottom: 25px;
+    }
+    section h2 {
+      font-size: 18px;
+      color: #34495e;
+      border-left: 5px solid #3498db;
+      padding-left: 10px;
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: 600;
+      margin-top: 12px;
+      display: block;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    input:focus, textarea:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 5px rgba(52,152,219,0.3);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      background: #3498db;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .options {
+      display: none;
+      margin-top: 25px;
+      text-align: center;
+    }
+    .options h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    .options button {
+      width: auto;
+      margin: 10px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .download { background: #27ae60; }
+    .whatsapp { background: #25D366; }
+    .email { background: #e67e22; }
+    .download:hover { background: #1e8449; }
+    .whatsapp:hover { background: #1ebd5a; }
+    .email:hover { background: #ca6f1e; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>UK Visa Questionnaire</h1>
+  <p class="note">Please answer all questions carefully.</p>
+
+  <form id="visaForm">
+
+    <section>
+      <h2>Financial Details</h2>
+      <label>How much do you earn each month - after tax?</label>
+      <input type="text" name="Monthly Income">
+
+      <label>Your Job Description?</label>
+      <input type="text" name="Job Description">
+
+      <label>How much money are you personally planning to spend on your visit to the UK?</label>
+      <input type="text" name="Planned UK Spend">
+
+      <label>What is the total amount of money you spend each month?</label>
+      <input type="text" name="Monthly Expenses">
+
+      <label>Will anyone be paying towards the cost of your visit?</label>
+      <input type="text" name="Sponsor">
+    </section>
+
+    <section>
+      <h2>Visit Details</h2>
+      <label>Give details of the main purpose of your visit and anything else you plan to do on your trip?</label>
+      <textarea name="Purpose"></textarea>
+
+      <label>Does anyone rely on you for financial support? (Include both those travelling with you and those who are not)</label>
+      <textarea name="Dependents"></textarea>
+    </section>
+
+    <section>
+      <h2>Family Information</h2>
+      <label>Mother's DOB</label>
+      <input type="date" name="Mother DOB">
+
+      <label>Father's DOB</label>
+      <input type="date" name="Father DOB">
+
+      <label>Do you have any family in the UK?</label>
+      <input type="text" name="Family in UK">
+    </section>
+
+    <section>
+      <h2>Travel History</h2>
+      <label>Have you been to the UK in the past 10 years?</label>
+      <input type="text" name="UK Visits">
+
+      <label>How many times have you visited the following places in the past 10 years?</label>
+      <input type="text" name="Australia" placeholder="Australia">
+      <input type="text" name="Canada" placeholder="Canada">
+      <input type="text" name="New Zealand" placeholder="New Zealand">
+      <input type="text" name="USA" placeholder="USA">
+      <input type="text" name="Switzerland" placeholder="Switzerland">
+      <input type="text" name="EEA" placeholder="European Economic Area">
+
+      <label>Other Countries visited in the past 10 years (do not include UK/USA/Canada/Australia/NZ/Switzerland/EEA):</label>
+      <textarea name="Other Countries"></textarea>
+
+      <label>For either the UK or any other country, have you ever been refused a visa?</label>
+      <input type="text" name="Visa Refused">
+    </section>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Options after submit -->
+  <div class="options" id="options">
+    <h3>Choose an action:</h3>
+    <button class="download" id="downloadBtn">📥 Download</button>
+    <button class="whatsapp" id="whatsappBtn">💬 WhatsApp</button>
+    <button class="email" id="emailBtn">✉️ Email</button>
+  </div>
+</div>
+
+<script>
+  let finalMessage = "";
+
+  document.getElementById("visaForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    finalMessage = "UK Visa Questionnaire:\n\n";
+    formData.forEach((value, key) => {
+      finalMessage += `${key}: ${value}\n`;
+    });
+
+    document.getElementById("options").style.display = "block";
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  });
+
+  // Download as text file
+  document.getElementById("downloadBtn").addEventListener("click", function() {
+    const blob = new Blob([finalMessage], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "UK_Visa_Questionnaire.txt";
+    link.click();
+  });
+
+  // WhatsApp Share
+  document.getElementById("whatsappBtn").addEventListener("click", function() {
+    const phone = "918169313795"; 
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(finalMessage)}`;
+    window.open(url, "_blank");
+  });
+
+  // Email Share
+  document.getElementById("emailBtn").addEventListener("click", function() {
+    const subject = "UK Visa Questionnaire Submission";
+    const body = encodeURIComponent(finalMessage);
+    const url = `mailto:?subject=${subject}&body=${body}`;
+    window.location.href = url;
+  });
+</script>
+
+</body>
+</html>
+
+<!-- Best Working -->

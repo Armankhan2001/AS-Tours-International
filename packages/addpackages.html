@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Travel Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+<div class="container mx-auto p-6">
+
+  <h1 class="text-3xl font-bold text-center text-blue-900 mb-6">Travel Packages Admin</h1>
+
+  <!-- Buttons -->
+  <div class="flex justify-between items-center mb-4">
+    <button id="openAddModal" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Add New Package</button>
+    <input type="text" id="searchInput" placeholder="Search by Package or Country..." class="border p-2 rounded w-1/3">
+  </div>
+
+  <!-- Recent Package Preview -->
+  <div id="previewSection" class="bg-white p-6 rounded shadow mb-6 hidden">
+    <h2 class="text-xl font-semibold mb-2">Recent Added Package Preview</h2>
+    <div class="overflow-x-auto">
+      <table id="previewTable" class="min-w-full border-collapse">
+        <thead class="bg-blue-900 text-white"></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Full Admin Table -->
+  <div class="bg-white p-6 rounded shadow mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold">All Packages</h2>
+      <div>
+        <button id="loadAll" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Load All Packages</button>
+        <span id="loadingMsg" class="text-blue-600 font-semibold ml-2"></span>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table id="adminTable" class="min-w-full border-collapse shadow">
+        <thead class="bg-blue-900 text-white"></thead>
+        <tbody></tbody>
+      </table>
+      <div class="mt-2 flex justify-between items-center">
+        <button id="prevPage" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">Prev</button>
+        <span id="pageInfo"></span>
+        <button id="nextPage" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Template -->
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+  <div class="bg-white p-6 rounded max-w-3xl w-full relative shadow-lg overflow-y-auto max-h-[90vh]">
+    <button id="modalClose" class="absolute top-2 right-2 text-gray-700 hover:text-gray-900 text-2xl font-bold">&times;</button>
+    <h3 class="text-xl font-semibold mb-4" id="modalTitle">Package Details</h3>
+    <div id="modalContent" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    <div class="mt-4 flex justify-end space-x-2">
+      <button id="modalUpdate" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Update</button>
+      <button id="modalDelete" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-800">Delete</button>
+      <button id="modalCancel" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Package Modal -->
+<div id="addModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+  <div class="bg-white p-6 rounded max-w-3xl w-full shadow-lg overflow-y-auto max-h-[90vh]">
+    <button id="addModalClose" class="absolute top-2 right-2 text-gray-700 hover:text-gray-900 text-2xl font-bold">&times;</button>
+    <h3 class="text-xl font-semibold mb-4">Add New Package</h3>
+    <form id="packageForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[70vh]">
+      <input type="text" placeholder="Country" name="Country" class="border p-2 rounded" required>
+      <input type="text" placeholder="Package Name" name="packageName" class="border p-2 rounded" required>
+      <input type="text" placeholder="Price" name="Price" class="border p-2 rounded">
+      <input type="text" placeholder="Our Price" name="Our Price" class="border p-2 rounded">
+      <input type="text" placeholder="Duration" name="Duration" class="border p-2 rounded">
+      <input type="text" placeholder="Location" name="Location" class="border p-2 rounded">
+      <textarea placeholder="Highlights" name="Highlights" class="border p-2 rounded"></textarea>
+      <input type="text" placeholder="Image URL" name="Image URL" class="border p-2 rounded">
+      <input type="text" placeholder="Link" name="Link" class="border p-2 rounded">
+      <input type="text" placeholder="Logo URL" name="Logo URL" class="border p-2 rounded">
+      <textarea placeholder="Itinerary" name="Itinerary" class="border p-2 rounded"></textarea>
+      <textarea placeholder="Hotels" name="Hotels" class="border p-2 rounded"></textarea>
+      <textarea placeholder="Inclusions" name="Inclusions" class="border p-2 rounded"></textarea>
+      <textarea placeholder="Exclusions" name="Exclusions" class="border p-2 rounded"></textarea>
+      <textarea placeholder="Note" name="Note" class="border p-2 rounded"></textarea>
+      <div class="col-span-full flex justify-end items-center space-x-2">
+        <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Add Package</button>
+        <span id="formLoading" class="text-blue-600 font-semibold"></span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbzjy7XJ99fSxi_OVn88nETc3NA-RwtSy3cxzXIOSHo3S-KAWQCiFfgRT97MFETozpob/exec"; // Replace this
+let currentData = [], currentPage = 1, pageSize = 10;
+
+// Modal elements
+const modal = document.getElementById("modal");
+const modalContent = document.getElementById("modalContent");
+const modalTitle = document.getElementById("modalTitle");
+const modalClose = document.getElementById("modalClose");
+const modalUpdate = document.getElementById("modalUpdate");
+const modalDelete = document.getElementById("modalDelete");
+const modalCancel = document.getElementById("modalCancel");
+
+// Add Modal
+const addModal = document.getElementById("addModal");
+const addModalClose = document.getElementById("addModalClose");
+const packageForm = document.getElementById("packageForm");
+const formLoading = document.getElementById("formLoading");
+const previewSection = document.getElementById("previewSection");
+const previewTable = document.getElementById("previewTable");
+const adminTable = document.getElementById("adminTable");
+const loadingMsg = document.getElementById("loadingMsg");
+const searchInput = document.getElementById("searchInput");
+const pageInfo = document.getElementById("pageInfo");
+const prevPage = document.getElementById("prevPage");
+const nextPage = document.getElementById("nextPage");
+
+// --- Open Add Modal ---
+document.getElementById("openAddModal").addEventListener("click",()=>addModal.classList.remove("hidden"));
+addModalClose.addEventListener("click",()=>addModal.classList.add("hidden"));
+
+// --- Fetch All Data ---
+document.getElementById("loadAll").addEventListener("click", fetchAll);
+
+function fetchAll(){
+  loadingMsg.textContent = "Loading...";
+  fetch(scriptURL).then(res=>res.json())
+    .then(data=>{
+      loadingMsg.textContent = "";
+      currentData = data;
+      currentPage = 1;
+      renderTable();
+    }).catch(err=>{ loadingMsg.textContent=""; alert(err); });
+}
+
+// --- Render Table with Pagination & Search ---
+function renderTable(){
+  const searchTerm = searchInput.value.toLowerCase();
+  let filtered = currentData.filter(r=>r["Package Name"].toLowerCase().includes(searchTerm) || r["Country"].toLowerCase().includes(searchTerm));
+  const totalPages = Math.ceil(filtered.length/pageSize);
+  const start = (currentPage-1)*pageSize;
+  const end = start+pageSize;
+  const pageData = filtered.slice(start,end);
+
+  // Table headers
+  if(pageData.length===0){ adminTable.querySelector("thead").innerHTML=""; adminTable.querySelector("tbody").innerHTML=""; return; }
+  const headers = Object.keys(pageData[0]).filter(k=>"rowIndex"!==k);
+  adminTable.querySelector("thead").innerHTML = "<tr>"+headers.map(h=>`<th>${h}</th>`).join("")+"<th>Actions</th></tr>";
+
+  const tbody = adminTable.querySelector("tbody");
+  tbody.innerHTML="";
+  pageData.forEach(row=>{
+    const tr = document.createElement("tr");
+    tr.dataset.rowIndex = row.rowIndex;
+    tr.dataset.fullData = JSON.stringify(row);
+
+    tr.innerHTML = headers.map(h=>{
+      if(row[h].length>30){
+        return `<td class="cursor-pointer text-blue-700 hover:underline" data-key="${h}" onclick="openRowModal(${row.rowIndex})">${row[h].substring(0,30)}...</td>`;
+      }
+      return `<td class="cursor-pointer" data-key="${h}" onclick="openRowModal(${row.rowIndex})">${row[h]}</td>`;
+    }).join("") + `<td>
+      <button class="bg-red-700 text-white px-2 py-1 rounded hover:bg-red-800" onclick="deleteRowModal(${row.rowIndex})">Delete</button>
+    </td>`;
+    tbody.appendChild(tr);
+  });
+  pageInfo.textContent = `Page ${currentPage} / ${totalPages}`;
+}
+
+// --- Pagination ---
+prevPage.addEventListener("click", ()=>{ if(currentPage>1){ currentPage--; renderTable(); }});
+nextPage.addEventListener("click", ()=>{ const totalPages = Math.ceil(currentData.length/pageSize); if(currentPage<totalPages){ currentPage++; renderTable(); }});
+searchInput.addEventListener("input",()=>{ currentPage=1; renderTable(); });
+
+// --- Row Modal for View/Edit ---
+let editingRow = null;
+function openRowModal(rowIndex){
+  const row = currentData.find(r=>r.rowIndex==rowIndex);
+  editingRow = row;
+  modalTitle.textContent = `Edit Package: ${row["Package Name"]}`;
+  modalContent.innerHTML = "";
+  Object.keys(row).filter(k=>"rowIndex"!==k).forEach(key=>{
+    const div = document.createElement("div");
+    div.className = "flex flex-col";
+    const label = document.createElement("label");
+    label.className="font-semibold";
+    label.textContent=key;
+    let input;
+    if(row[key].length>100){
+      input = document.createElement("textarea");
+      input.rows=4;
+    } else {
+      input = document.createElement("input");
+    }
+    input.value=row[key];
+    input.dataset.key=key;
+    input.className="border p-2 rounded";
+    div.appendChild(label);
+    div.appendChild(input);
+    modalContent.appendChild(div);
+  });
+  modal.classList.remove("hidden");
+}
+
+modalClose.addEventListener("click",()=> modal.classList.add("hidden"));
+modalCancel.addEventListener("click",()=> modal.classList.add("hidden"));
+
+// --- Update Row ---
+modalUpdate.addEventListener("click",()=>{
+  if(!editingRow) return;
+  const inputs = modalContent.querySelectorAll("input,textarea");
+  const data = {rowIndex: editingRow.rowIndex, action:"update"};
+  inputs.forEach(inp=> data[inp.dataset.key]=inp.value);
+
+  fetch(scriptURL,{ method:"POST", body:JSON.stringify(data) })
+    .then(res=>res.json())
+    .then(r=>{ alert(r.message); modal.classList.add("hidden"); fetchAll(); })
+    .catch(err=>alert(err));
+});
+
+// --- Delete Row ---
+modalDelete.addEventListener("click",()=>{
+  if(!editingRow) return;
+  if(!confirm("Are you sure you want to delete this package?")) return;
+  const data = {rowIndex: editingRow.rowIndex, action:"delete"};
+  fetch(scriptURL,{ method:"POST", body:JSON.stringify(data) })
+    .then(res=>res.json())
+    .then(r=>{ alert(r.message); modal.classList.add("hidden"); fetchAll(); })
+    .catch(err=>alert(err));
+});
+
+// --- Add Package Form ---
+packageForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  const formData = new FormData(packageForm);
+  const data = { action:"add" };
+  formData.forEach((value,key)=> data[key] = value);
+
+  formLoading.textContent = "Submitting...";
+  fetch(scriptURL,{ method:"POST", body:JSON.stringify(data)})
+    .then(res=>res.json())
+    .then(r=>{
+      formLoading.textContent="";
+      if(r.status==="duplicate"){ alert(r.message); return; }
+      if(r.status==="success"){
+        packageForm.reset();
+        addModal.classList.add("hidden");
+        previewSection.classList.remove("hidden");
+        showPreview(r.data);
+        fetchAll();
+      } else alert(r.message);
+    }).catch(err=>{ formLoading.textContent=""; alert(err); });
+});
+
+// --- Show Preview ---
+function showPreview(row){
+  previewTable.querySelector("thead").innerHTML="<tr>"+Object.keys(row).map(k=>`<th>${k}</th>`).join("")+"</tr>";
+  previewTable.querySelector("tbody").innerHTML="<tr>"+Object.keys(row).map(k=>{
+    if(row[k].length>50) return `<td class="cursor-pointer text-blue-700 hover:underline" onclick="alert('${row[k].replace(/'/g,"\\'")}')">View More</td>`;
+    return `<td>${row[k]}</td>`;
+  }).join("")+"</tr>";
+}
+</script>
+</body>
+</html>

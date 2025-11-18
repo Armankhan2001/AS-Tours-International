@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Itinerary View</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://unpkg.com/papaparse@5.3.2/papaparse.min.js"></script>
+
+<style>
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin:0; padding:20px; color:#333; }
+  .container { width: 100%; max-width: 900px; margin:auto; background:#fff; padding:20px; border-radius:18px; box-shadow:0 10px 25px rgba(0,0,0,0.1); }
+  .logo { text-align:center; margin-bottom:20px; }
+  .logo img { width:140px; max-width: 100%; border-radius:10px; }
+  .title { text-align:center; font-size:2rem; font-weight:bold; color:#0077b6; margin-bottom:30px; word-wrap: break-word; }
+  h2.section { background:#ffeb3b; padding:6px 14px; font-size:1.2rem; font-weight:bold; margin:30px 0 15px; display:inline-block; border-radius:6px; }
+  .day { padding:15px; margin-bottom:20px; border-left:4px solid #0077b6; background:#f8faff; border-radius:10px; page-break-inside: avoid; }
+  .day strong { font-size:1.1rem; color:#e63946; display:block; margin-bottom:6px; }
+  .day ul { margin:0; padding-left:20px; color:#555; }
+  table { width:100%; border-collapse:collapse; margin-top:15px; border-radius:10px; overflow:hidden; page-break-inside: avoid; }
+  table th, table td { border:1px solid #ccc; padding:10px; text-align:center; }
+  table th { background:#0077b6; color:#fff; font-weight:600; }
+  .cost-row { background:#ffe0e0; font-weight:bold; text-align:center; padding:12px; margin-top:8px; border-radius:8px; font-size:1rem; page-break-inside: avoid; }
+  .info-list { background:#fafafa; padding:15px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); page-break-inside: avoid; }
+  .info-list ul { margin:0; padding-left:20px; }
+  .info-list li { margin-bottom:6px; line-height:1.5; }
+  .btn-group { text-align:center; margin-top:30px; }
+  .btn { background:#0077b6; color:white; padding:12px 20px; border-radius:10px; text-decoration:none; font-weight:600; margin:10px; display:inline-flex; align-items:center; gap:8px; transition: background 0.3s; cursor:pointer; }
+  .btn:hover { background:#023e8a; }
+
+  /* Responsive */
+  @media (max-width: 768px){
+    .container { padding:15px; }
+    .title { font-size:1.6rem; }
+    table th, table td { padding:6px; font-size:0.9rem; }
+    .btn { padding:10px 15px; font-size:0.9rem; }
+  }
+
+  /* Print styles */
+  @media print {
+    body { background: white; padding:0; }
+    .container { box-shadow: none; border-radius: 0; padding:0; margin:0; }
+    .btn-group { display: none; }
+    h2.section { page-break-after: avoid; }
+    .day, table, .cost-row, .info-list { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="preview">
+  <div class="logo" id="logoBox"></div>
+  <div class="title" id="packageTitle">PACKAGE TITLE</div>
+
+  <h2 class="section">DAYWISE ITINERARY</h2>
+  <div id="itinerary"></div>
+
+  <h2 class="section">HOTEL OPTIONS :</h2>
+  <table>
+    <thead>
+      <tr><th>CITY NAME</th><th>HOTEL NAME</th><th>NO. OF NIGHT</th><th>MEAL PLAN</th></tr>
+    </thead>
+    <tbody id="hotelTable"></tbody>
+  </table>
+  <div class="cost-row" id="totalCost"></div>
+
+  <h2 class="section">INCLUSIONS</h2>
+  <div class="info-list" id="inclusions"></div>
+
+  <h2 class="section">EXCLUSIONS</h2>
+  <div class="info-list" id="exclusions"></div>
+
+  <h2 class="section" id="noteHeader" style="display:none;">NOTE</h2>
+  <div class="info-list" id="noteContent" style="display:none;"></div>
+</div>
+
+<div class="btn-group">
+  <button class="btn" id="downloadBtn"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+  <button class="btn" id="shareBtn"><i class="fa-solid fa-share-nodes"></i> Share</button>
+</div>
+
+<script>
+const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKWpvBUstFi-xtd__NDN3MqnMBb04fzGfAb9Ce27ao0gMGejfXqCp9V_Dh4G_Z8ungzPf4MHsy0hkx/pub?output=csv";
+const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(sheetUrl);
+const params = new URLSearchParams(window.location.search);
+const packageName = params.get("package");
+let currentPkg = null;
+
+Papa.parse(proxyUrl, { download:true, header:true, complete:function(results){
+    const allData = results.data;
+    currentPkg = allData.find(r => r['Package Name'] === packageName);
+
+    if(!currentPkg){ document.getElementById("preview").innerHTML = "<p>Package not found.</p>"; return; }
+
+    if(currentPkg["Logo"]){ document.getElementById("logoBox").innerHTML = `<img src="${currentPkg["Logo"]}" alt="Logo">`; }
+    document.getElementById("packageTitle").innerText = currentPkg["Package Name"] + " – " + currentPkg["Duration"];
+
+    // Itinerary
+    if(currentPkg["Itinerary"]){
+      const days = currentPkg["Itinerary"].split(/Day\s*\d+:/i);
+      let matches = currentPkg["Itinerary"].match(/Day\s*\d+:/gi) || [];
+      let formatted = "";
+      for(let i=1;i<days.length;i++){
+        let lines = days[i].trim().split("\n").filter(l=>l);
+        formatted += `<div class="day"><strong>${matches[i-1]} ${lines[0]||""}</strong><ul>` 
+                     + lines.map(l=>`<li>${l}</li>`).join("") 
+                     + "</ul></div>";
+      }
+      document.getElementById("itinerary").innerHTML = formatted;
+    }
+
+    // Hotels
+    if(currentPkg["Hotels"]){
+      let rows = currentPkg["Hotels"].split("\n").map(h=>{
+        let [city,hotel,nights,meals] = h.split("|");
+        return `<tr><td>${city||""}</td><td>${hotel||""}</td><td>${nights||""}</td><td>${meals||""}</td></tr>`;
+      }).join("");
+      document.getElementById("hotelTable").innerHTML = rows;
+    }
+
+    document.getElementById("totalCost").innerText = currentPkg["Price"]||"";
+
+    // Inclusions
+    document.getElementById("inclusions").innerHTML = currentPkg["Inclusions"] 
+      ? "<ul>" + currentPkg["Inclusions"].split("\n").map(i=>`<li>${i}</li>`).join("") + "</ul>" 
+      : "Not specified.";
+
+    // Exclusions
+    document.getElementById("exclusions").innerHTML = currentPkg["Exclusions"] 
+      ? "<ul>" + currentPkg["Exclusions"].split("\n").map(i=>`<li>${i}</li>`).join("") + "</ul>" 
+      : "Not specified.";
+
+    // Note
+    if(currentPkg["Note"] && currentPkg["Note"].trim() !== ""){
+      document.getElementById("noteHeader").style.display = "block";
+      document.getElementById("noteContent").style.display = "block";
+      document.getElementById("noteContent").innerHTML = "<ul>" 
+          + currentPkg["Note"].split("\n").map(i=>`<li>${i}</li>`).join("") 
+          + "</ul>";
+    } else {
+      document.getElementById("noteHeader").style.display = "none";
+      document.getElementById("noteContent").style.display = "none";
+    }
+
+}});
+
+// Print (native) for PDF
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  window.print();
+});
+
+// Share button
+document.getElementById("shareBtn").addEventListener("click", () => {
+  navigator.clipboard.writeText(window.location.href).then(()=>{ alert("Share link copied!"); })
+  .catch(()=>{ alert("Failed to copy link."); });
+});
+</script>
+
+</body>
+</html>

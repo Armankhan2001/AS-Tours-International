@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AsToursInternational — Itinerary Generator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+.pdf-page { width:210mm; min-height:297mm; padding:20mm; box-sizing:border-box; background:white; }
+.brand-logo { max-height:100px; object-fit:contain; display:block; margin-right:12px; }
+.wrap-td { white-space:normal; word-break:break-word; }
+.footer-company { margin-top:20px; font-size:12px; color:#374151; line-height:1.4; }
+.footer-generated { margin-top:10px; font-size:11px; color:#6b7280; }
+.cart-item { cursor:pointer; transition:all 0.2s; }
+.cart-item:hover { background:#f3f4f6; }
+</style>
+</head>
+<body class="bg-gradient-to-r from-gray-100 to-gray-200 min-h-screen font-sans">
+
+<header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-4 px-6 shadow sticky top-0 z-40">
+  <div class="max-w-6xl mx-auto flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <img src="../../../image/astourlogo.png" alt="AsToursInternational" class="h-16 rounded p-1 bg-white/20" id="dashLogo">
+      <div>
+        <h1 class="text-xl font-bold">AsToursInternational — Itinerary Generator</h1>
+        <div class="text-xs text-white/80">Professional itineraries for visa & client confirmations</div>
+      </div>
+    </div>
+    <a href="index.html" class="text-sm bg-white/10 px-3 py-1 rounded hover:bg-white/20">⬅ Back to Dashboard</a>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto p-6">
+  <div class="grid md:grid-cols-3 gap-6">
+
+    <!-- Form Panel -->
+    <form id="formPanel" class="col-span-1 bg-white rounded-2xl shadow p-5 space-y-4">
+      <h2 class="text-lg font-bold text-indigo-700">Itinerary Details</h2>
+
+      <!-- Logo Upload -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Logo (file upload)</label>
+        <input id="logoUpload" type="file" accept="image/*" class="block w-full text-sm" />
+        <div class="text-xs text-gray-500 mt-1">Or paste logo URL below</div>
+        <input id="logoUrl" type="url" placeholder="https://..." class="mt-2 border rounded p-2 w-full text-sm" />
+      </div>
+
+      <!-- Company Info -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Company Name (optional)</label>
+        <input id="companyName" placeholder="AsTours International" class="border rounded p-2 w-full" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Company Address (optional)</label>
+        <textarea id="companyAddress" rows="2" placeholder="101 B, Shakaza Heights, road no 27 Thane West 400612" class="border rounded p-2 w-full"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Company Email (optional)</label>
+        <input id="companyEmail" placeholder="Astoursinternational@gmail.com" class="border rounded p-2 w-full" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Company Website (optional)</label>
+        <input id="companyWebsite" placeholder="https://www.astoursinternational.com" class="border rounded p-2 w-full" />
+      </div>
+
+      <!-- Country & Confirmation -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Country of Tour</label>
+        <input id="tourCountry" placeholder="Brazil" class="border rounded p-2 w-full" />
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block text-sm">Confirmation No.</label>
+          <input id="confirmationNo" class="border rounded p-2 w-full" />
+        </div>
+        <div>
+          <label class="block text-sm">Reference (optional)</label>
+          <input id="reference" class="border rounded p-2 w-full" />
+        </div>
+      </div>
+
+      <!-- Passenger Details -->
+      <div>
+        <label class="block text-sm">Passenger Details (one per line)</label>
+        <textarea id="passengerDetails" rows="3" class="border rounded p-2 w-full" placeholder="Ahmed Abdul Saeed - Passport W3691761"></textarea>
+      </div>
+
+      <!-- Hotels -->
+      <div>
+        <div class="flex items-center justify-between">
+          <label class="block text-sm font-medium text-gray-700">Hotels / Stays</label>
+          <button type="button" onclick="addHotel()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded">+ Add</button>
+        </div>
+        <div id="hotelsList" class="mt-2 space-y-3"></div>
+      </div>
+
+      <!-- Extra Days -->
+      <div>
+        <div class="flex items-center justify-between">
+          <label class="block text-sm font-medium text-gray-700">Extra Day Entries (optional)</label>
+          <button type="button" onclick="addManualDay()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded">+ Add Day</button>
+        </div>
+        <div id="manualDays" class="mt-2 space-y-2"></div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2">
+        <button type="button" onclick="generatePreview()" class="w-full bg-indigo-600 text-white py-2 rounded font-semibold">Generate Preview</button>
+        <div class="flex gap-2">
+          <button type="button" onclick="copyPreview()" class="flex-1 bg-blue-600 text-white py-2 rounded">Copy</button>
+          <button type="button" onclick="downloadPDF()" class="flex-1 bg-emerald-600 text-white py-2 rounded">Download PDF</button>
+          <button type="button" onclick="saveToSheet(this)" class="flex-1 bg-orange-600 text-white py-2 rounded">Save to Sheet</button>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- Preview & Saved List -->
+    <section class="col-span-2">
+      <div class="bg-white rounded-2xl shadow p-6 min-h-[70vh]">
+        <div id="previewWrapper" class="pdf-page" style="display:none;"></div>
+        <div id="emptyMsg" class="text-gray-500 p-8">
+          <p class="font-medium">Professional Itinerary Preview</p>
+          <p class="mt-2">Fill the form on the left and click <b>Generate Preview</b>. Use the buttons to Copy, Download PDF or Save.</p>
+        </div>
+
+        <!-- Filter -->
+        <div class="mt-4 flex items-center gap-2">
+          <input type="text" id="filterCountry" placeholder="Filter by country" class="border rounded p-2 w-1/2">
+          <button class="bg-indigo-600 text-white px-3 py-1 rounded" onclick="loadItineraries()">Filter</button>
+          <button class="bg-gray-600 text-white px-3 py-1 rounded" onclick="window.open('saved.html', '_blank')">Saved Itineraries</button>
+        </div>
+
+        <!-- Itineraries List -->
+        <div id="itineraryList" class="mt-4 grid grid-cols-1 gap-2"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="max-w-6xl mx-auto text-center py-6 text-sm text-gray-500">
+  © <span id="year"></span> AsToursInternational — Powered by Solo2CEO
+</footer>
+
+<script>
+document.getElementById('year').innerText = new Date().getFullYear();
+let logoData = "";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzFibwNC3mrmwHc1P5GwwXv1AeNYNZD7iggejQAOmsLL1WMH5mDDU0MoU8tVGfmOAD3Zg/exec"; // <-- replace with your web app
+
+// Logo upload
+document.getElementById('logoUpload').addEventListener('change', e => {
+    const f = e.target.files[0]; 
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = ev => { logoData = ev.target.result; };
+    reader.readAsDataURL(f);
+});
+
+// Add hotel row
+function addHotel(pref={}) {
+    const container = document.createElement('div');
+    container.className = 'grid grid-cols-4 gap-2 items-center border rounded p-2 bg-gray-50 hotel-block';
+    container.innerHTML = `
+        <input class="p-2 border rounded hotel-city" placeholder="City" value="${pref.city||''}" />
+        <input class="p-2 border rounded hotel-checkin" type="date" value="${pref.checkin||''}" />
+        <input class="p-2 border rounded hotel-checkout" type="date" value="${pref.checkout||''}" />
+        <div class="col-span-4 grid grid-cols-6 gap-2">
+            <input class="col-span-3 p-2 border rounded hotel-name" placeholder="Hotel Name" value="${pref.hotel||''}" />
+            <input class="col-span-2 p-2 border rounded hotel-contact" placeholder="Contact / Phone (optional)" value="${pref.contact||''}" />
+            <button type="button" class="col-span-1 bg-red-500 text-white rounded px-2" onclick="this.closest('.hotel-block').remove()">Remove</button>
+        </div>`;
+    document.getElementById('hotelsList').appendChild(container);
+}
+
+// Add manual day
+function addManualDay(obj={}) {
+    const div = document.createElement('div');
+    div.className = 'grid grid-cols-3 gap-2 items-center';
+    div.innerHTML = `
+        <input type="date" class="p-2 border rounded day-date" value="${obj.date||''}" />
+        <input class="p-2 border rounded day-title" placeholder="Title" value="${obj.title||''}" />
+        <input class="p-2 border rounded day-activities" placeholder="Short activity" value="${obj.activities||''}" />
+        <div class="col-span-3 text-right">
+            <button type="button" class="mt-2 bg-red-500 text-white px-3 py-1 rounded" onclick="this.closest('div.grid').remove()">Remove</button>
+        </div>`;
+    document.getElementById('manualDays').appendChild(div);
+}
+
+function formatDate(d){
+    if(!d) return '';
+    const dt = new Date(d);
+    const dd = ('0' + dt.getDate()).slice(-2);
+    const mm = ('0' + (dt.getMonth()+1)).slice(-2);
+    const yyyy = dt.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+}
+
+function collectData(){
+    const companyName = document.getElementById('companyName').value || '';
+    const companyAddress = document.getElementById('companyAddress').value || '';
+    const companyEmail = document.getElementById('companyEmail').value || '';
+    const companyWebsite = document.getElementById('companyWebsite').value || '';
+    const confirmationNo = document.getElementById('confirmationNo').value || '';
+    const reference = document.getElementById('reference').value || '';
+    const tourCountry = document.getElementById('tourCountry').value || '';
+    const passengerDetails = (document.getElementById('passengerDetails').value||'').split(/\r?\n/).filter(s=>s.trim());
+
+    const hotels = [];
+    document.querySelectorAll('.hotel-block').forEach(h=>{
+        const city = h.querySelector('.hotel-city').value;
+        const checkin = h.querySelector('.hotel-checkin').value;
+        const checkout = h.querySelector('.hotel-checkout').value;
+        const hotel = h.querySelector('.hotel-name').value;
+        const contact = h.querySelector('.hotel-contact').value;
+        if(city && checkin && checkout && hotel) hotels.push({city, checkin, checkout, hotel, contact});
+    });
+
+    const manualDays = [];
+    document.querySelectorAll('#manualDays > .grid').forEach(d=>{
+        const date = d.querySelector('.day-date').value;
+        const title = d.querySelector('.day-title').value;
+        const activities = d.querySelector('.day-activities').value;
+        if(date || title || activities) manualDays.push({date,title,activities});
+    });
+
+    const logoUrl = document.getElementById('logoUrl').value || '';
+    return {companyName, companyAddress, companyEmail, companyWebsite, confirmationNo, reference, tourCountry, passengerDetails, hotels, manualDays, logoUrl, logoData};
+}
+
+// Escape HTML
+function escapeHtml(text){
+    if(!text && text!==0) return '';
+    return String(text).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+}
+
+
+
+// Greeting function
+function getGreeting(passengers, companyName){
+    let hasMr=false, hasMrs=false;
+    passengers.forEach(p=>{
+        if(p.toLowerCase().includes('mr')) hasMr=true;
+        if(p.toLowerCase().includes('mrs')) hasMrs=true;
+    });
+    const greeting = (hasMr && hasMrs) ? "Dear Sir/Ma’am," : hasMr ? "Dear Sir," : "Dear Sir/Ma’am,";
+    const companyShort = companyName.split('(')[0].trim();
+    const country = document.getElementById('tourCountry').value;
+    return `${greeting}\nGreetings from ${companyShort}!!\nAs per our discussion, we are pleased to confirm the below ${country ? country + ' tour' : 'tour'} for you.`;
+
+}
+
+// Build preview HTML
+function buildPreviewHTML(data){
+    let logoHTML = '';
+    if(data.logoData) logoHTML = `<img src="${data.logoData}" alt="logo" class="brand-logo">`;
+    else if(data.logoUrl) logoHTML = `<img src="${escapeHtml(data.logoUrl)}" alt="logo" class="brand-logo">`;
+    else logoHTML = `<div style="font-weight:700;color:#1f2937;font-size:18px">${escapeHtml(data.companyName||'')}</div>`;
+
+    const introHTML = `<p style="white-space:pre-line;"><b>${escapeHtml(data.confirmationNo)?('Confirmation No.: '+escapeHtml(data.confirmationNo)):""}</b>\n${escapeHtml(getGreeting(data.passengerDetails, data.companyName))}</p>`;
+    const passengersHTML = data.passengerDetails.map(p=>`<div>${escapeHtml(p)}</div>`).join('');
+
+    let hotelsHTML = '';
+    if(data.hotels.length){
+        hotelsHTML = `<table style="width:100%;border-collapse:collapse;margin-top:10px;">
+        <thead><tr style="background:#f3f4f6">
+        <th style="padding:8px;border:1px solid #d1d5db">City</th>
+        <th style="padding:8px;border:1px solid #d1d5db">Check In</th>
+        <th style="padding:8px;border:1px solid #d1d5db">Check Out</th>
+        <th style="padding:8px;border:1px solid #d1d5db">Hotel</th>`;
+        if(data.hotels.some(h=>h.contact)) hotelsHTML += `<th style="padding:8px;border:1px solid #d1d5db">Contact</th>`;
+        hotelsHTML += `</tr></thead><tbody>`;
+        data.hotels.forEach(h=>{
+            hotelsHTML += `<tr>
+            <td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(h.city)}</td>
+            <td style="padding:8px;border:1px solid #e5e7eb">${formatDate(h.checkin)}</td>
+            <td style="padding:8px;border:1px solid #e5e7eb">${formatDate(h.checkout)}</td>
+            <td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(h.hotel)}</td>`;
+            if(data.hotels.some(h=>h.contact)) hotelsHTML += `<td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(h.contact||'')}</td>`;
+            hotelsHTML += `</tr>`;
+        });
+        hotelsHTML += `</tbody></table>`;
+    }
+
+    // Schedule
+    const rows = [];
+    data.hotels.forEach(h=>{
+        let current = new Date(h.checkin);
+        const end = new Date(h.checkout);
+        while(current<=end){
+            rows.push({date: formatDate(current), detail:`Stay in ${h.city} — ${h.hotel}`});
+            current.setDate(current.getDate()+1);
+        }
+    });
+    data.manualDays.forEach(md=>{
+        if(!md.date) return;
+        const content = (md.title?md.title+' — ':'') + (md.activities||'');
+        const idx = rows.findIndex(r=>r.date===formatDate(md.date));
+        if(idx>=0) rows[idx].detail = content;
+        else rows.push({date:formatDate(md.date),detail:content});
+    });
+    rows.sort((a,b)=>a.date.localeCompare(b.date));
+    let scheduleHTML='';
+    if(rows.length){
+        scheduleHTML = `<table style="width:100%;border-collapse:collapse;margin-top:10px;">
+            <thead><tr style="background:#f3f4f6"><th style="padding:8px;border:1px solid #d1d5db">Date</th>
+            <th style="padding:8px;border:1px solid #d1d5db">Day-wise Activity</th></tr></thead><tbody>`;
+        rows.forEach(r=>{
+            scheduleHTML += `<tr><td style="padding:8px;border:1px solid #e5e7eb;vertical-align:top">${r.date}</td>
+            <td style="padding:8px;border:1px solid #e5e7eb;vertical-align:top">${escapeHtml(r.detail)}</td></tr>`;
+        });
+        scheduleHTML += `</tbody></table>`;
+    }
+
+    let companyInfo='';
+    if(data.companyName||data.companyAddress||data.companyEmail||data.companyWebsite){
+        companyInfo = `<div style="margin-top:16px;">`;
+        if(data.companyName) companyInfo += `<b>${escapeHtml(data.companyName)}</b><br/>`;
+        if(data.companyAddress) companyInfo += `${escapeHtml(data.companyAddress)}<br/>`;
+        if(data.companyEmail) companyInfo += `Email: ${escapeHtml(data.companyEmail)}<br/>`;
+        if(data.companyWebsite) companyInfo += `Website: ${escapeHtml(data.companyWebsite)}<br/>`;
+        companyInfo += `</div>`;
+    }
+
+    return `<div style="font-family:Inter,Arial,Helvetica,sans-serif;color:#111827;">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">${logoHTML}</div>
+        <hr style="margin:6px 0;border-color:#e5e7eb"/>
+        ${introHTML}
+        <div style="margin-top:8px;"><b>Passenger Details:</b>${passengersHTML}</div>
+        ${hotelsHTML}
+        ${scheduleHTML}
+        ${companyInfo}
+        <div style="margin-top:12px;font-size:11px;color:#6b7280;">Generated by AsToursInternational</div>
+    </div>`;
+}
+
+// Generate preview
+function generatePreview() {
+    const data = collectData();
+    data.passengerDetails = data.passengerDetails || [];
+    data.hotels = data.hotels || [];
+    data.manualDays = data.manualDays || [];
+    const html = buildPreviewHTML(data);
+    const wrapper = document.getElementById('previewWrapper');
+    wrapper.innerHTML = html;
+    document.getElementById('emptyMsg').style.display = 'none';
+    wrapper.style.display = 'block';
+    if (data.logoData) document.getElementById('dashLogo').src = data.logoData;
+    else if (data.logoUrl) document.getElementById('dashLogo').src = data.logoUrl;
+    else document.getElementById('dashLogo').src = '../../image/astourlogo.png';
+}
+
+// Download PDF
+function downloadPDF(){
+    const wrapper = document.getElementById('previewWrapper');
+    if(!wrapper.innerHTML.trim()){ alert('Generate preview first'); return; }
+    const opt = {
+        margin: [10,10,10,10],
+        filename: `Itinerary_${document.getElementById('confirmationNo').value||'confirmation'}.pdf`,
+        image: {type:'jpeg',quality:0.98},
+        html2canvas:{scale:2,useCORS:true,logging:false},
+        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+    };
+    html2pdf().set(opt).from(wrapper).save();
+}
+
+// Copy preview
+function copyPreview(){
+    const wrapper = document.getElementById('previewWrapper');
+    if(!wrapper.innerText.trim()){ alert('Generate preview first'); return; }
+    navigator.clipboard.writeText(wrapper.innerText).then(()=>alert('Itinerary text copied ✅'));
+}
+
+// Save to Google Sheet
+let isSaving = false; // prevent multiple clicks
+
+async function saveToSheet(button){
+    if(isSaving) return;
+    isSaving = true;
+
+    // Show "Submitting..." on button
+    const originalText = button ? button.innerText : '';
+    if(button){
+        button.innerText = 'Submitting...';
+        button.disabled = true;
+    }
+
+    const data = collectData();
+    const payload = {action:'save', data};
+
+    try {
+        const resp = await fetch(WEB_APP_URL, {method:'POST', body: JSON.stringify(payload)});
+        const result = await resp.json();
+
+        // Green success message in center
+        const msgDiv = document.createElement('div');
+        msgDiv.innerText = result.status || 'Saved successfully!';
+        msgDiv.style.position = 'fixed';
+        msgDiv.style.top = '50%';
+        msgDiv.style.left = '50%';
+        msgDiv.style.transform = 'translate(-50%, -50%)'; // center horizontally and vertically
+        msgDiv.style.backgroundColor = '#16a34a'; // green
+        msgDiv.style.color = 'white';
+        msgDiv.style.padding = '12px 20px';
+        msgDiv.style.borderRadius = '8px';
+        msgDiv.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+        msgDiv.style.zIndex = 9999;
+        msgDiv.style.fontWeight = '600';
+        msgDiv.style.fontSize = '16px';
+        document.body.appendChild(msgDiv);
+
+        setTimeout(()=>msgDiv.remove(), 3000); // remove after 3s
+
+        loadItineraries(); // reload cart
+
+    } catch(e){
+        alert('Error saving to sheet'); 
+        console.error(e);
+    } finally {
+        isSaving = false;
+        if(button){
+            button.innerText = originalText;
+            button.disabled = false;
+        }
+    }
+}
+
+
+
+
+// Load itineraries
+async function loadItineraries(){
+    const filter = document.getElementById('filterCountry').value.toLowerCase();
+    const list = document.getElementById('itineraryList');
+
+    // Show loading message
+    list.innerHTML = '<div style="padding:10px;color:#1f7a1f;font-weight:600;">Loading itineraries...</div>';
+
+    try {
+        const res = await fetch(`${WEB_APP_URL}?action=list`);
+        const json = await res.json();
+
+        // Clear list before appending
+        list.innerHTML = '';
+
+        json.data
+            .filter(d=>!filter || (d.tourCountry||'').toLowerCase().includes(filter))
+            .forEach(d=>{
+                const div = document.createElement('div');
+                div.className='cart-item border p-2 rounded bg-gray-50';
+                div.innerHTML = `<b>${d.confirmationNo || 'No Confirm'}</b> — ${d.tourCountry || ''} — ${d.passengerDetails.join(', ')}`;
+                div.onclick = ()=>loadItineraryIntoForm(d);
+                list.appendChild(div);
+            });
+
+        // If no itineraries found after filtering
+        if(list.innerHTML.trim() === '') {
+            list.innerHTML = '<div style="padding:10px;color:#6b7280;">No itineraries found.</div>';
+        }
+
+    } catch(e) {
+        list.innerHTML = '<div style="padding:10px;color:red;">Error loading itineraries. Please try again.</div>';
+        console.error(e);
+    }
+}
+
+// Load itinerary into form
+function loadItineraryIntoForm(d){
+    document.getElementById('companyName').value = d.companyName;
+    document.getElementById('companyAddress').value = d.companyAddress;
+    document.getElementById('companyEmail').value = d.companyEmail;
+    document.getElementById('companyWebsite').value = d.companyWebsite;
+    document.getElementById('confirmationNo').value = d.confirmationNo;
+    document.getElementById('reference').value = d.reference;
+    document.getElementById('tourCountry').value = d.tourCountry;
+    document.getElementById('passengerDetails').value = d.passengerDetails.join('\n');
+    document.getElementById('hotelsList').innerHTML = '';
+    d.hotels.forEach(h=>addHotel(h));
+    document.getElementById('manualDays').innerHTML = '';
+    d.manualDays.forEach(md=>addManualDay(md));
+    document.getElementById('logoUrl').value = d.logoUrl || '';
+    logoData = d.logoData || '';
+    generatePreview();
+}
+
+// Initial load
+loadItineraries();
+
+
+</script>
+</body>
+</html>

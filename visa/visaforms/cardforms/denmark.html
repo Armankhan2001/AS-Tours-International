@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schengen Tourist Visa Proforma Form</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      background: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .form-container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0d6efd;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      font-weight: 600;
+    }
+    .btn-submit {
+      background-color: #0d6efd;
+      color: white;
+    }
+    .btn-submit:hover {
+      background-color: #0b5ed7;
+    }
+    .action-buttons {
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container" id="formWrapper">
+  <h2>Schengen Tourist Visa Proforma Form</h2>
+  <form id="schengenForm">
+    <!-- Form fields same as previous template -->
+    <div class="form-group">
+      <label class="form-label">1. Do you have someone in EU countries inviting you or you'll visit them on your trip to ---------(Country You are applying for)?</label>
+      <textarea class="form-control" name="euInvite" rows="2" required></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">2. Have you had your fingerprint collected before for the purpose of applying for a Schengen Visa?</label><br>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="fingerprint" id="fingerYes" value="Yes" required>
+        <label class="form-check-label" for="fingerYes">Yes</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="fingerprint" id="fingerNo" value="No" required>
+        <label class="form-check-label" for="fingerNo">No</label>
+      </div>
+      <textarea class="form-control mt-2" name="fingerprintDetails" placeholder="If Yes, share sticker visa number and date of collection of biometric"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">3. Do you visit your family or friends in ---------(Country You are applying for)?</label>
+      <textarea class="form-control" name="familyVisit" rows="2"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">4. Other Member States of Destination (if applicable)</label>
+      <input type="text" class="form-control" name="otherDestinations">
+    </div>
+    <div class="form-group">
+      <label class="form-label">5. Your Email & Phone number:</label>
+      <input type="email" class="form-control mb-2" name="email" placeholder="Email" required>
+      <input type="tel" class="form-control" name="phone" placeholder="Phone Number" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">6. Do you have any other surname (Family name) other than the surname in passport?</label>
+      <input type="text" class="form-control" name="otherSurname">
+    </div>
+    <div class="form-group">
+      <label class="form-label">7. Aadhar Card Number:</label>
+      <input type="text" class="form-control" name="aadhar" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">8. Your current occupation, with employer name, address, Email, Phone number:</label>
+      <textarea class="form-control" name="occupationDetails" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">9. Cost of travelling and living during the applicant’s stay is covered by:</label><br>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="costCovered" id="byApplicant" value="Applicant" required>
+        <label class="form-check-label" for="byApplicant">Applicant himself</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="costCovered" id="bySponsor" value="Sponsor" required>
+        <label class="form-check-label" for="bySponsor">Sponsor</label>
+      </div>
+      <textarea class="form-control mt-2" name="sponsorDetails" placeholder="If by sponsor, give his details"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">10. Number of Entries You want to request for ---------(Country You are applying for) Visa?</label><br>
+      <select class="form-select" name="numEntries" required>
+        <option value="" selected disabled>Select</option>
+        <option value="Single">Single</option>
+        <option value="Multiple">Multiple</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">11. Any other name or surname from birth or before marriage? Family name change if any?</label>
+      <input type="text" class="form-control" name="otherName">
+    </div>
+    <div class="form-group">
+      <label class="form-label">12. Specify your occupation / your role:</label>
+      <input type="text" class="form-control" name="occupationRole">
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-submit btn-lg">Submit Form</button>
+    </div>
+  </form>
+
+  <div class="action-buttons text-center mt-3" id="actionButtons">
+    <button id="downloadPDF" class="btn btn-success me-2">Download PDF</button>
+    <button id="shareWhatsApp" class="btn btn-warning me-2">Share on WhatsApp</button>
+    <button id="sendEmail" class="btn btn-info">Send via Email</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  const form = document.getElementById('schengenForm');
+  const actionButtons = document.getElementById('actionButtons');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    alert("Form submitted successfully!");
+    actionButtons.style.display = 'block';
+  });
+
+  function getFormData() {
+    const formData = new FormData(form);
+    let dataText = "";
+    for (const [key, value] of formData.entries()) {
+      dataText += `${key}: ${value}\n`;
+    }
+    return dataText;
+  }
+
+  // Download PDF
+  document.getElementById('downloadPDF').addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text(getFormData(), 10, 10);
+    doc.save('schengen_visa_form.pdf');
+  });
+
+  // Share WhatsApp
+  document.getElementById('shareWhatsApp').addEventListener('click', () => {
+    const text = encodeURIComponent(getFormData());
+    const phone = '+918169313795';
+    const url = `https://wa.me/${phone}?text=${text}`;
+    window.open(url, '_blank');
+  });
+
+  // Send via Email
+  document.getElementById('sendEmail').addEventListener('click', () => {
+    const subject = encodeURIComponent("Schengen Visa Form Submission");
+    const body = encodeURIComponent(getFormData());
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  });
+</script>
+
+</body>
+</html>
+
+<!-- denmark -->

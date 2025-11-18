@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2575fc">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="image/astourlogo.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsToursInternational | B2B Visa Rate Sheet</title>
+    <link rel="icon" type="image/png" href="../image/astourlogo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #ece9e6, #ffffff); font-family: 'Segoe UI', sans-serif; }
+        h2 { font-weight: 700; letter-spacing: 1px; color: #2c3e50; }
+        .card {
+            border-radius: 18px;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
+        .country-name { font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; color: #34495e; }
+        .country-name img { width: 35px; height: 24px; border-radius: 6px; object-fit: cover; margin-right: 10px; border: 1px solid #ddd; }
+        .info-line { font-size: 0.95rem; color: #555; margin-bottom: 6px; }
+        .info-line i { color: #007bff; margin-right: 6px; }
+        .btn-custom { border-radius: 10px; font-weight: 500; padding: 6px 12px; }
+        .search-box input { border-radius: 12px; border: 2px solid #e0e0e0; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .nav-tabs .nav-link { border-radius: 10px 10px 0 0; font-weight: 600; color: #495057; }
+        .nav-tabs .nav-link.active { background: #007bff; color: white; }
+        #passwordOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+        #passwordOverlay input { padding: 12px; border-radius: 5px; border: none; width: 250px; margin-bottom: 15px; font-size: 16px; }
+        #passwordOverlay button { padding: 10px 20px; background: #ffa726; border: none; color: #fff; font-size: 16px; border-radius: 5px; cursor: pointer; }
+        #passwordOverlay p { color: red; margin-top: 10px; font-size: 14px; }
+        .card-clickable { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .card-clickable:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+    <!-- Password Prompt Overlay -->
+    <div id="passwordOverlay">
+        <input type="password" id="adminPassword" placeholder="Enter Password" />
+        <button onclick="checkPassword()">Unlock</button>
+        <p id="errorMessage"></p>
+    </div>
+
+    <div class="container py-4">
+        <h2 class="text-center mb-4">🌍 B2B Visa Rate Sheet</h2>
+
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs justify-content-center mb-4" id="sheetTabs">
+            <li class="nav-item"><button class="nav-link active" data-sheet="main">🌐 Main Visa Data</button></li>
+            <li class="nav-item"><button class="nav-link" data-sheet="schengen">🇪🇺 Schengen 29 Countries</button></li>
+            <li class="nav-item"><button class="nav-link" data-sheet="Evisa">🛂 E-visa</button></li>
+        </ul>
+
+        <!-- Search -->
+        <div class="search-box mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country...">
+        </div>
+
+        <!-- Cards -->
+        <div id="cardsContainer" class="row g-4 mt-3"></div>
+    </div>
+
+<script>
+const SHEET_ID = "1F9RGurjNDCxjw0ydzQPtBuoueLRrNH99uK-fhu3BAQs";
+const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ";
+
+const sheets = {
+    main: "VISA FEES & LINKS",
+    schengen: "Visa Fees Schengen 29 Countries",
+    Evisa: "E-visas",
+};
+
+let visaData = [];
+let activeSheet = "main";
+
+async function fetchVisaData(sheetKey) {
+    const range = sheets[sheetKey];
+    try {
+        const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`);
+        const data = await res.json();
+        if (!data.values || data.values.length === 0) {
+            document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-muted">No data found</p>`;
+            return;
+        }
+        const headers = data.values[0];
+        visaData = data.values.slice(1).map(row => {
+            const obj = {};
+            headers.forEach((header, i) => obj[header] = row[i] || "");
+            return obj;
+        });
+        renderCards(visaData, sheetKey);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-danger">Error loading data</p>`;
+    }
+}
+
+function renderCards(data, sheetKey) {
+    const container = document.getElementById("cardsContainer");
+    container.innerHTML = "";
+    if (!data || data.length === 0) {
+        container.innerHTML = `<p class="text-center text-muted">No data found</p>`;
+        return;
+    }
+
+    data.forEach(row => {
+        if (!row["Countries"]) return;
+        const card = document.createElement("div");
+        card.className = "col-md-4 mb-4";
+
+        // Calculate Service Charge 50% discount
+        let serviceCharge = row["Service Charge"] || "N/A";
+        let discountedCharge = (serviceCharge !== "N/A" && !isNaN(serviceCharge)) ? (parseFloat(serviceCharge)/2).toFixed(2) : "N/A";
+
+        let detailsHTML = `
+            <p class="info-line"><i class="fa-solid fa-coins"></i><strong>Visa Fees:</strong> ${row["Visa Fees"] || "N/A"}</p>
+            <p class="info-line"><i class="fa-solid fa-shield-halved"></i><strong>Insurance:</strong> ${row["Insurance"] || "N/A"}</p>
+            <p class="info-line"><i class="fa-solid fa-file-invoice"></i><strong>Service Charge:</strong> ${serviceCharge} <span class="text-success">(50% Discount: ${discountedCharge})</span></p>
+            <p class="info-line"><i class="fa-solid fa-clock"></i><strong>Processing Time:</strong> ${row["Processing Time"] || "N/A"}</p>
+        `;
+
+        if (sheetKey === "main" && row["Docs Scanning & Uploading Charges"])
+            detailsHTML += `<p class="info-line"><i class="fa-solid fa-upload"></i><strong>Docs Scanning & Uploading Charges:</strong> ${row["Docs Scanning & Uploading Charges"]}</p>`;
+
+        if (sheetKey === "schengen") {
+            if (row["Vfs Fees"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user-tie"></i><strong>Vfs Fees:</strong> ${row["Vfs Fees"]}</p>`;
+            if (row["Courier Charges"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope"></i><strong>Courier Charges:</strong> ${row["Courier Charges"]}</p>`;
+            if (row["If We Submit"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-handshake"></i><strong>If We Submit:</strong> ${row["If We Submit"]}</p>`;
+            if (row["Special Note"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-note-sticky"></i><strong>Special Note:</strong> ${row["Special Note"]}</p>`;
+        }
+
+        // Evisa: hide Sales Manager, Sales Manager Mail Id, 3rd Party Name
+        if (sheetKey === "Evisa") {
+            if (row["Required Docs"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-file-alt"></i><strong>Required Docs:</strong> ${row["Required Docs"]}</p>`;
+            // if (row["3rd Party Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope-circle-check"></i><strong>3rd Party Mail Id:</strong> ${row["3rd Party Mail Id"]}</p>`;
+        }
+
+        card.innerHTML = `
+            <div class="card h-100 p-3 position-relative card-clickable">
+                ${row["Checklists"] ? `<a href="${row["Checklists"]}" target="_blank" class="Checklists-ribbon" title="Visa Checklists"><i class="fa-solid fa-clipboard-check"></i></a>` : ""}
+                <h5 class="country-name">
+                    ${row["Code"] ? `<img src="https://flagcdn.com/w40/${row["Code"].toLowerCase()}.png" alt="flag">` : ""}
+                    ${row["Countries"]}
+                </h5>
+                ${detailsHTML}
+                <a href="https://wa.me/918850102255" target="_blank" class="btn btn-sm btn-success btn-custom"><i class="fa-brands fa-whatsapp"></i> Apply Now</a>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+
+// Search Filter
+document.getElementById("searchInput").addEventListener("input", e => {
+    const searchText = e.target.value.toLowerCase();
+    const filtered = visaData.filter(row => (row["Countries"] || "").toLowerCase().includes(searchText));
+    renderCards(filtered, activeSheet);
+});
+
+// Tab Switch
+document.querySelectorAll("#sheetTabs button").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll("#sheetTabs button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeSheet = btn.getAttribute("data-sheet");
+        fetchVisaData(activeSheet);
+        document.getElementById("searchInput").value = "";
+    });
+});
+
+// Load default sheet
+fetchVisaData("main");
+
+// Password check
+const encoded = btoa('b2b@ceo');
+function checkPassword() {
+    const input = document.getElementById("adminPassword").value;
+    const correctPassword = atob(encoded);
+    if (input === correctPassword) document.getElementById("passwordOverlay").style.display = "none";
+    else document.getElementById("errorMessage").textContent = "Incorrect password. Try again.";
+}
+</script>
+
+<style>
+.Checklists-ribbon {
+    position: absolute; top: 10px; right: -10px;
+    background: #28a745; color: white !important;
+    padding: 6px 10px; font-size: 14px; font-weight: bold;
+    border-radius: 0 6px 6px 0; text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s;
+}
+.Checklists-ribbon:hover { background: #218838; text-decoration: none; color: white !important; }
+.Checklists-ribbon i { font-size: 16px; }
+</style>
+</body>
+</html>

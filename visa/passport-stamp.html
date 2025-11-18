@@ -1,0 +1,268 @@
+<!-- visa/passport-stamp.html content to be added here -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stamp Visa Services | Sanskruti Travels</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="stamp-visa-page">
+
+  <!-- Header Section -->
+  <header>
+    <div class="logo">
+      <img src="../images/logo.png" alt="Sanskruti Travels">
+  </div>
+    <nav>
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../tours/himachal.html">Tours</a></li>
+        <li><a href="../visa/visa.html">Visa</a></li>
+        <li><a href="../flights.html">Flights</a></li>
+        <li><a href="../hotels.html">Hotels</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Visa Information Section -->
+  <section class="visa-info-section">
+    <h1>Stamp Visa Services (Passport Stamping & Biometrics)</h1>
+    <p>Some countries require a physical visa stamp or biometric data to be collected as part of the visa process. Select a country below to see the required documents, processing time, and details.</p>
+  </section>
+
+  <!-- Visa Form Section -->
+  <section class="visa-form-section">
+    <h2>Apply for a Stamp Visa</h2>
+    <form id="stamp-visa-form">
+      <div class="form-group">
+        <label for="country">Select Destination Country</label>
+        <select id="country" name="country" required>
+          <option value="">-- Choose a Country --</option>
+          <option value="usa">USA</option>
+          <option value="canada">Canada</option>
+          <option value="australia">Australia</option>
+          <option value="uk">United Kingdom</option>
+          <option value="japan">Japan</option>
+          <option value="france">France</option>
+          <option value="germany">Germany</option>
+          <option value="newzealand">New Zealand</option>
+          <option value="spain">Spain</option>
+          <option value="switzerland">Switzerland</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="full-name">Full Name</label>
+        <input type="text" id="full-name" name="full-name" placeholder="Enter your full name" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="passport-number">Passport Number</label>
+        <input type="text" id="passport-number" name="passport-number" placeholder="Enter your passport number" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="travel-date">Intended Travel Date</label>
+        <input type="date" id="travel-date" name="travel-date" required />
+      </div>
+  
+      <button type="submit" class="submit-btn">Submit Visa Application</button>
+    </form>
+  </section>  
+
+  <!-- Country Information Section -->
+  <section id="country-info">
+    <h2>Country Visa Details</h2>
+    <div id="country-details">
+      <p><strong>Requirement Type:</strong> Select a country to view details.</p>
+      <p><strong>Documents Required:</strong> Select a country to view required documents.</p>
+      <p><strong>Processing Time:</strong> Select a country to view processing time.</p>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2025 Sanskruti Travels. All rights reserved. | <a href="tel:+917977527874">Call: +91 79775 27874</a></p>
+  </footer>
+
+  <!-- JavaScript Section -->
+  <script>
+    const countryData = {
+      usa: {
+        requirement: 'Visa Stamping (Biometrics at US Embassy)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form (DS-160)',
+          'Visa Appointment Confirmation',
+          'Passport-sized Photographs',
+          'Visa Fee Payment Receipt',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '7-15 business days after interview'
+      },
+      canada: {
+        requirement: 'Visa Stamping (Biometrics at Visa Application Center)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form',
+          'Proof of Funds',
+          'Passport-sized Photographs',
+          'Visa Fee Payment',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '10-20 business days after biometric collection'
+      },
+      australia: {
+        requirement: 'Visa Stamping (Biometrics at Australian Visa Application Center)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form (482, 189, 190)',
+          'English Proficiency Test Results',
+          'Passport-sized Photographs',
+          'Visa Fee Payment',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '15-25 business days'
+      },
+      uk: {
+        requirement: 'Visa Stamping (Biometrics at UK Visa Application Center)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form',
+          'Financial Evidence',
+          'Passport-sized Photographs',
+          'Visa Fee Payment',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '10-15 business days after biometric appointment'
+      },
+      japan: {
+        requirement: 'Visa Stamping (Biometrics at Japan Embassy)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form',
+          'Passport-sized Photographs',
+          'Visa Fee Payment',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '5-10 business days'
+      },
+      france: {
+        requirement: 'Visa Stamping (Biometrics at French Embassy)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form (Schengen)',
+          'Proof of Travel Insurance',
+          'Passport-sized Photographs',
+          'Visa Fee Payment',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '7-10 business days'
+      },
+      germany: {
+        requirement: 'Visa Stamping (Biometrics at German Embassy)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form',
+          'Proof of Travel Insurance',
+          'Passport-sized Photographs',
+          'Visa Fee Payment',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '10-15 business days'
+      },
+      newzealand: {
+        requirement: 'Visa Stamping (Biometrics at New Zealand Visa Application Center)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form',
+          'Financial Evidence',
+          'Passport-sized Photographs',
+          'Visa Fee Payment',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '15-20 business days'
+      },
+      spain: {
+        requirement: 'Visa Stamping (Biometrics at Spanish Embassy)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form (Schengen)',
+          'Travel Insurance',
+          'Passport-sized Photographs',
+          'Visa Fee Payment',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '7-14 business days'
+      },
+      switzerland: {
+        requirement: 'Visa Stamping (Biometrics at Swiss Embassy)',
+        documents: [
+          'Valid Passport',
+          'Visa Application Form (Schengen)',
+          'Travel Insurance',
+          'Passport-sized Photographs',
+          'Visa Fee Payment',
+          'Biometric Appointment Confirmation'
+        ],
+        processingTime: '7-14 business days'
+      }
+    };
+
+    document.getElementById('country').addEventListener('change', function () {
+      const country = this.value;
+      const details = countryData[country];
+
+      if (details) {
+        document.getElementById('country-details').innerHTML = `
+          <p><strong>Requirement Type:</strong> ${details.requirement}</p>
+          <p><strong>Documents Required:</strong> <ul>${details.documents.map(doc => `<li>${doc}</li>`).join('')}</ul></p>
+          <p><strong>Processing Time:</strong> ${details.processingTime}</p>
+        `;
+      } else {
+        document.getElementById('country-details').innerHTML = `
+          <p><strong>Requirement Type:</strong> Select a country to view details.</p>
+          <p><strong>Documents Required:</strong> Select a country to view required documents.</p>
+          <p><strong>Processing Time:</strong> Select a country to view processing time.</p>
+        `;
+      }
+    });
+
+    document.getElementById('stamp-visa-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const country = document.getElementById('country').value;
+      const fullName = document.getElementById('full-name').value;
+      const passportNumber = document.getElementById('passport-number').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const travelDate = document.getElementById('travel-date').value;
+
+      const message = `Stamp Visa Application Details:
+      Country: ${country}
+      Full Name: ${fullName}
+      Passport Number: ${passportNumber}
+      Email: ${email}
+      Phone: ${phone}
+      Travel Date: ${travelDate}`;
+
+      const whatsappURL = `https://wa.me/917977527874?text=${encodeURIComponent(message)}`;
+      window.open(whatsappURL, '_blank');
+    });
+  </script>
+
+</body>
+</html>

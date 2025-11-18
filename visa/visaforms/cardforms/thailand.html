@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Thailand Digital Arrival Card (TDAC) — Questionnaire</title>
+  <style>
+    :root{--bg:#f7fafc;--card:#fff;--muted:#6b7280;--accent:#0ea5a4}
+    body{font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);margin:0;padding:20px;color:#111}
+    .container{max-width:900px;margin:18px auto;padding:20px}
+    .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 6px 20px rgba(16,24,40,0.06)}
+    h1{font-size:20px;margin:0 0 8px}
+    p.lead{color:var(--muted);margin-top:0}
+    form .row{display:flex;gap:12px;flex-wrap:wrap}
+    label{display:block;font-size:13px;margin-bottom:6px}
+    input[type=text], input[type=tel], input[type=date], textarea, select{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px}
+    .col{flex:1 1 220px;min-width:220px}
+    .full{flex-basis:100%}
+    .actions{display:flex;gap:10px;align-items:center;margin-top:14px}
+    button{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
+    button.secondary{background:#111827}
+    .notice{background:#fff4e6;border:1px solid #ffd8a8;padding:12px;border-radius:8px;color:#92400e;margin-top:12px}
+    .download-link{display:inline-block;margin-left:6px}
+    footer{margin-top:14px;color:var(--muted);font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+    textarea{min-height:80px;resize:vertical}
+    .hidden{display:none}
+    /* printable styling */
+    #printArea{background:#fff;padding:16px;border-radius:6px;margin-top:12px}
+    #printArea h2{margin-top:0;font-size:16px}
+    .kv{display:flex;gap:8px;margin-bottom:6px}
+    .kv b{width:220px}
+  </style>
+  <!-- libraries for client-side PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Thailand Digital Arrival Card (TDAC)</h1>
+      <p class="lead">Questionnaire — fill the form and you can download a <strong>PDF</strong>. If submission isn't possible, you'll be prompted to share via WhatsApp.</p>
+
+      <form id="tdacForm">
+        <div class="row">
+          <div class="col">
+            <label for="occupation">1. Occupation *</label>
+            <input id="occupation" name="occupation" type="text" required placeholder="e.g., Software Engineer">
+          </div>
+
+          <div class="col">
+            <label for="phone">2. Phone Number *</label>
+            <input id="phone" name="phone" type="tel" required placeholder="+91 98765 43210">
+          </div>
+
+          <div class="col">
+            <label for="arrivalDate">3. Date of arrival to Thailand *</label>
+            <input id="arrivalDate" name="arrivalDate" type="date" required>
+          </div>
+
+          <div class="col full">
+            <label for="boardedCountry">4. Country/Territory where you Boarded *</label>
+            <input id="boardedCountry" name="boardedCountry" type="text" required placeholder="e.g., India">
+          </div>
+
+          <div class="col">
+            <label for="flightNo">5. Flight No. / Vehicle No. *</label>
+            <input id="flightNo" name="flightNo" type="text" required placeholder="e.g., TG 321 / Bus 12">
+          </div>
+
+          <div class="col">
+            <label for="departureDate">6. Date of Departure and departure Flight Number *</label>
+            <input id="departureDate" name="departureDate" type="date" required>
+            <div style="margin-top:6px">
+              <input id="departureFlight" name="departureFlight" type="text" placeholder="Departure Flight No. (e.g., TG 322)" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:6px;margin-top:6px">
+            </div>
+          </div>
+
+          <div class="col full">
+            <label for="stayCountries">7. Please list the name of the countries/territories where you stayed within two weeks before arrival *</label>
+            <textarea id="stayCountries" name="stayCountries" required placeholder="List countries separated by commas"></textarea>
+          </div>
+
+          <div class="col full">
+            <label for="accommodationType">8. Type of Accommodation in Thailand, and address *</label>
+            <select id="accommodationType" name="accommodationType" required>
+              <option value="">-- select accommodation type --</option>
+              <option>Hotel</option>
+              <option>Private Residence</option>
+              <option>Service Apartment</option>
+              <option>Hostel</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="col">
+            <label for="province">Province *</label>
+            <input id="province" name="province" type="text" required>
+          </div>
+
+          <div class="col">
+            <label for="district">District / Area *</label>
+            <input id="district" name="district" type="text" required>
+          </div>
+
+          <div class="col">
+            <label for="subdistrict">Sub-District / Sub-Area *</label>
+            <input id="subdistrict" name="subdistrict" type="text" required>
+          </div>
+
+          <div class="col">
+            <label for="postcode">Post Code *</label>
+            <input id="postcode" name="postcode" type="text" required>
+          </div>
+
+          <div class="col full">
+            <label for="address">Address *</label>
+            <textarea id="address" name="address" required placeholder="Full address in Thailand (street, building, room no)"></textarea>
+          </div>
+
+          <div class="col full">
+            <label for="waNumber">WhatsApp number to send to (fixed for this form)</label>
+            <input id="waNumber" name="waNumber" type="tel" value="+917021360582" readonly>
+            <div class="small">PDF will be downloaded and WhatsApp chat to <strong>+91 7021360582</strong> will open (you must attach the PDF manually in the chat).</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit">Submit (Generate PDF & Open WhatsApp)</button>
+          <button type="button" id="downloadBtn" class="secondary">Download PDF</button>
+          <a id="whatsappBtn" class="download-link hidden" target="_blank" rel="noopener" href="">Open WhatsApp</a>
+        </div>
+
+        <div id="message" class="notice hidden" role="status"></div>
+      </form>
+
+      <div id="printArea" class="hidden" aria-hidden="true"></div>
+
+      <footer>
+        <p class="small">After clicking <strong>Submit</strong> the PDF will be downloaded locally and a WhatsApp chat to <strong>+91 7021360582</strong> will open with a prefilled message. You will need to manually attach the downloaded PDF to the WhatsApp chat.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('tdacForm');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const whatsappBtn = document.getElementById('whatsappBtn');
+    const messageBox = document.getElementById('message');
+    const printArea = document.getElementById('printArea');
+
+    // fixed whatsapp number (user provided)
+    const WHATSAPP_NUMBER = '+917021360582'; // international format
+    const WHATSAPP_NUMBER_PLAIN = WHATSAPP_NUMBER.replace(/[^\d]/g, '');
+
+    function getFormData() {
+      const fd = new FormData(form);
+      const obj = {};
+      for (const [k, v] of fd.entries()) obj[k] = v;
+      return obj;
+    }
+
+    function buildPrintableHTML(data) {
+      // create a simple printable layout
+      const html = [];
+      html.push('<div style="max-width:800px;font-family:Arial,Helvetica,sans-serif;color:#111;">');
+      html.push('<h2>Thailand Digital Arrival Card (TDAC) — Filled Form</h2>');
+      html.push('<hr>');
+      function kv(k, v) { return `<div class="kv"><b>${k}</b><div>${v || ''}</div></div>`; }
+      html.push(kv('Occupation:', data.occupation));
+      html.push(kv('Phone Number:', data.phone));
+      html.push(kv('Date of arrival to Thailand:', data.arrivalDate));
+      html.push(kv('Country/Territory where you Boarded:', data.boardedCountry));
+      html.push(kv('Flight No. / Vehicle No.:', data.flightNo));
+      html.push(kv('Date of Departure:', data.departureDate));
+      html.push(kv('Departure Flight No.:', data.departureFlight));
+      html.push(kv('Countries stayed within 2 weeks before arrival:', data.stayCountries));
+      html.push(kv('Accommodation Type:', data.accommodationType));
+      html.push(kv('Province:', data.province));
+      html.push(kv('District / Area:', data.district));
+      html.push(kv('Sub-District / Sub-Area:', data.subdistrict));
+      html.push(kv('Post Code:', data.postcode));
+      html.push(kv('Address:', data.address));
+      html.push('<hr>');
+      html.push(`<div style="font-size:12px;color:#555">Generated on: ${new Date().toLocaleString()}</div>`);
+      html.push('</div>');
+      return html.join('\n');
+    }
+
+    async function generatePdfAndDownload(filename) {
+      // use html2canvas + jspdf
+      // ensure printArea is visible for rendering
+      const { jsPDF } = window.jspdf;
+      // allow a short delay for DOM updates
+      await new Promise(r => setTimeout(r, 150));
+      const canvas = await html2canvas(printArea, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(filename);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // basic validation already handled by required attributes
+      const data = getFormData();
+
+      // populate printable area
+      printArea.innerHTML = buildPrintableHTML(data);
+      printArea.classList.remove('hidden');
+      printArea.style.display = 'block';
+
+      // generate filename
+      const safePhone = (data.phone || 'phone').replace(/\s+/g, '_').replace(/[^0-9_+\-]/g, '');
+      const filename = `TDAC_${safePhone}_${new Date().toISOString().slice(0,10)}.pdf`;
+
+      // generate and download pdf
+      try {
+        await generatePdfAndDownload(filename);
+      } catch (err) {
+        console.error('PDF generation failed', err);
+        messageBox.textContent = 'PDF generation failed in this browser. You can still download the filled form via the "Download PDF" button.';
+        messageBox.classList.remove('hidden');
+      }
+
+      // prepare whatsapp message and open chat (Option A: user will attach PDF manually)
+      const shortText = `Hello,%0AI've filled the Thailand TDAC form. Please find the PDF attached.\nName/Phone: ${encodeURIComponent(data.phone || '')}\nArrival: ${encodeURIComponent(data.arrivalDate || '')}\nFlight: ${encodeURIComponent(data.flightNo || '')}`;
+      const waUrl = `https://wa.me/${WHATSAPP_NUMBER_PLAIN}?text=${encodeURIComponent(`Hello, I've filled the Thailand TDAC form. Please find the PDF attached. Name/Phone: ${data.phone || ''} Arrival: ${data.arrivalDate || ''} Flight: ${data.flightNo || ''}`)}`;
+
+      whatsappBtn.href = waUrl;
+      whatsappBtn.classList.remove('hidden');
+
+      messageBox.textContent = 'It is not able to submit. Please share it on WhatsApp.';
+      messageBox.classList.remove('hidden');
+
+      // open whatsapp in a new tab so user can manually attach the downloaded PDF
+      window.open(waUrl, '_blank');
+
+      // hide print area after short delay
+      setTimeout(() => {
+        printArea.style.display = 'none';
+        printArea.classList.add('hidden');
+      }, 1500);
+    });
+
+    downloadBtn.addEventListener('click', async (e) => {
+      // create PDF from current form state without opening WhatsApp
+      const data = getFormData();
+      printArea.innerHTML = buildPrintableHTML(data);
+      printArea.classList.remove('hidden');
+      printArea.style.display = 'block';
+      const safePhone = (data.phone || 'phone').replace(/\s+/g, '_').replace(/[^0-9_+\-]/g, '');
+      const filename = `TDAC_${safePhone}_${new Date().toISOString().slice(0,10)}.pdf`;
+      try {
+        await generatePdfAndDownload(filename);
+      } catch (err) {
+        console.error('PDF generation failed', err);
+        messageBox.textContent = 'PDF generation failed in this browser.';
+        messageBox.classList.remove('hidden');
+      }
+      setTimeout(() => {
+        printArea.style.display = 'none';
+        printArea.classList.add('hidden');
+      }, 1000);
+    });
+
+    // phone input cleanup
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = phoneInput.value.replace(/[^\d+\-\s()]/g, '');
+    });
+  </script>
+</body>
+</html>

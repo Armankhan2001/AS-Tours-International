@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ASTours International — Corporate Profile | A Brand of TechVoyage Solutions</title>
+
+  <!-- Styles & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    /* ===== GLOBAL ===== */
+    :root{
+      --brand:#0d6efd;
+      --accent:#083c8a;
+      --muted:#6c757d;
+      --card:#ffffff;
+      --bg:#f5f9ff;
+      --paper:#fff;
+    }
+    html,body{height:100%}
+    body{
+      font-family: "Inter", "Poppins", "Segoe UI", sans-serif;
+      background: linear-gradient(180deg,var(--bg),#ffffff 40%);
+      color:#1f2937;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.55;
+    }
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* ===== NAV ===== */
+    .navbar{background:var(--card);box-shadow:0 4px 18px rgba(14,30,60,0.06)}
+    .navbar-brand img{height:48px;object-fit:contain}
+
+    /* ===== HERO ===== */
+    .hero{
+      min-height:260px;
+      background:linear-gradient(180deg, rgba(13,110,253,0.75), rgba(8,58,130,0.75)), url('../image/travelbg.jpg') center/cover no-repeat;
+      border-radius:12px;
+      /* color:white; */
+      display:flex;
+      align-items:center;
+      padding:36px;
+      position:relative;
+      margin-bottom:28px;
+      overflow:hidden;
+    }
+    .hero h1{font-size:2.4rem;font-weight:800;letter-spacing:0.4px;margin-bottom:8px}
+    .hero p.lead{font-size:1.05rem;opacity:0.95}
+
+    /* ===== CARD & SECTIONS ===== */
+    .content-card{background:var(--paper);border-radius:14px;padding:28px;box-shadow:0 10px 30px rgba(20,40,80,0.05);position:relative;margin-bottom:20px;overflow:hidden}
+    .watermark{
+      position:absolute;right:-20px;bottom:-40px;opacity:0.06;z-index:0;width:420px;height:420px;background:url('../image/astourlogo.png') center/contain no-repeat;
+      transform:rotate(-12deg);
+    }
+    .section-title{color:var(--brand);font-weight:800;margin-bottom:18px}
+    h3{color:var(--accent);font-weight:700;margin-top:18px}
+    .muted{color:var(--muted)}
+
+    /* ===== INFO BOXES ===== */
+    .info-box{border-radius:12px;background:#fff;padding:18px;border:1px solid #f0f3ff;box-shadow:0 6px 18px rgba(12,30,80,0.04)}
+    .stat{font-size:1.6rem;font-weight:800;color:var(--accent)}
+    .tag{display:inline-block;background:#f0f7ff;color:var(--brand);padding:6px 10px;border-radius:999px;font-weight:600;font-size:0.85rem}
+
+    /* ===== TABLES & LISTS ===== */
+    .table-sm td,.table-sm th{padding:.4rem .6rem}
+    ul.advanced{list-style:none;padding-left:0}
+    ul.advanced li{margin-bottom:8px;padding-left:26px;position:relative}
+    ul.advanced li:before{content:"\f00c";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;left:0;top:0;color:var(--brand)}
+
+    /* ===== TEAM ===== */
+    .avatar{width:92px;height:92px;border-radius:12px;object-fit:cover;box-shadow:0 8px 28px rgba(12,30,80,0.06)}
+
+    /* ===== FOOTER ===== */
+    footer{padding:22px 0;border-top:1px solid #e9eef9;background:#fff;margin-top:28px}
+
+    /* ===== PRINT / PDF STYLES ===== */
+    @media print{
+      body{background:white}
+      .hero{background:transparent;color:#000}
+      .watermark{display:none}
+    }
+    /* small screens */
+    @media (max-width:768px){
+      .hero{padding:28px}
+      .avatar{width:72px;height:72px}
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="../../templates/astours.html">
+        <img src="../../image/astourlogo.png" alt="ASTours Logo">
+        <div class="ms-3 d-none d-md-block">
+          <div style="font-weight:800;color:var(--accent)">ASTours International</div>
+          <small class="muted">A Brand of TechVoyage Solutions</small>
+        </div>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link" href="../../templates/astours.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../../templates/Travel/b2b/Visa/clientvisaquotations.html">Visa Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="../../packages/packages.html">Packages</a></li>
+          <li class="nav-item"><a class="nav-link" href="./b2b/Visa/b2b.html">B2B Portal</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="container mt-4">
+    <div class="hero content-card">
+      <div class="watermark"></div>
+      <div style="z-index:2" class="w-100">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h1>ASTours International</h1>
+            <p class="lead">A Brand of <strong>TechVoyage Solutions</strong> — your strategic partner for global travel, visa solutions, and B2B visa distribution. Trusted since 2020.</p>
+            <div class="mt-3">
+              <a class="btn btn-light btn-sm me-2" href="./b2b/Visa/b2b.html"><i class="fas fa-handshake me-2"></i>Become a B2B Partner</a>
+              <a class="btn btn-outline-light btn-sm" href="#contact"><i class="fas fa-envelope me-2"></i>Contact Sales</a>
+            </div>
+          </div>
+          <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+            <div class="info-box d-inline-block text-start">
+              <div class="muted small">Head Office</div>
+              <div style="font-weight:700">101, Shakaza Height, B-Wing</div>
+              <div class="muted small">Mumbra, Thane – 400612</div>
+              <div class="mt-2 small"><i class="fas fa-phone me-1"></i> +91 8850102255</div>
+              <div class="small"><i class="fas fa-phone me-1"></i> +91 7021360582</div>
+              <div class="small mt-1"><i class="fas fa-envelope me-1"></i> astoursinternational@gmail.com</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="content-card mt-4" id="profileContent">
+      <div class="watermark"></div>
+
+      <h2 class="section-title">Executive Summary</h2>
+      <p>
+        ASTours International is a leading Travel & Visa Solutions Company headquartered in Thane, Maharashtra, India. Since 2020, as a brand of TechVoyage Solutions, we have focused on delivering high-quality visa assistance, corporate mobility management, and B2B visa distribution services. Our market proposition is built on<strong> competitive pricing</strong>, <strong>digital-first partner tools</strong>, and a dedicated operations team enabling fast turnarounds for both retail travelers and enterprise clients.
+      </p>
+
+      <h3>Company Snapshot</h3>
+      <div class="row g-3">
+        <div class="col-md-3 col-6">
+          <div class="info-box text-center">
+            <div class="stat">2020</div>
+            <div class="muted small">Founded</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="info-box text-center">
+            <div class="stat">1000+</div>
+            <div class="muted small">Visa Applications Processed</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="info-box text-center">
+            <div class="stat">100+</div>
+            <div class="muted small">Active B2B Partners</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="info-box text-center">
+            <div class="stat">50+</div>
+            <div class="muted small">Countries Served</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABOUT / MISSION / VISION -->
+      <div class="row mt-4">
+        <div class="col-lg-8">
+          <h3>About ASTours International</h3>
+          <p>
+            ASTours International is built to serve travel agents, corporate mobility teams and end travelers who need a reliable partner for visa processing and travel planning. Our core competency lies in processing visas for multiple nationalities, managing group and corporate visa queues, and delivering B2B solutions that give travel agencies an edge by offering volume pricing, partner tracking and a single-pane dashboard.
+          </p>
+
+          <h3>Mission</h3>
+          <p>To simplify international travel and empower agencies and corporates with efficient, reliable, and cost-effective visa & travel management services.</p>
+
+          <h3>Vision</h3>
+          <p>To become India’s most trusted B2B travel & visa brand, enabling a connected digital travel ecosystem that empowers partners worldwide.</p>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="info-box">
+            <div style="font-weight:700">Brand</div>
+            <div class="muted small mb-2">ASTours International - A Brand of TechVoyage Solutions</div>
+            <div style="font-weight:700">Office</div>
+            <div class="muted small mb-2">101, Shakaza Height, B-Wing, Mumbra, Thane – 400612</div>
+            <div style="font-weight:700">Contact</div>
+            <div class="muted small">Manager: +91 8850102255<br>Visa Executive: +91 7021360582</div>
+            <div class="mt-3 text-center">
+              <a href="https://www.solo2ceo.info/templates/astours.html" class="tag">Visit Website</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAILED SERVICES -->
+      <h3 class="mt-4">Comprehensive Service Offerings (A — Z)</h3>
+      <p class="muted">We provide end-to-end services covering the full visa & travel lifecycle. Below is a detailed breakdown.</p>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <h5 class="mt-3">Visa Services (Retail & Corporate)</h5>
+          <ul class="advanced">
+            <li>Tourist Visas — Single & multiple entry assistance with full document prep.</li>
+            <li>Business Visas — Short-term business travel with invitation & letter support.</li>
+            <li>Work Visas — Documentation and embassy liaison for employment-based travel.</li>
+            <li>Student Visas — Pre-departure briefings, document verification and follow-ups.</li>
+            <li>Transit & Medical Visas — Quick handling for urgent travel requirements.</li>
+            <li>Visa Renewal / Extension advisory for eligible countries.</li>
+          </ul>
+
+          <h5 class="mt-3">Bulk & B2B Solutions</h5>
+          <ul class="advanced">
+            <li>Bulk Visa Processing — Group bookings, corporate delegations, school & tour groups.</li>
+            <li>Partner Portal (Agency Code) — Rate cards, client tracking, live status updates.</li>
+            <li>Priority Queues — Dedicated handling for high-volume partners & urgent cases.</li>
+            <li>API & CSV Integration — Automated rate pulls and CSV-based upload for bulk cases.</li>
+          </ul>
+        </div>
+
+        <div class="col-lg-6">
+          <h5 class="mt-3">Travel & Value-Add Services</h5>
+          <ul class="advanced">
+            <li>Curated Travel Packages — Business & leisure itineraries, customizable to corporate needs.</li>
+            <li>Hotel & Flight Bookings — Corporate rates, invoice consolidation and post-booking support.</li>
+            <li>Travel Insurance — Policy coordination for visa & travel compliance.</li>
+            <li>Invitation Letter & Host Coordination — Authenticated letters for embassies and consulars.</li>
+            <li>Pre-Departure Briefs & Travel Advisory — Country-specific tips and regulatory updates.</li>
+          </ul>
+
+          <h5 class="mt-3">Corporate Mobility & Compliance</h5>
+          <ul class="advanced">
+            <li>Employee Mobilty Programs — Relocation and long-term work assignment support.</li>
+            <li>Document Retention & Audit Trails — Secure storage for corporate compliance audits.</li>
+            <li>G2P & E-Travel Integrations — Assistance integration with corporate travel platforms.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PROCESS / SLA -->
+      <h3 class="mt-4">Process, SLAs & Quality Assurance</h3>
+      <p>Our operations follow a standardized workflow to ensure speed and accuracy:</p>
+      <ol>
+        <li><strong>Inquiry & Assessment:</strong> Partner / client submits details — we provide a checklist & ETA.</li>
+        <li><strong>Quotation & Confirmation:</strong> Quote issued with clear document requirements and fees.</li>
+        <li><strong>Document Collection & Verification:</strong> In-house review and correction to reduce rejection risk.</li>
+        <li><strong>Appointment & Submission:</strong> Embassy / VFS appointment scheduling and submission support.</li>
+        <li><strong>Tracking & Delivery:</strong> Live updates via Partner Portal; final delivery of passport/visa.</li>
+      </ol>
+      <p class="muted">Typical SLA:</p>
+      <table class="table table-sm">
+        <thead><tr><th>Service</th><th>Standard SLA</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td>Tourist Visa (Schengen / EU)</td><td>7–15 working days</td><td>3–7 days (fast-track)</td></tr>
+          <tr><td>Business / Work Visa</td><td>10–30 working days</td><td>5–12 days (priority)</td></tr>
+          <tr><td>Bulk Group Processing</td><td>Depends on volume (project plan)</td><td>Dedicated ops team</td></tr>
+        </tbody>
+      </table>
+
+      <!-- TECHNOLOGY & SECURITY -->
+      <h3 class="mt-4">Technology & Security</h3>
+      <p>ASTours International leverages TechVoyage Solutions' technology backbone for secure and scalable partner services:</p>
+      <ul class="advanced">
+        <li>Partner Portal — Agency Code login, rate cards, live status, downloadable reports.</li>
+        <li>Document Management — Encrypted storage with role-based access and audit trails.</li>
+        <li>API Endpoints — For partners who want automated rate sync and application submission.</li>
+        <li>Data Security — GDPR-aligned practices, secure backups and TLS/HTTPS for all transfers.</li>
+      </ul>
+
+      <!-- B2B PARTNER PROGRAM -->
+      <h3 class="mt-4">B2B Partner Program — Overview & Benefits</h3>
+      <p>We offer tiered partnerships based on monthly volumes and service needs. Each partner receives an Agency Code / Partner ID with the following benefits:</p>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="advanced">
+            <li>Live access to updated B2B visa rate cards (exclusive rates for partners)</li>
+            <li>Centralized client tracking and downloadable reports</li>
+            <li>Volume discounts & rebate structure</li>
+            <li>Priority handling for urgent requests</li>
+            <li>Dedicated account manager & onboarding assistance</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <div class="info-box">
+            <div style="font-weight:700">Partner Tiers</div>
+            <div class="muted small">Bronze / Silver / Gold — benefits scale with volume</div>
+            <table class="table table-sm mt-2">
+              <thead><tr><th>Tier</th><th>Min Volume</th><th>Benefits</th></tr></thead>
+              <tbody>
+                <tr><td>Bronze</td><td>0–50 apps/mo</td><td>Standard rates</td></tr>
+                <tr><td>Silver</td><td>50–200 apps/mo</td><td>Discounted rates + priority</td></tr>
+                <tr><td>Gold</td><td>200+ apps/mo</td><td>Best rates + SLA commitment</td></tr>
+              </tbody>
+            </table>
+            <div class="text-center mt-2">
+              <a class="btn btn-sm btn-primary" href="./b2b/partners.html">Register for Partner ID</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASE STUDIES & TESTIMONIALS -->
+      <h3 class="mt-4">Case Studies & Testimonials</h3>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="info-box">
+            <strong>Case Study — Corporate Delegation (Germany)</strong>
+            <p class="muted small mb-1">Challenge: 45-member delegation with tight timelines</p>
+            <p>Solution: Dedicated team, priority appointments, consolidated documentation & courier. Outcome: 100% processed within 6 business days.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="info-box">
+            <strong>Case Study — Bulk Student Visas (Malaysia)</strong>
+            <p class="muted small mb-1">Challenge: 70+ student applications in one cohort</p>
+            <p>Solution: Bulk submission with pre-verified document checklist and batch tracking. Outcome: Zero rejections; saved partner 22% on fees.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <div class="border-start ps-3">
+          <p><strong>Client Testimonials:</strong></p>
+          <p class="muted"><em>“ASTours' partner portal and quick responses saved our agency time and money. The Partner ID system is excellent for tracking client status.”</em> — <strong>Global Tours Co.</strong></p>
+          <p class="muted"><em>“We received great corporate support for our employee relocations. Professional and transparent.”</em> — <strong>Manufacturing Ltd.</strong></p>
+        </div>
+      </div>
+
+      <!-- TEAM -->
+      <h3 class="mt-4">Leadership & Team</h3>
+      <div class="row g-3 align-items-center">
+        <div class="col-md-3 col-6 text-center">
+          <img src="../image/team_ceo.jpg" class="avatar mb-2" alt="CEO">
+          <div style="font-weight:700">Arman Khan</div>
+          <div class="muted small">Founder & CEO, TechVoyage</div>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+          <img src="../image/team_ops.jpg" class="avatar mb-2" alt="Operations Head">
+          <div style="font-weight:700">Priya Sharma</div>
+          <div class="muted small">Head of Operations</div>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+          <img src="../image/team_b2b.jpg" class="avatar mb-2" alt="B2B Head">
+          <div style="font-weight:700">Ravi Patel</div>
+          <div class="muted small">B2B Partnership Lead</div>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+          <img src="../image/team_support.jpg" class="avatar mb-2" alt="Support Head">
+          <div style="font-weight:700">Nisha Verma</div>
+          <div class="muted small">Client Success Manager</div>
+        </div>
+      </div>
+
+      <!-- CSR & SUSTAINABILITY -->
+      <h3 class="mt-4">Corporate Social Responsibility</h3>
+      <p>ASTours supports community travel education and sustainable tourism initiatives. We run an annual program to assist low-income students travel for educational purposes at subsidized rates and contribute to eco-tourism awareness in visited destinations.</p>
+
+      <!-- LEGAL & COMPLIANCE -->
+      <h3 class="mt-4">Legal, Compliance & Certifications</h3>
+      <ul class="advanced">
+        <li>Registered under Indian MSME / Udyam (details available upon request).</li>
+        <li>Recognized partner with major Consulates & VFS centers.</li>
+        <li>GDPR & Data Privacy compliant; secure data storage and encrypted transfers.</li>
+        <li>Financial safeguards and insured for client transactions.</li>
+      </ul>
+
+      <!-- FAQ -->
+      <h3 class="mt-4">Frequently Asked Questions (FAQ)</h3>
+      <div class="accordion" id="faqAcc">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq1">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">How do I become a B2B partner?</button>
+          </h2>
+          <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">Register on the <a href="./b2b/Visa/b2b.html">B2B Portal</a> to get a Partner / Agency Code. Our onboarding team will verify documents and provide API/CSV integration if required.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">What payment options are available?</button>
+          </h2>
+          <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">We accept bank transfers, NEFT/RTGS, UPI and credit card payments. Customized credit terms available for Gold-tier partners.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="faq3">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">Can you handle embassy rejections?</button>
+          </h2>
+          <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">We provide post-rejection counseling and re-application assistance. Success depends on embassy policy and corrected documentation; we aim to minimize rejections through thorough checks.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANNEX: DOCUMENT CHECKLIST -->
+      <h3 class="mt-4">Annexures — Common Document Checklist</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="advanced">
+            <li>Valid Passport (min. 6 months validity)</li>
+            <li>Photographs (as per embassy specs)</li>
+            <li>Bank Statements (last 6 months)</li>
+            <li>Invitation/Employment Letters (if applicable)</li>
+            <li>Travel Insurance (for Schengen & select countries)</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul class="advanced">
+            <li>Cover Letter / Itinerary</li>
+            <li>Company ID & Pay Slips (for employees)</li>
+            <li>Business Registration Docs (for corporate applications)</li>
+            <li>Previous Visas (if any)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CONTACT & CTA -->
+      <div class="mt-4 p-3 rounded-3" style="background:linear-gradient(90deg,#f0f7ff,#fefefe)">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h4 style="margin:0">Ready to partner with ASTours?</h4>
+            <p class="muted" style="margin:0">Sign up for an Agency Code, view partner rates and start tracking your clients' visa applications instantly.</p>
+          </div>
+          <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a class="btn btn-primary me-2" href="./b2b/Visa/b2b.html"><i class="fas fa-user-tie me-2"></i>Register Partner</a>
+            <a class="btn btn-outline-primary" href="#contact"><i class="fas fa-envelope me-2"></i>Contact Sales</a>
+          </div>
+        </div>
+      </div>
+
+      
+
+      <!-- Contact block (for PDF) -->
+      <div id="contact" class="mt-4">
+        <h3>Contact & Corporate Office</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <p style="margin:0"><strong>ASTours International</strong> — A Brand of TechVoyage Solutions</p>
+            <p style="margin:0">101, Shakaza Height, B-Wing, Mumbra, Thane – 400612, Maharashtra, India</p>
+            <p style="margin:0">Email: astoursinternational@gmail.com</p>
+            <p style="margin:0">Phone: +91 8850102255 (Manager) | +91 7021360582 (Visa Executive)</p>
+          </div>
+          <div class="col-md-6">
+            <p style="margin:0">Website: <a href="https://www.solo2ceo.info/templates/astours.html" target="_blank">www.solo2ceo.info/templates/astours.html</a></p>
+            <p style="margin:0">B2B Portal: <a href="./b2b/Visa/b2b.html" target="_blank">./b2b/Visa/b2b.html</a></p>
+            <p style="margin:0">GSTIN / Company reg details available on request for corporate tie-ups.</p>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- profileContent -->
+  </div> <!-- container -->
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container text-center">
+      <small class="muted">© 2025 ASTours International — A Brand of TechVoyage Solutions. All Rights Reserved.</small>
+      <div class="mt-2 muted small">Designed by Solo2CEO</div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+ 
+
+
+     
+</body>
+</html>

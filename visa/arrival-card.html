@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arrival Card Services | Sanskruti Travels</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="arrival-card-page">
+
+  <header>
+    <div class="logo">
+      <img src="../images/logo.png" alt="Sanskruti Travels">
+  </div>
+    <nav>
+      <ul>
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../tours/himachal.html">Tours</a></li>
+        <li><a href="../visa/visa.html">Visa</a></li>
+        <li><a href="../flights.html">Flights</a></li>
+        <li><a href="../hotels.html">Hotels</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="arrival-card-intro">
+    <h1>Pre-Arrival Registration & Digital Arrival Cards</h1>
+    <p>Some countries require Indian travelers to complete a pre-arrival registration or digital arrival card before entry. Select your destination below to begin the process.</p>
+  </section>
+
+  <section class="arrival-card-form-section">
+    <form id="arrival-card-form">
+      <label for="country">Select Destination Country:</label>
+      <select id="country" name="country" required>
+        <option value="">-- Choose a Country --</option>
+        <option value="thailand">Thailand</option>
+        <option value="singapore">Singapore</option>
+        <option value="malaysia">Malaysia</option>
+        <option value="indonesia">Indonesia</option>
+        <option value="srilanka">Sri Lanka</option>
+        <option value="hongkong">Hong Kong</option>
+        <option value="kenya">Kenya</option>
+        <option value="zimbabwe">Zimbabwe</option>
+        <option value="tanzania">Tanzania</option>
+        <option value="gabon">Gabon</option>
+        <option value="mauritius">Mauritius</option>
+      </select>
+
+      <label for="full-name">Full Name:</label>
+      <input type="text" id="full-name" name="full-name" required />
+
+      <label for="passport-number">Passport Number:</label>
+      <input type="text" id="passport-number" name="passport-number" required />
+
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" required />
+
+      <label for="travel-date">Intended Travel Date:</label>
+      <input type="date" id="travel-date" name="travel-date" required />
+
+      <button type="submit">Submit Application</button>
+    </form>
+  </section>
+
+  <section id="country-info">
+    <h2>Country Information</h2>
+    <div id="country-details">
+      <p><strong>Requirement Type:</strong> Select a country to see the specific requirement type here.</p>
+      <p><strong>Notes:</strong> Select a country to see additional notes about the arrival process.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Sanskruti Travels. All rights reserved. | <a href="tel:+917977527874">Call: +91 79775 27874</a></p>
+  </footer>
+
+  <script>
+    const countryData = {
+      thailand: {
+        requirement: 'Digital Arrival Card (TM6)',
+        notes: 'Complete online or upon arrival before immigration.'
+      },
+      singapore: {
+        requirement: 'SG Arrival Card (SGAC)',
+        notes: 'Mandatory online registration 3 days before travel.'
+      },
+      malaysia: {
+        requirement: 'MDAC (Malaysia Digital Arrival Card)',
+        notes: 'Complete online registration 3 days before arrival.'
+      },
+      indonesia: {
+        requirement: 'Electronic Customs Declaration (ECD)',
+        notes: 'Required online before arrival. No visa required for up to 30 days for tourism.'
+      },
+      srilanka: {
+        requirement: 'Electronic Travel Authorization (ETA)',
+        notes: 'Required online before travel.'
+      },
+      hongkong: {
+        requirement: 'Pre-Arrival Registration (PAR)',
+        notes: 'Mandatory online registration before travel.'
+      },
+      kenya: {
+        requirement: 'eVisa/Pre-arrival Registration',
+        notes: 'Complete online eVisa or pre-arrival registration before arrival.'
+      },
+      zimbabwe: {
+        requirement: 'eVisa/Pre-arrival Registration',
+        notes: 'eVisa required or pre-arrival registration for entry.'
+      },
+      tanzania: {
+        requirement: 'eVisa/Pre-arrival Registration',
+        notes: 'Complete eVisa or pre-arrival registration before entry.'
+      },
+      gabon: {
+        requirement: 'eVisa/Pre-arrival Registration',
+        notes: 'eVisa is required for entry without a physical visa.'
+      },
+      mauritius: {
+        requirement: 'Travel Authorization',
+        notes: 'Pre-registration required for Indian citizens before travel.'
+      }
+    };
+
+    document.getElementById('country').addEventListener('change', function() {
+      const country = this.value;
+      const details = countryData[country];
+
+      if (details) {
+        document.getElementById('country-details').innerHTML = `
+          <p><strong>Requirement Type:</strong> ${details.requirement}</p>
+          <p><strong>Notes:</strong> ${details.notes}</p>
+        `;
+      } else {
+        document.getElementById('country-details').innerHTML = `
+          <p><strong>Requirement Type:</strong> Select a country to see the specific requirement type here.</p>
+          <p><strong>Notes:</strong> Select a country to see additional notes about the arrival process.</p>
+        `;
+      }
+    });
+
+    document.getElementById('arrival-card-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const country = document.getElementById('country').value;
+      const fullName = document.getElementById('full-name').value;
+      const passportNumber = document.getElementById('passport-number').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const travelDate = document.getElementById('travel-date').value;
+
+      const message = `Arrival Card Application Details:
+      Country: ${country}
+      Full Name: ${fullName}
+      Passport Number: ${passportNumber}
+      Email: ${email}
+      Phone: ${phone}
+      Travel Date: ${travelDate}`;
+
+      const whatsappURL = `https://wa.me/917977527874?text=${encodeURIComponent(message)}`;
+      window.open(whatsappURL, '_blank');
+    });
+  </script>
+
+</body>
+</html>

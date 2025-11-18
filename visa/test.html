@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visa Data Admin Panel</title>
+  <link rel="icon" type="image/png" href="../image/astourlogo.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body { 
+      background: linear-gradient(135deg, #ece9e6, #ffffff); 
+      font-family: 'Segoe UI', sans-serif; 
+    }
+    h2 {
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #2c3e50;
+    }
+    .card {
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    }
+    .country-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      color: #34495e;
+    }
+    .country-name img {
+      width: 35px;
+      height: 24px;
+      border-radius: 6px;
+      object-fit: cover;
+      margin-right: 10px;
+      border: 1px solid #ddd;
+    }
+    .info-line {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 6px;
+    }
+    .info-line i {
+      color: #007bff;
+      margin-right: 6px;
+    }
+    .btn-custom {
+      border-radius: 10px;
+      font-weight: 500;
+      padding: 6px 12px;
+      margin-top: 6px;
+    }
+    .search-box input {
+      border-radius: 12px;
+      border: 2px solid #e0e0e0;
+      padding: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .nav-tabs .nav-link {
+      border-radius: 10px 10px 0 0;
+      font-weight: 600;
+      color: #495057;
+    }
+    .nav-tabs .nav-link.active {
+      background: #007bff;
+      color: white;
+    }
+
+    /* Checklists Ribbon */
+    .Checklists-ribbon {
+      position: absolute;
+      top: 10px;
+      right: -10px;
+      background: #28a745;
+      color: white !important;
+      padding: 6px 10px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 0 6px 6px 0;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transition: background 0.3s;
+    }
+    .Checklists-ribbon:hover {
+      background: #218838;
+      text-decoration: none;
+      color: white !important;
+    }
+    .Checklists-ribbon i {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container py-4">
+    <h2 class="text-center mb-4">🌍 Visa Data Admin Panel</h2>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs justify-content-center mb-4" id="sheetTabs">
+      <li class="nav-item"><button class="nav-link active" data-sheet="DUBAI">🏙️ DUBAI e-VISA</button></li>
+      <li class="nav-item"><button class="nav-link" data-sheet="EVISA">🛂 e-VISA</button></li>
+      <li class="nav-item"><button class="nav-link" data-sheet="AFRICA">🌍 AFRICA</button></li>
+      <li class="nav-item"><button class="nav-link" data-sheet="ASIA">🌏 ASIA</button></li>
+      <li class="nav-item"><button class="nav-link" data-sheet="AUSNZ">🇦🇺 AUS & NZ</button></li>
+      <li class="nav-item"><button class="nav-link" data-sheet="CIS">🌏 CIS COUNTRIES</button></li>
+      <li class="nav-item">
+        <button class="nav-link" data-sheet="EUROPE">🌍 EUROPE</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-sheet="USACANADA">🇺🇸 USA & CANADA</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-sheet="LATINAMERICA">🌎 LATIN AMERICA</button>
+      </li>
+
+      <li class="nav-item"><a class="nav-link" href="adminvisadatabase.html">📄 Add VisaDatabase.json</a></li>
+      <li class="nav-item"><a class="nav-link" href="adminvisaquote.html">📄 Visa Quotations</a></li>
+    </ul>
+
+    <!-- Search Box -->
+    <div class="search-box mb-3">
+      <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country...">
+    </div>
+
+    <!-- Cards Container -->
+    <div id="cardsContainer" class="row g-4 mt-3"></div>
+  </div>
+
+<script>
+  const SHEET_ID = "1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo"; // Your spreadsheet ID
+  const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ";
+
+  // Sheet names for fetching
+  const sheets = {
+    DUBAI: "DUBAI e-VISA",
+    EVISA: "e-VISA",
+    AFRICA: "AFRICA",
+    ASIA: "ASIA",
+    AUSNZ: "AUS & NZ",
+    CIS: "CIS COUNTRIES",
+    EUROPE: "EUROPE",
+    USACANADA: "USA & CANADA",
+    LATINAMERICA: "LATIN AMERICA"
+  };
+
+  // Corresponding Google Sheet links for badge
+  const sheetLinks = {
+    DUBAI: "https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit#gid=1099384453",
+    EVISA: "https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit#gid=2006712566",
+    AFRICA: "https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit#gid=136631942",
+    ASIA: "https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit#gid=1793054489",
+    AUSNZ: "https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit#gid=1042635079",
+    CIS: "https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit#gid=591556463",
+    EUROPE: "https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit#gid=238015973",
+    USACANADA: "https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit#gid=78023625",
+    LATINAMERICA: "https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit#gid=1149016873"
+  };
+
+  let visaData = [];
+  let activeSheet = "DUBAI";
+
+  async function fetchVisaData(sheetKey) {
+    const range = sheets[sheetKey];
+    try {
+      const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`);
+      const data = await res.json();
+
+      if (!data.values || data.values.length === 0) {
+        document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-muted">No data found</p>`;
+        return;
+      }
+
+      // Skip empty rows at the top
+      let firstRowIndex = data.values.findIndex(row => row.some(cell => cell && cell.trim() !== ""));
+      const headers = data.values[firstRowIndex];
+      visaData = data.values.slice(firstRowIndex + 1).map(row => {
+        const obj = {};
+        headers.forEach((header, i) => obj[header] = row[i] || "");
+        return obj;
+      });
+
+      renderCards(visaData, sheetKey);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-danger">Error loading data</p>`;
+    }
+  }
+
+  function renderCards(data, sheetKey) {
+    const container = document.getElementById("cardsContainer");
+    container.innerHTML = "";
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `<p class="text-center text-muted">No data found</p>`;
+      return;
+    }
+
+    data.forEach(row => {
+      if (!row["Country"]) return;
+
+      const card = document.createElement("div");
+      card.className = "col-md-4";
+
+      let detailsHTML = `
+        ${row["Visa Type"] ? `<p class="info-line"><i class="fa-solid fa-passport"></i><strong>Visa Type:</strong> ${row["Visa Type"]}</p>` : ""}
+        ${row["Category"] ? `<p class="info-line"><i class="fa-solid fa-layer-group"></i><strong>Category:</strong> ${row["Category"]}</p>` : ""}
+        ${row["Visa Fee"] ? `<p class="info-line"><i class="fa-solid fa-coins"></i><strong>Visa Fee:</strong> ${row["Visa Fee"]}</p>` : ""}
+        ${row["Service Charges"] ? `<p class="info-line"><i class="fa-solid fa-file-invoice-dollar"></i><strong>Service Charges:</strong> ${row["Service Charges"]}</p>` : ""}
+        ${row["Processing Time"] ? `<p class="info-line"><i class="fa-solid fa-clock"></i><strong>Processing Time:</strong> ${row["Processing Time"]}</p>` : ""}
+        ${row["Documents Required"] ? `<p class="info-line"><i class="fa-solid fa-file-alt"></i><strong>Documents Required:</strong> ${row["Documents Required"]}</p>` : ""}
+      `;
+
+      if (sheetKey === "EVISA") {
+        if (row["3rd Party Name"]) detailsHTML = `<p class="info-line"><i class="fa-solid fa-user-tie"></i><strong>3rd Party Name:</strong> ${row["3rd Party Name"]}</p>` + detailsHTML;
+        if (row["Required Docs"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-file-alt"></i><strong>Required Docs:</strong> ${row["Required Docs"]}</p>`;
+        if (row["Sales Manager"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user"></i><strong>Sales Manager:</strong> ${row["Sales Manager"]}</p>`;
+        if (row["Sales Manager Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope"></i><strong>Sales Manager Mail Id:</strong> ${row["Sales Manager Mail Id"]}</p>`;
+        if (row["3rd Party Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope-circle-check"></i><strong>3rd Party Mail Id:</strong> ${row["3rd Party Mail Id"]}</p>`;
+      }
+
+      card.innerHTML = `
+        <div class="card h-100 p-3 position-relative">
+          <!-- Google Sheet Badge -->
+          <a href="${sheetLinks[sheetKey]}" target="_blank" class="Checklists-ribbon" title="View Google Sheet">
+            <i class="fa-solid fa-link"></i> Sheet
+          </a>
+          <h5 class="country-name">
+            ${row["Code"] ? `<img src="https://flagcdn.com/w40/${row["Code"].toLowerCase()}.png" alt="flag">` : ""}
+            ${row["Country"]}
+          </h5>
+          ${detailsHTML}
+          ${row["Links"] ? `<a href="${row["Links"]}" target="_blank" class="btn btn-sm btn-primary btn-custom"><i class="fa-solid fa-link"></i> Official Link</a>` : ""}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  // Search Filter
+  document.getElementById("searchInput").addEventListener("input", e => {
+    const searchText = e.target.value.toLowerCase();
+    const filtered = visaData.filter(row => (row["Country"] || "").toLowerCase().includes(searchText));
+    renderCards(filtered, activeSheet);
+  });
+
+  // Tab Switch
+  document.querySelectorAll("#sheetTabs button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#sheetTabs button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeSheet = btn.getAttribute("data-sheet");
+      fetchVisaData(activeSheet);
+      document.getElementById("searchInput").value = "";
+    });
+  });
+
+  // Load default sheet
+  fetchVisaData(activeSheet);
+</script>
+
+<style>
+  /* Google Sheet Ribbon */
+  .Checklists-ribbon {
+    position: absolute;
+    top: 10px;
+    right: -10px;
+    background: #28a745;
+    color: white !important;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 0 6px 6px 0;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s;
+  }
+  .Checklists-ribbon:hover {
+    background: #218838;
+    color: white !important;
+    text-decoration: none;
+  }
+  .Checklists-ribbon i {
+    font-size: 16px;
+    margin-right: 4px;
+  }
+</style>
+
+
+</body>
+</html>

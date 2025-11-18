@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visa Applications Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+body {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  font-family: 'Segoe UI', sans-serif;
+}
+h2 { font-weight: 700; color: #2c3e50; }
+
+.card {
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+.ribbon {
+  width: 120px;
+  height: 28px;
+  background-color: #007bff;
+  position: absolute;
+  top: 12px;
+  right: -40px;
+  text-align: center;
+  line-height: 28px;
+  color: #fff;
+  font-weight: bold;
+  transform: rotate(45deg);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.3s;
+}
+.ribbon:hover { background-color: #0056b3; }
+
+.country-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #007bff;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.country-name:hover { color: #ff5722; }
+
+.country-name img {
+  width: 32px;
+  height: 22px;
+  border-radius: 4px;
+  object-fit: cover;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+}
+
+.client-name { font-size: 1.1rem; font-weight: 700; color: #28a745; }
+.info-line { font-size: 0.95rem; margin-bottom: 6px; color: #444; }
+.info-line i { color: #007bff; margin-right: 6px; }
+
+.badge-status {
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 6px;
+}
+
+.search-box input {
+  border-radius: 12px;
+  border: 2px solid #dee2e6;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+</style>
+</head>
+<body>
+
+<div class="container py-4">
+  <h2 class="text-center mb-4">🌍 Visa Applications Work Status</h2>
+
+  <!-- Search -->
+  <div class="search-box mb-4">
+    <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search by country, client, or status...">
+  </div>
+
+  <!-- Cards -->
+  <div id="cardsContainer" class="row g-4"></div>
+</div>
+
+<script>
+const SHEET_ID = "1i7D49XMfgdjf5v2Hu5ohbcnlfBhQ-QXpf8RiNLyFKwA"; 
+const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ";
+const RANGE = "Arman Work Status";
+
+let sheetData = [];
+
+async function fetchSheetData() {
+  try {
+    const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${API_KEY}`);
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`HTTP ${res.status}: ${text}`);
+    }
+    const data = await res.json();
+    if (!data.values || data.values.length === 0) {
+      document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-muted">No data found</p>`;
+      return;
+    }
+
+    const headers = data.values[0].map(h => h?.toString().trim() || "");
+    sheetData = data.values.slice(1).map(row => {
+      const obj = {};
+      headers.forEach((header,i) => obj[header] = row[i]?.toString().trim() || "");
+      return obj;
+    });
+
+    renderCards(sheetData);
+
+  } catch (err) {
+    console.error("Error fetching sheet:", err);
+    document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-danger">Error loading data</p>`;
+  }
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function renderCards(data) {
+  const container = document.getElementById("cardsContainer");
+  container.innerHTML = "";
+
+  data.forEach(row => {
+    if (!row["Country"] && !row["Name"]) return;
+
+    const card = document.createElement("div");
+    card.className = "col-md-4";
+
+    // Status badge color coding
+    let statusClass = "";
+    const statusLower = row["Status"]?.toLowerCase() || "";
+    if(statusLower.includes("visa received")) statusClass = "bg-success text-white";
+    else if(statusLower.includes("submitted")) statusClass = "bg-danger text-white";
+    else if(statusLower.includes("in process")) statusClass = "bg-primary text-white";
+    else if(statusLower.includes("done")) statusClass = "bg-warning text-dark";
+    else if(statusLower.includes("plan cancelled")) statusClass = "bg-light text-white";
+
+    else statusClass = "bg-secondary text-white";
+
+    const statusBadge = row["Status"] ? `<span class="badge-status ${statusClass}">${escapeHtml(row["Status"])}</span>` : "";
+
+    // Note tooltip
+    const noteContent = row["Note"]?.trim();
+    const noteTooltip = noteContent ? `data-bs-toggle="tooltip" data-bs-placement="top" title="${escapeHtml(noteContent)}"` : "";
+
+    // Ribbon badge (click opens the sheet)
+    const sheetRibbon = `<div class="ribbon" onclick="window.open('https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit#gid=0','_blank')">Sheet</div>`;
+
+    // Card HTML
+    card.innerHTML = `
+      ${sheetRibbon}
+      <div class="card h-100 p-3" ${noteTooltip}>
+        <h5 class="country-name" onclick="window.location.href='https://www.solo2ceo.info/visa/admin'">
+          ${row["Country Code"] ? `<img src="https://flagcdn.com/w40/${row["Country Code"].toLowerCase()}.png" alt="flag">` : ""}
+          ${escapeHtml(row["Country"])}
+        </h5>
+        <p class="client-name"><i class="fa-solid fa-user"></i> ${escapeHtml(row["Name"])}</p>
+        <p class="info-line"><i class="fa-solid fa-calendar"></i><strong>Month:</strong> ${escapeHtml(row["Month"])}</p>
+        <p class="info-line"><i class="fa-solid fa-passport"></i><strong>Visa Type:</strong> ${escapeHtml(row["Visa Type"])}</p>
+        <p class="info-line"><i class="fa-solid fa-calendar-days"></i><strong>Travel Dates:</strong> ${escapeHtml(row["Travel Dates"])}</p>
+        <p class="info-line"><i class="fa-solid fa-briefcase"></i><strong>Work Receive Through:</strong> ${escapeHtml(row["Work receive through"])}</p>
+        <p class="info-line"><i class="fa-solid fa-phone"></i><strong>Phone:</strong> ${escapeHtml(row["Phone Number"])}</p>
+        ${row["Visa copies Link"] ? `<p class="info-line"><i class="fa-solid fa-link"></i><a href="${escapeHtml(row["Visa copies Link"])}" target="_blank">Visa Copies</a></p>` : ""}
+        ${statusBadge}
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  // Activate tooltips
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
+}
+
+// Search filter
+document.getElementById("searchInput").addEventListener("input", e => {
+  const searchText = e.target.value.toLowerCase();
+  const filtered = sheetData.filter(row =>
+    (row["Country"] || "").toLowerCase().includes(searchText) ||
+    (row["Name"] || "").toLowerCase().includes(searchText) ||
+    (row["Status"] || "").toLowerCase().includes(searchText) ||
+    (row["Note"] || "").toLowerCase().includes(searchText)
+  );
+  renderCards(filtered);
+});
+
+fetchSheetData();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

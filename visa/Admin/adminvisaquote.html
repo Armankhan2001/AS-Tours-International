@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../image/astourlogo.png">
+  <title>AsTours International | Visa & Travel Experts</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+     /* Password overlay */
+    /* #passwordOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #passwordOverlay input {
+      padding: 12px;
+      border-radius: 5px;
+      border: none;
+      width: 250px;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    #passwordOverlay button {
+      padding: 10px 20px;
+      background: #ffa726;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #passwordOverlay p {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    } */
+
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2.5rem 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+
+    .container {
+      flex: 1;
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+
+    .container h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: #ffe082;
+      margin-bottom: 2rem;
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .card {
+      width: 280px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2rem 1.2rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.4s ease;
+      flex: 0 0 auto;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+    }
+
+    .card .logo {
+      width: 60px;
+      height: auto;
+      margin-bottom: 1rem;
+      filter: brightness(1.1);
+      border-radius: 8px;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, #ffa726, #fb8c00);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .card button:hover {
+      background: linear-gradient(to right, #fb8c00, #f57c00);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.2rem;
+      font-size: 0.95rem;
+      color: #bbb;
+      background-color: rgba(0, 0, 0, 0.4);
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 500px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+
+      .card h3 {
+        font-size: 1.1rem;
+      }
+
+      .card button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+     <!-- Password Prompt Overlay -->
+  <!-- <div id="passwordOverlay">
+    <input type="password" id="adminPassword" placeholder="Enter Password" />
+    <button onclick="checkPassword()">Unlock</button>
+    <p id="errorMessage"></p>
+  </div> -->
+
+  <header>
+    <h1>Visa Quotations</h1>
+    <p>Your trusted partner for visa processing and global travel support</p>
+  </header>
+
+  <div class="container">
+    <h2>Open Visa Rate Sheets</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://logo.clearbit.com/tripstoreholidays.com" alt="Tripstore Logo" class="logo" />
+        <h3>Tripstore Rate Sheet</h3>
+        <button onclick="window.open('https://docs.google.com/spreadsheets/d/1i7D49XMfgdjf5v2Hu5ohbcnlfBhQ-QXpf8RiNLyFKwA/edit?usp=drive_link', '_blank')">Sheet</button>
+        <button onclick="window.location.href='test2.html'">Web</button>
+      </div>
+
+      <div class="card">
+        <img src="https://logo.clearbit.com/satgurutravel.com" alt="Satguru Logo" class="logo" />
+        <h3>Satguru Rate Sheet</h3>
+        <button onclick="window.open('https://docs.google.com/spreadsheets/d/1xH5s_U8muAzJFyQXEAOB6hCFcGxegMPCyQ_y418TSzo/edit?gid=1099384453#gid=1099384453')">sheet</button>
+        <button onclick="window.location.href='../test.html'">Web</button>
+
+      </div>
+
+      <div class="card">
+        <img src="https://files.gallabox.com/642163ce9a1b3d11e7a3205c/36f7ca79-9779-4113-a27e-5cf188a8bb41-WHITE.png" alt="Atlas Logo" class="logo" />
+        <h3>Atlas Rate Sheet</h3>
+        <button onclick="window.open('https://drive.google.com/file/d/1qcGXJjXpqNj-7MGbO5tJOeoJGQu1XDmO/view?usp=sharing', '_blank')">Sheet</button>
+        <button onclick="window.location.href='../test1.html'">Web</button>
+      </div>
+
+      <div class="card">
+        <img src="https://logo.clearbit.com/atlys.com" alt="Atlys Logo" class="logo" />
+        <h3>Atlys Rate Sheet</h3>
+        <button onclick="window.open('https://www.atlys.com/en-IN', '_blank')">Open</button>
+      </div>
+
+      <div class="card">
+        <img src="https://logo.clearbit.com/akbartravels.com" alt="Akbar Travels Logo" class="logo" />
+        <h3>Akbar Travels Rate Sheet</h3>
+        <button onclick="window.open('https://www.akbartravels.com/visa', '_blank')">Open</button>
+      </div>
+
+      <div class="card">
+        <img src="https://stampthepassport.com/assets/images/logo.webp" alt="Stamp the Passport Logo" class="logo" />
+        <h3>Stamp the Passport</h3>
+        <button onclick="window.open('https://stampthepassport.com/', '_blank')">Open</button>
+      </div>
+
+      <div class="card">
+        <img src="https://stampmyvisa.com/assets/images/logo-with-name.svg" alt="StampMyVisa Logo" class="logo" />
+        <h3>StampMyVisa</h3>
+        <button onclick="window.open('https://stampmyvisa.com/', '_blank')">Open</button>
+      </div>
+
+      <div class="card">
+        <img src="https://www.prominentvisa.com/images/logo/logo-big.png" alt="prominentvisaservice Logo" class="logo" />
+        <h3>Prominent Visa Service</h3>
+        <button onclick="window.open('https://www.prominentvisa.com/visainfo.aspx', '_blank')">Open</button>
+      </div>
+
+      
+
+       <div class="card">
+        <img src="https://www.sanskrutitravels.in/images/logo4.png" alt="Sanskrutitravels Logo" class="logo" />
+        <h3>Sanskruti Travels</h3>
+        <button onclick="window.open('https://www.sanskrutitravels.in/visa/visaservices.html', '_blank')">Open</button>
+      </div>
+    </div>
+  </div>
+<br>
+<br>
+  <div class="container">
+    <h2>Open Visa Details Provider</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://logo.clearbit.com/btwvisas.com" alt="Tripstore Logo" class="logo" />
+        <h3>BTW Visas(Visa Guide, & Requirements)</h3>
+        <button onclick="window.open('https://btwvisas.com')">Open</button>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <h2>USA Visa Slot Check</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="../image/astourlogo.png" alt="Visa Slots Logo" class="logo" />
+        <h3>VISA SLOTS (USA)</h3>
+        <button onclick="window.open('https://visaslots.info')">Open</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 AsTours International. All rights reserved.
+  </footer>
+
+  <!-- <script>
+  // Base64-encoded password:
+  const encoded = 'Sm91cm5leUAyNQ==';
+
+  function checkPassword() {
+    const input = document.getElementById("adminPassword").value;
+    const correctPassword = atob(encoded); // Decode from Base64
+
+    if (input === correctPassword) {
+      document.getElementById("passwordOverlay").style.display = "none";
+      document.querySelector("header").classList.add("visible");
+      document.querySelector(".container").classList.add("visible");
+      document.querySelector("footer").classList.add("visible");
+    } else {
+      document.getElementById("errorMessage").textContent = "Incorrect password. Try again.";
+    }
+  }
+</script> -->
+
+</body>
+</html>

@@ -1,0 +1,429 @@
+[
+  {
+    "country": "Azerbaijan",
+    "visaType": "Tourist 30 Days Stay, Single Entry",
+    "rate": "2950",
+    "page": 9,
+    "raw": "Azerbaijan Tourist 30 Days Stay, Single Entry 2950"
+  },
+  {
+    "country": "Egypt",
+    "visaType": "30 Days Stay, 3 Months Validity",
+    "rate": "3350",
+    "page": 9,
+    "raw": "Egypt 30 Days Stay, 3 Months Validity 3350"
+  },
+  {
+    "country": "Ethopia",
+    "visaType": "Tourist 30 Days Single Entry, 3 Months Validity 6000Antigua Barbuda 30 Days Stay and 6 Months Validity",
+    "rate": "9350",
+    "page": 9,
+    "raw": "Ethopia Tourist 30 Days Single Entry, 3 Months Validity 6000Antigua Barbuda 30 Days Stay and 6 Months Validity 9350"
+  },
+  {
+    "country": "Benin",
+    "visaType": "30 Days Stay Single Entry, 30 Days Validity",
+    "rate": "5500",
+    "page": 9,
+    "raw": "Benin 30 Days Stay Single Entry, 30 Days Validity 5500"
+  },
+  {
+    "country": "Botswana",
+    "visaType": "Tourist 30 Days Stay Single Entry",
+    "rate": "2500",
+    "page": 9,
+    "raw": "Botswana Tourist 30 Days Stay Single Entry 2500"
+  },
+  {
+    "country": "Burkina Faso",
+    "visaType": "As Per Itinerary Single Entry",
+    "rate": "6800",
+    "page": 9,
+    "raw": "Burkina Faso As Per Itinerary Single Entry 6800"
+  },
+  {
+    "country": "Cambodia",
+    "visaType": "30 Days Stay , 3 Months Validity",
+    "rate": "3100",
+    "page": 9,
+    "raw": "Cambodia 30 Days Stay , 3 Months Validity 3100"
+  },
+  {
+    "country": "Djibouti",
+    "visaType": "14 Days Stay Single Entry",
+    "rate": "1600",
+    "page": 9,
+    "raw": "Djibouti 14 Days Stay Single Entry 1600"
+  },
+  {
+    "country": "Georgia",
+    "visaType": "30 Days Multiple Entry, 120 Days Validity 4100East Arica 90 Days Stay Single Entry, 3 Months Validity",
+    "rate": "10200",
+    "page": 9,
+    "raw": "Georgia 30 Days Multiple Entry, 120 Days Validity 4100East Arica 90 Days Stay Single Entry, 3 Months Validity 10200"
+  },
+  {
+    "country": "India",
+    "visaType": "E Tourist Visa, 30 Days",
+    "rate": "2800",
+    "page": 9,
+    "raw": "India E Tourist Visa, 30 Days 2800"
+  },
+  {
+    "country": "Jordan",
+    "visaType": "3 Months Single Entry 5800Indonesia Tourist (Visa On Arrival) 30 Days  Stay, 3 Months Validity",
+    "rate": "3000",
+    "page": 9,
+    "raw": "Jordan 3 Months Single Entry 5800Indonesia Tourist (Visa On Arrival) 30 Days  Stay, 3 Months Validity 3000"
+  },
+  {
+    "country": "Ivory Coast",
+    "visaType": "As Per Itinerary",
+    "rate": "7800",
+    "page": 9,
+    "raw": "Ivory Coast As Per Itinerary 7800"
+  },
+  {
+    "country": "Hong Kong",
+    "visaType": "Pre Arrival Registration 350Guinea 90 Days Stay Single Entry",
+    "rate": "7700",
+    "page": 9,
+    "raw": "Hong Kong Pre Arrival Registration 350Guinea 90 Days Stay Single Entry 7700"
+  },
+  {
+    "country": "Kenya",
+    "visaType": "ETA 90 Days Stay Single Entry, 3 Months Validity",
+    "rate": "3350",
+    "page": 10,
+    "raw": "Kenya ETA 90 Days Stay Single Entry, 3 Months Validity 3350"
+  },
+  {
+    "country": "Laos",
+    "visaType": "30 Days Stay Single Entry, 60 Days Validity",
+    "rate": "5200",
+    "page": 10,
+    "raw": "Laos 30 Days Stay Single Entry, 60 Days Validity 5200"
+  },
+  {
+    "country": "Morocco",
+    "visaType": "30 Days Stay Single Entry, 06 Months Validity",
+    "rate": "8200",
+    "page": 10,
+    "raw": "Morocco 30 Days Stay Single Entry, 06 Months Validity 8200"
+  },
+  {
+    "country": "Myanmar",
+    "visaType": "28 Days Stay, 3 Months Validity",
+    "rate": "4900",
+    "page": 10,
+    "raw": "Myanmar 28 Days Stay, 3 Months Validity 4900"
+  },
+  {
+    "country": "Malaysia",
+    "visaType": "MDAC 30 Days",
+    "rate": "200",
+    "page": 10,
+    "raw": "Malaysia MDAC 30 Days 200"
+  },
+  {
+    "country": "Madagascar",
+    "visaType": "15 Days Single, 60 Days Validity",
+    "rate": "1500",
+    "page": 10,
+    "raw": "Madagascar 15 Days Single, 60 Days Validity 1500"
+  },
+  {
+    "country": "Uzbekistan",
+    "visaType": "E-Visa, 30 Days Stay Single Entry, 3 Months Validity",
+    "rate": "2300",
+    "page": 10,
+    "raw": "Uzbekistan E-Visa, 30 Days Stay Single Entry, 3 Months Validity 2300"
+  },
+  {
+    "country": "Vietnam",
+    "visaType": "E-Visa, 90 Days Stay Single Entry, 30 Days Validity",
+    "rate": "2500",
+    "page": 10,
+    "raw": "Vietnam E-Visa, 90 Days Stay Single Entry, 30 Days Validity 2500"
+  },
+  {
+    "country": "Zambia–Zimbabwe",
+    "visaType": "Tourist/Business Single Entry 2600Tanzania TurkeyTourist, 90 Days Stay Single Entry, 3 Months Stay Validity E-Visa, 30 Days Stay Single Entry, 3 Months Validity5000",
+    "rate": "4850",
+    "page": 10,
+    "raw": "Zambia–Zimbabwe Tourist/Business Single Entry 2600Tanzania TurkeyTourist, 90 Days Stay Single Entry, 3 Months Stay Validity E-Visa, 30 Days Stay Single Entry, 3 Months Validity5000 4850"
+  },
+  {
+    "country": "Uganda",
+    "visaType": "Tourist, 30 Days Stay Single Entry, 3 Months ValidityTajikistan Tourist, 60 Days Stay Single Entry, 2 Months Validity",
+    "rate": "3000",
+    "page": 10,
+    "raw": "Uganda Tourist, 30 Days Stay Single Entry, 3 Months ValidityTajikistan Tourist, 60 Days Stay Single Entry, 2 Months Validity 3000"
+  },
+  {
+    "country": "Russia",
+    "visaType": "E-Visa (60 Days Validity From DOI, Up to 16 Days Stay)",
+    "rate": "5500",
+    "page": 10,
+    "raw": "Russia E-Visa (60 Days Validity From DOI, Up to 16 Days Stay) 5500"
+  },
+  {
+    "country": "Sri Lanka",
+    "visaType": "ETA Double Entry",
+    "rate": "250",
+    "page": 10,
+    "raw": "Sri Lanka ETA Double Entry 250"
+  },
+  {
+    "country": "Sri Lanka Buisness Double",
+    "visaType": "Entry  3000Malawi Tourist / Business Single Entry",
+    "rate": "5400",
+    "page": 10,
+    "raw": "Sri Lanka Buisness Double Entry  3000Malawi Tourist / Business Single Entry 5400"
+  },
+  {
+    "country": "Oman",
+    "visaType": "26N - Tourist 10 days (Valid USA, UK)",
+    "rate": "1600",
+    "page": 11,
+    "raw": "Oman 26N - Tourist 10 days (Valid USA, UK) 1600"
+  },
+  {
+    "country": "Oman",
+    "visaType": "26M - Tourist  30 days (Valid USA, UK)",
+    "rate": "4900",
+    "page": 11,
+    "raw": "Oman 26M - Tourist  30 days (Valid USA, UK) 4900"
+  },
+  {
+    "country": "Oman",
+    "visaType": "Tourist 10 Days",
+    "rate": "2150",
+    "page": 11,
+    "raw": "Oman Tourist 10 Days 2150"
+  },
+  {
+    "country": "Oman",
+    "visaType": "Tourist 30 Days",
+    "rate": "5650",
+    "page": 11,
+    "raw": "Oman Tourist 30 Days 5650"
+  },
+  {
+    "country": "Oman",
+    "visaType": "Tourist 10 Days (Risk-Free)",
+    "rate": "2150",
+    "page": 11,
+    "raw": "Oman Tourist 10 Days (Risk-Free) 2150"
+  },
+  {
+    "country": "Oman",
+    "visaType": "Tourist 30 Days (Risk-Free)",
+    "rate": "6100",
+    "page": 11,
+    "raw": "Oman Tourist 30 Days (Risk-Free) 6100"
+  },
+  {
+    "country": "Qatar",
+    "visaType": "Tourist Entry (A1) Single Entry",
+    "rate": "500",
+    "page": 11,
+    "raw": "Qatar Tourist Entry (A1) Single Entry 500"
+  },
+  {
+    "country": "Saudi Arabia",
+    "visaType": "90 Days Stay 30 Days Visa Validity",
+    "rate": "12500",
+    "page": 11,
+    "raw": "Saudi Arabia 90 Days Stay 30 Days Visa Validity 12500"
+  },
+  {
+    "country": "UAE",
+    "visaType": "5 years Multiple Entry",
+    "rate": "14700",
+    "page": 11,
+    "raw": "UAE 5 years Multiple Entry 14700"
+  },
+  {
+    "country": "UAE",
+    "visaType": "Pre Arrival Permit (USA / UK / EU)",
+    "rate": "5600",
+    "page": 11,
+    "raw": "UAE Pre Arrival Permit (USA / UK / EU) 5600"
+  },
+  {
+    "country": "UAE",
+    "visaType": "30 Days Single Entry",
+    "rate": "6400",
+    "page": 11,
+    "raw": "UAE 30 Days Single Entry 6400"
+  },
+  {
+    "country": "UAE",
+    "visaType": "30 Days Single Entry Child 1200Country Visa Type Rates INR UAE 60 Days Single Entry",
+    "rate": "10800",
+    "page": 11,
+    "raw": "UAE 30 Days Single Entry Child 1200Country Visa Type Rates INR UAE 60 Days Single Entry 10800"
+  },
+  {
+    "country": "UAE",
+    "visaType": "30 Days Risk Free Visa",
+    "rate": "9100",
+    "page": 11,
+    "raw": "UAE 30 Days Risk Free Visa 9100"
+  },
+  {
+    "country": "UAE",
+    "visaType": "30 Days Child Risk Free Visa",
+    "rate": "9100",
+    "page": 11,
+    "raw": "UAE 30 Days Child Risk Free Visa 9100"
+  },
+  {
+    "country": "UAE",
+    "visaType": "60 Days Risk Free Visa",
+    "rate": "15500",
+    "page": 11,
+    "raw": "UAE 60 Days Risk Free Visa 15500"
+  },
+  {
+    "country": "UAE",
+    "visaType": "60 Days Child Risk Free Visa",
+    "rate": "8500",
+    "page": 11,
+    "raw": "UAE 60 Days Child Risk Free Visa 8500"
+  },
+  {
+    "country": "UAE",
+    "visaType": "30 Days Multiple",
+    "rate": "12500",
+    "page": 11,
+    "raw": "UAE 30 Days Multiple 12500"
+  },
+  {
+    "country": "UAE",
+    "visaType": "30 Days Child Multiple",
+    "rate": "5500",
+    "page": 11,
+    "raw": "UAE 30 Days Child Multiple 5500"
+  },
+  {
+    "country": "UAE",
+    "visaType": "60 Days Multiple",
+    "rate": "17300",
+    "page": 11,
+    "raw": "UAE 60 Days Multiple 17300"
+  },
+  {
+    "country": "UAE",
+    "visaType": "60 Days Child Multiple",
+    "rate": "8500",
+    "page": 11,
+    "raw": "UAE 60 Days Child Multiple 8500"
+  },
+  {
+    "country": "UAE",
+    "visaType": "48 Hours Transit Visa (Only Emirates)",
+    "rate": "1500",
+    "page": 11,
+    "raw": "UAE 48 Hours Transit Visa (Only Emirates) 1500"
+  },
+  {
+    "country": "UAE",
+    "visaType": "96 Hours Transit Visa (Only Emirates) 4200UAE 60 Days Single Entry Child",
+    "rate": "2200",
+    "page": 11,
+    "raw": "UAE 96 Hours Transit Visa (Only Emirates) 4200UAE 60 Days Single Entry Child 2200"
+  },
+  {
+    "country": "UAE",
+    "visaType": "30 Days Same Sponsor (Inside Country Extension)",
+    "rate": "23000",
+    "page": 11,
+    "raw": "UAE 30 Days Same Sponsor (Inside Country Extension) 23000"
+  },
+  {
+    "country": "Bangladesh",
+    "visaType": "Tourist 30 days Single Entry",
+    "rate": "5000",
+    "page": 12,
+    "raw": "Bangladesh Tourist 30 days Single Entry 5000"
+  },
+  {
+    "country": "Bangladesh Business",
+    "visaType": "60 days Single Entry",
+    "rate": "7500",
+    "page": 12,
+    "raw": "Bangladesh Business 60 days Single Entry 7500"
+  },
+  {
+    "country": "Brazil",
+    "visaType": "3 Month Validity 30 Day Stay  885 (SC) Canada (As Passport Expiry) Up to 6 Months Stay Validity",
+    "rate": "13060",
+    "page": 12,
+    "raw": "Brazil 3 Month Validity 30 Day Stay  885 (SC) Canada (As Passport Expiry) Up to 6 Months Stay Validity 13060"
+  },
+  {
+    "country": "China Normal",
+    "visaType": "Tourist/Business  885 (SC) Egypt Tourist (3 Month Validity 30 Day Stay)",
+    "rate": "3600",
+    "page": 12,
+    "raw": "China Normal Tourist/Business  885 (SC) Egypt Tourist (3 Month Validity 30 Day Stay) 3600"
+  },
+  {
+    "country": "Egypt Business",
+    "visaType": "(3 Month Validity 30 Day Stay)",
+    "rate": "6685",
+    "page": 12,
+    "raw": "Egypt Business (3 Month Validity 30 Day Stay) 6685"
+  },
+  {
+    "country": "Ghana",
+    "visaType": "3 Month Validity 30 Day Stay",
+    "rate": "14700",
+    "page": 12,
+    "raw": "Ghana 3 Month Validity 30 Day Stay 14700"
+  },
+  {
+    "country": "Japan",
+    "visaType": "Tourist/Business (3 Month Validity 30 Day Stay)",
+    "rate": "1100",
+    "page": 12,
+    "raw": "Japan Tourist/Business (3 Month Validity 30 Day Stay) 1100"
+  },
+  {
+    "country": "Saudi Arabia",
+    "visaType": "Tourist | Business Visa (Under 40 Years) 1180 (SC) Schengen Countries Normal 885 (SC)Country Visa Type Rates INR Singapore Tourist/Business/Family",
+    "rate": "2667",
+    "page": 12,
+    "raw": "Saudi Arabia Tourist | Business Visa (Under 40 Years) 1180 (SC) Schengen Countries Normal 885 (SC)Country Visa Type Rates INR Singapore Tourist/Business/Family 2667"
+  },
+  {
+    "country": "South Africa",
+    "visaType": "3 Month Validity 30 Day Stay",
+    "rate": "3160",
+    "page": 12,
+    "raw": "South Africa 3 Month Validity 30 Day Stay 3160"
+  },
+  {
+    "country": "South Korea",
+    "visaType": "Tourist/Business (3 Month Validity 30 Day Stay)",
+    "rate": "5530",
+    "page": 12,
+    "raw": "South Korea Tourist/Business (3 Month Validity 30 Day Stay) 5530"
+  },
+  {
+    "country": "Turkey",
+    "visaType": "Tourist/Business Single Entry (3 Month Validity 30 Day Stay)",
+    "rate": "19900",
+    "page": 12,
+    "raw": "Turkey Tourist/Business Single Entry (3 Month Validity 30 Day Stay) 19900"
+  },
+  {
+    "country": "UK/USA",
+    "visaType": "/Ireland Normal 885 (SC) New Zealand Tourist",
+    "rate": "24000",
+    "page": 12,
+    "raw": "UK/USA /Ireland Normal 885 (SC) New Zealand Tourist 24000"
+  }
+]

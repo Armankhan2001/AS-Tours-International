@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Apply for Visa | AsTours International</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    header { background: linear-gradient(45deg, #FF8C00, #FF4500); padding: 50px 20px; text-align: center; color: #fff; }
+    nav { display: flex; flex-wrap: wrap;justify-content: center; gap: 20px; padding: 15px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    nav a { text-decoration: none; color: #ff5f6d; font-weight: 600; transition: 0.3s; }
+    nav a:hover { color: #333; }
+    .subnav { background: #ffe8d1; padding: 10px 0; display: flex; justify-content: center; }
+    .subnav a { color: #333; font-weight: 600; }
+    body { font-family: 'Poppins', sans-serif; background: #fdfdfd; margin: 0; padding: 0; }
+    a { text-decoration: none; color: inherit; }
+
+
+    /* Form */
+    .form-container {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    h2 { text-align: center; margin-bottom: 25px; }
+    label { display: block; margin: 15px 0 5px; font-weight: 600; }
+    input, select, textarea {
+      width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;
+    }
+    .btn {
+      display: block; width: 100%; margin-top: 20px; padding: 12px; background: #FF8C00;
+      color: #fff; border: none; border-radius: 30px; font-weight: 600; font-size: 1.1rem;
+      cursor: pointer; transition: 0.3s;
+    }
+    .btn:hover { background: #FF4500; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+      color: #777;
+      background: #f1f1f1;
+    }
+
+    .form-download {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .btnn {
+      display: block; width: 100%; margin-top: 20px; padding: 12px; background: #5084ec;
+      color: #fff; border: none; border-radius: 30px; font-weight: 600; font-size: 1.1rem;
+      cursor: pointer; transition: 0.3s;
+    }
+    .btnn:hover { background: #FF4500; }
+
+ 
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Apply Now !</h1>
+  </header>
+
+<nav>
+  <a href="../index.html">Home</a>
+  <a href="../about.html">About</a>
+  <a href="../tours/packages.html">Packages</a>
+  <a href="visaservices.html">Visa</a>
+  <a href="../flights.html">Flights</a>
+  <a href="../hotels.html">Hotels</a>
+  <a href="../contact.html">Contact</a>
+</nav>
+
+<!-- Visa Application Form -->
+<div class="form-container">
+  <h2>Visa Application Form</h2>
+  <form id="visaForm">
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" required>
+
+    <label for="phone">Phone Number (with country code)</label>
+    <input type="tel" id="phone" required>
+
+    <label for="visaCountry">Select Country</label>
+    <select id="visaCountry" required>
+      <option value="">-- Select the country you want to apply for --</option>
+    </select>
+
+    <label for="visaType">Select Visa Type</label>
+    <select id="visaType" required>
+      <option value="">-- Choose Visa Type --</option>
+    </select>
+
+    <label for="message">Additional Message (Optional)</label>
+    <textarea id="message" rows="4" placeholder="Any specific requirement?"></textarea>
+
+    <button type="submit" class="btn">Submit & Message on WhatsApp</button>
+  </form>
+</div>
+<div><div class="form-download"><a href="e-visa.html" id="evisaBtn">Check & Download the Visa Forms Here</a>
+<!-- Link to Visa Forms Page -->
+<p><a href="visaforms.html" class="btnn">Visa Forms</a></p></div>
+</div>
+<div><div class="form-download"><a href="e-visa.html" id="evisaBtn">Check & Download the Visa Checklists Here</a>
+<!-- Link to Visa Checklists Page -->
+<p><a href="visachecklist.html" class="btnn">Visa checklist</a></p></div>
+</div>
+
+<div><div class="form-download"><a href="e-visa.html" id="evisaBtn">Check & Download Official Visa Forms & Checklists Here</a>
+<!-- Link to Official Visa Forms & Checklists Page -->
+<p><a href="https://drive.google.com/drive/folders/1CSJlOsjhP_eUkxxaykGzIzl57rrCSZ-f?usp=sharing" class="btnn" target="_blank">Official Visa Forms & Checklists</a></p></div>
+</div>
+
+
+<!-- Footer -->
+<footer>
+  &copy; 2025 AsToursInternational | Your Trusted Visa Partner
+</footer>
+
+<script>
+  // Toggle mobile menu
+  function toggleMenu() {
+    document.getElementById('menu').classList.toggle('active');
+  }
+
+  const apiUrl = 'https://raw.githubusercontent.com/Armankhan2001/visaDatabase/main/visaDatabase.json';
+  const countryDropdown = document.getElementById('visaCountry');
+  const visaTypeDropdown = document.getElementById('visaType');
+
+  let countries = [];
+
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      countries = data.visaDatabase;
+      countries.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.country;
+        option.textContent = item.country;
+        countryDropdown.appendChild(option);
+      });
+      handlePreselectionFromURL();
+    })
+    .catch(error => console.error('Error fetching visa data:', error));
+
+  countryDropdown.addEventListener('change', function () {
+    const selectedCountry = this.value;
+    visaTypeDropdown.innerHTML = '<option value="">-- Choose Visa Type --</option>';
+    const countryData = countries.find(item => item.country === selectedCountry);
+    if (countryData) {
+      countryData.visaTypes.forEach(visa => {
+        const visaOption = document.createElement('option');
+        visaOption.value = visa.type;
+        visaOption.textContent = visa.type;
+        visaTypeDropdown.appendChild(visaOption);
+      });
+    }
+  });
+
+document.getElementById('visaForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById('fullName').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const country = document.getElementById('visaCountry').value;
+  const visaType = document.getElementById('visaType').value;
+  const message = document.getElementById('message').value.trim();
+
+  if (!name || !phone || !country || !visaType) {
+    alert("Please fill all required fields.");
+    return;
+  }
+
+  const whatsappNumber = '919321892924';
+
+  // message string using emojis
+  const messageText = 
+`Hello AsTours International,
+🌍 I would like to apply for a *${visaType}* for *${country}*.
+
+📝 Applicant Details:
+👤 Name: ${name}
+📞 Phone: ${phone}
+${message ? '🗒️ Message: ' + message + '\n' : ''}
+
+Kindly get in touch with me.`;
+
+  // encode whole message safely
+  const encodedMessage = encodeURIComponent(messageText);
+
+  // open whatsapp
+  window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+});
+
+
+
+  function handlePreselectionFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const countryParam = urlParams.get('country');
+    if (countryParam) {
+      const exists = Array.from(countryDropdown.options).some(option => option.value === countryParam);
+      if (exists) {
+        countryDropdown.value = countryParam;
+        const event = new Event('change');
+        countryDropdown.dispatchEvent(event);
+      }
+    }
+  }
+</script>
+
+</body>
+</html>

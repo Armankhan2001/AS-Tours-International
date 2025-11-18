@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduSphere - Real Life, Real Education</title>
+<style>
+  body { margin:0; font-family:'Segoe UI', Roboto, Arial, sans-serif; background:#f4f6fb; color:#222; line-height:1.6; }
+  header { background:linear-gradient(135deg,#1a1a40,#2d2d7a); color:#fff; padding:50px 20px; text-align:center; }
+  header h1 { margin:0; font-size:42px; letter-spacing:1.2px; }
+  header p { margin:15px 0 0; font-size:18px; color:#e0e0e0; }
+
+  nav { background:#111; display:flex; flex-wrap:wrap; justify-content:center; gap:25px; padding:15px; box-shadow:0 3px 8px rgba(0,0,0,0.25);}
+  nav a { color:#fff; text-decoration:none; font-weight:600; font-size:15px; transition:0.3s; }
+  nav a:hover, nav a.active { color:#00c4ff; }
+
+  .container { width:92%; max-width:1300px; margin:30px auto; }
+  .search-filter { display:flex; flex-wrap:wrap; gap:15px; margin-bottom:25px; align-items:center; justify-content:space-between; }
+  .search-filter input, .search-filter select { padding:12px 15px; border:1px solid #ccc; border-radius:10px; font-size:15px; flex:1; min-width:200px; outline:none; transition:all 0.3s ease; }
+  .search-filter input:focus, .search-filter select:focus { border-color:#00c4ff; box-shadow:0 0 6px rgba(0,196,255,0.4); }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:25px; }
+  .card { background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 6px 15px rgba(0,0,0,0.1); transition:transform 0.3s ease, box-shadow 0.3s ease; animation:fadeIn 0.7s ease; cursor:pointer; }
+  .card:hover { transform:translateY(-8px); box-shadow:0 10px 20px rgba(0,0,0,0.2);}
+  .card iframe, .card .insta-placeholder { width:100%; height:220px; border:none; background:#000; display:block; }
+
+  .card-content { padding:18px; }
+  .card-content h3 { margin:0; font-size:20px; color:#1a1a40; }
+  .card-content p { margin:6px 0; font-size:14px; color:#444; }
+  .tag { display:inline-block; padding:5px 10px; margin:5px 4px 0 0; font-size:12px; border-radius:20px; font-weight:600;}
+  .tag.educated { background:#d1f7d6; color:#006400; }
+  .tag.non-educated { background:#ffd6d6; color:#8b0000; }
+  .tag.good { background:#d6f0ff; color:#004080; }
+  .tag.bad { background:#ffe0b3; color:#8b4500; }
+  .tag.education { background:#cb88dc; color:#006400; }
+  .tag.shorts { background:#d2dc6a; color:#c665e0; }
+
+  footer { text-align:center; padding:25px; margin-top:50px; background:#1a1a40; color:#fff; }
+  @keyframes fadeIn { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+  @media(max-width:600px){ header h1{ font-size:28px;} nav{gap:15px;} .card iframe,.card .insta-placeholder{height:180px;} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>EduSphere</h1>
+  <p>Real Life, Real Education – Discover Influencers & Experts</p>
+</header>
+
+<nav>
+  <a href="#" onclick="filterTab('all',event)" class="active">All Teachers</a>
+  <a href="#" onclick="filterTab('educated',event)">Educated</a>
+  <a href="#" onclick="filterTab('non-educated',event)">Non-Educated</a>
+  <a href="#" onclick="filterTab('real',event)">Real Life Education Shorts</a>
+</nav>
+
+<div class="container">
+  <div class="search-filter">
+    <input type="text" id="searchBox" placeholder="Search by name or field..." onkeyup="renderTeachers()">
+    <select id="fieldFilter" onchange="renderTeachers()"><option value="">All Fields</option></select>
+  </div>
+
+  <div class="grid" id="teacherGrid"></div>
+</div>
+
+<footer>&copy; 2025 EduSphere | Real Life, Real Education</footer>
+
+<script>
+const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTMlcm5QBnwKQ-Rn9cmT14Ceuu9V2y1Ks6b6iRsj44zrJ5H5BuZRC8jue4BLBPhC9nOjFrjLsGyGbJx/pub?output=csv";
+let teachers = [], currentTab="all";
+
+function parseVideoUrl(url){
+  if(!url) return null;
+  url=url.trim();
+  let ytId=null, instaCode=null;
+  if(url.includes("youtube.com/watch?v=")) ytId=url.split("watch?v=")[1].split("&")[0];
+  else if(url.includes("youtu.be/")) ytId=url.split("youtu.be/")[1].split("?")[0];
+  else if(url.includes("youtube.com/shorts/")) ytId=url.split("shorts/")[1].split("?")[0];
+  else if(url.includes("youtube.com/live/")) ytId=url.split("live/")[1].split("?")[0];
+  else if(url.includes("instagram.com")) {
+    const parts=url.split("/");
+    instaCode=parts.includes("reel") ? parts[parts.indexOf("reel")+1] : parts[parts.indexOf("p")+1];
+  }
+
+  if(ytId) return {type:"youtube", embed:"https://www.youtube.com/embed/"+ytId};
+  if(instaCode) return {type:"instagram", url:url};
+  return {type:"link", url:url};
+}
+
+async function fetchCSV(){
+  const response=await fetch(sheetUrl);
+  const data=await response.text();
+  const rows=data.split("\n").map(r=>r.split(","));
+  teachers=rows.slice(1).map(r=>{
+    const videoInfo=parseVideoUrl(r[4]);
+    return {
+      name:r[0], status:r[1].toLowerCase(), field:r[2], category:r[3].toLowerCase(),
+      videoType:videoInfo.type, videoEmbed:videoInfo.embed||null, videoUrl:videoInfo.url||null
+    }
+  });
+  populateFieldFilter();
+  renderTeachers();
+}
+
+function populateFieldFilter(){
+  const fields=[...new Set(teachers.map(t=>t.field))];
+  const select=document.getElementById("fieldFilter");
+  fields.forEach(f=>{
+    if(f.trim()!==""){
+      const option=document.createElement("option");
+      option.value=f; option.textContent=f;
+      select.appendChild(option);
+    }
+  });
+}
+
+function renderTeachers(){
+  const search=document.getElementById("searchBox").value.toLowerCase();
+  const fieldFilter=document.getElementById("fieldFilter").value;
+  const container=document.getElementById("teacherGrid");
+  container.innerHTML="";
+  teachers.filter(t=>{
+    if(currentTab==="educated" && t.status!=="educated") return false;
+    if(currentTab==="non-educated" && t.status!=="non-educated") return false;
+    if(currentTab==="real" && t.category!=="shorts") return false;
+    if(fieldFilter && t.field!==fieldFilter) return false;
+    if(search && !t.name.toLowerCase().includes(search) && !t.field.toLowerCase().includes(search)) return false;
+    return true;
+  }).forEach(t=>{
+    if(t.videoType==="youtube"){
+      container.innerHTML+=`
+        <div class="card">
+          <iframe src="${t.videoEmbed}" allowfullscreen></iframe>
+          <div class="card-content">
+            <h3>${t.name}</h3>
+            <p><b>Field:</b> ${t.field}</p>
+            <span class="tag ${t.status}">${t.status}</span>
+            <span class="tag ${t.category}">${t.category}</span>
+          </div>
+        </div>`;
+    } else if(t.videoType==="instagram"){
+      container.innerHTML+=`
+        <div class="card" onclick="window.open('${t.videoUrl}','_blank')">
+          <div class="insta-placeholder"></div>
+          <div class="card-content">
+            <h3>${t.name}</h3>
+            <p><b>Field:</b> ${t.field}</p>
+            <span class="tag ${t.status}">${t.status}</span>
+            <span class="tag ${t.category}">${t.category}</span>
+          </div>
+        </div>`;
+    } else {
+      container.innerHTML+=`
+        <div class="card" onclick="window.open('${t.videoUrl}','_blank')">
+          <div class="insta-placeholder"></div>
+          <div class="card-content">
+            <h3>${t.name}</h3>
+            <p><b>Field:</b> ${t.field}</p>
+            <span class="tag ${t.status}">${t.status}</span>
+            <span class="tag ${t.category}">${t.category}</span>
+          </div>
+        </div>`;
+    }
+  });
+}
+
+function filterTab(tab,event){
+  currentTab=tab;
+  document.querySelectorAll("nav a").forEach(a=>a.classList.remove("active"));
+  event.target.classList.add("active");
+  renderTeachers();
+}
+
+fetchCSV();
+</script>
+</body>
+</html>

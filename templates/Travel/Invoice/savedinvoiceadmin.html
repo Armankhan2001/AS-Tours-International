@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Solo2CEO | All Invoices</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <style>
+    body { background: #f1f5f9; font-family: Arial, sans-serif; }
+    .card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+    .card:hover { transform: translateY(-5px); }
+    .status-paid { color: green; font-weight: bold; }
+    .status-partial { color: orange; font-weight: bold; }
+    .status-unpaid, .status-none { color: red; font-weight: bold; }
+  </style>
+</head>
+<body class="p-6">
+
+  <h1 class="text-3xl font-bold text-center mb-8 text-blue-700">Solo2CEO Invoices</h1>
+  <div id="cardsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+  <script>
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9Ra8blsDYX6QSSbywxRSlwNESSM8JQLjJdkomEt_oWkWryLVOAZxgUI-EH7eho9Ez-fQbNFcivmJH/pub?output=csv";
+
+    async function loadInvoices() {
+      const res = await fetch(sheetUrl);
+      const csv = await res.text();
+      Papa.parse(csv, {
+        header: true,
+        skipEmptyLines: true,
+        complete: result => renderCards(result.data)
+      });
+    }
+
+    function renderCards(data) {
+      const container = document.getElementById("cardsContainer");
+      container.innerHTML = "";
+
+      data.forEach(d => {
+        const statusClass = d["Status"]?.includes("Paid") ? "status-paid" :
+                            d["Status"]?.includes("Partial") ? "status-partial" :
+                            "status-unpaid";
+
+        const card = document.createElement("div");
+        card.className = "card cursor-pointer";
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-3">
+            <h2 class="text-xl font-semibold text-blue-700">${d["Client Name"]}</h2>
+            <span class="${statusClass}">${d["Status"]}</span>
+          </div>
+          <p><b>Invoice No:</b> ${d["Invoice No"]}</p>
+          <p><b>Date:</b> ${d["Invoice Date"]}</p>
+          <p><b>Total:</b> ₹${d["Total (Rs)"] || "0"}</p>
+          <p class="mt-2 text-sm text-gray-500">${d["Description"]?.slice(0, 60)}...</p>
+          <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">View Invoice</button>
+        `;
+        card.onclick = () => window.open(`savedinvoicegenerate.html?invoiceNo=${encodeURIComponent(d["Invoice No"])}`, "_blank");
+        container.appendChild(card);
+      });
+    }
+
+    loadInvoices();
+  </script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Solo2CEO Invoice Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Arial', sans-serif; background: #f1f5f9; }
+    .invoice-box { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 850px; margin: auto; }
+    .btn { padding: 10px 15px; border-radius: 8px; margin: 5px; font-weight: bold; cursor: pointer; }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-secondary { background: #16a34a; color: #fff; }
+    .btn-warning { background: #eab308; color: #fff; }
+    .btn-share { background: #f97316; color: #fff; }
+    .status-paid { color: green; font-weight: bold; }
+    .status-partial { color: orange; font-weight: bold; }
+    .status-none { color: red; font-weight: bold; }
+  </style>
+</head>
+<body class="p-6">
+
+<h2 class="text-center text-3xl font-bold mb-6 text-blue-700">Solo2CEO Invoice Generator</h2>
+
+<!-- Invoice Form -->
+<div class="invoice-box mb-6">
+  <form id="invoiceForm" class="grid grid-cols-2 gap-4">
+    <input class="border p-2" id="companyName" placeholder="Company Name" required>
+    <input class="border p-2" id="companyAddress" placeholder="Company Address">
+    <input class="border p-2" id="companyContact" placeholder="Company Phone">
+    <input class="border p-2" id="companyEmail" placeholder="Company Email">
+
+    <input class="border p-2" id="bankName" placeholder="Bank Name">
+    <input class="border p-2" id="accountHolder" placeholder="Account Holder Name">
+    <input class="border p-2" id="accountNumber" placeholder="Account Number">
+    <input class="border p-2" id="ifscCode" placeholder="IFSC Code">
+    <input class="border p-2" id="upiID" placeholder="UPI ID">
+    <input class="border p-2" id="logoURL" placeholder="Logo URL">
+
+    <input class="border p-2" id="invoiceNo" placeholder="Invoice No (e.g. INV-1001)" required>
+    <input class="border p-2" type="date" id="invoiceDate" required>
+    <input class="border p-2" id="clientName" placeholder="Client Name" required>
+    <input class="border p-2" id="clientPhone" placeholder="Client Phone">
+    <input class="border p-2 col-span-2" id="clientAddress" placeholder="Client Address">
+
+    <textarea class="border p-2 col-span-2" id="description" placeholder="Service Description"></textarea>
+    <input class="border p-2" type="number" id="price" placeholder="Price (Rs)">
+    <input class="border p-2" type="number" id="discount" placeholder="Discount (Rs)" value="0">
+    <input class="border p-2" type="number" id="advance" placeholder="Advance (Rs)" value="0">
+    <input class="border p-2" type="number" id="finalPayment" placeholder="Final Payment (Rs)" value="0">
+  </form>
+
+  <button onclick="generateInvoice()" class="btn btn-primary mt-4">Generate Invoice</button>
+  <button onclick="saveToSheet()" class="btn btn-secondary mt-4">💾 Save to Google Sheet</button>
+</div>
+
+<!-- Invoice List -->
+<div class="text-center my-6">
+  <button onclick="loadInvoices()" class="btn btn-warning">📜 Load Saved Invoices</button>
+</div>
+<div id="invoiceList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+<!-- Invoice Preview -->
+<div id="invoicePreview" class="invoice-box hidden mt-6">
+  <div id="invoiceContent"></div>
+</div>
+
+<script>
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9Ra8blsDYX6QSSbywxRSlwNESSM8JQLjJdkomEt_oWkWryLVOAZxgUI-EH7eho9Ez-fQbNFcivmJH/pub?output=csv";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwpaj7XbBljTvDUYePa4I0RZ-qv7iIr5hH6Ws03M2tneMVLXF_WxqUBKFUrxDjmQbEM/exec"; // <-- Replace with your Apps Script web app link
+
+async function saveToSheet() {
+  const data = {
+    companyName: document.getElementById("companyName").value,
+    companyAddress: document.getElementById("companyAddress").value,
+    companyContact: document.getElementById("companyContact").value,
+    companyEmail: document.getElementById("companyEmail").value,
+    bankName: document.getElementById("bankName").value,
+    accountHolder: document.getElementById("accountHolder").value,
+    accountNumber: document.getElementById("accountNumber").value,
+    ifscCode: document.getElementById("ifscCode").value,
+    upiID: document.getElementById("upiID").value,
+    logoURL: document.getElementById("logoURL").value,
+    invoiceNo: document.getElementById("invoiceNo").value,
+    invoiceDate: document.getElementById("invoiceDate").value,
+    clientName: document.getElementById("clientName").value,
+    clientPhone: document.getElementById("clientPhone").value,
+    clientAddress: document.getElementById("clientAddress").value,
+    description: document.getElementById("description").value,
+    price: document.getElementById("price").value,
+    discount: document.getElementById("discount").value,
+    advance: document.getElementById("advance").value,
+    finalPayment: document.getElementById("finalPayment").value,
+  };
+
+  // Calculations
+  const total = data.price - data.discount;
+  const paid = (+data.advance + +data.finalPayment);
+  const pending = total - paid;
+  data.total = total;
+  data.pending = pending;
+  data.status = paid >= total ? "✅ Paid in Full" : paid > 0 ? "⚠️ Partial Payment" : "❌ Unpaid";
+
+  await fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  alert("✅ Invoice saved successfully!");
+  loadInvoices();
+}
+
+// Generate invoice preview
+function generateInvoice(data = null) {
+  const d = data || {
+    invoiceNo: invoiceNo.value, invoiceDate: invoiceDate.value,
+    clientName: clientName.value, clientAddress: clientAddress.value, clientPhone: clientPhone.value,
+    description: description.value, price: price.value, discount: discount.value,
+    advance: advance.value, finalPayment: finalPayment.value
+  };
+  const total = d.price - d.discount;
+  const paid = (+d.advance + +d.finalPayment);
+  const pending = total - paid;
+  let status = paid >= total ? "✅ Paid in Full" : paid > 0 ? "⚠️ Partial Payment" : "❌ Unpaid";
+
+  document.getElementById("invoiceContent").innerHTML = `
+    <div class="flex justify-between items-center mb-6">
+      <img src="${document.getElementById("logoURL").value || "./image/Solo2ceologo.png"}" class="h-14">
+      <h1 class="text-3xl font-bold text-blue-800">INVOICE</h1>
+    </div>
+    <h2 class="text-lg font-semibold">Billed To:</h2>
+    <p class="font-bold text-blue-700">${d.clientName}</p>
+    <p>${d.clientAddress}</p><p>${d.clientPhone}</p>
+    <p class="mt-2"><b>Invoice No:</b> ${d.invoiceNo} | <b>Date:</b> ${d.invoiceDate}</p>
+    <table class="w-full mt-4 border">
+      <tr><th>Particulars</th><th>Amount</th></tr>
+      <tr><td>${d.description}</td><td>Rs ${d.price}</td></tr>
+      ${d.discount > 0 ? `<tr><td>Discount</td><td>-Rs ${d.discount}</td></tr>` : ""}
+      <tr><td><b>Total</b></td><td><b>Rs ${total}</b></td></tr>
+      ${d.advance > 0 ? `<tr><td>Advance</td><td>Rs ${d.advance}</td></tr>` : ""}
+      ${d.finalPayment > 0 ? `<tr><td>Final Payment</td><td>Rs ${d.finalPayment}</td></tr>` : ""}
+      <tr><td>Pending</td><td>Rs ${pending}</td></tr>
+    </table>
+    <p class="mt-4">${status}</p>
+  `;
+  document.getElementById("invoicePreview").classList.remove("hidden");
+}
+
+// Load and display invoice cards
+async function loadInvoices() {
+  const res = await fetch(SHEET_URL);
+  const text = await res.text();
+  const rows = text.split("\n").map(r => r.split(","));
+  const headers = rows.shift();
+  const list = document.getElementById("invoiceList");
+  list.innerHTML = "";
+
+  rows.forEach(r => {
+    if (r.length < 10) return;
+    const obj = Object.fromEntries(headers.map((h, i) => [h.trim(), r[i]]));
+    const card = document.createElement("div");
+    card.className = "border p-4 rounded bg-white shadow hover:bg-blue-50 cursor-pointer";
+    card.innerHTML = `
+      <h3 class="font-bold text-blue-700">${obj["Client Name"]}</h3>
+      <p>Invoice: ${obj["Invoice No"]}</p>
+      <p>Date: ${obj["Invoice Date"]}</p>
+      <p>Amount: ₹${obj["Price (Rs)"]}</p>
+      <p>Status: ${obj["Status"]}</p>`;
+    card.onclick = () => fillForm(obj);
+    list.appendChild(card);
+  });
+}
+
+function fillForm(obj) {
+  for (const key in obj) {
+    const id = key.toLowerCase().replace(/\s*\(rs\)|\s+/g, "");
+    const el = document.getElementById(id);
+    if (el) el.value = obj[key];
+  }
+  generateInvoice(obj);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+
+</body>
+</html>

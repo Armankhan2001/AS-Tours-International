@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AsToursInternational — Itinerary Generator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+.hotel-block, .day-block { border-radius:0.5rem; background:#f9fafb; padding:0.5rem; }
+</style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+<header class="bg-indigo-700 text-white py-4 px-6 shadow sticky top-0 z-40">
+<div class="max-w-6xl mx-auto flex items-center justify-between">
+<h1 class="text-xl font-bold">Itinerary Generator</h1>
+<a href="preview.html" class="text-sm bg-white/10 px-3 py-1 rounded hover:bg-white/20">Go to Preview</a>
+</div>
+</header>
+
+<main class="max-w-6xl mx-auto p-6 grid md:grid-cols-3 gap-6">
+
+<form id="formPanel" class="col-span-1 bg-white rounded-2xl shadow p-5 space-y-4">
+<h2 class="text-lg font-bold text-indigo-700">Itinerary Details</h2>
+
+<div>
+<label class="block text-sm font-medium">Logo</label>
+<input id="logoUpload" type="file" accept="image/*" class="block w-full text-sm" />
+<input id="logoUrl" type="url" placeholder="https://..." class="mt-2 border rounded p-2 w-full text-sm" />
+</div>
+
+<div><label class="block text-sm font-medium">Company Name</label>
+<input id="companyName" placeholder="AsTours International" class="border rounded p-2 w-full" /></div>
+
+<div><label class="block text-sm font-medium">Country of Tour</label>
+<input id="tourCountry" placeholder="Brazil" class="border rounded p-2 w-full" /></div>
+
+<div class="grid grid-cols-2 gap-2">
+<div>
+<label class="block text-sm">Confirmation No.</label>
+<input id="confirmationNo" class="border rounded p-2 w-full" />
+</div>
+<div>
+<label class="block text-sm">Reference (optional)</label>
+<input id="reference" class="border rounded p-2 w-full" />
+</div>
+</div>
+
+<div>
+<label class="block text-sm">Passenger Details (one per line)</label>
+<textarea id="passengerDetails" rows="3" class="border rounded p-2 w-full" placeholder="Ahmed Abdul Saeed - Passport W3691761"></textarea>
+</div>
+
+<div>
+<div class="flex items-center justify-between">
+<label class="block text-sm font-medium">Hotels / Stays</label>
+<button type="button" onclick="addHotel()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded">+ Add</button>
+</div>
+<div id="hotelsList" class="mt-2 space-y-3"></div>
+</div>
+
+<div>
+<div class="flex items-center justify-between">
+<label class="block text-sm font-medium">Extra Day Entries</label>
+<button type="button" onclick="addManualDay()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded">+ Add Day</button>
+</div>
+<div id="manualDays" class="mt-2 space-y-2"></div>
+</div>
+
+<div class="space-y-2">
+<button type="button" onclick="openPreviewPage()" class="w-full bg-indigo-600 text-white py-2 rounded font-semibold">Open Preview Page</button>
+</div>
+
+</form>
+
+</main>
+
+<script>
+let logoData = "";
+
+// Logo upload
+document.getElementById('logoUpload').addEventListener('change', e => {
+    const f = e.target.files[0]; 
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = ev => { logoData = ev.target.result; };
+    reader.readAsDataURL(f);
+});
+
+// Add hotel
+function addHotel(pref={}) {
+    const container = document.createElement('div');
+    container.className='hotel-block grid grid-cols-4 gap-2 items-center';
+    container.innerHTML=`
+        <input class="p-2 border rounded hotel-city" placeholder="City" value="${pref.city||''}" />
+        <input class="p-2 border rounded hotel-checkin" type="date" value="${pref.checkin||''}" />
+        <input class="p-2 border rounded hotel-checkout" type="date" value="${pref.checkout||''}" />
+        <div class="col-span-4 grid grid-cols-6 gap-2">
+            <input class="col-span-3 p-2 border rounded hotel-name" placeholder="Hotel Name" value="${pref.hotel||''}" />
+            <input class="col-span-2 p-2 border rounded hotel-contact" placeholder="Contact" value="${pref.contact||''}" />
+            <button type="button" class="col-span-1 bg-red-500 text-white rounded px-2" onclick="this.closest('.hotel-block').remove()">Remove</button>
+        </div>
+    `;
+    document.getElementById('hotelsList').appendChild(container);
+}
+
+// Add manual day
+function addManualDay(obj={}) {
+    const div = document.createElement('div');
+    div.className='day-block grid grid-cols-3 gap-2 items-center';
+    div.innerHTML=`
+        <input type="date" class="p-2 border rounded day-date" value="${obj.date||''}" />
+        <input class="p-2 border rounded day-title" placeholder="Title" value="${obj.title||''}" />
+        <input class="p-2 border rounded day-activities" placeholder="Short activity" value="${obj.activities||''}" />
+        <div class="col-span-3 text-right">
+            <button type="button" class="mt-2 bg-red-500 text-white px-3 py-1 rounded" onclick="this.closest('.day-block').remove()">Remove</button>
+        </div>
+    `;
+    document.getElementById('manualDays').appendChild(div);
+}
+
+// Collect form data
+function collectData(){
+    const companyName = document.getElementById('companyName').value || '';
+    const tourCountry = document.getElementById('tourCountry').value || '';
+    const confirmationNo = document.getElementById('confirmationNo').value || '';
+    const reference = document.getElementById('reference').value || '';
+    const passengerDetails = (document.getElementById('passengerDetails').value||'').split(/\r?\n/).filter(s=>s.trim());
+
+    const hotels = [];
+    document.querySelectorAll('.hotel-block').forEach(h=>{
+        const city = h.querySelector('.hotel-city').value;
+        const checkin = h.querySelector('.hotel-checkin').value;
+        const checkout = h.querySelector('.hotel-checkout').value;
+        const hotel = h.querySelector('.hotel-name').value;
+        const contact = h.querySelector('.hotel-contact').value;
+        if(city && checkin && checkout && hotel) hotels.push({city, checkin, checkout, hotel, contact});
+    });
+
+    const manualDays = [];
+    document.querySelectorAll('.day-block').forEach(d=>{
+        const date = d.querySelector('.day-date').value;
+        const title = d.querySelector('.day-title').value;
+        const activities = d.querySelector('.day-activities').value;
+        if(date || title || activities) manualDays.push({date,title,activities});
+    });
+
+    const logoUrl = document.getElementById('logoUrl').value || '';
+    return {companyName,tourCountry,confirmationNo,reference,passengerDetails,hotels,manualDays,logoUrl,logoData};
+}
+
+// Open preview page with data
+function openPreviewPage(){
+    const data = collectData();
+    const jsonStr = encodeURIComponent(JSON.stringify(data));
+    window.open(`preview.html?data=${jsonStr}`,'_blank');
+}
+</script>
+
+</body>
+</html>

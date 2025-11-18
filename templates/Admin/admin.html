@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Astours International | Admin Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* ------------------- RESET ------------------- */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:"Poppins",sans-serif;
+  background: radial-gradient(circle at top left,#001f3f,#003f63,#0074a6);
+  color:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ------------------- OVERLAY ------------------- */
+#passwordOverlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(5,10,25,0.85);
+  backdrop-filter:blur(15px);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  z-index:9999;animation:fadeIn 1s ease forwards;
+}
+#passwordOverlay h1{
+  font-size:2.2rem;margin-bottom:25px;color:#00b8ff;text-align:center;
+}
+#passwordOverlay input{
+  padding:14px;border:none;border-radius:10px;width:280px;text-align:center;
+  font-size:16px;margin-bottom:20px;outline:none;
+  background:rgba(255,255,255,0.15);color:#fff;
+}
+#passwordOverlay input::placeholder{color:#ccc;}
+#passwordOverlay button{
+  padding:12px 30px;border:none;border-radius:8px;cursor:pointer;
+  font-size:16px;color:#fff;
+  background:linear-gradient(135deg,#00b8ff,#0074a6);
+  box-shadow:0 4px 15px rgba(0,132,255,0.3);
+  transition:0.3s;
+}
+#passwordOverlay button:hover{
+  transform:scale(1.05);
+  background:linear-gradient(135deg,#00e1ff,#006a9b);
+}
+#errorMessage{color:#ff4d4d;margin-top:15px;font-size:14px;}
+
+/* ------------------- HEADER ------------------- */
+header{
+  text-align:center;
+  padding:25px 10px;
+  font-size:2rem;
+  font-weight:700;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,0.15);
+  box-shadow:0 2px 12px rgba(0,0,0,0.3);
+}
+header span{color:#00e1ff;}
+
+/* ------------------- NAVBAR ------------------- */
+.navbar{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin:30px 0;
+}
+.nav-btn{
+  background:linear-gradient(135deg,#00b8ff,#0074a6);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  padding:12px 25px;
+  cursor:pointer;
+  font-size:1rem;
+  font-weight:500;
+  transition:0.3s;
+  box-shadow:0 4px 10px rgba(0,132,255,0.3);
+}
+.nav-btn:hover{
+  background:linear-gradient(135deg,#00e1ff,#006a9b);
+  transform:scale(1.05);
+}
+
+/* ------------------- CONTAINER / CARDS ------------------- */
+.container{
+  display:none;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
+  padding:40px 30px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.card{
+  background:rgba(255,255,255,0.1);
+  border-radius:20px;
+  text-align:center;
+  padding:30px 20px;
+  color:#fff;
+  backdrop-filter:blur(20px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.25);
+  transition:all 0.3s ease;
+  opacity:0;transform:translateY(30px);
+  animation:fadeUp 0.8s ease forwards;
+}
+.card:hover{
+  transform:translateY(-8px) scale(1.05);
+  box-shadow:0 12px 35px rgba(0,255,255,0.25);
+}
+.card h3{
+  margin-bottom:15px;
+  font-size:1.3rem;
+  color:#00e1ff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+}
+.card p{
+  font-size:0.95rem;
+  color:#ddd;
+  margin-bottom:20px;
+}
+.card a{
+  display:inline-block;
+  padding:10px 22px;
+  background:linear-gradient(135deg,#00b8ff,#0074a6);
+  border:none;border-radius:12px;color:#fff;
+  text-decoration:none;
+  font-weight:500;
+  transition:0.3s;
+}
+.card a:hover{
+  background:linear-gradient(135deg,#00e1ff,#006a9b);
+  transform:scale(1.05);
+}
+
+/* ------------------- ANIMATIONS ------------------- */
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+/* ------------------- FOOTER ------------------- */
+footer{
+  text-align:center;
+  padding:20px;
+  font-size:14px;
+  color:#bbb;
+  border-top:1px solid rgba(255,255,255,0.1);
+  margin-top:40px;
+}
+
+/* ------------------- RESPONSIVE ------------------- */
+@media(max-width:600px){
+  header{font-size:1.5rem;}
+  .nav-btn{padding:10px 20px;}
+  .card h3{font-size:1.1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD OVERLAY -->
+<div id="passwordOverlay">
+  <h1>🔐 Astours International Admin Login</h1>
+  <input type="password" id="adminPassword" placeholder="Enter Admin Password">
+  <button onclick="checkPassword()">Unlock</button>
+  <p id="errorMessage"></p>
+</div>
+
+<header>🌍 <span>Astours International</span> Admin Dashboard</header>
+
+<!-- NAVIGATION -->
+<div class="navbar">
+  <button class="nav-btn" onclick="toggleSection('b2bSection')">
+    <i class="fa-solid fa-briefcase"></i> B2B Management
+  </button>
+</div>
+
+<!-- B2B SECTION -->
+<div id="b2bSection" class="container">
+  <!-- Itinerary Sheet -->
+  <div class="card">
+    <h3><i class="fa-solid fa-clipboard-list"></i> Itinerary Create Sheet</h3>
+    <p>Manage your packages, visa, and travel itineraries using this live Google Sheet.</p>
+    <a href="https://docs.google.com/spreadsheets/d/1Hse1yBuY5c5GFIK0mSE0D2vf-84bfjMZ5paATAW9-GQ/edit?gid=0#gid=0" target="_blank">Open Sheet</a>
+  </div>
+
+  <!-- B2B Partner Management -->
+  <div class="card">
+    <h3><i class="fa-solid fa-handshake"></i> B2B Partner Management</h3>
+    <p>View and manage B2B partner registrations via Google Sheet or Web Dashboard.</p>
+    <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+      <a href="https://docs.google.com/spreadsheets/d/1lSTIk5piGmAtCs84uJy5DcBuCNxeHJe0BiXh1GEicvQ/edit?gid=0#gid=0/edit?gid=0#gid=0" target="_blank">Open Sheet</a>
+      <a href="../Travel/b2b/partnersdetails.html" target="_blank">Open Web</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fa-solid fa-handshake"></i> B2B Partners Referalls</h3>
+    <p>View and manage B2B partner Referalls Sheet or Web Dashboard.</p>
+    <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+      <a href="https://docs.google.com/spreadsheets/d/1lSTIk5piGmAtCs84uJy5DcBuCNxeHJe0BiXh1GEicvQ/edit?gid=1560195772#gid=1560195772" target="_blank">Open Sheet</a>
+      <a href="../Travel/b2b/Partnersreferrals.html" target="_blank">Open Web</a>
+    </div>
+  </div>
+</div>
+    <!-- Customer Review Sheet -->
+      <div class="card">
+        <h3><i class="fa-solid fa-comments"></i> Customer Review Sheet</h3>
+        <p>Manage your customer feedback efficiently using this live Google Sheet.</p>
+        <a href="https://docs.google.com/spreadsheets/d/1a9rIVfmiyb_K7yJBn3JZW1gPvAWbQMYJsBuUfMJnDjo/edit?gid=0#gid=0" target="_blank">Open Sheet</a>
+      </div>
+
+      <!-- Blog Management -->
+      <div class="card">
+        <h3><i class="fa-solid fa-blog"></i> Blog Management</h3>
+        <p>Manage blog content and posts using the live Google Sheet or directly via the web admin panel.</p>
+        <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+          <a href="https://docs.google.com/spreadsheets/d/1T2o6corRoxNT5WgrW7D5pbdZFBpTz16Tc6VLw2GKrro/edit?gid=0#gid=0" target="_blank">Open Sheet</a>
+          <a href="../Blog/Blogadmin.html" target="_blank">Open Web</a>
+        </div>
+      </div>
+<footer>
+  © 2025 Astours International — Your B2B Travel Partner
+</footer>
+
+<script>
+const encoded = 'Sm91cm5leUAyNg=='; // Base64 of "Journey@26"
+
+function checkPassword(){
+  const input = document.getElementById("adminPassword").value.trim();
+  const correct = atob(encoded);
+  if(input === correct){
+    document.getElementById("passwordOverlay").style.display = "none";
+  } else {
+    document.getElementById("errorMessage").textContent = "❌ Incorrect password. Try again.";
+  }
+}
+
+function toggleSection(sectionId){
+  const section = document.getElementById(sectionId);
+  section.style.display = (section.style.display === 'grid') ? 'none' : 'grid';
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("adminPassword").addEventListener("keypress", e => {
+    if(e.key === "Enter") checkPassword();
+  });
+});
+</script>
+
+</body>
+</html>
