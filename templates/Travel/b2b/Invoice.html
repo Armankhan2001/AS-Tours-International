@@ -132,7 +132,7 @@
   </div>
 
 <script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbyg184BpcGljouol9V4FgmSY2qKc10MEezt8y18_bTjG9AdmSl1fT4NLH-V_KNjdreb/exec"; // <-- Replace with your actual script URL
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzw2mZGGCrVv5N7YdIy7Wpc327bso9oSuYHXSddUQKOSvMIZ2tbbje0vuniyy5DaO7B/exec"; // <-- Replace with your actual script URL
 
   function generateInvoice() {
     const companyName = document.getElementById('companyName').value;
@@ -211,40 +211,68 @@
   }
 
   async function saveInvoice() {
-    const now = new Date().toLocaleString();
-    const data = {
-      Timestamp: now,
-      companyName: document.getElementById('companyName').value,
-      companyAddress: document.getElementById('companyAddress').value,
-      companyContact: document.getElementById('companyContact').value,
-      bankName: document.getElementById('bankName').value,
-      accountHolder: document.getElementById('accountHolder').value,
-      accountNumber: document.getElementById('accountNumber').value,
-      ifscCode: document.getElementById('ifscCode').value,
-      upiID: document.getElementById('upiID').value,
-      invoiceNo: document.getElementById('invoiceNo').value,
-      invoiceDate: document.getElementById('invoiceDate').value,
-      clientName: document.getElementById('clientName').value,
-      clientPhone: document.getElementById('clientPhone').value,
-      clientAddress: document.getElementById('clientAddress').value,
-      description: document.getElementById('description').value,
-      price: document.getElementById('price').value,
-      discount: document.getElementById('discount').value,
-      advance: document.getElementById('advance').value,
-      finalPayment: document.getElementById('finalPayment').value,
-      total: document.getElementById('price').value - document.getElementById('discount').value,
-      status: document.getElementById('pStatus').innerText
-    };
 
-    document.getElementById("saveMsg").textContent = "⏳ Saving...";
-    try {
-      await fetch(scriptURL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-      document.getElementById("saveMsg").textContent = "✅ Saved Successfully!";
-    } catch (err) {
-      document.getElementById("saveMsg").textContent = "❌ Failed to Save!";
-      console.error(err);
-    }
+  const cleanCompanyPhone = document.getElementById('companyContact').value.replace(/^\+91\s*/, "");
+  const cleanClientPhone = document.getElementById('clientPhone').value.replace(/^\+91\s*/, "");
+
+  const price = parseFloat(document.getElementById('price').value) || 0;
+  const discount = parseFloat(document.getElementById('discount').value) || 0;
+  const advance = parseFloat(document.getElementById('advance').value) || 0;
+  const finalPayment = parseFloat(document.getElementById('finalPayment').value) || 0;
+
+  const total = price - discount;
+  const pending = total - (advance + finalPayment);
+
+  const data = {
+    companyName: document.getElementById('companyName').value,
+    companyAddress: document.getElementById('companyAddress').value,
+
+    // FIXED: remove +91 from phone numbers
+    companyContact: cleanCompanyPhone,
+    companyEmail: document.getElementById('companyEmail').value,
+
+    bankName: document.getElementById('bankName').value,
+    accountHolder: document.getElementById('accountHolder').value,
+    accountNumber: document.getElementById('accountNumber').value,
+    ifscCode: document.getElementById('ifscCode').value,
+    upiID: document.getElementById('upiID').value,
+
+    invoiceNo: document.getElementById('invoiceNo').value,
+    invoiceDate: document.getElementById('invoiceDate').value,
+    clientName: document.getElementById('clientName').value,
+
+    // FIXED: remove +91
+    clientPhone: cleanClientPhone,
+
+    clientAddress: document.getElementById('clientAddress').value,
+    description: document.getElementById('description').value,
+
+    price: price,
+    discount: discount,
+    advance: advance,
+    finalPayment: finalPayment,
+    total: total,
+    pending: pending,
+    status: document.getElementById('pStatus').innerText,
+    logoURL: document.getElementById('companyLogoURL').value || ""
+  };
+
+  document.getElementById("saveMsg").textContent = "⏳ Saving...";
+  try {
+    await fetch(scriptURL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    document.getElementById("saveMsg").textContent = "✅ Saved Successfully!";
+  } catch (err) {
+    document.getElementById("saveMsg").textContent = "❌ Failed to Save!";
+    console.error(err);
   }
+}
+
 
   // Saved Invoices Preview
   // Fetch and show last 3 invoices on page load
