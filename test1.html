@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AS Tours International — Luxury Travel & Visa</title>
+  <meta name="description" content="AS Tours International — bespoke luxury travel planning, visa facilitation, and B2B travel solutions." />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --navy: #07203a; /* deep navy */
+      --gold: #d4af37; /* classic gold */
+      --cream: #fbf9f7; /* soft cream background */
+      --muted: #6b7280;
+    }
+    html,body{height:100%;}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:var(--cream); color:#0f172a;}
+    .font-playfair{font-family:'Playfair Display',serif}
+
+    /* Hero cinematic overlay */
+    .hero-bg{background-image:linear-gradient(180deg, rgba(7,32,58,0.50) 0%, rgba(7,32,58,0.45) 40%, rgba(7,32,58,0.55) 100%), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=5b8b7f8b1b4a'); background-size:cover; background-position:center;}
+
+    /* Premium CTAs */
+    .btn-gold{background:linear-gradient(90deg,var(--gold),#f3d27a); color:var(--navy); font-weight:700;}
+    .glass-card{backdrop-filter: blur(8px); background: rgba(255,255,255,0.6);}
+
+    /* soft shadow */
+    .soft-shadow{box-shadow:0 12px 40px rgba(7,32,58,0.12);}
+
+    /* logo sizing in header */
+    .brand-logo{height:56px}
+
+    /* Floating whatsapp */
+    .wa-btn{background:#25D366; box-shadow:0 8px 30px rgba(2,135,84,0.18)}
+
+    /* small helpers */
+    .accent-gold{color:var(--gold)}
+    .accent-bg-gold{background:linear-gradient(90deg, rgba(212,175,55,0.12), rgba(212,175,55,0.08));}
+
+    @media (min-width: 1024px){
+      .brand-logo{height:72px}
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="#home" class="flex items-center gap-4">
+          <img src="/mnt/data/Copy of ASTOURSINTERNATIONAL LOGO.png" alt="AS Tours International" class="brand-logo object-contain" />
+          <div class="hidden sm:block">
+            <div class="text-sm font-semibold">AS Tours International</div>
+            <div class="text-xs text-muted text-gray-500">Global Luxury Travel & Visa</div>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center gap-8 text-sm font-medium">
+          <a href="#home" class="hover:underline text-slate-800">Home</a>
+          <a href="#packages" class="hover:underline">Packages</a>
+          <a href="#visa" class="hover:underline">Visa Services</a>
+          <a href="#why" class="hover:underline">Why Choose Us</a>
+          <a href="#reviews" class="hover:underline">Testimonials</a>
+          <a href="#contact" class="hover:underline">Contact</a>
+          <a href="#b2b" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm border border-transparent btn-gold">Partner with Us</a>
+        </nav>
+
+        <div class="lg:hidden">
+          <button id="mobileBtn" class="p-2 rounded-md ring-1 ring-slate-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden lg:hidden border-t border-gray-100">
+      <div class="px-6 py-4 space-y-3">
+        <a href="#packages" class="block">Packages</a>
+        <a href="#visa" class="block">Visa Services</a>
+        <a href="#why" class="block">Why Choose Us</a>
+        <a href="#contact" class="block">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="hero-bg min-h-[72vh] lg:min-h-[86vh] flex items-center">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+
+        <div class="relative z-10 text-white py-12">
+          <h1 class="font-playfair text-4xl sm:text-5xl lg:text-6xl leading-tight font-extrabold">
+            Travel in Style. <span class="accent-gold">Discover the World</span>
+          </h1>
+          <p class="mt-6 max-w-xl text-lg text-gray-100/90">Bespoke luxury itineraries, expert visa facilitation, and curated experiences — crafted for the discerning traveler.</p>
+
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#packages" class="inline-flex items-center gap-3 btn-gold px-6 py-3 rounded-full shadow-soft">Explore Packages</a>
+            <a href="#visa" class="inline-flex items-center gap-3 border border-white/30 text-white px-6 py-3 rounded-full">Visa Assistance</a>
+          </div>
+
+          <div class="mt-8 grid grid-cols-3 gap-4 max-w-md">
+            <div class="glass-card p-3 rounded-xl soft-shadow text-center">
+              <div class="text-sm font-semibold">Expert Visa Support</div>
+              <div class="text-xs text-gray-100">High success rate</div>
+            </div>
+            <div class="glass-card p-3 rounded-xl soft-shadow text-center">
+              <div class="text-sm font-semibold">Private Transfers</div>
+              <div class="text-xs text-gray-100">Luxury vehicles</div>
+            </div>
+            <div class="glass-card p-3 rounded-xl soft-shadow text-center">
+              <div class="text-sm font-semibold">Tailored Itineraries</div>
+              <div class="text-xs text-gray-100">Handcrafted experiences</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden lg:block relative">
+          <div class="rounded-3xl overflow-hidden soft-shadow">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=9c6a4d2c2c4f" alt="Luxury travel" class="w-full h-[520px] object-cover" />
+            <div class="absolute bottom-6 left-6 bg-white/90 p-4 rounded-xl border shadow-md">
+              <div class="text-sm font-semibold">Featured Package</div>
+              <div class="text-xs text-slate-600">Maldives — 5 Nights, Overwater Villa</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PACKAGES -->
+  <section id="packages" class="py-20">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="font-playfair text-3xl lg:text-4xl font-extrabold">Featured Premium Packages</h2>
+        <p class="mt-3 text-gray-600 max-w-2xl mx-auto">Handpicked luxury escapes with private experiences and VIP service.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card -->
+        <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
+          <img src="https://images.unsplash.com/photo-1505765054364-2d6a4f6f6cff?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=6f0c3b3b3c2e" alt="Maldives" class="w-full h-56 object-cover" />
+          <div class="p-6">
+            <h3 class="font-semibold text-xl">Maldives — Private Atoll Retreat</h3>
+            <p class="text-sm text-gray-600 mt-2">Overwater villas, private chef, sunset cruises.</p>
+            <div class="mt-4 flex items-center justify-between">
+              <div class="text-sm text-gray-500">From <span class="font-bold text-slate-800">$3,999</span></div>
+              <a href="#contact" class="text-sm font-semibold accent-gold">Book Now →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
+          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=2c9f9d9f9c7e" alt="Paris" class="w-full h-56 object-cover" />
+          <div class="p-6">
+            <h3 class="font-semibold text-xl">Paris — Culture & Michelin Dining</h3>
+            <p class="text-sm text-gray-600 mt-2">Private museum tours, chauffeured city days.</p>
+            <div class="mt-4 flex items-center justify-between">
+              <div class="text-sm text-gray-500">From <span class="font-bold text-slate-800">$2,499</span></div>
+              <a href="#contact" class="text-sm font-semibold accent-gold">Book Now →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
+          <img src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=7b3e3f3d3e5a" alt="Dubai" class="w-full h-56 object-cover" />
+          <div class="p-6">
+            <h3 class="font-semibold text-xl">Dubai — Ultra Luxury & Experiences</h3>
+            <p class="text-sm text-gray-600 mt-2">Heli-tours, desert luxury camps, fine dining.</p>
+            <div class="mt-4 flex items-center justify-between">
+              <div class="text-sm text-gray-500">From <span class="font-bold text-slate-800">$2,799</span></div>
+              <a href="#contact" class="text-sm font-semibold accent-gold">Book Now →</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISA / IMMIGRATION -->
+  <section id="visa" class="py-20 bg-gradient-to-b from-white to-gray-50">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        <div class="p-8 bg-white rounded-2xl soft-shadow">
+          <h3 class="font-playfair text-2xl font-bold">Visa & Immigration Services</h3>
+          <p class="mt-3 text-gray-600">Comprehensive visa support for tourist, business, and work permits. Document checks, application filing, and interview preparation by our specialists.</p>
+
+          <ul class="mt-6 space-y-3 text-sm text-gray-700">
+            <li class="flex items-start gap-3"><span class="text-gold">•</span> Tourist & Schengen Visas</li>
+            <li class="flex items-start gap-3"><span class="text-gold">•</span> Business & Work Permits</li>
+            <li class="flex items-start gap-3"><span class="text-gold">•</span> Document Authentication</li>
+            <li class="flex items-start gap-3"><span class="text-gold">•</span> Interview Coaching</li>
+          </ul>
+
+          <div class="mt-6">
+            <a href="#contact" class="inline-flex items-center gap-3 px-5 py-3 rounded-full btn-gold">Consult an Expert</a>
+          </div>
+        </div>
+
+        <!-- Visa Checker mini-app (client-only, lightweight) -->
+        <div class="p-8 rounded-2xl glass-card soft-shadow">
+          <h4 class="font-semibold">Quick Visa Checklist</h4>
+          <p class="text-sm text-gray-600 mt-2">Get a short checklist (AI-assisted). Always confirm with our experts.</p>
+
+          <div class="mt-4 space-y-3">
+            <input id="vc-dest" placeholder="Destination (e.g., USA)" class="w-full p-3 rounded-lg border" />
+            <input id="vc-nat" placeholder="Your Nationality (e.g., Indian)" class="w-full p-3 rounded-lg border" />
+            <button id="vc-btn" class="w-full btn-gold py-3 rounded-lg">Get Checklist</button>
+          </div>
+
+          <div id="vc-result" class="mt-4 text-sm text-gray-700"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section id="why" class="py-20">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
+      <h3 class="font-playfair text-3xl font-extrabold">Why AS Tours International?</h3>
+      <p class="mt-3 text-gray-600 max-w-2xl mx-auto">Personalized service, local expertise, and VIP partnerships make every trip effortless.</p>
+
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-8 bg-white rounded-2xl soft-shadow text-left">
+          <h4 class="font-semibold">Handcrafted Itineraries</h4>
+          <p class="mt-2 text-sm text-gray-600">Every trip is unique — we design experiences around you.</p>
+        </div>
+        <div class="p-8 bg-white rounded-2xl soft-shadow text-left">
+          <h4 class="font-semibold">VIP Partnerships</h4>
+          <p class="mt-2 text-sm text-gray-600">Priority access to hotels, restaurants and local concierges.</p>
+        </div>
+        <div class="p-8 bg-white rounded-2xl soft-shadow text-left">
+          <h4 class="font-semibold">Trusted Visa Experts</h4>
+          <p class="mt-2 text-sm text-gray-600">Experienced team ensuring documentation accuracy.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="reviews" class="py-20 bg-gradient-to-b from-gray-50 to-white">
+    <div class="max-w-5xl mx-auto px-6 lg:px-8 text-center">
+      <h3 class="font-playfair text-3xl font-extrabold">What Our Clients Say</h3>
+      <div class="mt-8 space-y-6">
+        <blockquote class="bg-white p-6 rounded-2xl soft-shadow text-left">
+          <p class="italic">"AS Tours handled our visa and honeymoon booking — flawless execution. The private villa was perfect."</p>
+          <footer class="mt-3 text-sm font-semibold text-slate-700">— Priya R., Mumbai</footer>
+        </blockquote>
+
+        <blockquote class="bg-white p-6 rounded-2xl soft-shadow text-left">
+          <p class="italic">"Professional and attentive. Every detail was organized and stress-free."</p>
+          <footer class="mt-3 text-sm font-semibold text-slate-700">— Arjun M., Delhi</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="py-20">
+    <div class="max-w-4xl mx-auto px-6 lg:px-8">
+      <div class="bg-white rounded-3xl p-8 lg:p-12 soft-shadow">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <h3 class="font-playfair text-2xl font-extrabold">Get in Touch</h3>
+            <p class="mt-3 text-gray-600">Tell us about your dream trip or visa needs and our consultant will reach out within one business day.</p>
+
+            <div class="mt-6 space-y-4 text-sm text-gray-700">
+              <div class="flex gap-4 items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><div><div class="font-semibold">Email</div><div class="text-xs text-gray-600">astoursinternational@gmail.com</div></div></div>
+              <div class="flex gap-4 items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m-6 14v-6a4 4 0 014-4h4"/></svg><div><div class="font-semibold">Phone</div><div class="text-xs text-gray-600">+91 7021360582 • +91 8850102255</div></div></div>
+            </div>
+
+            <div class="mt-6 flex items-center gap-4">
+              <a class="inline-flex items-center gap-2 px-4 py-2 rounded-full btn-gold" href="#contact">Request Callback</a>
+              <a class="inline-flex items-center gap-2 px-4 py-2 rounded-full border" href="https://wa.me/919321892924?text=Hello%20AS%20Tours%20International%20Team">WhatsApp</a>
+            </div>
+          </div>
+
+          <form id="contactForm" class="space-y-4" onsubmit="return false;">
+            <input name="name" placeholder="Full name" class="w-full p-3 border rounded-lg" required />
+            <input name="email" type="email" placeholder="Email" class="w-full p-3 border rounded-lg" required />
+            <input name="phone" placeholder="Phone" class="w-full p-3 border rounded-lg" />
+            <textarea name="message" placeholder="Tell us about your trip" class="w-full p-3 border rounded-lg" rows="5" required></textarea>
+            <button id="sendBtn" class="w-full btn-gold py-3 rounded-lg">Send Inquiry</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B2B -->
+  <section id="b2b" class="py-12 bg-gradient-to-r from-yellow-50 to-white text-center">
+    <div class="max-w-4xl mx-auto px-6 lg:px-8">
+      <h4 class="font-playfair text-2xl font-extrabold">Partner With Us — B2B Solutions</h4>
+      <p class="mt-2 text-gray-600">Exclusive rates, priority service and dedicated account management for agencies and corporates.</p>
+      <div class="mt-6"><a href="#contact" class="btn-gold inline-flex items-center gap-3 px-6 py-3 rounded-full">Start Partnership</a></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <img src="/mnt/data/Copy of ASTOURSINTERNATIONAL LOGO.png" alt="AS Tours" class="h-14 object-contain mb-4" />
+        <p class="text-sm text-gray-300">AS Tours International — Exclusively for the discerning traveler.</p>
+      </div>
+      <div>
+        <h5 class="font-semibold">Explore</h5>
+        <ul class="mt-3 text-sm text-gray-300 space-y-2">
+          <li><a href="#packages" class="hover:underline">Packages</a></li>
+          <li><a href="#visa" class="hover:underline">Visa Services</a></li>
+          <li><a href="#why" class="hover:underline">Why Choose Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-semibold">Contact</h5>
+        <p class="text-sm text-gray-300 mt-3">Email: astoursinternational@gmail.com<br/>Phone: +91 7021360582</p>
+      </div>
+    </div>
+
+    <div class="text-center text-sm text-gray-400 mt-8">&copy; 2025 AS Tours International. All rights reserved.</div>
+  </footer>
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/919321892924?text=Hello%20AS%20Tours%20International%20Team" class="fixed right-6 bottom-6 wa-btn w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg" target="_blank" rel="noopener">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.94 11.94 0 0012 1C6.48 1 2 5.48 2 11c0 1.97.57 3.8 1.56 5.35L2 23l6.96-1.68A11.94 11.94 0 0012 23c5.52 0 10-4.48 10-10 0-1.97-.57-3.8-1.56-5.35zM12 21a9.01 9.01 0 01-4.78-1.39L6 19l.46-1.76A8.98 8.98 0 013 11c0-4.97 4.03-9 9-9s9 4.03 9 9-4.03 9-9 9z"/></svg>
+  </a>
+
+  <!-- Scripts: Mobile menu + lightweight client-only visa checklist + fake contact handler -->
+  <script>
+    document.getElementById('mobileBtn').addEventListener('click', () => {
+      const m = document.getElementById('mobileMenu'); m.classList.toggle('hidden');
+    });
+
+    // Lightweight client-only visa checklist (placeholder) — you can wire the Gemini/OpusClip backend later
+    document.getElementById('vc-btn').addEventListener('click', () => {
+      const d = document.getElementById('vc-dest').value.trim();
+      const n = document.getElementById('vc-nat').value.trim();
+      const r = document.getElementById('vc-result');
+      if(!d||!n){ r.innerHTML = '<div class="text-sm text-red-500">Please enter destination and nationality.</div>'; return; }
+      r.innerHTML = '<div class="text-sm">Generating checklist…</div>';
+      setTimeout(()=>{
+        r.innerHTML = `<ul class="text-sm text-slate-700 ml-4 mt-2 space-y-1"><li>Passport (valid 6+ months)</li><li>Recent passport photos</li><li>Completed visa application form</li><li>Proof of funds & travel itinerary</li><li>Confirmed return ticket</li></ul><div class="text-xs text-gray-500 mt-3">This is a preliminary checklist. Contact AS Tours for a full verification.</div>`;
+      },700);
+    });
+
+    // Fake contact handler to demonstrate UI flow
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const btn = document.getElementById('sendBtn');
+      btn.disabled = true; btn.innerText = 'Sending...';
+      setTimeout(()=>{ btn.disabled=false; btn.innerText='Send Inquiry'; alert('Thanks! Your inquiry has been received. Our consultant will contact you soon.'); document.getElementById('contactForm').reset(); },1200);
+    });
+  </script>
+
+</body>
+</html>
