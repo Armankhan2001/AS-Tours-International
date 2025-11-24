@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -10,14 +10,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-
 
   <script>
         tailwind.config = {
@@ -108,8 +101,7 @@
         }
         .whatsapp-float:hover { transform: scale(1.1); background-color: #20b858; }
     </style>
-    <!-- 2nd Style Below -->
-    <style>
+  <style>
 
 
  /* Custom Configuration for Premium Look */
@@ -216,134 +208,62 @@
       .brand-logo{height:72px}
     }
   </style>
-    <!-- NAVBAR STYLE Below -->
-  <style>
-    :root {
-      --navy: #07203a;
-      --gold: #d4af37;
-    }
-
-    body {
-      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      margin: 0;
-      background: #f9fafb;
-    }
-
-    .font-playfair { font-family: 'Playfair Display', serif; }
-
-    /* Premium CTA button */
-    .btn-gold {
-      background: linear-gradient(90deg, var(--gold), #f3d27a);
-      color: var(--navy);
-      font-weight: 600;
-      font-size: 0.875rem; /* subtle size */
-      transition: all 0.3s ease;
-    }
-
-    .btn-gold:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-    }
-
-    /* Logo badge style (kept as-is) */
-    .logo-badge {
-      height: 140px;
-      width: 140px;
-      background-color: #ffd700;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-    }
-
-    .logo-badge:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-    }
-
-    .logo-badge img {
-      width: 90%;
-      height: auto;
-      padding: 4px;
-    }
-
-    @media (min-width: 1024px) {
-      .logo-badge {
-        height: 160px;
-        width: 160px;
-      }
-    }
-
-    /* Navbar links font size */
-    .nav-link {
-      font-size: 0.875rem; /* slightly smaller, elegant */
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-  </style>
 </head>
 <body class="antialiased">
 
-  <!-- NAVIGATION -->
-  <header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 lg:px-8">
-      <div class="flex items-center justify-between h-16">
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="#home" class="flex items-center gap-4">
+          <img src="image/astourlogo.png" alt="AS Tours International" class="brand-logo object-contain" />
+          <div class="hidden sm:block">
+            <div class="text-sm font-semibold">AS Tours International</div>
+            <div class="text-xs text-muted text-gray-500">Global Luxury Travel & Visa</div>
+          </div>
+        </a>
 
-        <!-- Logo Badge -->
-        <div class="absolute top-0 left-4 z-50">
-          <a href="#home" class="logo-badge">
-            <img src="image/astourlogo.png" alt="AS Tours International">
-          </a>
-        </div>
+        <nav class="hidden lg:flex items-center gap-8 text-sm font-medium">
+          <a href="#home" class="hover:underline text-slate-800">Home</a>
+          <a href="../packages/packages.html" class="hover:underline">Packages</a>
+          <a href="/visa/visaservices.html" class="hover:underline">Visa Services</a>
+          <a href="templates/Travel/About.html" class="hover:underline">Why Choose Us</a>
+          <a href="/templates/Travel/Customerreview.html" class="hover:underline">Testimonials</a>
+          <a href="/templates/Blog.html" class="hover:underline">News</a>
+          <!-- <a href="#reviews" class="hover:underline">Carrier</a> -->
+          <a href="#contact" class="hover:underline">Contact</a>
 
-        <!-- Spacer for logo -->
-        <div class="w-36 flex-shrink-0"></div>
-
-        <!-- Desktop Nav -->
-        <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
-          <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a>
-            <a href="../packages/packages.html" class="block text-slate-800 hover:underline text-base font-medium">Packages</a>
-            <a href="/visa/visaservices.html" class="block text-slate-800 hover:underline text-base font-medium">Visa Services</a>
-            <a href="templates/Travel/About.html" class="block text-slate-800 hover:underline text-base font-medium">Why Choose Us</a>
-            <a href="/templates/Travel/Customerreview.html" class="block text-slate-800 hover:underline text-base font-medium">Testimonials</a>
-            <a href="/templates/Blog.html" class="block text-slate-800 hover:underline text-base font-medium">News</a>
-            <a href="#contact" class="block text-slate-800 hover:underline text-base font-medium">Contact</a>
-            <a href="templates/Travel/b2b/Visa/b2b.html" 
-            class="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border border-transparent btn-gold hover:shadow-lg transition">
-            Partner with Us
-    </a>
+          <a href="templates/Travel/b2b/Visa/b2b.html" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm border border-transparent btn-gold">Partner with Us</a>
         </nav>
 
-        <!-- Mobile Menu Button -->
-        <div class="lg:hidden ml-auto">
-          <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
+        <div class="lg:hidden">
+          <button id="mobileBtn" class="p-2 rounded-md ring-1 ring-slate-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
           </button>
         </div>
-
       </div>
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
-      <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
-        <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a>
-        <a href="../packages/packages.html" class="block text-slate-800 hover:underline text-base font-medium">Packages</a>
-        <a href="/visa/visaservices.html" class="block text-slate-800 hover:underline text-base font-medium">Visa Services</a>
-        <a href="templates/Travel/About.html" class="block text-slate-800 hover:underline text-base font-medium">Why Choose Us</a>
-        <a href="/templates/Travel/Customerreview.html" class="block text-slate-800 hover:underline text-base font-medium">Testimonials</a>
-        <a href="/templates/Blog.html" class="block text-slate-800 hover:underline text-base font-medium">News</a>
-        <a href="#contact" class="block text-slate-800 hover:underline text-base font-medium">Contact</a>
-        <a href="templates/Travel/b2b/Visa/b2b.html" 
-        class="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border border-transparent btn-gold hover:shadow-lg transition">
-        Partner with Us
-        </a>
-      </div>
-    </div>
+<div id="mobileMenu" class="hidden lg:hidden border-t border-gray-100 bg-white shadow-md">
+  <div class="px-6 py-4 space-y-3 flex flex-col">
+    <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a>
+    <a href="../packages/packages.html" class="block text-slate-800 hover:underline text-base font-medium">Packages</a>
+    <a href="/visa/visaservices.html" class="block text-slate-800 hover:underline text-base font-medium">Visa Services</a>
+    <a href="templates/Travel/About.html" class="block text-slate-800 hover:underline text-base font-medium">Why Choose Us</a>
+    <a href="/templates/Travel/Customerreview.html" class="block text-slate-800 hover:underline text-base font-medium">Testimonials</a>
+    <a href="/templates/Blog.html" class="block text-slate-800 hover:underline text-base font-medium">News</a>
+    <a href="#contact" class="block text-slate-800 hover:underline text-base font-medium">Contact</a>
+    
+    <!-- Partner Button -->
+    <a href="templates/Travel/b2b/Visa/b2b.html" 
+       class="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border border-transparent btn-gold hover:shadow-lg transition">
+       Partner with Us
+    </a>
+  </div>
+</div>
   </header>
+
   <!-- HERO -->
   <section id="home" class="hero-bg min-h-[72vh] lg:min-h-[86vh] flex items-center">
     <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
@@ -1281,6 +1201,10 @@ async function checkVisaRequirements() {
     
 }
 </script>
+
+
+    <!-- Font Awesome (for icons) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 
 </body>
 </html>
