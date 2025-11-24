@@ -10,14 +10,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-
 
   <script>
         tailwind.config = {
@@ -108,8 +101,7 @@
         }
         .whatsapp-float:hover { transform: scale(1.1); background-color: #20b858; }
     </style>
-    <!-- 2nd Style Below -->
-    <style>
+  <style>
 
 
  /* Custom Configuration for Premium Look */
@@ -301,49 +293,48 @@
         <div class="w-36 flex-shrink-0"></div>
 
         <!-- Desktop Nav -->
-        <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
-          <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a>
-            <a href="../packages/packages.html" class="block text-slate-800 hover:underline text-base font-medium">Packages</a>
-            <a href="/visa/visaservices.html" class="block text-slate-800 hover:underline text-base font-medium">Visa Services</a>
-            <a href="templates/Travel/About.html" class="block text-slate-800 hover:underline text-base font-medium">Why Choose Us</a>
-            <a href="/templates/Travel/Customerreview.html" class="block text-slate-800 hover:underline text-base font-medium">Testimonials</a>
-            <a href="/templates/Blog.html" class="block text-slate-800 hover:underline text-base font-medium">News</a>
-            <a href="#contact" class="block text-slate-800 hover:underline text-base font-medium">Contact</a>
-            <a href="templates/Travel/b2b/Visa/b2b.html" 
-            class="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border border-transparent btn-gold hover:shadow-lg transition">
-            Partner with Us
-    </a>
+        <nav class="hidden lg:flex items-center gap-8 text-sm font-medium">
+          <a href="#home" class="hover:underline text-slate-800">Home</a>
+          <a href="../packages/packages.html" class="hover:underline">Packages</a>
+          <a href="/visa/visaservices.html" class="hover:underline">Visa Services</a>
+          <a href="templates/Travel/About.html" class="hover:underline">Why Choose Us</a>
+          <a href="/templates/Travel/Customerreview.html" class="hover:underline">Testimonials</a>
+          <a href="/templates/Blog.html" class="hover:underline">News</a>
+          <!-- <a href="#reviews" class="hover:underline">Carrier</a> -->
+          <a href="#contact" class="hover:underline">Contact</a>
+
+          <a href="templates/Travel/b2b/Visa/b2b.html" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm border border-transparent btn-gold">Partner with Us</a>
         </nav>
 
-        <!-- Mobile Menu Button -->
-        <div class="lg:hidden ml-auto">
-          <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
+        <div class="lg:hidden">
+          <button id="mobileBtn" class="p-2 rounded-md ring-1 ring-slate-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
           </button>
         </div>
-
       </div>
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
-      <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
-        <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a>
-        <a href="/templates/Blog.html" class="block text-slate-800 hover:underline text-base font-medium">News</a>
-        <a href="../packages/packages.html" class="block text-slate-800 hover:underline text-base font-medium">Packages</a>
-        <a href="/visa/visaservices.html" class="block text-slate-800 hover:underline text-base font-medium">Visa Services</a>
-        <a href="templates/Travel/About.html" class="block text-slate-800 hover:underline text-base font-medium">Why Choose Us</a>
-        <a href="/templates/Travel/Customerreview.html" class="block text-slate-800 hover:underline text-base font-medium">Testimonials</a>
-        <a href="#contact" class="block text-slate-800 hover:underline text-base font-medium">Contact</a>
-        <a href="templates/Travel/b2b/Visa/b2b.html" 
-        class="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border border-transparent btn-gold hover:shadow-lg transition">
-        Partner with Us
-        </a>
-      </div>
-    </div>
+<div id="mobileMenu" class="hidden lg:hidden border-t border-gray-100 bg-white shadow-md">
+  <div class="px-6 py-4 space-y-3 flex flex-col">
+    <!-- <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a> -->
+    <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a>
+    <a href="/templates/Blog.html" class="block text-slate-800 hover:underline text-base font-medium">News</a>
+    <a href="../packages/packages.html" class="block text-slate-800 hover:underline text-base font-medium">Packages</a>
+    <a href="/visa/visaservices.html" class="block text-slate-800 hover:underline text-base font-medium">Visa Services</a>
+    <a href="templates/Travel/About.html" class="block text-slate-800 hover:underline text-base font-medium">Why Choose Us</a>
+    <a href="/templates/Travel/Customerreview.html" class="block text-slate-800 hover:underline text-base font-medium">Testimonials</a>
+    <a href="#contact" class="block text-slate-800 hover:underline text-base font-medium">Contact</a>
+    
+    <!-- Partner Button -->
+    <a href="templates/Travel/b2b/Visa/b2b.html" 
+       class="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border border-transparent btn-gold hover:shadow-lg transition">
+       Partner with Us
+    </a>
+  </div>
+</div>
   </header>
+
   <!-- HERO -->
   <section id="home" class="hero-bg min-h-[72vh] lg:min-h-[86vh] flex items-center">
     <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
@@ -1281,6 +1272,11 @@ async function checkVisaRequirements() {
     
 }
 </script>
+
+
+    <!-- Font Awesome (for icons) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    
 
 </body>
 </html>
