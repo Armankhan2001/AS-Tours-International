@@ -494,203 +494,154 @@
     
     <!-- JavaScript for Mobile Menu & LLM Features -->
     <script>
-        // --- Core UI Logic ---
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+// === Load API Key From Google Sheet ===
+async function loadApiKey() {
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQY2BokImG-lKK2HjjAPxJIi2kwTLVuELWKB8BQXDEFRjG5cXn4Tj0x_qivopk9DPCCBBGDUF06FBvU/pub?output=csv";
+    try {
+        const res = await fetch(sheetURL);
+        const csv = await res.text();
+        const rows = csv.split("\n").map(r => r.split(","));
+        let geminiKey = "";
+        rows.forEach(row => {
+            if (row[0]?.trim() === "Gemini") {
+                geminiKey = row[1]?.trim();
+            }
+        });
+        window.GEMINI_API_KEY = geminiKey;
+        console.log("Gemini API Loaded:", geminiKey);
+    } catch (err) {
+        console.error("API key load error", err);
+    }
+}
+loadApiKey();
+
+// === Mobile Menu ===
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click',()=> mobileMenu.classList.add('hidden')));
+
+// === Core Gemini API Request Handler ===
+async function fetchWithBackoff(payload, retries = 0) {
+    if (!window.GEMINI_API_KEY) throw new Error("API key not loaded yet");
+    const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${window.GEMINI_API_KEY}`;
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
 
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
-        });
-
-        // --- Gemini API Integration Logic ---
-        const API_KEY = "AIzaSyAFvC791qgDoRbaP2YPiFHrLjz1WjCkrjU"; // Provided by Canvas environment
-        const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
-
-        /**
-         * Generic function to fetch content from the Gemini API with exponential backoff.
-         * IMPORTANT: This version now logs the detailed error message from the API on failure.
-         * @param {object} payload - The request payload.
-         * @param {number} retries - Current retry count (default 0).
-         * @returns {Promise<object>} The JSON response.
-         */
-        async function fetchWithBackoff(payload, retries = 0) {
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.status === 429 && retries < 5) { // Too Many Requests
-                    const delay = Math.pow(2, retries) * 1000 + Math.random() * 1000;
-                    console.warn(`Rate limit hit. Retrying in ${delay / 1000}s...`);
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    return fetchWithBackoff(payload, retries + 1);
-                }
-
-                if (!response.ok) {
-                    let errorMessage = `API call failed with status ${response.status}: ${response.statusText}`;
-                    try {
-                        // Attempt to read the JSON error body for more detail
-                        const errorBody = await response.json();
-                        if (errorBody.error && errorBody.error.message) {
-                            errorMessage += ` - Details: ${errorBody.error.message}`;
-                        } else {
-                            errorMessage += ` - Body: ${JSON.stringify(errorBody)}`;
-                        }
-                    } catch (e) {
-                        // Failed to parse error body as JSON, use statusText
-                    }
-                    throw new Error(errorMessage);
-                }
-                
-                return response.json();
-
-            } catch (error) {
-                console.error("Gemini API request failed:", error);
-                throw error;
-            }
+        if (response.status === 429 && retries < 5) {
+            const delay = Math.pow(2, retries) * 1000 + Math.random() * 1000;
+            await new Promise(r => setTimeout(r, delay));
+            return fetchWithBackoff(payload, retries + 1);
         }
 
-        /**
-         * Feature 1: Generates a travel idea and itinerary based on user input.
-         */
-        async function generateTravelIdea() {
-            const mood = document.getElementById('travelMood').value;
-            const duration = document.getElementById('travelDuration').value;
-            const theme = document.getElementById('travelTheme').value;
-            const resultDiv = document.getElementById('travelIdeaResult');
-            const button = document.getElementById('travelIdeaBtn');
-
-            if (!mood || !duration) {
-                resultDiv.innerHTML = `<p class="text-red-500 font-semibold">Please select a Mood and Duration to generate your idea.</p>`;
-                return;
-            }
-
-            button.disabled = true;
-            button.innerHTML = '<span class="inline-block w-4 h-4 border-2 border-white border-solid rounded-full loader mr-2"></span> Generating...';
-            resultDiv.innerHTML = `<p class="text-center text-primary-dark font-semibold mt-4">Consulting our AI Travel Expert...</p>`;
-
-            const systemPrompt = "You are a creative, world-class luxury travel planner. Based on the user's preferences, suggest one unique travel destination and provide a short, enticing 3-day itinerary summary (Introduction, Day 1, Day 2, Day 3, Conclusion). The suggested location must be exclusive or high-end. Output must be in formatted Markdown.";
-            const userQuery = `I want a trip. Mood: ${mood}. Duration: ${duration}. Theme/Focus: ${theme || 'General Discovery'}.`;
-
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                tools: [{ "google_search": {} }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-            };
-
+        if (!response.ok) {
+            let message = `Status ${response.status}: ${response.statusText}`;
             try {
-                const result = await fetchWithBackoff(payload);
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't generate a travel idea right now. Please try again.";
-                
-                // Simple Markdown to HTML conversion for display
-                const htmlText = text
-                    .replace(/##\s(.*?)\n/g, '<h3 class="text-2xl font-bold text-primary-dark mt-4 mb-2">$1</h3>')
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\n/g, '<br>');
-
-                resultDiv.innerHTML = `
-                    <h4 class="font-bold text-2xl text-primary-dark mb-4 border-b border-accent-gold pb-2">Your Bespoke Travel Itinerary:</h4>
-                    <div class="space-y-3 text-lg">${htmlText}</div>
-                    <p class="text-sm italic text-gray-500 mt-4 pt-2 border-t border-gray-200">This is an AI-generated idea. Contact us to make it real!</p>
-                `;
-
-            } catch (error) {
-                resultDiv.innerHTML = `<p class="text-red-500 font-semibold">Error: Could not connect to the travel genius. Please check the console for details.</p>`;
-            } finally {
-                button.disabled = false;
-                button.innerHTML = 'Suggest My Trip';
-            }
+                const b = await response.json();
+                if (b.error?.message) message += ` - ${b.error.message}`;
+            } catch {}
+            throw new Error(message);
         }
+        return response.json();
+    } catch (err) {
+        console.error("Gemini Error:", err);
+        throw err;
+    }
+}
 
-        /**
-         * Feature 2: Checks key visa requirements for a destination/nationality.
-         */
-        async function checkVisaRequirements() {
-            const destination = document.getElementById('visaDestination').value.trim();
-            const nationality = document.getElementById('visaNationality').value.trim();
-            const resultDiv = document.getElementById('visaResult');
-            const sourcesDiv = document.getElementById('visaSources');
-            const button = document.getElementById('visaCheckBtn');
+// === Travel Idea Generator ===
+async function generateTravelIdea() {
+    const mood = document.getElementById('travelMood').value;
+    const duration = document.getElementById('travelDuration').value;
+    const theme = document.getElementById('travelTheme').value;
+    const resultDiv = document.getElementById('travelIdeaResult');
+    const button = document.getElementById('travelIdeaBtn');
 
-            if (!destination || !nationality) {
-                resultDiv.innerHTML = `<p class="text-red-500 font-semibold">Please enter both Destination Country and Applicant Nationality.</p>`;
-                sourcesDiv.innerHTML = '';
-                return;
-            }
+    if (!mood || !duration) {
+        resultDiv.innerHTML = `<p class='text-red-500 font-semibold'>Please select a Mood and Duration.</p>`;
+        return;
+    }
 
-            button.disabled = true;
-            button.innerHTML = '<span class="inline-block w-4 h-4 border-2 border-white border-solid rounded-full loader mr-2"></span> Checking Policies...';
-            resultDiv.innerHTML = `<p class="text-center text-primary-dark font-semibold mt-4">Checking latest visa policies with Google Search...</p>`;
-            sourcesDiv.innerHTML = '';
+    button.disabled = true;
+    button.innerHTML = '<span class="loader"></span> Generating...';
+    resultDiv.innerHTML = "Consulting AI Travel Expert...";
 
-            const systemPrompt = "You are an expert visa consultant. Provide a list of key required tourist visa documents (4-6 items) and the most critical first step for obtaining the visa. Be concise and use bullet points for the documents. State clearly that this is a preliminary guide and professional consultation is required.";
-            const userQuery = `What are the key tourist visa requirements for a national of ${nationality} traveling to ${destination}?`;
+    const systemPrompt = "You are a luxury travel planner. Provide 1 destination + 3‑day plan in Markdown.";
+    const userQuery = `Mood: ${mood}, Duration: ${duration}, Theme: ${theme}`;
 
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                tools: [{ "google_search": {} }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-            };
+    const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        tools: [{ google_search: {} }],
+        systemInstruction: { parts: [{ text: systemPrompt }] }
+    };
 
-            try {
-                const result = await fetchWithBackoff(payload);
-                const candidate = result.candidates?.[0];
-                const text = candidate?.content?.parts?.[0]?.text || "Sorry, I couldn't retrieve the visa requirements right now. The external information source may be unavailable.";
-                
-                // Simple Markdown to HTML conversion for display
-                const htmlText = text
-                    .replace(/\*\s(.*?)\n/g, '<li>$1</li>')
-                    .replace(/\n\n/g, '<br><br>')
-                    .replace(/^- (.*)/gm, '<li>$1</li>'); // Added a fix for dash-style lists if generated
+    try {
+        const result = await fetchWithBackoff(payload);
+        const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
+        const html = text.replace(/\n/g, '<br>').replace(/## (.*?)/g, '<h3>$1</h3>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        resultDiv.innerHTML = `<h4>Your Itinerary</h4><div>${html}</div>`;
+    } catch (e) {
+        resultDiv.innerHTML = `<p class='text-red-500'>Error: ${e.message}</p>`;
+    } finally {
+        button.disabled = false;
+        button.innerHTML = 'Suggest My Trip';
+    }
+}
 
-                resultDiv.innerHTML = `
-                    <h4 class="font-bold text-2xl text-primary-dark mb-4 border-b border-accent-gold pb-2">Preliminary Visa Guide:</h4>
-                    <ul class="list-disc ml-6 space-y-2 text-lg">
-                        ${htmlText}
-                    </ul>
-                `;
+// === Visa Checker ===
+async function checkVisaRequirements() {
+    const destination = document.getElementById('visaDestination').value.trim();
+    const nationality = document.getElementById('visaNationality').value.trim();
+    const resultDiv = document.getElementById('visaResult');
+    const sourcesDiv = document.getElementById('visaSources');
+    const button = document.getElementById('visaCheckBtn');
 
-                // Display sources if available
-                let sources = [];
-                const groundingMetadata = candidate?.groundingMetadata;
-                if (groundingMetadata && groundingMetadata.groundingAttributions) {
-                    sources = groundingMetadata.groundingAttributions
-                        .map(attribution => ({
-                            uri: attribution.web?.uri,
-                            title: attribution.web?.title,
-                        }))
-                        .filter(source => source.uri && source.title);
-                }
-                
-                if (sources.length > 0) {
-                    sourcesDiv.innerHTML = `<p class="font-semibold text-primary-dark mt-4">Grounded Information Sources:</p>`;
-                    sources.forEach(source => {
-                        sourcesDiv.innerHTML += `<div class="ml-2"> - <a href="${source.uri}" target="_blank" class="text-blue-500 hover:text-blue-700 hover:underline">${source.title}</a></div>`;
-                    });
-                } else {
-                     sourcesDiv.innerHTML = '<p class="font-semibold text-gray-500 mt-4">Information provided is general and not explicitly web-grounded.</p>';
-                }
+    if (!destination || !nationality) {
+        resultDiv.innerHTML = `<p class='text-red-500 font-semibold'>Enter both fields.</p>`;
+        return;
+    }
 
+    button.disabled = true;
+    button.innerHTML = '<span class="loader"></span> Checking...';
+    resultDiv.innerHTML = "Checking visa policies...";
+    sourcesDiv.innerHTML = "";
 
-            } catch (error) {
-                // Display the specific error message on the UI
-                resultDiv.innerHTML = `<p class="text-red-500 font-semibold">Gemini API Error: ${error.message}</p>`;
-                sourcesDiv.innerHTML = '';
-            } finally {
-                button.disabled = false;
-                button.innerHTML = 'Get Initial Requirements';
-            }
+    const systemPrompt = "You are a visa consultant. Give 4–6 bullet points, concise.";
+    const userQuery = `Tourist visa requirements for ${nationality} visiting ${destination}.`;
+
+    const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        tools: [{ google_search: {} }],
+        systemInstruction: { parts: [{ text: systemPrompt }] }
+    };
+
+    try {
+        const result = await fetchWithBackoff(payload);
+        const c = result.candidates?.[0];
+        const text = c?.content?.parts?.[0]?.text || "No data.";
+
+        const html = text.replace(/\* (.*?)\n/g, '<li>$1</li>').replace(/\n/g, '<br>');
+        resultDiv.innerHTML = `<h4>Preliminary Visa Guide</h4><ul>${html}</ul>`;
+
+        const sources = c?.groundingMetadata?.groundingAttributions || [];
+        if (sources.length) {
+            sourcesDiv.innerHTML = `<p>Sources:</p>` + sources.map(s => `<a href="${s.web?.uri}" target="_blank">${s.web?.title}</a><br>`).join('');
         }
-    </script>
+    } catch (e) {
+        resultDiv.innerHTML = `<p class='text-red-500'>Gemini Error: ${e.message}</p>`;
+    } finally {
+        button.disabled = false;
+        button.innerHTML = 'Get Initial Requirements';
+    }
+}
+</script>
+
     <!-- Font Awesome (for icons) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 

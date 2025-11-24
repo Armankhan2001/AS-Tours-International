@@ -1,203 +1,1158 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ASTours International</title>
-  <link rel="icon" type="image/png" href="/image/astourlogo.png">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AS Tours International — Luxury Travel & Visa</title>
+  <meta name="description" content="AS Tours International — bespoke luxury travel planning, visa facilitation, and B2B travel solutions." />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+
+  <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#002147',
+                        gold: '#D4AF37',
+                        'gold-light': '#F3D27A',
+                        cream: '#F9FAFB',
+                    },
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styles */
+        body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; color: #1e293b; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; }
+
+        /* Gradients & Utilities */
+        .bg-gradient-gold { background: linear-gradient(90deg, #D4AF37 0%, #F3D27A 100%); }
+        .text-gradient-gold { background: linear-gradient(90deg, #D4AF37, #F3D27A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Buttons */
+        .btn-gold {
+            background: linear-gradient(90deg, #D4AF37 0%, #F3D27A 100%);
+            color: #002147;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); }
+
+        .btn-navy {
+            background-color: #002147;
+            color: #D4AF37;
+            border: 1px solid #D4AF37;
+            transition: all 0.3s ease;
+        }
+        .btn-navy:hover { background-color: #022c5e; color: #fff; transform: translateY(-2px); }
+
+        /* Cards & Shadows */
+        .soft-shadow { box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15); }
+
+        /* Hero Background */
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 33, 71, 0.7), rgba(0, 33, 71, 0.6)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* AI Output Formatting */
+        .ai-result ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .ai-result li { margin-bottom: 0.25rem; }
+        .ai-result strong { color: #002147; }
+        .ai-result p { margin-bottom: 0.75rem; }
+
+        /* Loader */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #D4AF37;
+            width: 24px;
+            height: 24px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Floating Whatsapp */
+        .whatsapp-float {
+            position: fixed; bottom: 24px; right: 24px;
+            background-color: #25d366; color: #FFF;
+            border-radius: 50%; text-align: center;
+            font-size: 30px; box-shadow: 2px 2px 3px #999;
+            z-index: 100; width: 60px; height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); background-color: #20b858; }
+    </style>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #e0f2ff, #ffffff);
-    }
-    .navbar {
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
-    }
-    .navbar-brand .logo {
-      width: 100px;
-      height: auto;
-      margin: 0;
-    }
-    .hero {
-      background: url('../image/banner.jpg') center/cover no-repeat;
-      color: white;
-      padding: 120px 0;
-      text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
-    }
-    .hero h1 {
-      font-size: 2.8rem;
-    }
-    .section-title {
-      color: #0d6efd;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .logo {
-      width: 150px;
-      height: auto;
-      display: block;
-      margin: 0 auto 20px;
-      animation: pulse 3s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    .card {
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-      text-align: center;
-      font-weight: 500;
-      padding: 25px;
-    }
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    }
-    footer {
-      background: #ffffff;
-      border-top: 1px solid #ccc;
-      padding: 20px;
-      text-align: center;
-      font-size: 14px;
-      color: #666;
-    }
-    /* Floating WhatsApp */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #25d366;
-      color: white;
-      border-radius: 50%;
-      width: 55px;
-      height: 55px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      z-index: 999;
-      text-decoration: none;
-    }
-    .whatsapp-float:hover {
-      background: #1ebe5d;
-    }
 
 
+ /* Custom Configuration for Premium Look */
+        :root {
+            --primary-dark: #002147; /* Midnight Blue / Deep Navy */
+            --accent-gold: #FFC300; /* Metallic Gold */
+            --bg-light: #f4f4f7; /* Very light grey for background */
+            --font-body: 'Inter', sans-serif;
+        }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .text-primary-dark { color: var(--primary-dark); }
+        .bg-primary-dark { background-color: var(--primary-dark); }
+        .text-accent-gold { color: var(--accent-gold); }
+        .bg-accent-gold { background-color: var(--accent-gold); }
+        
+        body { font-family: var(--font-body); }
+
+        /* Premium Button Style - Gold Fill */
+        .btn-premium {
+            @apply bg-accent-gold text-primary-dark font-semibold py-4 px-10 rounded-full shadow-xl transition duration-300 ease-in-out hover:bg-[#e8af00] transform hover:scale-[1.02] active:scale-100;
+        }
+        /* Premium Button Style - Outline/Inverse (Adjusted for Hero) */
+        .btn-inverse {
+            @apply bg-transparent border-2 border-white text-white font-semibold py-4 px-10 rounded-full transition duration-300 ease-in-out hover:bg-white hover:text-primary-dark transform hover:scale-[1.02] active:scale-100;
+        }
+
+        /* LLM Button Style */
+        .btn-llm {
+             @apply bg-primary-dark text-accent-gold font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-accent-gold focus:ring-opacity-50;
+        }
+        
+        /* Hero Background - Placeholder Image with Dark Overlay */
+        .hero-bg {
+            background-image: url('image/packagebgimage.avif');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.65);
+        }
+
+        /* Card Hover Effect */
+        .feature-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 10px 30px rgba(0, 33, 71, 0.08);
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 45px rgba(0, 33, 71, 0.15);
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #25d366;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border-top-color: #3498db;
+            border-left-color: #3498db;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    :root{
+      --navy: #07203a; /* deep navy */
+      --gold: #d4af37; /* classic gold */
+      --cream: #fbf9f7; /* soft cream background */
+      --muted: #6b7280;
+    }
+    html,body{height:100%;}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:var(--cream); color:#0f172a;}
+    .font-playfair{font-family:'Playfair Display',serif}
+
+    /* Hero cinematic overlay */
+    .hero-bg{background-image:linear-gradient(180deg, rgba(7,32,58,0.50) 0%, rgba(7,32,58,0.45) 40%, rgba(7,32,58,0.55) 100%), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=5b8b7f8b1b4a'); background-size:cover; background-position:center;}
+
+    /* Premium CTAs */
+    .btn-gold{background:linear-gradient(90deg,var(--gold),#f3d27a); color:var(--navy); font-weight:700;}
+    .glass-card{backdrop-filter: blur(8px); background: rgba(255,255,255,0.6);}
+
+    /* soft shadow */
+    .soft-shadow{box-shadow:0 12px 40px rgba(7,32,58,0.12);}
+
+    /* logo sizing in header */
+    .brand-logo{height:56px}
+
+    /* Floating whatsapp */
+    .wa-btn{background:#25D366; box-shadow:0 8px 30px rgba(2,135,84,0.18)}
+
+    /* small helpers */
+    .accent-gold{color:var(--gold)}
+    .accent-bg-gold{background:linear-gradient(90deg, rgba(212,175,55,0.12), rgba(212,175,55,0.08));}
+
+    @media (min-width: 1024px){
+      .brand-logo{height:72px}
+    }
   </style>
 </head>
-<body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-    <div class="container">
-      <a class="navbar-brand text-primary fw-bold" href="#">
-        <img src="./image/astourlogo.png" alt="ASTours Logo" class="logo">
+<body class="antialiased">
+
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="#home" class="flex items-center gap-4">
+          <img src="image/astourlogo.png" alt="AS Tours International" class="brand-logo object-contain" />
+          <div class="hidden sm:block">
+            <div class="text-sm font-semibold">AS Tours International</div>
+            <div class="text-xs text-muted text-gray-500">Global Luxury Travel & Visa</div>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center gap-8 text-sm font-medium">
+          <a href="#home" class="hover:underline text-slate-800">Home</a>
+          <a href="../packages/packages.html" class="hover:underline">Packages</a>
+          <a href="/visa/visaservices.html" class="hover:underline">Visa Services</a>
+          <a href="templates/Travel/About.html" class="hover:underline">Why Choose Us</a>
+          <a href="/templates/Travel/Customerreview.html" class="hover:underline">Testimonials</a>
+          <a href="/templates/Blog.html" class="hover:underline">News</a>
+          <!-- <a href="#reviews" class="hover:underline">Carrier</a> -->
+          <a href="#contact" class="hover:underline">Contact</a>
+
+          <a href="templates/Travel/b2b/Visa/b2b.html" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm border border-transparent btn-gold">Partner with Us</a>
+        </nav>
+
+        <div class="lg:hidden">
+          <button id="mobileBtn" class="p-2 rounded-md ring-1 ring-slate-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden lg:hidden border-t border-gray-100">
+      <div class="px-6 py-4 space-y-3">
+        <!-- <a href="#packages" class="block">Packages</a>
+        <a href="#visa" class="block">Visa Services</a>
+        <a href="#why" class="block">Why Choose Us</a>
+        <a href="#contact" class="block">Contact</a> -->
+        <a href="#home" class="hover:underline text-slate-800">Home</a>
+          <a href="../packages/packages.html" class="hover:underline">Packages</a>
+          <a href="/visa/visaservices.html" class="hover:underline">Visa Services</a>
+          <a href="templates/Travel/About.html" class="hover:underline">Why Choose Us</a>
+          <a href="/templates/Travel/Customerreview.html" class="hover:underline">Testimonials</a>
+          <a href="/templates/Blog.html" class="hover:underline">News</a>
+          <!-- <a href="#reviews" class="hover:underline">Carrier</a> -->
+          <a href="#contact" class="hover:underline">Contact</a>
+
+          <a href="templates/Travel/b2b/Visa/b2b.html" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm border border-transparent btn-gold">Partner with Us</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="hero-bg min-h-[72vh] lg:min-h-[86vh] flex items-center">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+
+        <div class="relative z-10 text-white py-12">
+          <h1 class="font-playfair text-4xl sm:text-5xl lg:text-6xl leading-tight font-extrabold">
+            Travel in Style. <span class="accent-gold">Discover the World</span>
+          </h1>
+          <p class="mt-6 max-w-xl text-lg text-gray-100/90">Bespoke luxury itineraries, expert visa facilitation, and curated experiences — crafted for the discerning traveler.</p>
+
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#packages" class="inline-flex items-center gap-3 btn-gold px-6 py-3 rounded-full shadow-soft">Explore Packages</a>
+            <a href="#visa" class="inline-flex items-center gap-3 border border-white/30 text-white px-6 py-3 rounded-full">Visa Assistance</a>
+          </div>
+
+          <div class="mt-8 grid grid-cols-3 gap-4 max-w-md">
+            <div class="glass-card p-3 rounded-xl soft-shadow text-center">
+              <div class="text-sm font-semibold">Expert Visa Support</div>
+              <div class="text-xs text-gray-100">High success rate</div>
+            </div>
+            <div class="glass-card p-3 rounded-xl soft-shadow text-center">
+              <div class="text-sm font-semibold">Private Transfers</div>
+              <div class="text-xs text-gray-100">Luxury vehicles</div>
+            </div>
+            <div class="glass-card p-3 rounded-xl soft-shadow text-center">
+              <div class="text-sm font-semibold">Tailored Itineraries</div>
+              <div class="text-xs text-gray-100">Handcrafted experiences</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden lg:block relative">
+          <div class="rounded-3xl overflow-hidden soft-shadow">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=9c6a4d2c2c4f" alt="Luxury travel" class="w-full h-[520px] object-cover" />
+            <div class="absolute bottom-6 left-6 bg-white/90 p-4 rounded-xl border shadow-md">
+              <div class="text-sm font-semibold">Featured Package</div>
+              <div class="text-xs text-slate-600">Maldives — 5 Nights, Overwater Villa</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+    <!-- Services -->
+        <section id="services" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        
+        <div class="text-center mb-12">
+        <h2 class="font-playfair text-3xl lg:text-4xl font-extrabold text-primary-dark">
+            Our Core Services
+        </h2>
+        <p class="mt-3 text-gray-600 max-w-2xl mx-auto">
+            Premium travel services designed to make your journey seamless, luxurious, and stress-free.
+        </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Card 1 -->
+        <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop"
+                alt="International Tours"
+                class="w-full h-56 object-cover" />
+            <div class="p-6">
+            <h3 class="font-semibold text-xl">International & Domestic Tours</h3>
+            <p class="text-sm text-gray-600 mt-2">
+                Curated itineraries to the world’s most desired locations, handled end-to-end.
+            </p>
+            <div class="mt-4">
+                <a href="#contact" class="text-sm font-semibold accent-gold">Explore More →</a>
+            </div>
+            </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
+            <img src="https://images.unsplash.com/photo-1500048993953-d23a436266cf?q=80&w=1200&auto=format&fit=crop"
+                alt="Custom Travel Packages"
+                class="w-full h-56 object-cover" />
+            <div class="p-6">
+            <h3 class="font-semibold text-xl">Custom Travel Packages</h3>
+            <p class="text-sm text-gray-600 mt-2">
+                Tailored journeys built around your unique interests, schedule, and budget.
+            </p>
+            <div class="mt-4">
+                <a href="#contact" class="text-sm font-semibold accent-gold">Customize Trip →</a>
+            </div>
+            </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
+            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop"
+                alt="Visa & Flight Assistance"
+                class="w-full h-56 object-cover" />
+            <div class="p-6">
+            <h3 class="font-semibold text-xl">Visa & Flight Assistance</h3>
+            <p class="text-sm text-gray-600 mt-2">
+                Stress-free visa processing and premium flight booking for seamless travel.
+            </p>
+            <div class="mt-4">
+                <a href="#contact" class="text-sm font-semibold accent-gold">Get Assistance →</a>
+            </div>
+            </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop"
+                alt="Group & Corporate Travel"
+                class="w-full h-56 object-cover" />
+            <div class="p-6">
+            <h3 class="font-semibold text-xl">Group & Corporate Travel</h3>
+            <p class="text-sm text-gray-600 mt-2">
+                Dedicated solutions for company trips, incentives, and employee mobility.
+            </p>
+            <div class="mt-4">
+                <a href="#contact" class="text-sm font-semibold accent-gold">Plan Group Tour →</a>
+            </div>
+            </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
+            <img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=1200&auto=format&fit=crop"
+                alt="Luxury Tours"
+                class="w-full h-56 object-cover" />
+            <div class="p-6">
+            <h3 class="font-semibold text-xl">Honeymoon & Luxury Tours</h3>
+            <p class="text-sm text-gray-600 mt-2">
+                Exclusive resorts, private transfers, and personalized luxury experiences.
+            </p>
+            <div class="mt-4">
+                <a href="#contact" class="text-sm font-semibold accent-gold">View Luxury Trips →</a>
+            </div>
+            </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop"
+                alt="Adventure & Wildlife"
+                class="w-full h-56 object-cover" />
+            <div class="p-6">
+            <h3 class="font-semibold text-xl">Adventure & Wildlife Tours</h3>
+            <p class="text-sm text-gray-600 mt-2">
+                Expertly guided treks, safaris, and explorations off the beaten path.
+            </p>
+            <div class="mt-4">
+                <a href="#contact" class="text-sm font-semibold accent-gold">Start Adventure →</a>
+            </div>
+            </div>
+        </article>
+
+        </div>
+    </div>
+    </section>
+
+
+        
+        <!-- Visa Section (Enhanced & Optimized) -->
+<section id="visa" class="py-24 sm:py-28 bg-bg-light">
+  <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <h2 class="font-playfair text-3xl sm:text-5xl font-extrabold text-center mb-8 sm:mb-16 text-primary-dark">
+      Expert Visa Facilitation
+    </h2>
+    <p class="text-center text-base sm:text-2xl max-w-4xl mx-auto mb-12 text-gray-600 font-light">
+      Navigate complex immigration processes with ease. We provide guidance, document verification, and submission services for high success rates.
+    </p>
+
+    <!-- Quick Visa Requirement Checker -->
+    <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-xl border-l-4 border-accent-gold mb-16">
+      <h3 class="font-playfair text-2xl sm:text-3xl font-bold mb-6 text-primary-dark flex items-center">
+        <i class="fas fa-magic text-accent-gold mr-3"></i> ✨ Quick Visa Requirement Checker
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+        <input 
+          type="text" 
+          id="visaDestination" 
+          placeholder="Destination Country (e.g., USA)" 
+          class="p-3 sm:p-4 border border-gray-300 rounded-lg text-base sm:text-lg focus:ring-accent-gold focus:border-accent-gold outline-none transition"
+          required
+        >
+        <input 
+          type="text" 
+          id="visaNationality" 
+          placeholder="Applicant Nationality (e.g., Indian)" 
+          class="p-3 sm:p-4 border border-gray-300 rounded-lg text-base sm:text-lg focus:ring-accent-gold focus:border-accent-gold outline-none transition"
+          required
+        >
+        <button 
+          onclick="checkVisaRequirements()" 
+          id="visaCheckBtn" 
+          class="w-full sm:w-auto text-base sm:text-lg bg-primary-dark text-accent-gold font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition duration-300 hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-accent-gold focus:ring-opacity-50"
+        >
+          Get Initial Requirements
+        </button>
+      </div>
+
+      <!-- Generated Visa Requirements -->
+      <div id="visaResult" class="mt-8 p-6 sm:p-8 bg-gray-50 rounded-lg border-dashed border-2 border-gray-300 min-h-[120px] flex flex-col gap-4">
+        <p class="text-gray-500 text-center">Enter your destination and nationality above to get a quick guide on required tourist visa documents. (Always confirm with ASTours)</p>
+      </div>
+
+      <div id="visaSources" class="mt-4 text-xs sm:text-sm text-gray-500 space-y-1"></div>
+    </div>
+
+    <!-- Visa Categories -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-10">
+
+      <!-- USA / Canada -->
+      <article class="rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition">
+        <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=1200&auto=format&fit=crop"
+             alt="USA Canada Visa"
+             class="w-full h-56 object-cover" />
+        <div class="p-6 text-center">
+          <h3 class="font-bold text-xl text-primary-dark">USA & Canada Visas</h3>
+          <p class="text-gray-500 mt-2">B1/B2 tourist visas and interview preparation support.</p>
+          <div class="mt-4">
+            <a href="#contact" class="text-sm font-semibold accent-gold">Apply Now →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Schengen -->
+      <article class="rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition">
+        <img src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?q=80&w=1200&auto=format&fit=crop"
+             alt="Schengen Visa"
+             class="w-full h-56 object-cover" />
+        <div class="p-6 text-center">
+          <h3 class="font-bold text-xl text-primary-dark">Schengen Area Visas</h3>
+          <p class="text-gray-500 mt-2">Multi-entry and tourist visas for 29 European countries.</p>
+          <div class="mt-4">
+            <a href="#contact" class="text-sm font-semibold accent-gold">Check Eligibility →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Corporate Work Permits -->
+      <article class="rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition">
+        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop"
+             alt="Corporate Work Permit"
+             class="w-full h-56 object-cover" />
+        <div class="p-6 text-center">
+          <h3 class="font-bold text-xl text-primary-dark">Corporate Work Permits</h3>
+          <p class="text-gray-500 mt-2">Specialized services for international business and employment visas.</p>
+          <div class="mt-4">
+            <a href="#contact" class="text-sm font-semibold accent-gold">Learn More →</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Call-to-Action -->
+    <div class="text-center mt-16">
+      <a href="#contact" class="inline-block bg-primary-dark text-accent-gold font-bold py-3 px-8 sm:py-4 sm:px-12 rounded-full shadow-lg transition duration-300 hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-accent-gold focus:ring-opacity-50 text-xl">
+        Consult Our Visa Experts
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-          <!-- <li class="nav-item"><a class="nav-link" href="#services">Services</a></li> -->
-          <li class="nav-item"><a class="nav-link" href="/visa/visaservices.html">Visa</a></li>
-          <li class="nav-item"><a class="nav-link" href="../packages/packages.html">Packages</a></li>
-          <li class="nav-item"><a class="nav-link" href="templates/Travel/About.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="/templates/Blog.html">Blog</a></li>
-          <li class="nav-item"><a class="nav-link" href="/templates/Travel/Customerreview.html">Reviews</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-          <li class="nav-item"><a class="nav-link" href="templates/Travel/b2b/Visa/b2b.html">B2B Service</a></li>
-        </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- Example JS for highlighting documents -->
+<script>
+function checkVisaRequirements() {
+  const destination = document.getElementById('visaDestination').value.trim();
+  const nationality = document.getElementById('visaNationality').value.trim();
+  const resultDiv = document.getElementById('visaResult');
+
+  if (!destination || !nationality) {
+    resultDiv.innerHTML = `<p class="text-center text-gray-500">Please enter both destination and nationality.</p>`;
+    return;
+  }
+
+  // Example documents array
+  const documents = [
+    { name: 'Passport', description: 'Valid for at least 6 months from your travel date.' },
+    { name: 'Visa Application Form', description: 'Completely filled and signed.' },
+    { name: 'Photographs', description: '2 recent passport-sized photos.' },
+    { name: 'Travel Itinerary', description: 'Confirmed flights and accommodation details.' }
+  ];
+
+  resultDiv.innerHTML = '';
+  documents.forEach(doc => {
+    const docDiv = document.createElement('div');
+    docDiv.className = 'p-4 bg-gray-100 border-l-4 border-accent-gold rounded-lg flex flex-col sm:flex-row sm:justify-between items-start gap-2';
+    docDiv.innerHTML = `
+      <strong class="text-primary-dark text-lg">${doc.name}</strong>
+      <span class="text-gray-600 text-sm sm:text-base">${doc.description}</span>
+    `;
+    resultDiv.appendChild(docDiv);
+  });
+}
+</script>
+
+
+
+        <!-- Destinations / Packages Teaser (Gemini API Integration) -->
+<section id="packages" class="py-24 sm:py-28 bg-bg-light">
+  <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+    <!-- Section Heading -->
+    <h2 class="font-playfair text-3xl sm:text-5xl font-extrabold text-center mb-8 sm:mb-16 text-primary-dark">
+      Find Your Perfect Travel Package
+    </h2>
+    <p class="text-center text-base sm:text-2xl max-w-4xl mx-auto mb-12 text-gray-600 font-light">
+      Enter the country, select your package type, and budget. Get curated destinations, activities, sightseeing, and a detailed itinerary from our AI travel expert.
+    </p>
+
+    <!-- User Input Form -->
+    <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-2xl border-l-4 border-primary-dark mb-16">
+      <h3 class="font-playfair text-2xl sm:text-3xl font-bold mb-6 text-primary-dark flex items-center">
+        <i class="fas fa-gem text-primary-dark mr-3"></i> ✨ Customized Package Generator
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-6">
+        <input type="text" id="packageCountry" placeholder="Country Name (e.g., France)" class="p-3 sm:p-4 border border-gray-300 rounded-lg text-base sm:text-lg focus:ring-accent-gold focus:border-accent-gold" required>
+
+        <select id="packageType" class="p-3 sm:p-4 border border-gray-300 rounded-lg text-base sm:text-lg focus:ring-accent-gold focus:border-accent-gold" required>
+          <option value="">Package Type</option>
+          <option value="Honeymoon">Honeymoon</option>
+          <option value="Children">Children</option>
+          <option value="Group">Group Tour</option>
+          <option value="Birthday">Birthday Tour</option>
+          <option value="Holiday">Holiday Tour</option>
+        </select>
+
+        <input type="number" id="packageBudget" placeholder="Budget (USD)" class="p-3 sm:p-4 border border-gray-300 rounded-lg text-base sm:text-lg focus:ring-accent-gold focus:border-accent-gold" required>
+
+        <button onclick="fetchTravelPackage()" id="fetchPackageBtn" class="w-full sm:w-auto text-base sm:text-lg bg-primary-dark text-accent-gold font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition duration-300 hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-accent-gold focus:ring-opacity-50">
+          Find Packages
+        </button>
+      </div>
+
+      <!-- API Result / Checklist -->
+      <div id="packageResult" class="mt-8 p-6 sm:p-8 bg-gray-50 rounded-lg border-dashed border-2 border-gray-300 min-h-[150px] text-gray-800 flex flex-col gap-4">
+        <p class="text-gray-500 text-center">Your best packages will appear here after entering your preferences and clicking 'Find Packages'.</p>
       </div>
     </div>
-  </nav>
 
-  <!-- Hero -->
-  <section id="home" class="hero text-center"> 
-    <div class="container">
-     <!-- <img src="../image/astourlogo.png" alt="ASTours Logo" class="logo"> --> 
-        <h1 class="fw-bold">Your Dream Vacation, Perfectly Planned</h1>
-        <p class="lead">Customized Tours | Exotic Destinations | Seamless Travel</p>
-          <a href="../packages/packages.html" class="btn btn-primary me-2">Explore Packages</a>
-         <a href="/visa/visaservices.html" class="btn btn-success">Visa Services</a>
-    </div> 
-  </section>
+  </div>
+</section>
 
-  <!-- Services -->
-  <section id="services" class="py-5">
-    <div class="container">
-      <h2 class="section-title">Our Services</h2>
-      <div class="row g-4">
-        <div class="col-md-4"><div class="card"><i class="fas fa-plane fa-2x text-primary mb-3"></i>International & Domestic Tours</div></div>
-        <div class="col-md-4"><div class="card"><i class="fas fa-suitcase-rolling fa-2x text-primary mb-3"></i>Custom Travel Packages</div></div>
-        <div class="col-md-4"><div class="card"><i class="fas fa-passport fa-2x text-primary mb-3"></i>Visa & Flight Assistance</div></div>
-        <div class="col-md-4"><div class="card"><i class="fas fa-users fa-2x text-primary mb-3"></i>Group & Corporate Travel</div></div>
-        <div class="col-md-4"><div class="card"><i class="fas fa-heart fa-2x text-primary mb-3"></i>Honeymoon & Luxury Tours</div></div>
-        <div class="col-md-4"><div class="card"><i class="fas fa-mountain fa-2x text-primary mb-3"></i>Adventure & Wildlife Tours</div></div>
+<script>
+async function fetchTravelPackage() {
+  const country = document.getElementById('packageCountry').value.trim();
+  const type = document.getElementById('packageType').value;
+  const budget = document.getElementById('packageBudget').value;
+  const resultDiv = document.getElementById('packageResult');
+  const button = document.getElementById('fetchPackageBtn');
+
+  if (!country || !type || !budget) {
+    resultDiv.innerHTML = `<p class="text-red-500 text-center font-semibold">Please fill in all fields.</p>`;
+    return;
+  }
+
+  button.disabled = true;
+  button.innerHTML = '<span class="loader"></span> Generating...';
+  resultDiv.innerHTML = `<p class="text-gray-500 text-center">Consulting AI Travel Expert...</p>`;
+
+  const systemPrompt = "You are a luxury travel planner. Provide 2–3 packages for the requested country, package type, and budget. Include destinations, top cities, best activities, sightseeing, and price. Format in Markdown with bullet points.";
+  const userQuery = `Country: ${country}, Package Type: ${type}, Budget: $${budget}`;
+
+  const payload = {
+    contents: [{ parts: [{ text: userQuery }] }],
+    tools: [{ google_search: {} }],
+    systemInstruction: { parts: [{ text: systemPrompt }] }
+  };
+
+  try {
+    const result = await fetchWithBackoff(payload);
+    const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
+    
+    // Convert Markdown-style to HTML with bullet lists
+    const html = text
+      .replace(/^### (.*)$/gm, '<h3 class="text-primary-dark font-bold text-lg mt-4 mb-2">$1</h3>')
+      .replace(/^\* (.*)$/gm, '<li class="ml-4 text-gray-700">$1</li>')
+      .replace(/\n{2,}/g, '<br><br>');
+
+    // Wrap each package in a styled div
+    const packages = html.split('<br><br>').map(pkg => `
+      <div class="p-4 sm:p-6 bg-gray-100 border-l-4 border-accent-gold rounded-lg flex flex-col gap-2 mb-4">
+        ${pkg}
       </div>
-    </div>
-  </section>
+    `).join('');
 
-  <!-- Destinations -->
-  <section id="destinations" class="py-5 bg-light">
-    <div class="container">
-      <h2 class="section-title">Top Destinations</h2>
-      <div class="row g-4">
-        <div class="col-md-4"><div class="card">Paris & Europe</div></div>
-        <div class="col-md-4"><div class="card">Thailand Beaches</div></div>
-        <div class="col-md-4"><div class="card">Dubai Luxury</div></div>
-        <div class="col-md-4"><div class="card">India Heritage</div></div>
-        <div class="col-md-4"><div class="card">Maldives Honeymoon</div></div>
-        <div class="col-md-4"><div class="card">Singapore Highlights</div></div>
-      </div>
-    </div>
-  </section>
+    resultDiv.innerHTML = `<h4 class="font-bold text-xl text-primary-dark mb-3">Recommended Packages:</h4>${packages}`;
+    
+  } catch (e) {
+    console.error(e);
+    resultDiv.innerHTML = `<p class="text-red-500 text-center">Error: ${e.message}</p>`;
+  } finally {
+    button.disabled = false;
+    button.innerHTML = 'Find Packages';
+  }
+}
+</script>
 
-  <!-- About -->
-  <section id="about" class="py-5">
-    <div class="container text-center">
-      <h2 class="section-title">About ASTours International</h2>
-      <p class="lead">
-        ASTours International is your trusted travel partner delivering exceptional tour packages across the globe.
-        From luxury vacations to group adventures, we craft experiences that last a lifetime.
-      </p>
-    </div>
-  </section>
 
-  <!-- Contact -->
-  <section id="contact" class="py-5 bg-light">
-    <div class="container text-center">
-      <h2 class="section-title">Get in Touch</h2>
-      <p><i class="fas fa-phone"></i> +91 7021360582 | +91 8850102255</p>
-      <p><i class="fas fa-envelope"></i> astoursinternational@gmail.com</p>
-      <p><i class="fab fa-instagram"></i> @astoursinternational</p>
-    </div>
-  </section>
+        <!-- About -->
+        <section id="about" class="py-28 bg-primary-dark text-white">
+            <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="font-playfair text-6xl font-extrabold mb-10 text-accent-gold">Our Legacy of Excellence</h2>
+                <p class="lead text-2xl font-light mb-12 leading-relaxed">
+                    ASTours International is dedicated to delivering flawless travel solutions. With over a decade of expertise, we manage every detail—from complex visa documentation to crafting personalized, five-star itineraries—ensuring your focus remains purely on the journey ahead. We are your trusted partner for navigating the world in style and comfort.
+                </p>
+                <a href="#contact" class="bg-white text-primary-dark font-bold py-4 px-12 rounded-full hover:bg-gray-100 transition duration-300 transform hover:scale-105 text-xl">
+                    Consult an Expert Today
+                </a>
+            </div>
+        </section>
+        
+<!-- PapaParse CSV Parser -->
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-  <!-- Footer -->
-  <footer>
-  <p>&copy; 2025 ASTours International. All Rights Reserved.</p>
-  <p>
-    <i class="fas fa-globe"></i> Designed by 
-    <a href="https://solo2ceo.info" target="_blank" rel="noopener noreferrer">
-      Solo2CEO
+<section id="blog" class="py-28 bg-bg-light">
+  <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      
+      <h2 class="font-playfair text-5xl font-extrabold text-center mb-16 text-primary-dark">
+        Latest Visa & Travel Updates
+      </h2>
+
+      <div id="blog-container" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div>
+  </div>
+</section>
+
+<script>
+// Google Sheet CSV URL
+const SHEET_CSV =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS9H4rqyeF9_a0N51tVxqx6rRLKYBpEYbSZHxQoDSHSjSA1UX6Xh51IhwZBCPyapkMxQzHqz1h2n4AA/pub?output=csv";
+
+// Fetch & parse CSV using PapaParse
+async function loadCSV() {
+  const response = await fetch(SHEET_CSV);
+  const csv = await response.text();
+
+  const parsed = Papa.parse(csv, {
+    header: true,
+    skipEmptyLines: true
+  });
+
+  // Sort by date newest → oldest
+  const sorted = parsed.data.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+
+  return sorted.slice(0, 3); // last 3 updates
+}
+
+// Blog card with redirect
+function blogCard(item) {
+  const cdn = item["CDN Code"] ? item["CDN Code"].toLowerCase() : "xx";
+  const flagURL = `https://flagcdn.com/w40/${cdn}.png`;
+
+  return `
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden feature-card group hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
+
+        <!-- Royal Blue Header -->
+        <div class="bg-[#0A2A5C] px-6 py-4 flex items-center gap-3">
+            <img src="${flagURL}" class="w-8 h-5 rounded shadow-md" alt="${item.Country}">
+            <h3 class="text-white font-semibold text-lg">${item.Title}</h3>
+        </div>
+
+        <div class="p-6">
+            <p class="text-sm text-gray-500 mb-3">
+                ${item.Date} • ${item.Country}
+            </p>
+
+            <p class="text-gray-700 text-base line-clamp-3 leading-relaxed">
+                ${item.Description}
+            </p>
+
+            <a href="https://www.solo2ceo.info/templates/Blog.html?id=${cdn}-${item.Date}"
+               class="inline-block mt-5 text-accent-gold font-semibold hover:underline">
+               Read Update →
+            </a>
+        </div>
+    </div>
+  `;
+}
+
+// Load on page
+(async () => {
+  const data = await loadCSV();
+  document.getElementById("blog-container").innerHTML =
+    data.map(blogCard).join("");
+})();
+</script>
+
+<style>
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>
+
+
+
+
+
+
+        <section id="reviews" class="py-28 bg-white">
+    <div class="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 class="font-playfair text-5xl font-extrabold text-center mb-16 text-primary-dark">
+            What Our Clients Say
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            <!-- Review Card 1 -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-accent-gold/40 hover:shadow-2xl transition duration-300">
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="https://i.pravatar.cc/150?img=47" class="w-16 h-16 rounded-full object-cover border-2 border-accent-gold">
+                    <div>
+                        <h3 class="font-semibold text-xl text-primary-dark">Jane D.</h3>
+                        <p class="text-gray-500 text-sm">Mumbai, India</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    ASTours handled our complex US family visa perfectly. Their guidance during interview preparation
+                    and documentation support made the entire process smooth.
+                </p>
+
+                <div class="flex text-accent-gold text-lg">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <!-- Review Card 2 -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-accent-gold/40 hover:shadow-2xl transition duration-300">
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="https://i.pravatar.cc/150?img=12" class="w-16 h-16 rounded-full object-cover border-2 border-accent-gold">
+                    <div>
+                        <h3 class="font-semibold text-xl text-primary-dark">Rohan K.</h3>
+                        <p class="text-gray-500 text-sm">Delhi, India</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Our Maldives honeymoon package was flawless. Luxury resort booking, seamless transfers,
+                    and curated activities made it unforgettable.
+                </p>
+
+                <div class="flex text-accent-gold text-lg">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <!-- Review Card 3 -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-accent-gold/40 hover:shadow-2xl transition duration-300">
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="https://i.pravatar.cc/150?img=32" class="w-16 h-16 rounded-full object-cover border-2 border-accent-gold">
+                    <div>
+                        <h3 class="font-semibold text-xl text-primary-dark">Sara L.</h3>
+                        <p class="text-gray-500 text-sm">Bangalore, India</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The Schengen visa support was incredibly smooth. My documents, appointments, and travel plan were
+                    perfectly managed by their expert team.
+                </p>
+
+                <div class="flex text-accent-gold text-lg">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+        <!-- Contact -->
+        <section id="contact" class="py-28">
+            <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+                <h2 class="font-playfair text-5xl font-extrabold text-center mb-16 text-primary-dark">Get in Touch</h2>
+                <div class="bg-white p-10 sm:p-16 rounded-3xl shadow-2xl border border-gray-100">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <!-- Contact Info Column -->
+                        <div class="space-y-10">
+                            <div class="flex items-start space-x-6">
+                                <i class="fas fa-phone-alt fa-3x text-accent-gold mt-1 opacity-80"></i>
+                                <div>
+                                    <p class="font-bold text-2xl text-primary-dark">Call Us</p>
+                                    <p class="text-gray-600 text-lg">+91 7021360582</p>
+                                    <p class="text-gray-600 text-lg">+91 8850102255</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-6">
+                                <i class="fas fa-envelope fa-3x text-accent-gold mt-1 opacity-80"></i>
+                                <div>
+                                    <p class="font-bold text-2xl text-primary-dark">Email</p>
+                                    <p class="text-gray-600 text-lg">astoursinternational@gmail.com</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-6">
+                                <i class="fab fa-instagram fa-3x text-accent-gold mt-1 opacity-80"></i>
+                                <div>
+                                    <p class="font-bold text-2xl text-primary-dark">Instagram</p>
+                                    <p class="text-gray-600 text-lg">@astoursinternational</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Form Column -->
+                        <form onsubmit="return false;" class="space-y-6">
+                            <p class="text-xl font-medium text-primary-dark">Let us know how we can assist you:</p>
+                            <div>
+                                <input type="text" placeholder="Your Full Name" class="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-primary-dark focus:border-primary-dark transition text-lg shadow-sm" required>
+                            </div>
+                            <div>
+                                <input type="email" placeholder="Email Address" class="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-primary-dark focus:border-primary-dark transition text-lg shadow-sm" required>
+                            </div>
+                            <div>
+                                <textarea placeholder="How can we help? (e.g., Schengen Visa, Luxury Dubai Package)" rows="5" class="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-primary-dark focus:border-primary-dark transition text-lg shadow-sm" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-premium w-full text-xl bg-primary-dark text-accent-gold font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-accent-gold focus:ring-opacity-50">
+                                Submit Inquiry
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- B2B Callout / B2B Service Section -->
+        <section id="b2b" class="py-20 bg-accent-gold text-primary-dark">
+            <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="font-playfair text-4xl sm:text-5xl font-extrabold mb-4">Partner With Us: B2B Service</h2>
+                <p class="text-2xl mb-10 font-medium">Explore exclusive rates and priority services for corporate clients and travel agencies.</p>
+                <a href="#contact" class="bg-primary-dark text-white font-bold py-4 px-14 rounded-full shadow-xl transition duration-300 hover:bg-blue-900 text-xl">
+                    Start B2B Partnership
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+  <footer id="contact" class="bg-navy text-white pt-20 pb-8">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <div>
+    <!-- Logo Image -->
+    <img src="image/astourlogo.png" 
+         alt="AS Tours International Logo" 
+         class="w-28 mb-0">
+    <h4 class="font-playfair text-2xl font-bold text-gold mb-6">AS Tours International</h4>
+
+    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+        Your gateway to the world. We specialize in luxury travel, seamless visa processing, 
+        and creating unforgettable memories.
+    </p>
+
+    <div class="flex gap-4">
+        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gold hover:text-navy transition-colors">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gold hover:text-navy transition-colors">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gold hover:text-navy transition-colors">
+            <i class="fab fa-linkedin-in"></i>
+        </a>
+    </div>
+</div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-6">Quick Links</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li><a href="#packages" class="hover:text-gold transition-colors">Luxury Packages</a></li>
+                        <li><a href="#visa" class="hover:text-gold transition-colors">Visa Services</a></li>
+                        <li><a href="#blog" class="hover:text-gold transition-colors">Travel Blog</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-6">Contact</h4>
+                    <ul class="space-y-4 text-gray-400 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt text-gold mt-1"></i>
+                            <span>101, Sakaza Height<br>Thane, Maharashtra, India 400612</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-phone text-gold"></i>
+                            <span>+91 70213 60582</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-gold"></i>
+                            <span>astoursinternational@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-6">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe for visa alerts and deals.</p>
+                    <form onsubmit="event.preventDefault(); alert('Subscribed!')" class="flex gap-2">
+                        <input type="email" placeholder="Email Address" class="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-gold">
+                        <button type="submit" class="bg-gold text-navy px-4 py-2 rounded-lg font-bold hover:bg-white transition-colors"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2024 AS Tours International. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/919321892924?text=Hello%20ASTours%20International%20Team%2C%20I%20would%20like%20to%20know%20more%20about%20your%20packages." 
+       class="whatsapp-float w-18 h-18 rounded-full flex items-center justify-center text-white text-5xl hover:scale-110 transition duration-300" 
+       target="_blank">
+        <i class="fab fa-whatsapp"></i>
     </a>
-  </p>
-</footer>
+    
+    <!-- JavaScript for Mobile Menu & LLM Features -->
+    <script>
+// === Load API Key From Google Sheet ===
+async function loadApiKey() {
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQY2BokImG-lKK2HjjAPxJIi2kwTLVuELWKB8BQXDEFRjG5cXn4Tj0x_qivopk9DPCCBBGDUF06FBvU/pub?output=csv";
+    try {
+        const res = await fetch(sheetURL);
+        const csv = await res.text();
+        const rows = csv.split("\n").map(r => r.split(","));
+        let geminiKey = "";
+        rows.forEach(row => {
+            if (row[0]?.trim() === "Gemini") {
+                geminiKey = row[1]?.trim();
+            }
+        });
+        window.GEMINI_API_KEY = geminiKey;
+        console.log("Gemini API Loaded:", geminiKey);
+    } catch (err) {
+        console.error("API key load error", err);
+    }
+}
+loadApiKey();
 
+// === Mobile Menu ===
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click',()=> mobileMenu.classList.add('hidden')));
 
-  <!-- WhatsApp -->
-  <a href="https://wa.me/919321892924?text=Hello%20ASTours%20International%20Team%2C%20I%20would%20like%20to%20know%20more%20about%20your%20packages." class="whatsapp-float" target="_blank">
-    <i class="fab fa-whatsapp"></i>
-  </a>
+// === Core Gemini API Request Handler ===
+async function fetchWithBackoff(payload, retries = 0) {
+    if (!window.GEMINI_API_KEY) throw new Error("API key not loaded yet");
+    const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${window.GEMINI_API_KEY}`;
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.status === 429 && retries < 5) {
+            const delay = Math.pow(2, retries) * 1000 + Math.random() * 1000;
+            await new Promise(r => setTimeout(r, delay));
+            return fetchWithBackoff(payload, retries + 1);
+        }
+
+        if (!response.ok) {
+            let message = `Status ${response.status}: ${response.statusText}`;
+            try {
+                const b = await response.json();
+                if (b.error?.message) message += ` - ${b.error.message}`;
+            } catch {}
+            throw new Error(message);
+        }
+        return response.json();
+    } catch (err) {
+        console.error("Gemini Error:", err);
+        throw err;
+    }
+}
+
+// === Travel Idea Generator ===
+async function generateTravelIdea() {
+    const mood = document.getElementById('travelMood').value;
+    const duration = document.getElementById('travelDuration').value;
+    const theme = document.getElementById('travelTheme').value;
+    const resultDiv = document.getElementById('travelIdeaResult');
+    const button = document.getElementById('travelIdeaBtn');
+
+    if (!mood || !duration) {
+        resultDiv.innerHTML = `<p class='text-red-500 font-semibold'>Please select a Mood and Duration.</p>`;
+        return;
+    }
+
+    button.disabled = true;
+    button.innerHTML = '<span class="loader"></span> Generating...';
+    resultDiv.innerHTML = "Consulting AI Travel Expert...";
+
+    const systemPrompt = "You are a luxury travel planner. Provide 1 destination + 3‑day plan in Markdown.";
+    const userQuery = `Mood: ${mood}, Duration: ${duration}, Theme: ${theme}`;
+
+    const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        tools: [{ google_search: {} }],
+        systemInstruction: { parts: [{ text: systemPrompt }] }
+    };
+
+    try {
+        const result = await fetchWithBackoff(payload);
+        const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
+        const html = text.replace(/\n/g, '<br>').replace(/## (.*?)/g, '<h3>$1</h3>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        resultDiv.innerHTML = `<h4>Your Itinerary</h4><div>${html}</div>`;
+    } catch (e) {
+        resultDiv.innerHTML = `<p class='text-red-500'>Error: ${e.message}</p>`;
+    } finally {
+        button.disabled = false;
+        button.innerHTML = 'Suggest My Trip';
+    }
+}
+
+// === Visa Checker ===
+async function checkVisaRequirements() {
+    const destination = document.getElementById('visaDestination').value.trim();
+    const nationality = document.getElementById('visaNationality').value.trim();
+    const resultDiv = document.getElementById('visaResult');
+    const sourcesDiv = document.getElementById('visaSources');
+    const button = document.getElementById('visaCheckBtn');
+
+    if (!destination || !nationality) {
+        resultDiv.innerHTML = `<p class='text-red-500 font-semibold'>Enter both fields.</p>`;
+        return;
+    }
+
+    button.disabled = true;
+    button.innerHTML = '<span class="loader"></span> Checking...';
+    resultDiv.innerHTML = "Checking visa policies...";
+    sourcesDiv.innerHTML = "";
+
+    const systemPrompt = "You are a visa consultant. Give 4–6 bullet points, concise.";
+    const userQuery = `Tourist visa requirements for ${nationality} visiting ${destination}.`;
+
+    const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        tools: [{ google_search: {} }],
+        systemInstruction: { parts: [{ text: systemPrompt }] }
+    };
+
+    try {
+        const result = await fetchWithBackoff(payload);
+        const c = result.candidates?.[0];
+        const text = c?.content?.parts?.[0]?.text || "No data.";
+
+        const html = text.replace(/\* (.*?)\n/g, '<li>$1</li>').replace(/\n/g, '<br>');
+        resultDiv.innerHTML = `<h4>Preliminary Visa Guide</h4><ul>${html}</ul>`;
+
+        const sources = c?.groundingMetadata?.groundingAttributions || [];
+        if (sources.length) {
+            sourcesDiv.innerHTML = `<p>Sources:</p>` + sources.map(s => `<a href="${s.web?.uri}" target="_blank">${s.web?.title}</a><br>`).join('');
+        }
+    } catch (e) {
+        resultDiv.innerHTML = `<p class='text-red-500'>Gemini Error: ${e.message}</p>`;
+    } finally {
+        button.disabled = false;
+        button.innerHTML = 'Get Initial Requirements';
+    }
+}
+</script>
+
+    <!-- Font Awesome (for icons) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
 </body>
 </html>
