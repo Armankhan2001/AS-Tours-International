@@ -4,74 +4,224 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us | AS Tours International</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy: #07203a;
+      --gold: #d4af37;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f9fafb;
+      color: #333;
+    }
+
+    .font-playfair { font-family: 'Playfair Display', serif; }
+
+    /* --- LOGO BADGE STYLES --- */
+    .logo-badge {
+      /* Mobile Default */
+      height: 60px; 
+      width: 60px;
+      background-color: #ffd700;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      border-bottom-right-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
+
+    .logo-badge img {
+      width: 85%;
+      height: auto;
+    }
+
+    /* Desktop Size */
+    @media (min-width: 1024px) {
+      .logo-badge {
+        height: 160px;
+        width: 160px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    /* --- BUTTON STYLES --- */
+    .btn-gold {
+      background: linear-gradient(90deg, var(--gold), #f3d27a);
+      color: var(--navy);
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+  </style>
 </head>
 
-<body class="bg-gradient-to-b from-blue-50 to-blue-100 font-[Poppins] text-gray-800">
+<body class="flex flex-col min-h-screen">
 
-  <!-- Header -->
-  <header class="bg-white shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-    <a href="../index.html" class="text-blue-600 font-semibold hover:text-blue-800">
-      ← Home
-    </a>
-    <div class="text-xl font-bold text-blue-700">
-      <a href="../index.html">AS Tours International</a>
+  <!-- ================= NAVIGATION ================= -->
+  <header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+
+        <!-- Logo Badge -->
+        <div class="absolute top-0 left-4 z-50">
+          <a href="../index.html" class="logo-badge">
+            <!-- Ensure path matches your folder structure -->
+            <img src="../image/astourlogo.png" alt="AS Tours Logo">
+          </a>
+        </div>
+
+        <!-- Spacer for logo -->
+        <div class="w-16 lg:w-36 flex-shrink-0"></div>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden lg:flex items-center gap-8 text-[#07203a] font-medium text-sm">
+          <a href="../index.html" class="hover:text-[#d4af37] transition-colors">Home</a>
+          <a href="../visa/globalvisa.html" class="hover:text-[#d4af37] transition-colors">Global Visa</a>
+          <a href="../packages/packages.html" class="hover:text-[#d4af37] transition-colors">Packages</a>
+          <a href="../visa/visaservices.html" class="hover:text-[#d4af37] transition-colors">Visa Services</a>
+          <a href="#" class="text-[#d4af37] font-bold border-b-2 border-[#d4af37]">Contact</a>
+          <a href="../b2b/Visa/b2b.html" class="ml-4 px-6 py-2.5 rounded-full btn-gold shadow-md">Partner with Us</a>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <div class="lg:hidden ml-auto">
+          <button id="mobileBtn" class="p-2 text-[#07203a] hover:bg-gray-100 rounded-md transition-colors">
+            <i class="fas fa-bars fa-lg"></i>
+          </button>
+        </div>
+
+      </div>
     </div>
-    <a href="#Contact" class="text-sm text-blue-500 hover:text-blue-700">Contact</a>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 absolute w-full shadow-lg z-40">
+      <div class="flex flex-col px-6 py-6 space-y-4 text-[#07203a] font-medium">
+        <div class="h-8"></div> <!-- Spacer for mobile logo -->
+        <a href="../index.html" class="hover:text-[#d4af37]">Home</a>
+        <a href="../visa/globalvisa.html" class="hover:text-[#d4af37]">Global Visa</a>
+        <a href="../packages/packages.html" class="hover:text-[#d4af37]">Packages</a>
+        <a href="../visa/visaservices.html" class="hover:text-[#d4af37]">Visa Services</a>
+        <a href="#" class="text-[#d4af37] font-bold">Contact</a>
+        <a href="../b2b/Visa/b2b.html" class="mt-2 px-4 py-3 rounded-lg btn-gold text-center">Partner with Us</a>
+      </div>
+    </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="px-6 py-14 text-center">
-    <h1 class="text-4xl font-bold text-blue-900 mb-3">Contact Us</h1>
-    <p class="text-lg text-gray-700 max-w-2xl mx-auto">
-      Have questions about visas, immigration, or travel packages?  
-      Our team at <span class="font-semibold text-blue-700">AS Tours International</span> is ready to assist you.
-    </p>
-  </section>
+  <!-- ================= HERO & CONTENT ================= -->
+  <main class="flex-grow bg-gradient-to-b from-gray-50 to-blue-50/30">
+    
+    <!-- Hero Text -->
+    <section class="px-6 pt-16 pb-10 text-center">
+      <h1 class="text-4xl lg:text-5xl font-playfair font-bold text-[#07203a] mb-4">
+        Contact Us
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        Have questions about visas, immigration, or travel packages?<br>
+        Our team at <span class="font-semibold text-[#d4af37]">AS Tours International</span> is ready to assist you.
+      </p>
+    </section>
 
-  <!-- Contact Card -->
-  <section id="Contact" class="px-6 pb-16 flex justify-center">
-    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-xl w-full border border-blue-100">
+    <!-- Contact Card -->
+    <section id="Contact" class="px-6 pb-20 flex justify-center">
+      <div class="bg-white rounded-2xl shadow-xl p-8 max-w-xl w-full border-t-4 border-[#d4af37]">
 
-      <h2 class="text-2xl font-semibold text-blue-800 mb-6 text-center">
-        Get in Touch
-      </h2>
+        <h2 class="text-2xl font-playfair font-bold text-[#07203a] mb-8 text-center">
+          Get in Touch
+        </h2>
 
-      <div class="space-y-4 text-lg">
-        <p>📧 <span class="font-medium">Email:</span>  
-          <a href="mailto:astoursinternational@gmail.com" class="text-blue-600 hover:underline">
-            astoursinternational@gmail.com
+        <div class="space-y-6 text-lg text-gray-700">
+          
+          <!-- Email -->
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#07203a] shrink-0">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500 font-semibold uppercase tracking-wide">Email</p>
+              <a href="mailto:astoursinternational@gmail.com" class="text-blue-600 hover:text-[#d4af37] transition-colors break-all">
+                astoursinternational@gmail.com
+              </a>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#07203a] shrink-0">
+              <i class="fas fa-phone"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500 font-semibold uppercase tracking-wide">Phone</p>
+              <p class="font-medium">+91 7021360582</p>
+              <p class="font-medium">+91 8850102255</p>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#07203a] shrink-0">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500 font-semibold uppercase tracking-wide">Location</p>
+              <p class="font-medium">Mumbai, Maharashtra, India</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- WhatsApp Button -->
+        <div class="mt-10 text-center">
+          <a href="https://wa.me/918850102255" target="_blank"
+             class="inline-flex items-center gap-2 bg-[#25D366] text-white px-8 py-3 rounded-full shadow-lg hover:bg-[#20bd5a] hover:-translate-y-1 transition-all duration-300 font-semibold">
+             <i class="fab fa-whatsapp fa-lg"></i> Chat on WhatsApp
           </a>
-        </p>
+        </div>
 
-        <p>📞 <span class="font-medium">Phone:</span>  
-          <span class="font-semibold text-gray-800">+91 7021360582 | +91 8850102255</span>
-        </p>
-
-        <p>📍 <span class="font-medium">Location:</span>  
-          <span class="text-gray-700">Mumbai, Maharashtra, India</span>
-        </p>
       </div>
+    </section>
 
-      <div class="mt-8 text-center">
-        <a href="https://wa.me/918850102255"
-           class="bg-green-600 text-white px-6 py-3 rounded-xl shadow hover:bg-green-700 transition">
-          💬 Chat on WhatsApp
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-[#07203a] text-white py-8 border-t border-[#d4af37]">
+    <div class="container mx-auto px-4 text-center">
+      <p class="text-gray-400 text-sm mb-4">
+        &copy; <script>document.write(new Date().getFullYear())</script> AS Tours International
+      </p>
+      <div class="flex justify-center gap-4">
+        <a href="https://instagram.com/astoursinternational" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#07203a] transition-all">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="mailto:astoursinternational@gmail.com" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#07203a] transition-all">
+          <i class="fas fa-envelope"></i>
         </a>
       </div>
     </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-6 text-center text-sm">
-    © <script>document.write(new Date().getFullYear())</script> AS Tours International  
-    <br>
-    Follow us on Instagram:
-    <a href="https://instagram.com/astoursinternational" class="text-blue-400 hover:text-blue-200" target="_blank">
-      @astoursinternational
-    </a>
   </footer>
+
+  <!-- Script -->
+  <script>
+    document.getElementById('mobileBtn').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+  </script>
 
 </body>
 </html>

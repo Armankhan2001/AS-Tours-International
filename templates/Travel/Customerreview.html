@@ -1,230 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Happy Travellers — Share Your Success</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  /* Card entry animation */
-  .card-enter { transform: translateY(10px) scale(0.95); opacity: 0; transition: all 0.4s ease; }
-  .card-enter.show { transform: translateY(0) scale(1); opacity: 1; }
-  /* Hover zoom */
-  .review-card:hover { transform: scale(1.02); transition: 0.3s; }
-  /* Slider */
-  .slider { position: relative; }
-  .slide { display: none; }
-  .slide.active { display: block; }
-  .slider button { font-size: 1.5rem; }
-</style>
-</head>
-<body class="bg-gradient-to-br from-pink-50 via-yellow-50 to-blue-50 min-h-screen p-6">
-
-<div class="max-w-7xl mx-auto">
-  <header class="text-center mb-10">
-    <h1 class="text-5xl font-extrabold text-pink-600 mb-2">💬 Happy Travellers</h1>
-    <p class="text-gray-600 text-lg">Share your visa & trip success stories and inspire others!</p>
-  </header>
-
-  <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Travellers — Share Your Success</title>
     
-    <!-- Form Section -->
-    <section class="lg:col-span-1 bg-white/90 p-6 rounded-3xl shadow-xl">
-      <h2 class="text-2xl font-bold mb-4 text-pink-500">Share Your Story</h2>
-      <form id="reviewForm" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium">Full Name</label>
-          <input id="name" placeholder="e.g. Rajesh Kumar" required class="mt-1 block w-full rounded-md border p-2" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Country / Package</label>
-          <input id="country" placeholder="e.g. Canada Visitor Visa" required class="mt-1 block w-full rounded-md border p-2" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Your Experience</label>
-          <textarea id="message" rows="4" placeholder="Share your experience..." required class="mt-1 block w-full rounded-md border p-2"></textarea>
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Photos (visa/trip)</label>
-          <input id="photos" type="file" accept="image/*" multiple class="mt-1 block w-full"/>
-        </div>
-        <div>
-          <button id="submitBtn" class="w-full py-2 rounded-xl font-semibold bg-gradient-to-r from-pink-500 to-yellow-400 text-white hover:from-pink-600 hover:to-yellow-500">Submit Review</button>
-        </div>
-        <p id="status" class="text-sm text-gray-600"></p>
-      </form>
-    </section>
-
-    <!-- Reviews Section -->
-    <section class="lg:col-span-2">
-      <h2 class="text-2xl font-bold mb-4 text-pink-500">Success Stories</h2>
-      <div id="reviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-        <!-- Review cards inserted here -->
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="mt-12 text-center text-sm text-gray-500">Admins must approve reviews in the Sheet to make them public.</footer>
-</div>
-
-<script>
-const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwW_sh_7YEWRyh9mlSqFnl9W6PcWh94bRIOte2zIClNlpuBstNhO3N9WYRqfeJ_f3w/exec';
-
-// Status display
-const statusEl = document.getElementById('status');
-function setStatus(msg, isError=false){ statusEl.textContent = msg; statusEl.style.color = isError ? '#b91c1c' : '#065f46'; }
-
-// Convert file to Base64
-function fileToDataURL(file){
-  return new Promise((resolve, reject)=>{
-    if(!file) return resolve(null);
-    const reader = new FileReader();
-    reader.onload = ()=> resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-// Submit form
-document.getElementById('reviewForm').addEventListener('submit', async (ev)=>{
-  ev.preventDefault();
-  setStatus('Preparing your review...');
-
-  const name = document.getElementById('name').value.trim();
-  const country = document.getElementById('country').value.trim();
-  const message = document.getElementById('message').value.trim();
-  const files = document.getElementById('photos').files;
-  const imagesData = await Promise.all([...files].map(f => fileToDataURL(f)));
-  const payload = { name, country, message, images: imagesData };
-
-  try{
-    setStatus('Uploading — please wait...');
-    await fetch(API_ENDPOINT, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    setStatus('✅ Thanks! Your review was submitted for approval.');
-    document.getElementById('reviewForm').reset();
-    loadReviews();
-  } catch(err){
-    console.error(err);
-    setStatus('❌ Failed to submit. Please try again.', true);
-  }
-});
-
-// Load approved reviews
-async function loadReviews(){
-  const grid = document.getElementById('reviewsGrid');
-  grid.innerHTML = '';
-  setStatus('Loading reviews...');
-  try{
-    const res = await fetch(API_ENDPOINT + '?action=getReviews');
-    const data = await res.json();
-
-    if(Array.isArray(data.reviews) && data.reviews.length){
-      setStatus('');
-      data.reviews.forEach((r,i)=>{
-        const div = document.createElement('div');
-        div.className = 'review-card bg-white/90 rounded-3xl p-4 shadow-lg card-enter';
-
-        // Parse images
-        let images = [];
-        try { images = Array.isArray(r.image) ? r.image : JSON.parse(r.image); } 
-        catch(e){ if(r.image) images = [r.image]; }
-
-        // Slider HTML
-        let sliderHtml = '';
-        if(images.length){
-          const slides = images.map((img, idx)=>{
-            let slideContent = '';
-            if(img.includes('drive.google.com')){
-              const fileIdMatch = img.match(/[-\w]{25,}/);
-              const fileId = fileIdMatch ? fileIdMatch[0] : null;
-              if(fileId){
-                slideContent = `<iframe src="https://drive.google.com/file/d/${fileId}/preview" class="w-full h-48 rounded-lg" frameborder="0" allowfullscreen></iframe>`;
-              } else {
-                slideContent = `<img src="https://via.placeholder.com/150" class="w-full h-48 object-cover rounded-lg"/>`;
-              }
-            } else {
-              slideContent = `<img src="${img}" onerror="this.src='https://via.placeholder.com/150'" class="w-full h-48 object-cover rounded-lg"/>`;
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --navy: #07203a;
+            --gold: #d4af37;
+            --pink-accent: #ec4899; /* Used pink-500 from the original page */
+        }
+        
+        /* Global Styles & Font Overrides */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Updated background to match the luxury theme better while keeping a light gradient */
+            background: linear-gradient(to bottom right, #f7f7f7, #ffffff);
+        }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        
+        /* Card entry animation */
+        .card-enter { transform: translateY(10px) scale(0.95); opacity: 0; transition: all 0.4s ease; }
+        .card-enter.show { transform: translateY(0) scale(1); opacity: 1; }
+        /* Hover zoom */
+        .review-card:hover { 
+            transform: scale(1.02); 
+            transition: 0.3s; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+        }
+        /* Slider */
+        .slider { position: relative; }
+        .slide { display: none; }
+        .slide.active { display: block; }
+        .slider button { font-size: 1.5rem; }
+        
+        /* --- Navbar Component Styles --- */
+        .logo-badge {
+            height: 60px; 
+            width: 60px;
+            background-color: #ffd700;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-bottom-right-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+        .logo-badge img {
+            width: 85%;
+            height: auto;
+        }
+        @media (min-width: 1024px) {
+            .logo-badge {
+                height: 160px;
+                width: 160px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             }
-            return `<div class="slide ${idx===0?'active':''} relative mb-2">${slideContent}</div>`;
-          }).join('');
-
-          sliderHtml = `
-            <div class="slider relative">
-              ${slides}
-              ${images.length>1 ? `<button class="prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/60 rounded-full px-2">‹</button>
-              <button class="next absolute right-2 top-1/2 -translate-y-1/2 bg-white/60 rounded-full px-2">›</button>` : ''}
-            </div>`;
-        } else {
-          sliderHtml = `<img src="https://via.placeholder.com/150" class="w-full h-48 object-cover rounded-lg mb-2"/>`;
+        }
+        .btn-gold {
+            background: linear-gradient(90deg, var(--gold), #f3d27a);
+            color: var(--navy);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
         }
 
-        div.innerHTML = `
-          <div class="flex items-center gap-3 mb-3">
-            <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-              <img src="${images[0] || 'https://via.placeholder.com/150'}" class="w-full h-full object-cover"/>
-            </div>
-            <div>
-              <div class="font-semibold text-lg">${escapeHtml(r.name)}</div>
-              <div class="text-sm text-gray-500">${escapeHtml(r.country)} • ${escapeHtml(r.date)}</div>
-            </div>
-          </div>
-          ${sliderHtml}
-          <p class="text-gray-700 text-sm">${escapeHtml(r.message)}</p>
-        `;
-
-        grid.appendChild(div);
-        setTimeout(()=>div.classList.add('show'), 50*i + 50);
-
-        // Slider functionality
-        if(images.length>1){
-          const slider = div.querySelector('.slider');
-          const slideEls = slider.querySelectorAll('.slide');
-          let current = 0;
-          const prevBtn = slider.querySelector('.prev');
-          const nextBtn = slider.querySelector('.next');
-          const showSlide = idx=>{ slideEls.forEach((s,i)=> s.style.display = (i===idx?'block':'none')); };
-          showSlide(current);
-          if(prevBtn && nextBtn){
-            prevBtn.addEventListener('click', ()=>{ current = (current-1+slideEls.length)%slideEls.length; showSlide(current); });
-            nextBtn.addEventListener('click', ()=>{ current = (current+1)%slideEls.length; showSlide(current); });
-          }
+        /* --- Custom Footer --- */
+        footer.luxury-footer {
+            background: var(--navy);
+            color: white;
+            padding: 28px;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 50px;
+            border-top: 4px solid var(--gold);
         }
+        footer.luxury-footer a {
+            color: var(--gold);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    
+    <header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="flex items-center justify-between h-24">
 
-      });
+                <div class="absolute top-0 left-4 z-50">
+                    <a href="../../index.html" class="logo-badge">
+                        <img src="../../image/astourlogo.png" alt="AS Tours Logo">
+                    </a>
+                </div>
 
-      // Modal click for full-size images
-      document.querySelectorAll('.slide img, .review-card > img').forEach(img=>{
-        img.addEventListener('click', e=>{
-          const src = e.target.src;
-          const modal = document.createElement('div');
-          modal.className = 'fixed inset-0 bg-black/80 flex items-center justify-center z-50 cursor-pointer';
-          modal.innerHTML = `<img src="${src}" class="max-h-[90%] max-w-[90%]"/>`;
-          modal.addEventListener('click', ()=>modal.remove());
-          document.body.appendChild(modal);
+                <div class="w-16 lg:w-36 flex-shrink-0"></div>
+
+                <nav class="hidden lg:flex items-center gap-8 text-[--navy] font-medium text-sm">
+                    <a href="../../index.html" class="hover:text-[--gold] transition-colors">Home</a>
+                    <a href="../Travel/b2b/Visa/clientvisaquotations.html" class="hover:text-[--gold] transition-colors">Global Visa</a>
+                    <a href="../packages/packages.html" class="hover:text-[--gold] transition-colors">Packages</a>
+                    <a href="../visa/visaservices.html" class="hover:text-[--gold] transition-colors">Visa Services</a>
+                    <a href="../blog/blog.html" class="hover:text-[--gold] transition-colors">Blog</a>
+                    <a href="../b2b/Visa/b2b.html" class="ml-4 px-6 py-2.5 rounded-full btn-gold shadow-md">Partner with Us</a>
+                </nav>
+
+                <div class="lg:hidden ml-auto">
+                    <button id="mobileBtn" class="p-2 text-[--navy] hover:bg-gray-100 rounded-md transition-colors">
+                        <i class="fas fa-bars fa-lg"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 absolute w-full shadow-lg z-40">
+            <div class="flex flex-col px-6 py-6 space-y-4 text-[--navy] font-medium">
+                <a href="../../index.html" class="hover:text-[--gold] transition-colors">Home</a>
+                    <a href="../Travel/b2b/Visa/clientvisaquotations.html" class="hover:text-[--gold] transition-colors">Global Visa</a>
+                    <a href="../packages/packages.html" class="hover:text-[--gold] transition-colors">Packages</a>
+                    <a href="../visa/visaservices.html" class="hover:text-[--gold] transition-colors">Visa Services</a>
+                    <a href="../blog/blog.html" class="hover:text-[--gold] transition-colors">Blog</a>
+                    <a href="../b2b/Visa/b2b.html" class="ml-4 px-6 py-2.5 rounded-full btn-gold shadow-md">Partner with Us</a>
+            </div>
+        </div>
+    </header>
+    <div class="max-w-7xl mx-auto p-6 pt-12">
+        <header class="text-center mb-10">
+            <h1 class="text-5xl font-extrabold text-[--navy] mb-2 font-playfair">
+                <i class="fas fa-heart text-[--pink-accent]"></i> Happy Travellers
+            </h1>
+            <p class="text-gray-600 text-lg">Share your visa & trip success stories and inspire others!</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <section class="lg:col-span-1 bg-white/90 p-6 rounded-3xl shadow-xl border border-gray-100">
+                <h2 class="text-2xl font-bold mb-4 text-[--pink-accent]">Share Your Story</h2>
+                <form id="reviewForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium">Full Name</label>
+                        <input id="name" placeholder="e.g. Rajesh Kumar" required class="mt-1 block w-full rounded-md border p-2 focus:border-[--navy] focus:ring-[--navy]" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Country / Package</label>
+                        <input id="country" placeholder="e.g. Canada Visitor Visa" required class="mt-1 block w-full rounded-md border p-2 focus:border-[--navy] focus:ring-[--navy]" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Your Experience</label>
+                        <textarea id="message" rows="4" placeholder="Share your experience..." required class="mt-1 block w-full rounded-md border p-2 focus:border-[--navy] focus:ring-[--navy]"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Photos (visa/trip)</label>
+                        <input id="photos" type="file" accept="image/*" multiple class="mt-1 block w-full"/>
+                    </div>
+                    <div>
+                        <button id="submitBtn" class="w-full py-2 rounded-xl font-semibold bg-gradient-to-r from-[--pink-accent] to-yellow-400 text-white hover:from-pink-600 hover:to-yellow-500 transition-all">Submit Review</button>
+                    </div>
+                    <p id="status" class="text-sm text-gray-600"></p>
+                </form>
+            </section>
+
+            <section class="lg:col-span-2">
+                <h2 class="text-2xl font-bold mb-4 text-[--pink-accent]">Success Stories</h2>
+                <div id="reviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+                    </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="luxury-footer">
+        <p>Admins must approve reviews in the Sheet to make them public.</p>
+        <p class="mt-1">&copy; <script>document.write(new Date().getFullYear())</script> ASTours International. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle logic
+        document.getElementById('mobileBtn').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
         });
-      });
+        
+        // Original JavaScript logic (Kept intact)
+        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwW_sh_7YEWRyh9mlSqFnl9W6PcWh94bRIOte2zIClNlpuBstNhO3N9WYRqfeJ_f3w/exec';
 
-    } else {
-      setStatus('No success stories yet. Be the first to share!');
-    }
+        // Status display
+        const statusEl = document.getElementById('status');
+        function setStatus(msg, isError=false){ statusEl.textContent = msg; statusEl.style.color = isError ? '#b91c1c' : '#065f46'; }
 
-  } catch(err){
-    console.error(err);
-    setStatus('Could not load reviews.', true);
-  }
-}
+        // Convert file to Base64
+        function fileToDataURL(file){
+            return new Promise((resolve, reject)=>{
+                if(!file) return resolve(null);
+                const reader = new FileReader();
+                reader.onload = ()=> resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
 
-// Escape HTML
-function escapeHtml(s){ if(!s) return ''; return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
+        // Submit form
+        document.getElementById('reviewForm').addEventListener('submit', async (ev)=>{
+            ev.preventDefault();
+            setStatus('Preparing your review...');
 
-// Initial load
-loadReviews();
-</script>
+            const name = document.getElementById('name').value.trim();
+            const country = document.getElementById('country').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const files = document.getElementById('photos').files;
+            const imagesData = await Promise.all([...files].map(f => fileToDataURL(f)));
+            const payload = { name, country, message, images: imagesData };
+
+            try{
+                setStatus('Uploading — please wait...');
+                await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                setStatus('✅ Thanks! Your review was submitted for approval.');
+                document.getElementById('reviewForm').reset();
+                loadReviews();
+            } catch(err){
+                console.error(err);
+                setStatus('❌ Failed to submit. Please try again.', true);
+            }
+        });
+
+        // Load approved reviews
+        async function loadReviews(){
+            const grid = document.getElementById('reviewsGrid');
+            grid.innerHTML = '';
+            setStatus('Loading reviews...');
+            try{
+                const res = await fetch(API_ENDPOINT + '?action=getReviews');
+                const data = await res.json();
+
+                if(Array.isArray(data.reviews) && data.reviews.length){
+                    setStatus('');
+                    data.reviews.forEach((r,i)=>{
+                        const div = document.createElement('div');
+                        div.className = 'review-card bg-white/90 rounded-3xl p-4 shadow-lg card-enter border border-gray-100';
+
+                        // Parse images
+                        let images = [];
+                        try { images = Array.isArray(r.image) ? r.image : JSON.parse(r.image); } 
+                        catch(e){ if(r.image) images = [r.image]; }
+
+                        // Slider HTML
+                        let sliderHtml = '';
+                        if(images.length){
+                            const slides = images.map((img, idx)=>{
+                                let slideContent = '';
+                                if(img.includes('drive.google.com')){
+                                    const fileIdMatch = img.match(/[-\w]{25,}/);
+                                    const fileId = fileIdMatch ? fileIdMatch[0] : null;
+                                    if(fileId){
+                                        slideContent = `<iframe src="https://drive.google.com/file/d/${fileId}/preview" class="w-full h-48 rounded-lg" frameborder="0" allowfullscreen></iframe>`;
+                                    } else {
+                                        slideContent = `<img src="https://via.placeholder.com/150" class="w-full h-48 object-cover rounded-lg"/>`;
+                                    }
+                                } else {
+                                    slideContent = `<img src="${img}" onerror="this.src='https://via.placeholder.com/150'" class="w-full h-48 object-cover rounded-lg"/>`;
+                                }
+                                return `<div class="slide ${idx===0?'active':''} relative mb-2">${slideContent}</div>`;
+                            }).join('');
+
+                            sliderHtml = `
+                                <div class="slider relative">
+                                    ${slides}
+                                    ${images.length>1 ? `<button class="prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/60 rounded-full px-2">‹</button>
+                                    <button class="next absolute right-2 top-1/2 -translate-y-1/2 bg-white/60 rounded-full px-2">›</button>` : ''}
+                                </div>`;
+                        } else {
+                            sliderHtml = `<div class="h-48 rounded-lg mb-2 flex items-center justify-center bg-gray-100 text-gray-400">No Image Shared</div>`;
+                        }
+
+                        div.innerHTML = `
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200 shadow-sm">
+                                    <i class="fas fa-user-circle text-6xl text-gray-400"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-lg text-[--navy]">${escapeHtml(r.name)}</div>
+                                    <div class="text-sm text-gray-500">${escapeHtml(r.country)} • ${escapeHtml(r.date)}</div>
+                                </div>
+                            </div>
+                            ${sliderHtml}
+                            <p class="text-gray-700 text-sm mt-3">${escapeHtml(r.message)}</p>
+                        `;
+
+                        grid.appendChild(div);
+                        setTimeout(()=>div.classList.add('show'), 50*i + 50);
+
+                        // Slider functionality
+                        if(images.length>1){
+                            const slider = div.querySelector('.slider');
+                            const slideEls = slider.querySelectorAll('.slide');
+                            let current = 0;
+                            const prevBtn = slider.querySelector('.prev');
+                            const nextBtn = slider.querySelector('.next');
+                            const showSlide = idx=>{ slideEls.forEach((s,i)=> s.style.display = (i===idx?'block':'none')); };
+                            showSlide(current);
+                            if(prevBtn && nextBtn){
+                                prevBtn.addEventListener('click', ()=>{ current = (current-1+slideEls.length)%slideEls.length; showSlide(current); });
+                                nextBtn.addEventListener('click', ()=>{ current = (current+1)%slideEls.length; showSlide(current); });
+                            }
+                        }
+
+                    });
+
+                    // Modal click for full-size images
+                    document.querySelectorAll('.slide img').forEach(img=>{
+                        img.addEventListener('click', e=>{
+                            // Prevent click if inside iframe (for Drive embeds)
+                            if (e.target.closest('iframe')) return;
+                            
+                            const src = e.target.src;
+                            const modal = document.createElement('div');
+                            modal.className = 'fixed inset-0 bg-black/80 flex items-center justify-center z-50 cursor-pointer';
+                            modal.innerHTML = `<img src="${src}" class="max-h-[90%] max-w-[90%] object-contain"/>`;
+                            modal.addEventListener('click', ()=>modal.remove());
+                            document.body.appendChild(modal);
+                        });
+                    });
+
+                } else {
+                    setStatus('No success stories yet. Be the first to share!');
+                }
+
+            } catch(err){
+                console.error(err);
+                setStatus('Could not load reviews.', true);
+            }
+        }
+
+        // Escape HTML
+        function escapeHtml(s){ if(!s) return ''; return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
+
+        // Initial load
+        loadReviews();
+    </script>
 </body>
 </html>
