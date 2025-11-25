@@ -185,7 +185,19 @@
     .font-playfair{font-family:'Playfair Display',serif}
 
     /* Hero cinematic overlay */
-    .hero-bg{background-image:linear-gradient(180deg, rgba(7,32,58,0.50) 0%, rgba(7,32,58,0.45) 40%, rgba(7,32,58,0.55) 100%), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=5b8b7f8b1b4a'); background-size:cover; background-position:center;}
+    /* Hero cinematic overlay */
+.hero-bg {
+  background-image: linear-gradient(
+      180deg,
+      rgba(7, 32, 58, 0.50) 0%,
+      rgba(7, 32, 58, 0.45) 40%,
+      rgba(7, 32, 58, 0.55) 100%
+    ),
+    url('image/packagebgimage.png');
+  background-size: cover;
+  background-position: center;
+}
+
 
     /* Premium CTAs */
     .btn-gold{background:linear-gradient(90deg,var(--gold),#f3d27a); color:var(--navy); font-weight:700;}
@@ -274,6 +286,20 @@
       transition: color 0.3s;
     }
   </style>
+
+    <style>
+  /* Add safe top padding below navbar so the logo never overlaps hero text */
+  .hero-safe {
+    padding-top: 10px; /* adjust based on logo size */
+  }
+
+  @media (min-width: 1024px) {
+    .hero-safe {
+      padding-top: 45px;
+    }
+  }
+</style>
+
 </head>
 <body class="antialiased">
 
@@ -317,6 +343,9 @@
     <!-- Mobile Menu -->
 <div id="mobileMenu" class="hidden lg:hidden border-t border-gray-100 bg-white shadow-md">
   <div class="px-6 py-4 space-y-3 flex flex-col">
+    <br>
+    <br>
+    <br>
     <!-- <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a> -->
     <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a>
     <a href="/templates/Blog.html" class="block text-slate-800 hover:underline text-base font-medium">News</a>
@@ -336,7 +365,8 @@
   </header>
 
   <!-- HERO -->
-  <section id="home" class="hero-bg min-h-[72vh] lg:min-h-[86vh] flex items-center">
+  <section id="home" class="hero-bg hero-safe min-h-[72vh] lg:min-h-[86vh] flex items-center">
+
     <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
 
@@ -369,10 +399,10 @@
 
         <div class="hidden lg:block relative">
           <div class="rounded-3xl overflow-hidden soft-shadow">
-            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=9c6a4d2c2c4f" alt="Luxury travel" class="w-full h-[520px] object-cover" />
+            <img src="./image/Azerbaijan.jpeg" alt="Luxury travel" class="w-full h-[520px] object-cover" />
             <div class="absolute bottom-6 left-6 bg-white/90 p-4 rounded-xl border shadow-md">
               <div class="text-sm font-semibold">Featured Package</div>
-              <div class="text-xs text-slate-600">Maldives — 5 Nights, Overwater Villa</div>
+              <div class="text-xs text-slate-600">Azerbaijan — 6 Nights, Baku City Escape</div>
             </div>
           </div>
         </div>
@@ -398,7 +428,7 @@
 
         <!-- Card 1 -->
         <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop"
+            <img src="image/International & Domestic Tours.png"
                 alt="International Tours"
                 class="w-full h-56 object-cover" />
             <div class="p-6">
@@ -414,7 +444,7 @@
 
         <!-- Card 2 -->
         <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
-            <img src="https://images.unsplash.com/photo-1500048993953-d23a436266cf?q=80&w=1200&auto=format&fit=crop"
+            <img src="image/Customer Travel Package.png"
                 alt="Custom Travel Packages"
                 class="w-full h-56 object-cover" />
             <div class="p-6">
@@ -430,7 +460,7 @@
 
         <!-- Card 3 -->
         <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
-            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop"
+            <img src="image/Visa & Flight Assistance.png"
                 alt="Visa & Flight Assistance"
                 class="w-full h-56 object-cover" />
             <div class="p-6">
@@ -446,7 +476,7 @@
 
         <!-- Card 4 -->
         <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
-            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop"
+            <img src="image/Corporate & Group tours.png"
                 alt="Group & Corporate Travel"
                 class="w-full h-56 object-cover" />
             <div class="p-6">
@@ -462,7 +492,7 @@
 
         <!-- Card 5 -->
         <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
-            <img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=1200&auto=format&fit=crop"
+            <img src="image/Honeymoon & Luxuryyy.jpg"
                 alt="Luxury Tours"
                 class="w-full h-56 object-cover" />
             <div class="p-6">
@@ -478,7 +508,7 @@
 
         <!-- Card 6 -->
         <article class="rounded-2xl overflow-hidden soft-shadow bg-white">
-            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop"
+            <img src="image/Adventure & Wildlife.png"
                 alt="Adventure & Wildlife"
                 class="w-full h-56 object-cover" />
             <div class="p-6">
@@ -553,7 +583,7 @@
 
       <!-- USA / Canada -->
       <article class="rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition">
-        <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=1200&auto=format&fit=crop"
+        <img src="image/USA & Canada Visas.png"
              alt="USA Canada Visa"
              class="w-full h-56 object-cover" />
         <div class="p-6 text-center">
@@ -567,7 +597,7 @@
 
       <!-- Schengen -->
       <article class="rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition">
-        <img src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?q=80&w=1200&auto=format&fit=crop"
+        <img src="image/Schengen Visas.png"
              alt="Schengen Visa"
              class="w-full h-56 object-cover" />
         <div class="p-6 text-center">
@@ -581,7 +611,7 @@
 
       <!-- Corporate Work Permits -->
       <article class="rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition">
-        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop"
+        <img src="image/work permit.png"
              alt="Corporate Work Permit"
              class="w-full h-56 object-cover" />
         <div class="p-6 text-center">
@@ -1106,7 +1136,7 @@ contactForm.addEventListener('submit', async (e) => {
     </footer>
 
     <!-- Floating WhatsApp -->
-    <a href="https://wa.me/919321892924?text=Hello%20ASTours%20International%20Team%2C%20I%20would%20like%20to%20know%20more%20about%20your%20packages." 
+    <a href="https://www.whatsapp.com/channel/0029VbAT0oPBKfi7XQuPnO2L" 
        class="whatsapp-float w-18 h-18 rounded-full flex items-center justify-center text-white text-5xl hover:scale-110 transition duration-300" 
        target="_blank">
         <i class="fab fa-whatsapp"></i>

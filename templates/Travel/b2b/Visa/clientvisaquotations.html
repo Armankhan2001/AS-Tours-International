@@ -9,7 +9,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AsToursInternational | B2B Visa Rate Sheet</title>
+    <title>Limited Time Offer | AsToursInternational B2B</title>
     <link rel="icon" type="image/png" href="../../../../image/astourlogo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -144,6 +144,50 @@
             text-decoration: none; color: white !important;
         }
         .Checklists-ribbon i { font-size: 16px; }
+
+        /* Advertising / Offer Banner Styles */
+        .offer-banner {
+            background: linear-gradient(135deg, #07203a 0%, #1e3c72 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: -20px; /* Overlap with container slightly */
+            padding-bottom: 60px;
+        }
+        .offer-badge {
+            background-color: #ef4444; /* Red */
+            color: white;
+            padding: 5px 15px;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            animation: pulse 2s infinite;
+        }
+        .offer-highlight {
+            color: #ffd700;
+            font-weight: 700;
+        }
+        .discount-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px 30px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
     </style>
 </head>
 <body>
@@ -174,7 +218,7 @@
             <!-- <a href="#reviews" class="hover:underline">Carrier</a> -->
             <a href="../../../contact.html" class="hover:underline">Contact</a>
 
-            <a href="../b2b.html" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm border border-transparent btn-gold">Partner with Us</a>
+            <a href="../../b2b/Visa/b2b.html" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm border border-transparent btn-gold">Partner with Us</a>
             </nav>
 
             <div class="lg:hidden">
@@ -207,10 +251,29 @@
     </div>
     </div>
 
-    <div class="container py-4">
+    <!-- ADVERTISING HERO SECTION -->
+    <div class="offer-banner">
+        <div class="container mx-auto">
+            <div class="offer-badge">Limited Time Offer</div>
+            <h1 class="text-4xl md:text-5xl font-playfair font-bold mb-3 text-white">
+                Exclusive <span class="offer-highlight">Global Visa</span> Pricing
+            </h1>
+            <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
+                Join our premium network today and unlock unbeatable rates for all global visa services.
+            </p>
+            
+            <div class="discount-box">
+                <div class="text-sm uppercase tracking-wider text-gray-300">Service Charges Dropped To</div>
+                <div class="text-4xl font-bold text-white mt-1">
+                    70% <span class="text-lg font-normal opacity-80">of Standard Rates</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4 relative z-10">
         <br>
-        <Br></Br>
-        <h2 class="text-center mb-4">Your All Visa Needs Details Below !</h2>
+        <h2 class="text-center mb-4 mt-2">Explore Your Special Rates Below</h2>
 
         <!-- Navigation Tabs -->
         <ul class="nav nav-tabs justify-content-center mb-4" id="sheetTabs">
@@ -221,7 +284,7 @@
 
         <!-- Search -->
         <div class="search-box mb-3">
-            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country...">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country for special rates...">
         </div>
 
         <!-- Cards -->
@@ -276,10 +339,31 @@ function renderCards(data, sheetKey) {
         const card = document.createElement("div");
         card.className = "col-md-4 mb-4";
 
+        // --- CALCULATE B2B RATE (70% of Service Charge) ---
+        let rawServiceCharge = row["Service Charge"];
+        let displayServiceCharge = rawServiceCharge || "N/A";
+
+        if (rawServiceCharge) {
+            // Find numeric parts (handles commas like 1,000)
+            let match = rawServiceCharge.toString().match(/[\d,]+/); 
+            if (match) {
+                let numberStr = match[0].replace(/,/g, ''); // remove commas to parse
+                let originalValue = parseFloat(numberStr);
+                
+                if (!isNaN(originalValue)) {
+                    // Calculate 70%
+                    let discountedValue = Math.round(originalValue * 0.90);
+                    // Replace the found number in the original string (keeps currency symbols)
+                    displayServiceCharge = rawServiceCharge.toString().replace(match[0], discountedValue);
+                }
+            }
+        }
+        // --------------------------------------------------
+
         let detailsHTML = `
             <p class="info-line"><i class="fa-solid fa-coins"></i><strong>Visa Fees:</strong> ${row["Visa Fees"] || "N/A"}</p>
             <p class="info-line"><i class="fa-solid fa-shield-halved"></i><strong>Insurance:</strong> ${row["Insurance"] || "N/A"}</p>
-            <p class="info-line"><i class="fa-solid fa-file-invoice"></i><strong>Service Charge:</strong> ${row["Service Charge"] || "N/A"}</p>
+            <p class="info-line"><i class="fa-solid fa-file-invoice text-success"></i><strong>Service Charge:</strong> <span class="fw-bold text-success">${displayServiceCharge}</span> <span class="badge bg-warning text-dark ms-1" style="font-size: 0.7em">OFFER</span></p>
             <p class="info-line"><i class="fa-solid fa-clock"></i><strong>Processing Time:</strong> ${row["Processing Time"] || "N/A"}</p>
         `;
 
@@ -305,7 +389,7 @@ function renderCards(data, sheetKey) {
                     ${row["Countries"]}
                 </h5>
                 ${detailsHTML}
-                <a href="https://wa.me/918850102255" target="_blank" class="btn btn-sm btn-success btn-custom"><i class="fa-brands fa-whatsapp"></i> Apply Now</a>
+                <a href="https://wa.me/918850102255" target="_blank" class="btn btn-sm btn-success btn-custom w-100 mt-2"><i class="fa-brands fa-whatsapp"></i> Claim Offer Now</a>
             </div>
         `;
         container.appendChild(card);
