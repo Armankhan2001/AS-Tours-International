@@ -54,10 +54,10 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.15);
         }
 
-        /* Logo badge style */
+        /* Logo badge style (made slightly smaller for mobile header space) */
         .logo-badge {
-            height: 140px;
-            width: 140px;
+            height: 80px; /* Reduced height */
+            width: 80px; /* Reduced width */
             background-color: #ffd700;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             display: flex;
@@ -68,6 +68,14 @@
             border-bottom-left-radius: 8px;
             overflow: hidden;
         }
+        /* Adjusted logo size for larger screens to original 140px */
+        @media (min-width: 1024px) {
+            .logo-badge {
+                height: 140px;
+                width: 140px;
+            }
+        }
+
         .logo-badge img {
             width: 90%;
             height: auto;
@@ -82,9 +90,15 @@
             transition: color 0.3s;
         }
 
-        /* Content Padding for Fixed Header */
+        /* Content Padding for Fixed Header (Adjusted for smaller mobile logo) */
         .content-padding {
-            padding-top: 100px; /* Adjust based on navbar height */
+            padding-top: 100px; /* Base for fixed header */
+        }
+        /* Increased padding for large screens to account for the larger logo badge */
+        @media (min-width: 1024px) {
+            .content-padding {
+                padding-top: 160px; /* Adjust for taller logo badge on large screens */
+            }
         }
 
         /* --- Card Styles --- */
@@ -136,10 +150,13 @@
             background: #1a3c5d;
         }
 
-        /* --- Tabs --- */
+        /* --- Tabs (Adjusted for better mobile overflow) --- */
         .nav-tabs-custom {
             display: flex;
-            justify-content: center;
+            justify-content: start; /* Changed from center to start for mobile scroll */
+            overflow-x: auto; /* Allows horizontal scrolling on small screens */
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap; /* Ensures buttons stay on one line */
             margin-bottom: 1.5rem;
             border-bottom: 2px solid #e0e0e0;
         }
@@ -152,6 +169,7 @@
             text-decoration: none;
             background: none;
             border: none;
+            flex-shrink: 0; /* Prevents buttons from shrinking */
         }
         .nav-tabs-custom button.active, .nav-tabs-custom a.active {
             color: var(--gold);
@@ -159,6 +177,12 @@
         }
         .nav-tabs-custom button:hover, .nav-tabs-custom a:hover {
             color: var(--gold);
+        }
+        @media (min-width: 768px) {
+             .nav-tabs-custom {
+                justify-content: center; /* Center on larger screens */
+                overflow-x: hidden;
+            }
         }
 
         /* --- Search --- */
@@ -182,13 +206,15 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            text-align: center; /* Center text for all devices */
         }
 
         #passwordOverlay input {
             padding: 12px;
             border-radius: 8px;
             border: none;
-            width: 280px;
+            width: 80%; /* Adjusted for better mobile fit */
+            max-width: 350px; /* Added max-width for desktop look */
             margin-bottom: 15px;
             font-size: 16px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -219,7 +245,7 @@
         .Checklists-ribbon {
             position: absolute;
             top: 10px;
-            right: 10px; /* Adjusted position to be inside the card */
+            right: 10px;
             background: #28a745;
             color: white !important;
             padding: 6px 10px;
@@ -230,6 +256,13 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
             transition: background 0.3s;
             z-index: 10;
+            /* Adjust font size for smaller screens if needed */
+            font-size: 12px; 
+        }
+        @media (min-width: 640px) {
+            .Checklists-ribbon {
+                font-size: 14px;
+            }
         }
         .Checklists-ribbon:hover {
             background: #218838;
@@ -243,15 +276,15 @@
             <div class="flex items-center justify-between h-16">
 
                 <div class="absolute top-0 left-4 z-50">
-                    <a href="../index.html" class="logo-badge">
+                    <a href="../../index.html" class="logo-badge">
                         <img src="../../image/astourlogo.png" alt="AS Tours International">
                     </a>
                 </div>
 
-                <div class="w-36 flex-shrink-0"></div>
+                <div class="w-24 lg:w-40 flex-shrink-0"></div>
 
                 <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
-                    <a href="#Home" class="nav-link-custom block hover:text-[var(--gold)]">Home</a>
+                    <a href="#" class="nav-link-custom block hover:text-[var(--gold)]">Home</a>
                     <a href="../../templates/Travel/b2b/Visa/clientvisaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">Client Visa Rate</a>
                     <a href="../../templates/Travel/b2b/Visa/visaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">B2B Visa Rates</a>
                     <a href="../../templates/Travel/b2b/Visa/b2bvisaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">B2B Offer rate</a>
@@ -288,7 +321,7 @@
     </div>
 
     <div class="container mx-auto px-4 py-4 content-padding">
-        <h2 class="text-center mb-6 text-3xl">🌍 Visa Data Admin Panel</h2>
+        <h2 class="text-center mb-6 text-2xl sm:text-3xl">🌍 Visa Data Admin Panel</h2>
 
         <div class="nav-tabs-custom" id="sheetTabs">
             <button class="active" data-sheet="main">🌐 Main Visa Data</button>
@@ -306,7 +339,7 @@
             <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country...">
         </div>
 
-        <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="cardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
     </div>
 
     <script>
@@ -487,7 +520,8 @@
 
             const installBtn = document.createElement('button');
             installBtn.textContent = "📲 Install Admin App";
-            installBtn.className = "fixed bottom-5 left-3 px-3 py-2 bg-[var(--navy)] text-white rounded-lg text-sm z-1000 cursor-pointer";
+            // Ensure the install button is visible on mobile and not blocked by the password overlay
+            installBtn.className = "fixed bottom-5 left-3 px-3 py-2 bg-[var(--navy)] text-white rounded-lg text-sm z-4000 cursor-pointer"; 
             
             document.body.appendChild(installBtn);
 
@@ -507,7 +541,7 @@
         if(isIos && !isInStandaloneMode){
             const iosBtn = document.createElement('button');
             iosBtn.textContent = "📲 Install Admin App";
-            iosBtn.className = "fixed bottom-5 left-3 px-3 py-2 bg-[var(--navy)] text-white rounded-lg text-sm z-1000 cursor-pointer";
+            iosBtn.className = "fixed bottom-5 left-3 px-3 py-2 bg-[var(--navy)] text-white rounded-lg text-sm z-4000 cursor-pointer";
 
             iosBtn.addEventListener('click', () => {
                 alert("To install this app on your iPhone, tap the Share button in Safari and select 'Add to Home Screen'");
