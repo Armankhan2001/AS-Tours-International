@@ -1,79 +1,334 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2575fc">
+    <meta name="theme-color" content="#07203a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="image/astourlogo.png">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AsToursInternational | B2B Visa Rate Sheet</title>
     <link rel="icon" type="image/png" href="../image/astourlogo.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
     <style>
-        body { background: linear-gradient(135deg, #ece9e6, #ffffff); font-family: 'Segoe UI', sans-serif; }
-        h2 { font-weight: 700; letter-spacing: 1px; color: #2c3e50; }
+        :root {
+            --navy: #07203a;
+            --gold: #d4af37;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f1f5f9; /* Light background */
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* General Heading */
+        h2 {
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--navy);
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Premium CTA button */
+        .btn-gold {
+            background: linear-gradient(90deg, var(--gold), #f3d27a);
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Logo badge style */
+        .logo-badge {
+            height: 140px;
+            width: 140px;
+            background-color: #ffd700;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-bottom-right-radius: 8px;
+            border-bottom-left-radius: 8px;
+            overflow: hidden;
+        }
+        .logo-badge img {
+            width: 90%;
+            height: auto;
+            padding: 4px;
+            object-fit: contain;
+        }
+
+        /* Navbar links font size */
+        .nav-link-custom {
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        /* Content Padding for Fixed Header */
+        .content-padding {
+            padding-top: 100px; /* Adjust based on navbar height */
+        }
+
+        /* --- Card Styles --- */
         .card {
             border-radius: 18px;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            background: white;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
+            cursor: pointer;
         }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
-        .country-name { font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; color: #34495e; }
-        .country-name img { width: 35px; height: 24px; border-radius: 6px; object-fit: cover; margin-right: 10px; border: 1px solid #ddd; }
-        .info-line { font-size: 0.95rem; color: #555; margin-bottom: 6px; }
-        .info-line i { color: #007bff; margin-right: 6px; }
-        .btn-custom { border-radius: 10px; font-weight: 500; padding: 6px 12px; }
-        .search-box input { border-radius: 12px; border: 2px solid #e0e0e0; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .nav-tabs .nav-link { border-radius: 10px 10px 0 0; font-weight: 600; color: #495057; }
-        .nav-tabs .nav-link.active { background: #007bff; color: white; }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+        }
+        .country-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+        .country-name img {
+            width: 35px;
+            height: 24px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+        }
+        .info-line {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .info-line i {
+            color: var(--gold);
+            margin-right: 6px;
+        }
+        .btn-custom {
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 6px 12px;
+            background: #28a745; /* Success Green */
+            color: white;
+            transition: background 0.3s;
+        }
+        .btn-custom:hover {
+            background: #218838;
+        }
+
+        /* --- Tabs --- */
+        .nav-tabs-custom {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .nav-tabs-custom button, .nav-tabs-custom a {
+            padding: 10px 15px;
+            font-weight: 600;
+            color: var(--navy);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            text-decoration: none;
+            background: none;
+            border: none;
+        }
+        .nav-tabs-custom button.active, .nav-tabs-custom a.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+        .nav-tabs-custom button:hover, .nav-tabs-custom a:hover {
+            color: var(--gold);
+        }
+
+        /* --- Search --- */
+        .search-box input {
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            padding: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            width: 100%;
+        }
+
+        /* --- Password overlay (Tailwind adapted) --- */
         #passwordOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: black; z-index: 9999;
-            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 32, 58, 0.95); /* Dark Navy transparent */
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
-        #passwordOverlay input { padding: 12px; border-radius: 5px; border: none; width: 250px; margin-bottom: 15px; font-size: 16px; }
-        #passwordOverlay button { padding: 10px 20px; background: #ffa726; border: none; color: #fff; font-size: 16px; border-radius: 5px; cursor: pointer; }
-        #passwordOverlay p { color: red; margin-top: 10px; font-size: 14px; }
-        .card-clickable { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .card-clickable:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+        #passwordOverlay input {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            width: 280px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        #passwordOverlay button {
+            padding: 10px 20px;
+            background: var(--gold);
+            border: none;
+            color: var(--navy);
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #passwordOverlay button:hover {
+            background: #e3c46e;
+        }
+
+        #passwordOverlay p {
+            color: #fca5a5; /* Light Red */
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Checklists Ribbon */
+        .Checklists-ribbon {
+            position: absolute;
+            top: 10px;
+            right: 10px; 
+            background: var(--navy);
+            color: white !important;
+            padding: 6px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: background 0.3s;
+            z-index: 10;
+        }
+        .Checklists-ribbon:hover {
+            background: #1a3c5d;
+        }
+        
+        /* B2B Discount Highlight */
+        .discount-highlight {
+            font-weight: 700;
+            color: #10b981; /* Tailwind emerald-500 */
+            margin-left: 8px;
+            background-color: #ecfdf5; /* Tailwind emerald-50 */
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        /* Note Styling */
+        .fee-note {
+            font-size: 0.8rem;
+            color: #ef4444; /* Tailwind red-500 */
+            margin-top: -4px;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
     </style>
 </head>
-<body>
-    <!-- Password Prompt Overlay -->
+<body class="antialiased">
+
+    <header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+
+                <div class="absolute top-0 left-4 z-50">
+                    <a href="../../../../index.html" class="logo-badge">
+                        <img src="../../../../image/astourlogo.png" alt="AS Tours International">
+                    </a>
+                </div>
+
+                <div class="w-36 flex-shrink-0"></div>
+
+                <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
+                    <a href="#" class="nav-link-custom hover:text-[var(--gold)]">Home</a>
+                    <a href="../../../../packages/packages.html" class="nav-link-custom hover:text-[var(--gold)]">Packages</a>
+                    <a href="../../../../visa/visaservices.html" class="nav-link-custom hover:text-[var(--gold)] font-bold text-[var(--gold)]">Visa Services</a>
+                    <a href="../about.html" class="nav-link-custom hover:text-[var(--gold)]">About Us</a>
+                    <a href="../../../contact.html" class="nav-link-custom hover:text-[var(--gold)]">Contact</a>
+                    <a href="../Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold font-bold">Partner with Us</a>
+                </nav>
+
+                <div class="lg:hidden ml-auto">
+                    <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
+            <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+                <a href="#" class="nav-link-custom hover:text-[var(--gold)]">Home</a>
+                <a href="../../../../packages/packages.html" class="nav-link-custom hover:text-[var(--gold)]">Packages</a>
+                <a href="../../../../visa/visaservices.html" class="nav-link-custom hover:text-[var(--gold)] font-bold text-[var(--gold)]">Visa Services</a>
+                <a href="../about.html" class="nav-link-custom hover:text-[var(--gold)]">About Us</a>
+                <a href="../../../contact.html" class="nav-link-custom hover:text-[var(--gold)]">Contact</a>
+                <a href="../Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold font-bold">Partner with Us</a>
+            </div>
+        </div>
+    </header>
+
     <div id="passwordOverlay">
         <input type="password" id="adminPassword" placeholder="Enter Password" />
         <button onclick="checkPassword()">Unlock</button>
         <p id="errorMessage"></p>
     </div>
 
-    <div class="container py-4">
-        <h2 class="text-center mb-4">🌍 B2B Visa Rate Sheet</h2>
+    <div class="container mx-auto px-4 py-4 content-padding">
+        <h2 class="text-center mb-6 text-3xl">🤝 B2B Visa Rate Sheet</h2>
 
-        <!-- Navigation Tabs -->
-        <ul class="nav nav-tabs justify-content-center mb-4" id="sheetTabs">
-            <li class="nav-item"><button class="nav-link active" data-sheet="main">🌐 Main Visa Data</button></li>
-            <li class="nav-item"><button class="nav-link" data-sheet="schengen">🇪🇺 Schengen 29 Countries</button></li>
-            <li class="nav-item"><button class="nav-link" data-sheet="Evisa">🛂 E-visa</button></li>
-        </ul>
+        <div class="nav-tabs-custom" id="sheetTabs">
+            <button class="active" data-sheet="main">🌐 Main Visa Data</button>
+            <button data-sheet="schengen">🇪🇺 Schengen 29 Countries</button>
+            <button data-sheet="Evisa">🛂 E-visa</button>
+        </div>
 
-        <!-- Search -->
-        <div class="search-box mb-3">
+        <div class="search-box mb-6">
             <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country...">
         </div>
 
-        <!-- Cards -->
-        <div id="cardsContainer" class="row g-4 mt-3"></div>
+        <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
 <script>
+// TOGGLE MOBILE MENU
+document.getElementById('mobileBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+});
+
 const SHEET_ID = "1F9RGurjNDCxjw0ydzQPtBuoueLRrNH99uK-fhu3BAQs";
-const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ";
+const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ"; // Replace with your key
 
 const sheets = {
     main: "VISA FEES & LINKS",
@@ -81,28 +336,42 @@ const sheets = {
     Evisa: "E-visas",
 };
 
+// Map sheet keys to user-friendly names for the WhatsApp message
+const sheetNames = {
+    main: "Main Visa Data",
+    schengen: "Schengen Visa",
+    Evisa: "E-Visa",
+};
+
 let visaData = [];
 let activeSheet = "main";
 
 async function fetchVisaData(sheetKey) {
     const range = sheets[sheetKey];
+    const container = document.getElementById("cardsContainer");
+    container.innerHTML = `<p class="text-center text-gray-500 col-span-full"><i class="fas fa-spinner fa-spin mr-2"></i> Loading data...</p>`;
+    
     try {
         const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`);
         const data = await res.json();
+        
         if (!data.values || data.values.length === 0) {
-            document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-muted">No data found</p>`;
+            container.innerHTML = `<p class="text-center text-muted col-span-full">No data found</p>`;
+            visaData = [];
             return;
         }
+        
         const headers = data.values[0];
         visaData = data.values.slice(1).map(row => {
             const obj = {};
             headers.forEach((header, i) => obj[header] = row[i] || "");
             return obj;
         });
+        
         renderCards(visaData, sheetKey);
     } catch (error) {
         console.error("Error fetching data:", error);
-        document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-danger">Error loading data</p>`;
+        container.innerHTML = `<p class="text-center text-red-500 col-span-full">Error loading data.</p>`;
     }
 }
 
@@ -110,28 +379,45 @@ function renderCards(data, sheetKey) {
     const container = document.getElementById("cardsContainer");
     container.innerHTML = "";
     if (!data || data.length === 0) {
-        container.innerHTML = `<p class="text-center text-muted">No data found</p>`;
+        container.innerHTML = `<p class="text-center text-muted col-span-full">No data found</p>`;
         return;
     }
 
     data.forEach(row => {
         if (!row["Countries"]) return;
+        
+        const countryName = row["Countries"];
+        const currentSheetName = sheetNames[sheetKey];
         const card = document.createElement("div");
-        card.className = "col-md-4 mb-4";
+        card.className = "col-span-1";
+
+        // Generate WhatsApp message with country and sheet name
+        const whatsappMessage = encodeURIComponent(`Hello, I would like to inquire about the ${currentSheetName} for ${countryName}. Please share the detailed B2B requirements and rates.`);
+        const whatsappLink = `https://wa.me/918850102255?text=${whatsappMessage}`;
+
 
         // Calculate Service Charge 50% discount
         let serviceCharge = row["Service Charge"] || "N/A";
-        let discountedCharge = (serviceCharge !== "N/A" && !isNaN(serviceCharge)) ? (parseFloat(serviceCharge)/2).toFixed(2) : "N/A";
+        let discountedCharge = (serviceCharge !== "N/A" && !isNaN(parseFloat(serviceCharge)) && parseFloat(serviceCharge) > 0) 
+            ? (parseFloat(serviceCharge) / 2).toFixed(2) 
+            : "N/A";
 
         let detailsHTML = `
             <p class="info-line"><i class="fa-solid fa-coins"></i><strong>Visa Fees:</strong> ${row["Visa Fees"] || "N/A"}</p>
+            <p class="fee-note">⚠️ Visa Fees are subject to slight changes (price hike).</p>
             <p class="info-line"><i class="fa-solid fa-shield-halved"></i><strong>Insurance:</strong> ${row["Insurance"] || "N/A"}</p>
-            <p class="info-line"><i class="fa-solid fa-file-invoice"></i><strong>Service Charge:</strong> ${serviceCharge} <span class="text-success">(50% Discount: ${discountedCharge})</span></p>
+            <p class="info-line text-base font-medium text-[var(--navy)]">
+                <i class="fa-solid fa-file-invoice" style="color: var(--gold);"></i>
+                <strong>Service Charge:</strong> 
+                <span class="line-through text-gray-500">${serviceCharge}</span> 
+                <span class="discount-highlight">(50% Off: ${discountedCharge})</span>
+            </p>
             <p class="info-line"><i class="fa-solid fa-clock"></i><strong>Processing Time:</strong> ${row["Processing Time"] || "N/A"}</p>
         `;
 
-        if (sheetKey === "main" && row["Docs Scanning & Uploading Charges"])
-            detailsHTML += `<p class="info-line"><i class="fa-solid fa-upload"></i><strong>Docs Scanning & Uploading Charges:</strong> ${row["Docs Scanning & Uploading Charges"]}</p>`;
+        if (sheetKey === "main") {
+            if (row["Docs Scanning & Uploading Charges"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-upload"></i><strong>Docs Scanning & Uploading Charges:</strong> ${row["Docs Scanning & Uploading Charges"]}</p>`;
+        }
 
         if (sheetKey === "schengen") {
             if (row["Vfs Fees"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user-tie"></i><strong>Vfs Fees:</strong> ${row["Vfs Fees"]}</p>`;
@@ -140,21 +426,21 @@ function renderCards(data, sheetKey) {
             if (row["Special Note"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-note-sticky"></i><strong>Special Note:</strong> ${row["Special Note"]}</p>`;
         }
 
-        // Evisa: hide Sales Manager, Sales Manager Mail Id, 3rd Party Name
+        // Evisa: Filtered data display - Removed "3rd Party Mail Id" field
         if (sheetKey === "Evisa") {
             if (row["Required Docs"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-file-alt"></i><strong>Required Docs:</strong> ${row["Required Docs"]}</p>`;
-            // if (row["3rd Party Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope-circle-check"></i><strong>3rd Party Mail Id:</strong> ${row["3rd Party Mail Id"]}</p>`;
+            // The 3rd Party Mail Id field is intentionally excluded here
         }
 
         card.innerHTML = `
-            <div class="card h-100 p-3 position-relative card-clickable">
+            <div class="card h-full p-4 relative">
                 ${row["Checklists"] ? `<a href="${row["Checklists"]}" target="_blank" class="Checklists-ribbon" title="Visa Checklists"><i class="fa-solid fa-clipboard-check"></i></a>` : ""}
                 <h5 class="country-name">
                     ${row["Code"] ? `<img src="https://flagcdn.com/w40/${row["Code"].toLowerCase()}.png" alt="flag">` : ""}
-                    ${row["Countries"]}
+                    ${countryName}
                 </h5>
                 ${detailsHTML}
-                <a href="https://wa.me/918850102255" target="_blank" class="btn btn-sm btn-success btn-custom"><i class="fa-brands fa-whatsapp"></i> Apply Now</a>
+                <a href="${whatsappLink}" target="_blank" class="btn btn-sm btn-custom mt-3 inline-block"><i class="fa-brands fa-whatsapp"></i> Apply Now</a>
             </div>
         `;
         container.appendChild(card);
@@ -188,22 +474,20 @@ const encoded = btoa('b2b@ceo');
 function checkPassword() {
     const input = document.getElementById("adminPassword").value;
     const correctPassword = atob(encoded);
-    if (input === correctPassword) document.getElementById("passwordOverlay").style.display = "none";
-    else document.getElementById("errorMessage").textContent = "Incorrect password. Try again.";
+    if (input === correctPassword) {
+        document.getElementById("passwordOverlay").style.display = "none";
+    } else {
+        document.getElementById("errorMessage").textContent = "Incorrect password. Try again.";
+    }
 }
-</script>
 
-<style>
-.Checklists-ribbon {
-    position: absolute; top: 10px; right: -10px;
-    background: #28a745; color: white !important;
-    padding: 6px 10px; font-size: 14px; font-weight: bold;
-    border-radius: 0 6px 6px 0; text-decoration: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    transition: background 0.3s;
-}
-.Checklists-ribbon:hover { background: #218838; text-decoration: none; color: white !important; }
-.Checklists-ribbon i { font-size: 16px; }
-</style>
+// Add Enter Key event listener to the password input
+document.getElementById("adminPassword").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); 
+        checkPassword();
+    }
+});
+</script>
 </body>
 </html>

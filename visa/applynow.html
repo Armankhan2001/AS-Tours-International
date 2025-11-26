@@ -1,190 +1,328 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <title>Apply for Visa | AsTours International</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    header { background: linear-gradient(45deg, #FF8C00, #FF4500); padding: 50px 20px; text-align: center; color: #fff; }
-    nav { display: flex; flex-wrap: wrap;justify-content: center; gap: 20px; padding: 15px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    nav a { text-decoration: none; color: #ff5f6d; font-weight: 600; transition: 0.3s; }
-    nav a:hover { color: #333; }
-    .subnav { background: #ffe8d1; padding: 10px 0; display: flex; justify-content: center; }
-    .subnav a { color: #333; font-weight: 600; }
-    body { font-family: 'Poppins', sans-serif; background: #fdfdfd; margin: 0; padding: 0; }
-    a { text-decoration: none; color: inherit; }
+    <meta charset="UTF-8">
+    <title>Apply for Visa | AS Tours International</title>
+    <link rel="stylesheet" href="../image/astourlogo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --navy: #07203a;
+            --gold: #d4af37;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f9fafb;
+            color: #333;
+        }
+
+        .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* Premium CTA button */
+        .btn-gold {
+            background: linear-gradient(90deg, var(--gold), #f3d27a);
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Logo badge style */
+        .logo-badge {
+            height: 140px;
+            width: 140px;
+            background-color: #ffd700;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-bottom-right-radius: 8px; /* Original design details */
+            border-bottom-left-radius: 8px; /* Original design details */
+            overflow: hidden;
+        }
+
+        .logo-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo-badge img {
+            width: 90%;
+            height: auto;
+            padding: 4px;
+            object-fit: contain;
+        }
+
+        @media (min-width: 1024px) {
+            .logo-badge {
+                height: 160px;
+                width: 160px;
+            }
+        }
+
+        /* Navbar links font size */
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        /* --- FORM STYLES --- */
+        .form-container {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+        }
+        h2 { text-align: center; margin-bottom: 25px; color: var(--navy); font-family: 'Playfair Display', serif; font-size: 1.875rem; }
+        label { display: block; margin: 15px 0 5px; font-weight: 600; color: #4b5563; }
+        input, select, textarea {
+            width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 1rem;
+            background: #f9fafb; transition: border-color 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: none; }
+
+        /* Custom styling for the primary submit button */
+        .btn-submit {
+            display: block; width: 100%; margin-top: 25px; padding: 14px;
+            background: var(--navy);
+            color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 1.1rem;
+            cursor: pointer; transition: background 0.3s, transform 0.2s;
+        }
+        .btn-submit:hover { background: #1a3c5d; transform: translateY(-1px); }
+
+        /* Form Download Cards */
+        .form-download-card {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--gold);
+            text-align: center;
+        }
+        .btnn-download {
+            display: block; width: 100%; margin-top: 15px; padding: 10px; background: #2563eb; /* Blue for Forms */
+            color: #fff; border: none; border-radius: 30px; font-weight: 600; font-size: 1rem;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btnn-download:hover { background: #1d4ed8; }
+        .btnn-checklist {
+             background: #059669; /* Green for Checklists */
+        }
+        .btnn-checklist:hover { background: #047857; }
+        .btnn-official {
+             background: #dc2626; /* Red for Official Drive */
+        }
+        .btnn-official:hover { background: #b91c1c; }
 
 
-    /* Form */
-    .form-container {
-      max-width: 600px;
-      margin: 60px auto;
-      padding: 30px;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-    h2 { text-align: center; margin-bottom: 25px; }
-    label { display: block; margin: 15px 0 5px; font-weight: 600; }
-    input, select, textarea {
-      width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;
-    }
-    .btn {
-      display: block; width: 100%; margin-top: 20px; padding: 12px; background: #FF8C00;
-      color: #fff; border: none; border-radius: 30px; font-weight: 600; font-size: 1.1rem;
-      cursor: pointer; transition: 0.3s;
-    }
-    .btn:hover { background: #FF4500; }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 20px;
-      margin-top: 50px;
-      color: #777;
-      background: #f1f1f1;
-    }
-
-    .form-download {
-      max-width: 600px;
-      margin: 60px auto;
-      padding: 30px;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-    .btnn {
-      display: block; width: 100%; margin-top: 20px; padding: 12px; background: #5084ec;
-      color: #fff; border: none; border-radius: 30px; font-weight: 600; font-size: 1.1rem;
-      cursor: pointer; transition: 0.3s;
-    }
-    .btnn:hover { background: #FF4500; }
-
- 
-
-  </style>
+        /* Additional padding to avoid content being hidden by fixed header */
+        .content-padding {
+            padding-top: 180px; /* Adjust based on logo/header height */
+        }
+        @media (min-width: 1024px) {
+            .content-padding {
+                padding-top: 120px;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="antialiased">
 
-  <header>
-    <h1>Apply Now !</h1>
-  </header>
+    <header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="flex items-center justify-between h-16">
 
-<nav>
-  <a href="../index.html">Home</a>
-  <a href="../about.html">About</a>
-  <a href="../tours/packages.html">Packages</a>
-  <a href="visaservices.html">Visa</a>
-  <a href="../flights.html">Flights</a>
-  <a href="../hotels.html">Hotels</a>
-  <a href="../contact.html">Contact</a>
-</nav>
+                <div class="absolute top-0 left-4 z-50">
+                    <a href="../index.html" class="logo-badge">
+                        <img src="../image/astourlogo.png" alt="AS Tours International">
+                    </a>
+                </div>
 
-<!-- Visa Application Form -->
-<div class="form-container">
-  <h2>Visa Application Form</h2>
-  <form id="visaForm">
-    <label for="fullName">Full Name</label>
-    <input type="text" id="fullName" required>
+                <div class="w-36 flex-shrink-0"></div>
 
-    <label for="phone">Phone Number (with country code)</label>
-    <input type="tel" id="phone" required>
+                <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
+                    <a href="../index.html" class="nav-link hover:text-[var(--gold)]">Home</a>
+                    <a href="visaservices.html" class="nav-link hover:text-[var(--gold)] font-bold text-[var(--gold)]">Visa Services</a>
+                    <a href="../templates/contact.html" class="nav-link hover:text-[var(--gold)]">Contact</a>
+                    <a href="../templates/Travel/b2b/Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold">Partner with Us</a>
+                </nav>
 
-    <label for="visaCountry">Select Country</label>
-    <select id="visaCountry" required>
-      <option value="">-- Select the country you want to apply for --</option>
-    </select>
+                <div class="lg:hidden ml-auto">
+                    <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
 
-    <label for="visaType">Select Visa Type</label>
-    <select id="visaType" required>
-      <option value="">-- Choose Visa Type --</option>
-    </select>
+            </div>
+        </div>
 
-    <label for="message">Additional Message (Optional)</label>
-    <textarea id="message" rows="4" placeholder="Any specific requirement?"></textarea>
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
+            <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+                <a href="../index.html" class="nav-link hover:text-[var(--gold)]">Home</a>
+                <a href="visaservices.html" class="nav-link hover:text-[var(--gold)] font-bold text-[var(--gold)]">Visa Services</a>
+                <a href="../templates/contact.html" class="nav-link hover:text-[var(--gold)]">Contact</a>
+                <a href="../templates/Travel/b2b/Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold">Partner with Us</a>
+            </div>
+        </div>
+    </header>
 
-    <button type="submit" class="btn">Submit & Message on WhatsApp</button>
-  </form>
-</div>
-<div><div class="form-download"><a href="e-visa.html" id="evisaBtn">Check & Download the Visa Forms Here</a>
-<!-- Link to Visa Forms Page -->
-<p><a href="visaforms.html" class="btnn">Visa Forms</a></p></div>
-</div>
-<div><div class="form-download"><a href="e-visa.html" id="evisaBtn">Check & Download the Visa Checklists Here</a>
-<!-- Link to Visa Checklists Page -->
-<p><a href="visachecklist.html" class="btnn">Visa checklist</a></p></div>
-</div>
+    <div class="content-padding">
 
-<div><div class="form-download"><a href="e-visa.html" id="evisaBtn">Check & Download Official Visa Forms & Checklists Here</a>
-<!-- Link to Official Visa Forms & Checklists Page -->
-<p><a href="https://drive.google.com/drive/folders/1CSJlOsjhP_eUkxxaykGzIzl57rrCSZ-f?usp=sharing" class="btnn" target="_blank">Official Visa Forms & Checklists</a></p></div>
-</div>
+        <div class="bg-gradient-to-r from-[var(--navy)] to-[#1a3c5d] py-16 text-center text-white">
+            <h1 class="font-playfair text-4xl lg:text-5xl font-bold">Start Your Visa Application</h1>
+            <p class="mt-2 text-lg text-gray-300">Fill out the form below and we will contact you immediately.</p>
+        </div>
 
+        <div class="form-container">
+            <h2>Visa Application Form</h2>
+            <form id="visaForm">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" required>
 
-<!-- Footer -->
-<footer>
-  &copy; 2025 AsToursInternational | Your Trusted Visa Partner
-</footer>
+                <label for="phone">Phone Number (with country code)</label>
+                <input type="tel" id="phone" required>
 
-<script>
-  // Toggle mobile menu
-  function toggleMenu() {
-    document.getElementById('menu').classList.toggle('active');
-  }
+                <label for="visaCountry">Select Country</label>
+                <select id="visaCountry" required>
+                    <option value="">-- Select the country you want to apply for --</option>
+                </select>
 
-  const apiUrl = 'https://raw.githubusercontent.com/Armankhan2001/visaDatabase/main/visaDatabase.json';
-  const countryDropdown = document.getElementById('visaCountry');
-  const visaTypeDropdown = document.getElementById('visaType');
+                <label for="visaType">Select Visa Type</label>
+                <select id="visaType" required>
+                    <option value="">-- Choose Visa Type --</option>
+                </select>
 
-  let countries = [];
+                <label for="message">Additional Message (Optional)</label>
+                <textarea id="message" rows="4" placeholder="Any specific requirement?"></textarea>
 
-  fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      countries = data.visaDatabase;
-      countries.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.country;
-        option.textContent = item.country;
-        countryDropdown.appendChild(option);
-      });
-      handlePreselectionFromURL();
-    })
-    .catch(error => console.error('Error fetching visa data:', error));
+                <button type="submit" class="btn-submit">
+                    <i class="fab fa-whatsapp mr-2"></i> Submit & Message on WhatsApp
+                </button>
+            </form>
+        </div>
 
-  countryDropdown.addEventListener('change', function () {
-    const selectedCountry = this.value;
-    visaTypeDropdown.innerHTML = '<option value="">-- Choose Visa Type --</option>';
-    const countryData = countries.find(item => item.country === selectedCountry);
-    if (countryData) {
-      countryData.visaTypes.forEach(visa => {
-        const visaOption = document.createElement('option');
-        visaOption.value = visa.type;
-        visaOption.textContent = visa.type;
-        visaTypeDropdown.appendChild(visaOption);
-      });
-    }
-  });
+        <div class="max-w-4xl mx-auto px-4 pb-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-document.getElementById('visaForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+                <div class="form-download-card">
+                    <p class="font-bold text-gray-700 mb-2">Pre-filled Visa Forms</p>
+                    <p class="text-sm text-gray-500 mb-4">Templates to simplify your documentation.</p>
+                    <a href="visaforms.html" class="btnn-download">
+                        Download Visa Forms
+                    </a>
+                </div>
 
-  const name = document.getElementById('fullName').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const country = document.getElementById('visaCountry').value;
-  const visaType = document.getElementById('visaType').value;
-  const message = document.getElementById('message').value.trim();
+                <div class="form-download-card">
+                    <p class="font-bold text-gray-700 mb-2">Essential Visa Checklists</p>
+                    <p class="text-sm text-gray-500 mb-4">Ensure you have all necessary documents ready.</p>
+                    <a href="visachecklist.html" class="btnn-download btnn-checklist">
+                        Download Checklists
+                    </a>
+                </div>
 
-  if (!name || !phone || !country || !visaType) {
-    alert("Please fill all required fields.");
-    return;
-  }
+                <div class="form-download-card">
+                    <p class="font-bold text-gray-700 mb-2">Official Documents</p>
+                    <p class="text-sm text-gray-500 mb-4">Direct access to official application links and guides.</p>
+                    <a href="https://drive.google.com/drive/folders/1CSJlOsjhP_eUkxxaykGzIzl57rrCSZ-f?usp=sharing" class="btnn-download btnn-official" target="_blank">
+                        Official Drive Link
+                    </a>
+                </div>
+            </div>
+        </div>
 
-  const whatsappNumber = '919321892924';
+    </div>
 
-  // message string using emojis
-  const messageText = 
-`Hello AsTours International,
+    <footer class="bg-[var(--navy)] text-white py-6 mt-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm">
+                &copy; 2025 AS Tours International | Your Trusted Visa Partner | All Rights Reserved
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // TOGGLE MOBILE MENU
+        document.getElementById('mobileBtn').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+
+        const apiUrl = 'https://raw.githubusercontent.com/Armankhan2001/visaDatabase/main/visaDatabase.json';
+        const countryDropdown = document.getElementById('visaCountry');
+        const visaTypeDropdown = document.getElementById('visaType');
+
+        let countries = [];
+
+        // FETCH VISA DATA AND POPULATE COUNTRY DROPDOWN
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                countries = data.visaDatabase;
+                countries.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.country;
+                    option.textContent = item.country;
+                    countryDropdown.appendChild(option);
+                });
+                handlePreselectionFromURL();
+            })
+            .catch(error => console.error('Error fetching visa data:', error));
+
+        // POPULATE VISA TYPE DROPDOWN BASED ON COUNTRY
+        countryDropdown.addEventListener('change', function () {
+            const selectedCountry = this.value;
+            visaTypeDropdown.innerHTML = '<option value="">-- Choose Visa Type --</option>';
+            const countryData = countries.find(item => item.country === selectedCountry);
+            if (countryData) {
+                countryData.visaTypes.forEach(visa => {
+                    const visaOption = document.createElement('option');
+                    visaOption.value = visa.type;
+                    visaOption.textContent = visa.type;
+                    visaTypeDropdown.appendChild(visaOption);
+                });
+            }
+        });
+
+        // HANDLE FORM SUBMISSION AND WHATSAPP MESSAGE
+        document.getElementById('visaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const country = document.getElementById('visaCountry').value;
+            const visaType = document.getElementById('visaType').value;
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !phone || !country || !visaType) {
+                alert("Please fill all required fields.");
+                return;
+            }
+
+            const whatsappNumber = '919321892924';
+
+            // message string using emojis
+            const messageText =
+                `Hello AsTours International,
 🌍 I would like to apply for a *${visaType}* for *${country}*.
 
 📝 Applicant Details:
@@ -194,28 +332,28 @@ ${message ? '🗒️ Message: ' + message + '\n' : ''}
 
 Kindly get in touch with me.`;
 
-  // encode whole message safely
-  const encodedMessage = encodeURIComponent(messageText);
+            // encode whole message safely
+            const encodedMessage = encodeURIComponent(messageText);
 
-  // open whatsapp
-  window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
-});
+            // open whatsapp
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+        });
 
 
-
-  function handlePreselectionFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const countryParam = urlParams.get('country');
-    if (countryParam) {
-      const exists = Array.from(countryDropdown.options).some(option => option.value === countryParam);
-      if (exists) {
-        countryDropdown.value = countryParam;
-        const event = new Event('change');
-        countryDropdown.dispatchEvent(event);
-      }
-    }
-  }
-</script>
+        // HANDLE URL PARAMETER PRESELECTION
+        function handlePreselectionFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const countryParam = urlParams.get('country');
+            if (countryParam) {
+                const exists = Array.from(countryDropdown.options).some(option => option.value === countryParam);
+                if (exists) {
+                    countryDropdown.value = countryParam;
+                    const event = new Event('change');
+                    countryDropdown.dispatchEvent(event);
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>

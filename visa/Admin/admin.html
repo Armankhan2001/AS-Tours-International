@@ -1,451 +1,544 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#2575fc">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="image/astourlogo.png">
+    <meta name="theme-color" content="#07203a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="image/astourlogo.png">
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visa Data Admin Panel | AS Tours</title>
+    <link rel="icon" type="image/png" href="../image/astourlogo.png">
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visa Data Admin Panel</title>
-  <link rel="icon" type="image/png" href="../image/astourlogo.png">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    body { 
-      background: linear-gradient(135deg, #ece9e6, #ffffff); 
-      font-family: 'Segoe UI', sans-serif; 
-    }
-    h2 {
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: #2c3e50;
-    }
-    .card {
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.12);
-    }
-    .country-name {
-      font-size: 1.25rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      color: #34495e;
-    }
-    .country-name img {
-      width: 35px;
-      height: 24px;
-      border-radius: 6px;
-      object-fit: cover;
-      margin-right: 10px;
-      border: 1px solid #ddd;
-    }
-    .info-line {
-      font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 6px;
-    }
-    .info-line i {
-      color: #007bff;
-      margin-right: 6px;
-    }
-    .btn-custom {
-      border-radius: 10px;
-      font-weight: 500;
-      padding: 6px 12px;
-    }
-    .search-box input {
-      border-radius: 12px;
-      border: 2px solid #e0e0e0;
-      padding: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-    .nav-tabs .nav-link {
-      border-radius: 10px 10px 0 0;
-      font-weight: 600;
-      color: #495057;
-    }
-    .nav-tabs .nav-link.active {
-      background: #007bff;
-      color: white;
-    }
+    <script src="https://cdn.tailwindcss.com"></script>
 
-      /* Password overlay */
-    #passwordOverlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      z-index: 9999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 
-    #passwordOverlay input {
-      padding: 12px;
-      border-radius: 5px;
-      border: none;
-      width: 250px;
-      margin-bottom: 15px;
-      font-size: 16px;
-    }
+    <style>
+        :root {
+            --navy: #07203a;
+            --gold: #d4af37;
+        }
 
-    #passwordOverlay button {
-      padding: 10px 20px;
-      background: #ffa726;
-      border: none;
-      color: #fff;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f1f5f9; /* Light background */
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
 
-    #passwordOverlay p {
-      color: red;
-      margin-top: 10px;
-      font-size: 14px;
-    }
+        .font-playfair { font-family: 'Playfair Display', serif; }
 
-  /* Hover effects on Form Country fill click */
-    .card-clickable {
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
+        /* General Heading */
+        h2 {
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--navy);
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Premium CTA button */
+        .btn-gold {
+            background: linear-gradient(90deg, var(--gold), #f3d27a);
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
 
-.card-clickable:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
+        /* Logo badge style */
+        .logo-badge {
+            height: 140px;
+            width: 140px;
+            background-color: #ffd700;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-bottom-right-radius: 8px;
+            border-bottom-left-radius: 8px;
+            overflow: hidden;
+        }
+        .logo-badge img {
+            width: 90%;
+            height: auto;
+            padding: 4px;
+            object-fit: contain;
+        }
 
-  </style>
+        /* Navbar links font size */
+        .nav-link-custom {
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        /* Content Padding for Fixed Header */
+        .content-padding {
+            padding-top: 100px; /* Adjust based on navbar height */
+        }
+
+        /* --- Card Styles --- */
+        .card {
+            border-radius: 18px;
+            background: white;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+        }
+        .country-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+        .country-name img {
+            width: 35px;
+            height: 24px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+        }
+        .info-line {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .info-line i {
+            color: var(--gold);
+            margin-right: 6px;
+        }
+        .btn-custom {
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 6px 12px;
+            background: var(--navy);
+            color: white;
+            transition: background 0.3s;
+        }
+        .btn-custom:hover {
+            background: #1a3c5d;
+        }
+
+        /* --- Tabs --- */
+        .nav-tabs-custom {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .nav-tabs-custom button, .nav-tabs-custom a {
+            padding: 10px 15px;
+            font-weight: 600;
+            color: var(--navy);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            text-decoration: none;
+            background: none;
+            border: none;
+        }
+        .nav-tabs-custom button.active, .nav-tabs-custom a.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+        .nav-tabs-custom button:hover, .nav-tabs-custom a:hover {
+            color: var(--gold);
+        }
+
+        /* --- Search --- */
+        .search-box input {
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            padding: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            width: 100%;
+        }
+
+        /* --- Password overlay (Adapted to Tailwind/Modern CSS) --- */
+        #passwordOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 32, 58, 0.95); /* Dark Navy transparent */
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #passwordOverlay input {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            width: 280px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        #passwordOverlay button {
+            padding: 10px 20px;
+            background: var(--gold);
+            border: none;
+            color: var(--navy);
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #passwordOverlay button:hover {
+            background: #e3c46e;
+        }
+
+        #passwordOverlay p {
+            color: #fca5a5; /* Light Red */
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Checklists Ribbon */
+        .Checklists-ribbon {
+            position: absolute;
+            top: 10px;
+            right: 10px; /* Adjusted position to be inside the card */
+            background: #28a745;
+            color: white !important;
+            padding: 6px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: background 0.3s;
+            z-index: 10;
+        }
+        .Checklists-ribbon:hover {
+            background: #218838;
+        }
+    </style>
 </head>
-<body>
-     <!-- Password Prompt Overlay -->
-  <div id="passwordOverlay">
-    <input type="password" id="adminPassword" placeholder="Enter Password" />
-    <button onclick="checkPassword()">Unlock</button>
-    <p id="errorMessage"></p>
-  </div>
-  <div class="container py-4">
-    <h2 class="text-center mb-4">🌍 Visa Data Admin Panel</h2>
+<body class="antialiased">
 
-    <!-- Navigation Tabs -->
-    <ul class="nav nav-tabs justify-content-center mb-4" id="sheetTabs">
-      <li class="nav-item">
-        <button class="nav-link active" data-sheet="main">🌐 Main Visa Data</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" data-sheet="schengen">🇪🇺 Schengen 29 Countries</button>
-      </li>
-    </ul>
-    <!-- Tabs -->
-<ul class="nav nav-tabs justify-content-center mb-4" id="sheetTabs">
-  <li class="nav-item">
-    <button class="nav-link" data-sheet="Evisa">🛂 E-visa</button>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="adminvisadatabase.html">
-      📄 Add VisaDatabase.json
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="adminvisaquote.html">
-      📄 Visa Quotations
-    </a>
-  </li>
-</ul>
+    <header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="flex items-center justify-between h-16">
 
-    <!-- Search -->
-    <div class="search-box">
-      <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country...">
+                <div class="absolute top-0 left-4 z-50">
+                    <a href="../index.html" class="logo-badge">
+                        <img src="../../image/astourlogo.png" alt="AS Tours International">
+                    </a>
+                </div>
+
+                <div class="w-36 flex-shrink-0"></div>
+
+                <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
+                    <a href="#Home" class="nav-link-custom block hover:text-[var(--gold)]">Home</a>
+                    <a href="../../templates/Travel/b2b/Visa/clientvisaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">Client Visa Rate</a>
+                    <a href="../../templates/Travel/b2b/Visa/visaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">B2B Visa Rates</a>
+                    <a href="../../templates/Travel/b2b/Visa/b2bvisaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">B2B Offer rate</a>
+                    <a href="../../templates/Admin/admin.html" class="nav-link-custom block hover:text-[var(--gold)]">Partner Admin</a>
+                    <a href="../../templates/Travel/b2b/Visa/b2b.html" class="block mt-2 px-4 py-2 rounded-full btn-gold text-center">Partner with Us</a>
+                </nav>
+
+                <div class="lg:hidden ml-auto">
+                    <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
+            <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+                <a href="#Home" class="nav-link-custom block hover:text-[var(--gold)]">Home</a>
+                <a href="../../templates/Travel/b2b/Visa/clientvisaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">Client Visa Rate</a>
+                <a href="../../templates/Travel/b2b/Visa/visaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">B2B Visa Rates</a>
+                <a href="../../templates/Travel/b2b/Visa/b2bvisaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">B2B Offer rate</a>
+                <a href="../../templates/Admin/admin.html" class="nav-link-custom block hover:text-[var(--gold)]">Partner Admin</a>
+                <a href="../../templates/Travel/b2b/Visa/b2b.html" class="block mt-2 px-4 py-2 rounded-full btn-gold text-center">Partner with Us</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="passwordOverlay">
+        <input type="password" id="adminPassword" placeholder="Enter Password" />
+        <button onclick="checkPassword()">Unlock</button>
+        <p id="errorMessage"></p>
     </div>
 
-    <!-- Cards -->
-    <div id="cardsContainer" class="row g-4 mt-3"></div>
-  </div>
+    <div class="container mx-auto px-4 py-4 content-padding">
+        <h2 class="text-center mb-6 text-3xl">🌍 Visa Data Admin Panel</h2>
 
-<script>
-  const SHEET_ID = "1F9RGurjNDCxjw0ydzQPtBuoueLRrNH99uK-fhu3BAQs";
-  const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ";
+        <div class="nav-tabs-custom" id="sheetTabs">
+            <button class="active" data-sheet="main">🌐 Main Visa Data</button>
+            <button data-sheet="schengen">🇪🇺 Schengen 29 Countries</button>
+            <button data-sheet="Evisa">🛂 E-visa</button>
+            <a class="nav-link-custom" href="adminvisadatabase.html">
+                📄 Add VisaDatabase.json
+            </a>
+            <a class="nav-link-custom" href="adminvisaquote.html">
+                📄 Visa Quotations
+            </a>
+        </div>
 
-  const sheets = {
-    main: "VISA FEES & LINKS",
-    schengen: "Visa Fees Schengen 29 Countries",
-    Evisa: "E-visas",
-  };
+        <div class="search-box mb-6">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country...">
+        </div>
 
-  let visaData = [];
-  let activeSheet = "main";
+        <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
 
-  async function fetchVisaData(sheetKey) {
-    const range = sheets[sheetKey];
+    <script>
+        // TOGGLE MOBILE MENU
+        document.getElementById('mobileBtn').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
 
-    try {
-      const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`);
-      const data = await res.json();
+        const SHEET_ID = "1F9RGurjNDCxjw0ydzQPtBuoueLRrNH99uK-fhu3BAQs";
+        const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ"; // Note: This key should be treated as sensitive/API should be restricted.
 
-      if (!data.values || data.values.length === 0) {
-        document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-muted">No data found</p>`;
-        return;
-      }
+        const sheets = {
+            main: "VISA FEES & LINKS",
+            schengen: "Visa Fees Schengen 29 Countries",
+            Evisa: "E-visas",
+        };
 
-      const headers = data.values[0];
-      visaData = data.values.slice(1).map(row => {
-        const obj = {};
-        headers.forEach((header, i) => obj[header] = row[i] || "");
-        return obj;
-      });
+        let visaData = [];
+        let activeSheet = "main";
 
-      renderCards(visaData, sheetKey);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-danger">Error loading data</p>`;
-    }
-  }
+        async function fetchVisaData(sheetKey) {
+            const range = sheets[sheetKey];
+            const container = document.getElementById("cardsContainer");
+            container.innerHTML = `<p class="text-center text-gray-500 col-span-full"><i class="fas fa-spinner fa-spin mr-2"></i> Loading data...</p>`;
 
-  function renderCards(data, sheetKey) {
-  const container = document.getElementById("cardsContainer");
-  container.innerHTML = "";
+            try {
+                const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`);
+                const data = await res.json();
 
-  if (!data || data.length === 0) {
-    container.innerHTML = `<p class="text-center text-muted">No data found</p>`;
-    return;
-  }
+                if (!data.values || data.values.length === 0) {
+                    container.innerHTML = `<p class="text-center text-muted col-span-full">No data found</p>`;
+                    visaData = [];
+                    return;
+                }
 
-  data.forEach(row => {
-    if (!row["Countries"]) return;
+                const headers = data.values[0];
+                visaData = data.values.slice(1).map(row => {
+                    const obj = {};
+                    headers.forEach((header, i) => obj[header] = row[i] || "");
+                    return obj;
+                });
 
-    const card = document.createElement("div");
-    card.className = "col-md-4 mb-4";
+                renderCards(visaData, sheetKey);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                container.innerHTML = `<p class="text-center text-red-500 col-span-full">Error loading data. Check console for details.</p>`;
+            }
+        }
 
-    let detailsHTML = `
-      <p class="info-line"><i class="fa-solid fa-coins"></i><strong>Visa Fees:</strong> ${row["Visa Fees"] || "N/A"}</p>
-      <p class="info-line"><i class="fa-solid fa-shield-halved"></i><strong>Insurance:</strong> ${row["Insurance"] || "N/A"}</p>
-      <p class="info-line"><i class="fa-solid fa-file-invoice"></i><strong>Service Charge:</strong> ${row["Service Charge"] || "N/A"}</p>
-      <p class="info-line"><i class="fa-solid fa-file-invoice"></i><strong>Processing Time:</strong> ${row["Processing Time"] || "N/A"}</p>
-    `;
+        function renderCards(data, sheetKey) {
+            const container = document.getElementById("cardsContainer");
+            container.innerHTML = "";
 
-    if (sheetKey === "main") {
-      if (row["Docs Scanning & Uploading Charges"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user-tie"></i><strong>Docs Scanning & Uploading Charges:</strong> ${row["Docs Scanning & Uploading Charges"]}</p>`;
-    }
+            if (!data || data.length === 0) {
+                container.innerHTML = `<p class="text-center text-muted col-span-full">No data found</p>`;
+                return;
+            }
 
-    if (sheetKey === "schengen") {
-      if (row["Vfs Fees"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user-tie"></i><strong>Vfs Fees:</strong> ${row["Vfs Fees"]}</p>`;
-      if (row["Courier Charges"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-file-alt"></i><strong>Courier Charges:</strong> ${row["Courier Charges"]}</p>`;
-      if (row["If We Submit"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user"></i><strong>If We Submit:</strong> ${row["If We Submit"]}</p>`;
-      if (row["Special Note"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user"></i><strong>Special Note:</strong> ${row["Special Note"]}</p>`;
-    }
+            data.forEach(row => {
+                if (!row["Countries"]) return;
 
+                const card = document.createElement("div");
+                card.className = "col-span-1";
 
-    if (sheetKey === "Evisa") {
-      if (row["3rd Party Name"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user-tie"></i><strong>3rd Party Name:</strong> ${row["3rd Party Name"]}</p>`;
-      if (row["Required Docs"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-file-alt"></i><strong>Required Docs:</strong> ${row["Required Docs"]}</p>`;
-      if (row["Sales Manager"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user"></i><strong>Sales Manager:</strong> ${row["Sales Manager"]}</p>`;
-      if (row["Sales Manager Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope"></i><strong>Sales Manager Mail Id:</strong> ${row["Sales Manager Mail Id"]}</p>`;
-      if (row["3rd Party Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope-circle-check"></i><strong>3rd Party Mail Id:</strong> ${row["3rd Party Mail Id"]}</p>`;
-    }
+                let detailsHTML = `
+                    <p class="info-line"><i class="fa-solid fa-coins"></i><strong>Visa Fees:</strong> ${row["Visa Fees"] || "N/A"}</p>
+                    <p class="info-line"><i class="fa-solid fa-shield-halved"></i><strong>Insurance:</strong> ${row["Insurance"] || "N/A"}</p>
+                    <p class="info-line"><i class="fa-solid fa-file-invoice"></i><strong>Service Charge:</strong> ${row["Service Charge"] || "N/A"}</p>
+                    <p class="info-line"><i class="fa-solid fa-clock"></i><strong>Processing Time:</strong> ${row["Processing Time"] || "N/A"}</p>
+                `;
 
-    card.innerHTML = `
-      <div class="card h-100 p-3 position-relative card-clickable">
-        ${row["Checklists"] ? `<a href="${row["Checklists"]}" target="_blank" class="Checklists-ribbon" title="Visa Checklists">
-          <i class="fa-solid fa-clipboard-check"></i>
-        </a>` : ""}
-        <h5 class="country-name">
-          ${row["Code"] ? `<img src="https://flagcdn.com/w40/${row["Code"].toLowerCase()}.png" alt="flag">` : ""}
-          ${row["Countries"]}
-        </h5>
-        ${detailsHTML}
-        ${row["Links"] ? `<a href="${row["Links"]}" target="_blank" class="btn btn-sm btn-primary btn-custom">
-          <i class="fa-solid fa-link"></i> Official Link</a>` : ""}
+                if (sheetKey === "main") {
+                    if (row["Docs Scanning & Uploading Charges"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-upload"></i><strong>Docs Scanning & Uploading Charges:</strong> ${row["Docs Scanning & Uploading Charges"]}</p>`;
+                }
 
-          
-      </div>
-    `;
-
-// Make the whole card clickable
-  const cardElement = card.querySelector(".card-clickable");
-  cardElement.addEventListener("click", async () => {
-    let fileName;
-
-    // If this card belongs to the Schengen sheet → always open denmark.html
-    if (sheetKey === "schengen") {
-      fileName = "denmark.html";
-    } else {
-      // Default behaviour for other sheets
-      fileName = row["Countries"].toLowerCase().replace(/\s+/g, "") + ".html";
-    }
-
-    const filePath = `../visaforms/cardforms/${fileName}`;
-
-    try {
-      const res = await fetch(filePath, { method: "HEAD" });
-      if (res.ok) {
-        window.location.href = filePath;
-      } else {
-        alert(`Form for ${row["Countries"]} is not available.`);
-      }
-    } catch (err) {
-      alert(`Unable to open form for ${row["Countries"]}.`);
-    }
-  });
+                if (sheetKey === "schengen") {
+                    if (row["Vfs Fees"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-building-columns"></i><strong>VFS Fees:</strong> ${row["Vfs Fees"]}</p>`;
+                    if (row["Courier Charges"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-truck"></i><strong>Courier Charges:</strong> ${row["Courier Charges"]}</p>`;
+                    if (row["If We Submit"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user-check"></i><strong>If We Submit:</strong> ${row["If We Submit"]}</p>`;
+                    if (row["Special Note"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-note-sticky"></i><strong>Special Note:</strong> ${row["Special Note"]}</p>`;
+                }
 
 
-container.appendChild(card);
-  });
-}
+                if (sheetKey === "Evisa") {
+                    if (row["3rd Party Name"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user-tie"></i><strong>3rd Party Name:</strong> ${row["3rd Party Name"]}</p>`;
+                    if (row["Required Docs"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-file-alt"></i><strong>Required Docs:</strong> ${row["Required Docs"]}</p>`;
+                    if (row["Sales Manager"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user"></i><strong>Sales Manager:</strong> ${row["Sales Manager"]}</p>`;
+                    if (row["Sales Manager Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope"></i><strong>Sales Manager Mail Id:</strong> ${row["Sales Manager Mail Id"]}</p>`;
+                    if (row["3rd Party Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope-circle-check"></i><strong>3rd Party Mail Id:</strong> ${row["3rd Party Mail Id"]}</p>`;
+                }
+
+                card.innerHTML = `
+                    <div class="card h-full p-4 relative">
+                        ${row["Checklists"] ? `<a href="${row["Checklists"]}" target="_blank" class="Checklists-ribbon" title="Visa Checklists">
+                            <i class="fa-solid fa-clipboard-check"></i> Checklists
+                        </a>` : ""}
+                        <h5 class="country-name">
+                            ${row["Code"] ? `<img src="https://flagcdn.com/w40/${row["Code"].toLowerCase()}.png" alt="flag">` : ""}
+                            ${row["Countries"]}
+                        </h5>
+                        ${detailsHTML}
+                        ${row["Links"] ? `<a href="${row["Links"]}" target="_blank" class="btn btn-sm btn-custom mt-3 inline-block">
+                            <i class="fa-solid fa-link"></i> Official Link</a>` : ""}
+                    </div>
+                `;
+
+                // Make the whole card clickable
+                const cardElement = card.querySelector(".card");
+                cardElement.addEventListener("click", async () => {
+                    let fileName;
+
+                    // If this card belongs to the Schengen sheet → always open denmark.html
+                    if (sheetKey === "schengen") {
+                        fileName = "denmark.html";
+                    } else {
+                        // Default behaviour for other sheets
+                        fileName = row["Countries"].toLowerCase().replace(/\s+/g, "") + ".html";
+                    }
+
+                    const filePath = `../visaforms/cardforms/${fileName}`;
+
+                    try {
+                        const res = await fetch(filePath, { method: "HEAD" });
+                        if (res.ok) {
+                            window.location.href = filePath;
+                        } else {
+                            alert(`Form for ${row["Countries"]} is not available.`);
+                        }
+                    } catch (err) {
+                        alert(`Unable to open form for ${row["Countries"]}.`);
+                    }
+                });
 
 
-  // Search Filter
-  document.getElementById("searchInput").addEventListener("input", (e) => {
-    const searchText = e.target.value.toLowerCase();
-    const filtered = visaData.filter(row =>
-      (row["Countries"] || "").toLowerCase().includes(searchText)
-    );
-    renderCards(filtered, activeSheet);
-  });
-
-  // Tab Switch
-  document.querySelectorAll("#sheetTabs button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("#sheetTabs button").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      activeSheet = btn.getAttribute("data-sheet");
-      fetchVisaData(activeSheet);
-      document.getElementById("searchInput").value = "";
-    });
-  });
-
-  // Load default sheet
-  fetchVisaData("main");
-</script>
+                container.appendChild(card);
+            });
+        }
 
 
+        // Search Filter
+        document.getElementById("searchInput").addEventListener("input", (e) => {
+            const searchText = e.target.value.toLowerCase();
+            const filtered = visaData.filter(row =>
+                (row["Countries"] || "").toLowerCase().includes(searchText)
+            );
+            renderCards(filtered, activeSheet);
+        });
+
+        // Tab Switch
+        document.querySelectorAll("#sheetTabs button").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll("#sheetTabs button").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                activeSheet = btn.getAttribute("data-sheet");
+                fetchVisaData(activeSheet);
+                document.getElementById("searchInput").value = "";
+            });
+        });
+
+        // Load default sheet
+        fetchVisaData("main");
+    </script>
 
 
-<style>
-  /* Checklists Ribbon */
-  .Checklists-ribbon {
-    position: absolute;
-    top: 10px;
-    right: -10px;
-    background: #28a745;
-    color: white !important;
-    padding: 6px 10px;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 0 6px 6px 0;
-    text-decoration: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    transition: background 0.3s;
-  }
-  .Checklists-ribbon:hover {
-    background: #218838;
-    text-decoration: none;
-    color: white !important;
-  }
-  .Checklists-ribbon i {
-    font-size: 16px;
-  }
-</style>
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log("Service Worker registered"))
+                .catch(err => console.error("Service Worker registration failed:", err));
+        }
 
+        // Android Install Button
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
 
-<script>
-  // Register Service Worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log("Service Worker registered"))
-      .catch(err => console.error("Service Worker registration failed:", err));
-  }
+            const installBtn = document.createElement('button');
+            installBtn.textContent = "📲 Install Admin App";
+            installBtn.className = "fixed bottom-5 left-3 px-3 py-2 bg-[var(--navy)] text-white rounded-lg text-sm z-1000 cursor-pointer";
+            
+            document.body.appendChild(installBtn);
 
-  // Android Install Button
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
+            installBtn.addEventListener('click', async () => {
+                deferredPrompt.prompt();
+                const choiceResult = await deferredPrompt.userChoice;
+                if (choiceResult.outcome === 'accepted') console.log("App installed");
+                deferredPrompt = null;
+                installBtn.remove();
+            });
+        });
 
-    const installBtn = document.createElement('button');
-    installBtn.textContent = "📲 Install Admin App";
-    installBtn.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      left: 10px;
-      padding: 6px 12px;
-      background: #2575fc;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      z-index: 1000;
-      cursor: pointer;
-    `;
-    document.body.appendChild(installBtn);
+        // iOS hint
+        const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
 
-    installBtn.addEventListener('click', async () => {
-      deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      if (choiceResult.outcome === 'accepted') console.log("App installed");
-      deferredPrompt = null;
-      installBtn.remove();
-    });
-  });
+        if(isIos && !isInStandaloneMode){
+            const iosBtn = document.createElement('button');
+            iosBtn.textContent = "📲 Install Admin App";
+            iosBtn.className = "fixed bottom-5 left-3 px-3 py-2 bg-[var(--navy)] text-white rounded-lg text-sm z-1000 cursor-pointer";
 
-  // iOS hint
-  const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-  const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+            iosBtn.addEventListener('click', () => {
+                alert("To install this app on your iPhone, tap the Share button in Safari and select 'Add to Home Screen'");
+            });
+            document.body.appendChild(iosBtn);
+        }
+    </script>
 
-  if(isIos && !isInStandaloneMode){
-    const iosBtn = document.createElement('button');
-    iosBtn.textContent = "📲 Install Admin App";
-    iosBtn.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      left: 10px;
-      padding: 6px 12px;
-      background: #2575fc;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      z-index: 1000;
-      cursor: pointer;
-    `;
-    iosBtn.addEventListener('click', () => {
-      alert("To install this app on your iPhone, tap the Share button in Safari and select 'Add to Home Screen'");
-    });
-    document.body.appendChild(iosBtn);
-  }
-</script>
+    <script>
+        // Base64-encoded password:
+        const encoded = 'Sm91cm5leUAyNQ==';
 
+        function checkPassword() {
+            const input = document.getElementById("adminPassword").value;
+            const correctPassword = atob(encoded); // Decode from Base64
+
+            if (input === correctPassword) {
+                document.getElementById("passwordOverlay").style.display = "none";
+                // You can add classes to show content here if it was hidden initially
+            } else {
+                document.getElementById("errorMessage").textContent = "Incorrect password. Try again.";
+            }
+        }
+
+        // Add Enter Key event listener to the password input
+        document.getElementById("adminPassword").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default form submission if any
+                checkPassword();
+            }
+        });
+    </script>
 </body>
-<script>
-  // Base64-encoded password:
-  const encoded = 'Sm91cm5leUAyNQ==';
-
-  function checkPassword() {
-    const input = document.getElementById("adminPassword").value;
-    const correctPassword = atob(encoded); // Decode from Base64
-
-    if (input === correctPassword) {
-      document.getElementById("passwordOverlay").style.display = "none";
-      document.querySelector("header").classList.add("visible");
-      document.querySelector(".container").classList.add("visible");
-      document.querySelector("footer").classList.add("visible");
-    } else {
-      document.getElementById("errorMessage").textContent = "Incorrect password. Try again.";
-    }
-  }
-</script>
 </html>
