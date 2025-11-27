@@ -1,222 +1,416 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Itinerary Preview — AsToursInternational</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AsToursInternational — Itinerary Preview</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-.pdf-page {
-    width: 210mm;
-    min-height: 297mm;
-    padding: 20mm;
-    margin: auto;
-    box-sizing: border-box;
-    background: white;
-    font-family: Inter, Arial, Helvetica, sans-serif;
-    color: #111827;
+/* Custom styles */
+:root {
+	--navy: #07203a;
+	--gold: #d4af37;
 }
-.brand-logo { max-height: 100px; object-fit: contain; display: block; margin-bottom: 10px; }
-.section-title { font-weight: 700; color: #4f46e5; margin-top: 20px; margin-bottom: 8px; }
-.table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-.table th, .table td { padding: 8px; border: 1px solid #d1d5db; vertical-align: top; word-break: break-word; }
-.table th { background-color: #f3f4f6; text-align: left; }
-.date-cell { white-space: nowrap; } /* prevents date overflow */
-.footer { margin-top: 20px; font-size: 11px; color: #6b7280; text-align: center; }
+body {
+	font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	margin: 0;
+	background-color: #f3f4f6;
+	padding-top: 80px; 
+}
+.font-playfair { font-family: 'Playfair Display', serif; }
+
+/* --- PDF Page Styles - For Screen View --- */
+.pdf-page { 
+	/* Base for screen viewing */
+	max-width: 210mm; /* Limit screen width to A4 size */
+	min-height: 297mm;
+	padding: 20mm; 
+	box-sizing: border-box; 
+	background: white; 
+	box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+	margin: 30px auto; /* Centering the content block */
+	color: #111827;
+	font-size: 13px;
+	line-height: 1.5;
+	/* For mobile screen view, let it flow nicely */
+	width: 95%; 
+	max-width: 800px; /* Adjusted max width for better mobile margin */
+	margin: 20px auto;
+	padding: 15px; /* Reduced padding on mobile */
+}
+
+/* --- LOGO SIZING --- */
+.brand-logo { 
+	max-height: 80px; 
+	object-fit: contain; 
+	display: block; 
+}
+
+/* --- NAVBAR STYLES --- */
+.btn-gold {
+	background: linear-gradient(90deg, var(--gold), #f3d27a);
+	color: var(--navy);
+	font-weight: 600;
+	font-size: 0.875rem;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.btn-gold:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* Floating Logo badge style */
+.logo-badge {
+	height: 64px; 
+	width: 64px;
+	background-color: #ffd700;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px; 
+	position: fixed; 
+	top: 8px; 
+	left: 1rem;
+	z-index: 60; 
+}
+.logo-badge img {
+	width: 90%;
+	height: auto;
+	padding: 4px;
+}
+
+@media (min-width: 1024px) {
+	/* Reset PDF page container on desktop for A4 view */
+	.pdf-page { 
+		width: 210mm; 
+		margin: 30px auto; 
+		padding: 20mm;
+		max-width: none;
+	}
+	.logo-badge {
+		height: 140px; 
+		width: 140px;
+		left: calc(50% - 35rem); /* Align logo outside the main container */
+		border-radius: 8px;
+		top: 10px;
+	}
+    body { padding-top: 100px; }
+    .nav-link { font-size: 0.95rem; }
+}
+
+/* --- Responsive Table Styling --- */
+/* Makes tables horizontally scrollable on small screens if they overflow */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.responsive-table {
+    min-width: 600px; /* Minimum width to ensure content isn't cramped */
+}
+
+
+/* --- OPTIMIZED PRINT/PDF STYLES --- */
+.itinerary-day, .itinerary-section, .no-break {
+	page-break-inside: avoid;
+}
+
+@media print {
+	body {
+		background-color: white !important;
+		padding-top: 0 !important; 
+	}
+	.pdf-page {
+		/* Print should ignore screen margins and flow to paper edges */
+		width: 100%;
+		max-width: 210mm; 
+		margin: 0;
+		box-shadow: none;
+		border: none;
+		padding: 20mm; /* Use the print margin */
+		font-size: 12pt; /* Better readability on paper */
+	}
+	.no-print {
+		display: none !important;
+	}
+	/* Ensure tables don't get cut off on print */
+	.table-responsive {
+		overflow-x: visible;
+	}
+}
 </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center py-8">
+<body class="antialiased">
 
-<div class="max-w-4xl w-full bg-white shadow rounded-xl p-6">
-
-<div class="flex justify-between items-center mb-4">
-    <div id="logoWrapper"></div>
-</div>
-<hr class="mb-4 border-gray-300">
-
-<div id="confirmationText" class="mb-2 font-semibold"></div>
-
-<div id="greeting" class="text-sm mb-4 whitespace-pre-line"></div>
-
-<div id="passengers" class="text-sm mb-4"></div>
-
-<div id="hotelsSection" class="mb-4"></div>
-
-<div id="scheduleSection" class="mb-4"></div>
-
-<!-- Company info at the bottom -->
-<div id="companyInfo" class="text-sm mt-6 border-t pt-4"></div>
-
-<div class="flex gap-2 mt-4">
-<button id="downloadBtn" class="bg-emerald-600 text-white px-4 py-2 rounded">Download PDF</button>
-<button onclick="window.history.back()" class="bg-gray-600 text-white px-4 py-2 rounded">Back</button>
+<div class="logo-badge no-print">
+	<a href="../../../index.html">
+		<img src="../../../image/astourlogo.png" alt="AS Tours International">
+	</a>
 </div>
 
-<div class="footer">Generated by AsToursInternational</div>
+<header class="no-print fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-sm z-50 h-20">
+	<div class="max-w-7xl mx-auto px-4 lg:px-8">
+		<div class="flex items-center justify-end h-20"> 
+			
+			<div class="w-20 md:w-36 flex-shrink-0 lg:hidden"></div>
+
+			<nav class="hidden lg:flex items-center gap-8 ml-auto">
+				<a href="saveditinerary.html" class="px-3 py-1 text-sm rounded bg-gray-100 hover:bg-gray-200 transition text-[var(--navy)]">
+					← Back to Saved Itineraries
+				</a>
+				<a href="itinerary.html" class="nav-link">Generate Itineraries</a> 
+				
+				<button id="printBtn" class="ml-4 px-5 py-2 text-sm rounded-full btn-gold">
+					🖨️ Print Itinerary
+				</button>
+			</nav>
+
+			<div class="lg:hidden flex items-center gap-3">
+				<button id="printBtnMobile" class="px-3 py-1 text-sm rounded-full btn-gold shadow hover:shadow-md">
+					🖨️ Print
+				</button>
+				<button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+					</svg>
+				</button>
+			</div>
+
+		</div>
+	</div>
+
+	<div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full absolute top-full left-0">
+		<div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+			<a href="generate.html" class="nav-link block">Go to Generator</a>
+			<a href="saved.html" class="nav-link block">Saved Itineraries</a>
+		</div>
+	</div>
+</header>
+
+<main id="previewContainer" class="pdf-page">
+	<div class="text-center p-20 text-gray-500" id="loadingMessage">
+		<div class="spinner border-[var(--navy)] mb-4 mx-auto"></div>
+		<h2 class="text-2xl font-bold mb-4">Loading Itinerary Data...</h2>
+	</div>
+</main>
+
+<div class="no-print text-center pb-10">
+	<a href="generate.html" class="text-sm text-indigo-600 hover:text-indigo-800">Return to the Generator</a>
 </div>
 
 <script>
-// Get data from URL
-function getDataFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    const dataStr = params.get('data');
-    if(!dataStr) return null;
-    try {
-        return JSON.parse(decodeURIComponent(dataStr));
-    } catch(e) {
-        console.error(e);
-        return null;
-    }
-}
+let itineraryData = null; 
 
-// Escape HTML
-function escapeHtml(text){
-    if(!text && text!==0) return '';
-    return String(text).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
-}
+// --- Helper Functions ---
 
-// Format date
 function formatDate(d){
-    if(!d) return '';
-    const dt = new Date(d);
-    const dd = ('0' + dt.getDate()).slice(-2);
-    const mm = ('0' + (dt.getMonth()+1)).slice(-2);
-    const yyyy = dt.getFullYear();
-    return `${dd}/${mm}/${yyyy}`;
+	if(!d) return '';
+	const dt = new Date(d + 'T00:00:00');
+	if (isNaN(dt.getTime())) return 'Invalid Date';
+	const dd = ('0' + dt.getDate()).slice(-2);
+	const mm = ('0' + (dt.getMonth()+1)).slice(-2);
+	const yyyy = dt.getFullYear();
+	return `${dd}/${mm}/${yyyy}`;
 }
 
-// Build preview
-function buildPreview(data){
-    // Logo
-    const logoWrapper = document.getElementById('logoWrapper');
-    logoWrapper.innerHTML = '';
-    if(data.logoData){
-        const img = document.createElement('img');
-        img.src = data.logoData;
-        img.className = 'brand-logo';
-        logoWrapper.appendChild(img);
-    } else if(data.logoUrl){
-        const img = document.createElement('img');
-        img.src = data.logoUrl;
-        img.className = 'brand-logo';
-        logoWrapper.appendChild(img);
-    }
-
-    // Confirmation text
-    document.getElementById('confirmationText').innerText = `Confirmation No.: ${data.confirmationNo || ''}`;
-
-    // Greeting
-    let greeting = '';
-    let hasMr=false, hasMrs=false;
-    (data.passengerDetails||[]).forEach(p=>{
-        if(p.toLowerCase().includes('mr')) hasMr=true;
-        if(p.toLowerCase().includes('mrs')) hasMrs=true;
-    });
-    greeting = (hasMr && hasMrs) ? "Dear Sir/Ma’am," : hasMr ? "Dear Sir," : "Dear Sir/Ma’am,";
-    greeting += `\nGreetings from ${data.companyName||''}!\nAs per our discussion, we are pleased to confirm the below ${data.tourCountry||'tour'} for you.`;
-    document.getElementById('greeting').innerText = greeting;
-
-    // Passengers
-    if(data.passengerDetails && data.passengerDetails.length){
-        document.getElementById('passengers').innerHTML = `<b>Passenger Details:</b><br>${data.passengerDetails.map(p=>escapeHtml(p)).join('<br>')}`;
-    }
-
-    // Hotels
-    let hotelsHtml = '';
-    if(data.hotels && data.hotels.length){
-        hotelsHtml = `<div class="section-title">Hotels / Stays</div><table class="table">
-        <thead><tr>
-        <th>City</th><th>Check In</th><th>Check Out</th><th>Hotel</th>`;
-        if(data.hotels.some(h=>h.contact)) hotelsHtml += `<th>Contact</th>`;
-        hotelsHtml += `</tr></thead><tbody>`;
-        data.hotels.forEach(h=>{
-            hotelsHtml += `<tr>
-            <td>${escapeHtml(h.city)}</td>
-            <td class="date-cell">${formatDate(h.checkin)}</td>
-            <td class="date-cell">${formatDate(h.checkout)}</td>
-            <td>${escapeHtml(h.hotel)}</td>`;
-            if(data.hotels.some(h=>h.contact)) hotelsHtml += `<td>${escapeHtml(h.contact||'')}</td>`;
-            hotelsHtml += `</tr>`;
-        });
-        hotelsHtml += `</tbody></table>`;
-    }
-    document.getElementById('hotelsSection').innerHTML = hotelsHtml;
-
-    // Schedule
-    let rows = [];
-    if(data.hotels) data.hotels.forEach(h=>{
-        let current = new Date(h.checkin);
-        const end = new Date(h.checkout);
-        while(current <= end){
-            rows.push({date: formatDate(current), detail:`Stay in ${h.city} — ${h.hotel}`});
-            current.setDate(current.getDate()+1);
-        }
-    });
-    if(data.manualDays) data.manualDays.forEach(md=>{
-        if(!md.date) return;
-        const content = (md.title ? md.title+' — ' : '') + (md.activities||'');
-        const idx = rows.findIndex(r=>r.date===formatDate(md.date));
-        if(idx>=0) rows[idx].detail = content;
-        else rows.push({date:formatDate(md.date),detail:content});
-    });
-    rows.sort((a,b)=>a.date.localeCompare(b.date));
-    let scheduleHtml = '';
-    if(rows.length){
-        scheduleHtml = `<div class="section-title">Day-wise Schedule</div><table class="table">
-        <thead><tr><th>Date</th><th>Activity</th></tr></thead><tbody>`;
-        rows.forEach(r=>{
-            scheduleHtml += `<tr><td class="date-cell">${r.date}</td><td>${escapeHtml(r.detail)}</td></tr>`;
-        });
-        scheduleHtml += `</tbody></table>`;
-    }
-    document.getElementById('scheduleSection').innerHTML = scheduleHtml;
-
-    // Company info at bottom
-    const companyHtml = `
-    ${data.companyName ? `<b>${escapeHtml(data.companyName)}</b><br>` : ''}
-    ${data.companyAddress ? `${escapeHtml(data.companyAddress)}<br>` : ''}
-    ${data.companyEmail ? `Email: ${escapeHtml(data.companyEmail)}<br>` : ''}
-    ${data.companyWebsite ? `Website: ${escapeHtml(data.companyWebsite)}<br>` : ''}
-    `;
-    document.getElementById('companyInfo').innerHTML = companyHtml;
+function escapeHtml(text){
+	if(!text && text!==0) return '';
+	return String(text).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
 }
 
-// Download PDF
-// Download PDF
-function downloadPDF(){
-    const element = document.querySelector('.max-w-4xl');
-
-    // Use html2pdf with optimized settings
-    const opt = {
-        margin: [10,10,10,10],
-        filename: `Itinerary_${document.getElementById('confirmationText').innerText.replace('Confirmation No.: ','')||'confirmation'}.pdf`,
-        image: {type:'jpeg', quality:1.0},
-        html2canvas: {
-            scale: 3,          // higher scale for better quality
-            useCORS: true,     // load external images
-            logging: false,
-            scrollY: 0         // prevent canvas shift
-        },
-        jsPDF: {unit:'mm', format:'a4', orientation:'portrait'}
-    };
-
-    html2pdf().set(opt).from(element).save();
+function getGreeting(passengers, companyName){
+	let hasMr=false, hasMrs=false;
+	(passengers || []).forEach(p=>{
+		if(p && p.toLowerCase().includes('mr')) hasMr=true;
+		if(p && p.toLowerCase().includes('mrs')) hasMrs=true;
+	});
+	const greeting = (hasMr && hasMrs) ? "Dear Sir/Ma'am," : hasMr ? "Dear Sir," : "Dear Sir/Ma'am,";
+	const companyShort = (companyName || '').split('(')[0].trim() || 'AsTours International';
+	const tourCountry = itineraryData?.tourCountry || '';
+	return `${greeting}\nGreetings from ${companyShort}!!\nAs per our discussion, we are pleased to confirm the below ${tourCountry ? tourCountry + ' tour' : 'tour'} for you.`;
 }
 
-// Attach event
-document.getElementById('downloadBtn').addEventListener('click', downloadPDF);
+// --- Core Rendering Function ---
+function buildPreviewHTML(data){
+	let logoHTML = '';
+	if(data.logoData) logoHTML = `<img src="${data.logoData}" alt="logo" class="brand-logo">`;
+	else if(data.logoUrl) logoHTML = `<img src="${escapeHtml(data.logoUrl)}" alt="logo" class="brand-logo">`;
+	else logoHTML = `<div style="font-weight:700;color:#1f2937;font-size:18px">${escapeHtml(data.companyName||'AsTours International')}</div>`;
 
-// Initialize
-const data = getDataFromURL();
-if(data){
-    buildPreview(data);
-} else {
-    document.body.innerHTML = '<div class="text-center text-red-500 mt-20">No itinerary data found!</div>';
+	const introHTML = `<p style="white-space:pre-line;"><b>${escapeHtml(data.confirmationNo)?('Confirmation No.: '+escapeHtml(data.confirmationNo)):""}</b>\n${escapeHtml(getGreeting(data.passengerDetails||[], data.companyName||''))}</p>`;
+	const passengersHTML = (data.passengerDetails || []).map(p=>`<div style="margin-left: 10px;">${escapeHtml(p)}</div>`).join('');
+
+	// Hotels Table
+	let hotelsHTML = '';
+	if(data.hotels && data.hotels.length){
+		// ADDED table-responsive wrapper and responsive-table class
+		hotelsHTML = `<div class="itinerary-section"><h3 style="font-size:14px; margin-top:16px; margin-bottom:6px; font-weight:700;">Hotel Details</h3>
+		<div class="table-responsive">
+		<table class="responsive-table" style="width:100%;border-collapse:collapse;margin-top:0px;font-size:12px;table-layout: fixed;">
+		<thead><tr style="background:#f3f4f6">
+		<th style="padding:8px;border:1px solid #d1d5db;text-align:left;width:20%;">City</th>
+		<th style="padding:8px;border:1px solid #d1d5db;text-align:left;width:15%;">Check In</th>
+		<th style="padding:8px;border:1px solid #d1d5db;text-align:left;width:15%;">Check Out</th>
+		<th style="padding:8px;border:1px solid #d1d5db;text-align:left;width:30%;">Hotel</th>
+		<th style="padding:8px;border:1px solid #d1d5db;text-align:left;width:20%;">Contact</th>
+		</tr></thead><tbody>`;
+		data.hotels.forEach(h=>{
+			hotelsHTML += `<tr>
+			<td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(h.city||'')}</td>
+			<td style="padding:8px;border:1px solid #e5e7eb">${formatDate(h.checkin)}</td>
+			<td style="padding:8px;border:1px solid #e5e7eb">${formatDate(h.checkout)}</td>
+			<td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(h.hotel||'')}</td>
+			<td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(h.contact||'')}</td>
+			</tr>`;
+		});
+		hotelsHTML += `</tbody></table></div></div>`;
+	}
+
+	// Schedule Logic
+	const rows = [];
+	(data.hotels || []).forEach(h=>{
+		if(!h.checkin || !h.checkout) return; 
+		let current = new Date(h.checkin + 'T00:00:00');
+		const end = new Date(h.checkout + 'T00:00:00');
+		
+		while(current.getTime() < end.getTime()){ 
+			rows.push({date: formatDate(current.toISOString().split('T')[0]), detail:`Stay in ${h.city} — ${h.hotel}`});
+			current.setDate(current.getDate()+1);
+		}
+	});
+	
+	// Integrate manual days
+	(data.manualDays || []).forEach(md=>{
+		if(!md.date) return;
+		const content = (md.title?md.title+' — ':'') + (md.activities||'');
+		const formattedDate = formatDate(md.date);
+		
+		const idx = rows.findIndex(r=>r.date===formattedDate);
+		if(idx>=0) rows[idx].detail = content; 
+		else rows.push({date:formattedDate,detail:content});
+	});
+	
+	rows.sort((a,b)=>a.date.split('/').reverse().join('').localeCompare(b.date.split('/').reverse().join(''))); 
+
+	let scheduleHTML='';
+	if(rows.length){
+		// ADDED table-responsive wrapper and responsive-table class
+		scheduleHTML = `<div class="itinerary-section"><h3 style="font-size:14px; margin-top:16px; margin-bottom:6px; font-weight:700;">Day-wise Itinerary</h3>
+		<div class="table-responsive">
+		<table class="responsive-table" style="width:100%;border-collapse:collapse;margin-top:0px;font-size:12px;table-layout:fixed;">
+			<thead><tr style="background:#f3f4f6"><th style="padding:8px;border:1px solid #d1d5db;width:120px;text-align:left">Date</th>
+			<th style="padding:8px;border:1px solid #d1d5db;text-align:left">Activity</th></tr></thead><tbody>`;
+		rows.forEach(r=>{
+			scheduleHTML += `<tr class="itinerary-day"><td style="padding:8px;border:1px solid #e5e7eb;vertical-align:top">${r.date}</td>
+			<td style="padding:8px;border:1px solid #e5e7eb;vertical-align:top">${escapeHtml(r.detail)}</td></tr>`;
+		});
+		scheduleHTML += `</tbody></table></div></div>`;
+	}
+
+	// Footer Company Info
+	let companyInfo='';
+	if(data.companyName||data.companyAddress||data.companyEmail||data.companyWebsite){
+		companyInfo = `<div style="margin-top:20px;padding-top:10px;border-top:1px solid #e5e7eb;font-size:11px;color:#4b5563;">`;
+		if(data.companyName) companyInfo += `<b>${escapeHtml(data.companyName)}</b><br/>`;
+		if(data.companyAddress) companyInfo += `${escapeHtml(data.companyAddress)}<br/>`;
+		if(data.companyEmail) companyInfo += `Email: ${escapeHtml(data.companyEmail)}<br/>`;
+		if(data.companyWebsite) companyInfo += `Website: ${escapeHtml(data.companyWebsite)}<br/>`;
+		companyInfo += `</div>`;
+	}
+
+
+	return `<div style="font-family:Inter,Arial,Helvetica,sans-serif;color:#111827;">
+		<div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">${logoHTML}</div>
+		<hr style="margin:6px 0;border-color:#e5e7eb"/>
+		${introHTML}
+		<div style="margin-top:8px;font-size:12px;margin-left: 10px;"><b>Passenger Details:</b>${passengersHTML}</div>
+		${hotelsHTML}
+		${scheduleHTML}
+		${companyInfo}
+		<div style="margin-top:12px;font-size:11px;color:#6b7280;text-align:center;">Generated by AsToursInternational</div>
+	</div>`;
+}
+// --- End buildPreviewHTML ---
+
+
+// --- Print Function ---
+function printItinerary() {
+    window.print();
 }
 
-document.getElementById('downloadBtn').addEventListener('click', downloadPDF);
 
+// --- Event Handlers and Initialization ---
+document.addEventListener('DOMContentLoaded', () => {
+	// Print Buttons
+	document.getElementById('printBtn').addEventListener('click', printItinerary);
+	document.getElementById('printBtnMobile')?.addEventListener('click', printItinerary);
+
+	// Mobile Menu Toggle
+	document.getElementById('mobileBtn').addEventListener('click', () => {
+		document.getElementById('mobileMenu').classList.toggle('hidden');
+	});
+
+	// Load Itinerary Content
+	loadItinerary();
+});
+
+
+function loadItinerary() {
+	const container = document.getElementById('previewContainer');
+	const rawData = sessionStorage.getItem('itineraryDataForPreview');
+	
+	// Hide loading spinner from the view but keep it for logic reference
+	if (document.getElementById('loadingMessage')) {
+		document.getElementById('loadingMessage').style.display = 'block';
+	}
+	
+	if (!rawData) {
+		container.innerHTML = `
+			<div class="text-center p-20 text-red-600">
+				<h2 class="text-2xl font-bold mb-4">❌ Failed to Find Data</h2>
+				<p class="text-lg mb-4">No itinerary data was found in the session storage.</p>
+				<p class="mb-6">Please ensure you generate the itinerary or click 'Preview' from the saved list.</p>
+				<a href="generate.html" class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition font-semibold shadow-md">
+					Go to Generator
+				</a>
+			</div>
+		`;
+		return;
+	}
+
+	try {
+		itineraryData = JSON.parse(rawData);
+		const htmlStructure = buildPreviewHTML(itineraryData); 
+		
+		if (htmlStructure && htmlStructure.length > 50) {
+			container.innerHTML = htmlStructure;
+		} else {
+			container.innerHTML = `
+				<div class="text-center p-20 text-red-600">
+					<h2 class="text-2xl font-bold mb-4">❌ Failed to Render Structure</h2>
+					<p class="text-lg mb-4">Data was found, but the rendering logic crashed or returned empty content. Check the structure of the data and the <code>buildPreviewHTML</code> function.</p>
+					<a href="generate.html" class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition font-semibold shadow-md">
+						Go Back to Generator
+					</a>
+				</div>
+			`;
+		}
+
+	} catch (e) {
+		console.error("Critical error during data parsing or HTML building:", e);
+		container.innerHTML = `
+			<div class="text-center p-20 text-red-600">
+				<h2 class="text-2xl font-bold mb-4">❌ Data Corrupted</h2>
+				<p class="text-lg mb-4">The data stored for this itinerary is not valid. Please re-load and re-save the itinerary from the generator page.</p>
+				<a href="generate.html" class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition font-semibold shadow-md">
+					Go Back to Generator
+				</a>
+			</div>
+		`;
+	}
+}
 </script>
 </body>
 </html>

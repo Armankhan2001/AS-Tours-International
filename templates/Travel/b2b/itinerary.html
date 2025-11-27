@@ -6,174 +6,257 @@
 <title>AsToursInternational — Itinerary Generator</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
+/* Custom styles from the navbar and original page combined/updated */
+:root {
+  --navy: #07203a;
+  --gold: #d4af37;
+}
+body {
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  background-color: #f3f4f6;
+}
+.font-playfair { font-family: 'Playfair Display', serif; }
+
+/* Premium CTA button */
+.btn-gold {
+  background: linear-gradient(90deg, var(--gold), #f3d27a);
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 0.875rem; /* subtle size */
+  transition: all 0.3s ease;
+}
+.btn-gold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* Logo badge style (RESTORED FROM INPUT) */
+.logo-badge {
+  height: 64px; /* Mobile size */
+  width: 64px; /* Mobile size */
+  background-color: #ffd700;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 4px; /* Squared off look from original */
+  flex-shrink: 0;
+}
+.logo-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+.logo-badge img {
+  width: 90%;
+  height: auto;
+  padding: 4px;
+}
+@media (min-width: 1024px) {
+  .logo-badge {
+    height: 160px; /* Large desktop size */
+    width: 160px; /* Large desktop size */
+    position: absolute; /* Floating effect */
+    top: 0;
+    left: 1rem;
+    z-index: 50;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Restore original shadow */
+  }
+}
+
+/* Navbar links font size (RESTORED FROM INPUT) */
+.nav-link {
+  font-size: 0.875rem; /* slightly smaller, elegant */
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+/* Utility for hidden PDF wrapper */
 .pdf-page { width:210mm; min-height:297mm; padding:20mm; box-sizing:border-box; background:white; }
 .brand-logo { max-height:100px; object-fit:contain; display:block; margin-right:12px; }
-.wrap-td { white-space:normal; word-break:break-word; }
-.footer-company { margin-top:20px; font-size:12px; color:#374151; line-height:1.4; }
-.footer-generated { margin-top:10px; font-size:11px; color:#6b7280; }
 .cart-item { cursor:pointer; transition:all 0.2s; }
 .cart-item:hover { background:#f3f4f6; }
 </style>
 </head>
 <body class="bg-gradient-to-r from-gray-100 to-gray-200 min-h-screen font-sans">
 
-<header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-4 px-6 shadow sticky top-0 z-40">
-  <div class="max-w-6xl mx-auto flex items-center justify-between">
-    <div class="flex items-center gap-4">
-      <img src="../../../image/astourlogo.png" alt="AsToursInternational" class="h-16 rounded p-1 bg-white/20" id="dashLogo">
-      <div>
-        <h1 class="text-xl font-bold">AsToursInternational — Itinerary Generator</h1>
-        <div class="text-xs text-white/80">Professional itineraries for visa & client confirmations</div>
+<header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      
+      <div class="absolute top-0 left-4 z-50">
+        <a href="../../../index.html" class="logo-badge">
+          <img src="../../../image/astourlogo.png" alt="AS Tours International" id="dashLogo">
+        </a>
       </div>
+      
+      <div class="w-36 flex-shrink-0"></div>
+
+      <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
+        <a href="#" class="nav-link font-bold text-indigo-600 hover:text-[var(--gold)]">Home</a> 
+        <a href="Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold">Partner with Us</a>
+      </nav>
+
+      <div class="lg:hidden ml-auto">
+        <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+
     </div>
-    <a href="index.html" class="text-sm bg-white/10 px-3 py-1 rounded hover:bg-white/20">⬅ Back to Dashboard</a>
+  </div>
+
+  <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
+    <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+      <a href="#" class="nav-link block font-bold text-indigo-600 hover:text-[var(--gold)]">Home</a>
+      <a href="Visa/b2b.html" class="block mt-2 px-4 py-2 rounded-full btn-gold text-center">Partner with Us</a>
+    </div>
   </div>
 </header>
+<main class="max-w-7xl mx-auto p-4 md:p-6 mt-16 lg:mt-24">
+  <div class="grid lg:grid-cols-3 gap-6">
 
-<main class="max-w-6xl mx-auto p-6">
-  <div class="grid md:grid-cols-3 gap-6">
+    <form id="formPanel" class="lg:col-span-1 bg-white rounded-2xl shadow-xl p-6 space-y-5 h-fit lg:sticky lg:top-24">
+      <h2 class="text-xl font-bold text-[var(--navy)]">Itinerary Details</h2>
 
-    <!-- Form Panel -->
-    <form id="formPanel" class="col-span-1 bg-white rounded-2xl shadow p-5 space-y-4">
-      <h2 class="text-lg font-bold text-indigo-700">Itinerary Details</h2>
-
-      <!-- Logo Upload -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Logo (file upload)</label>
-        <input id="logoUpload" type="file" accept="image/*" class="block w-full text-sm" />
-        <div class="text-xs text-gray-500 mt-1">Or paste logo URL below</div>
-        <input id="logoUrl" type="url" placeholder="https://..." class="mt-2 border rounded p-2 w-full text-sm" />
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Logo (File or URL)</label>
+        <input id="logoUpload" type="file" accept="image/*" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+        <input id="logoUrl" type="url" placeholder="Or paste logo URL here" class="mt-2 border rounded p-2 w-full text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
       </div>
 
-      <!-- Company Info -->
       <div>
         <label class="block text-sm font-medium text-gray-700">Company Name (optional)</label>
-        <input id="companyName" placeholder="AsTours International" class="border rounded p-2 w-full" />
+        <input id="companyName" placeholder="AsTours International" class="border rounded p-2 w-full text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
       </div>
 
       <div>
         <label class="block text-sm font-medium text-gray-700">Company Address (optional)</label>
-        <textarea id="companyAddress" rows="2" placeholder="101 B, Shakaza Heights, road no 27 Thane West 400612" class="border rounded p-2 w-full"></textarea>
+        <textarea id="companyAddress" rows="2" placeholder="101 B, Shakaza Heights, road no 27 Thane West 400612" class="border rounded p-2 w-full text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"></textarea>
       </div>
 
       <div>
         <label class="block text-sm font-medium text-gray-700">Company Email (optional)</label>
-        <input id="companyEmail" placeholder="Astoursinternational@gmail.com" class="border rounded p-2 w-full" />
+        <input id="companyEmail" placeholder="Astoursinternational@gmail.com" class="border rounded p-2 w-full text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
       </div>
 
       <div>
         <label class="block text-sm font-medium text-gray-700">Company Website (optional)</label>
-        <input id="companyWebsite" placeholder="https://www.astoursinternational.com" class="border rounded p-2 w-full" />
+        <input id="companyWebsite" placeholder="https://www.astoursinternational.com" class="border rounded p-2 w-full text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
       </div>
 
-      <!-- Country & Confirmation -->
       <div>
         <label class="block text-sm font-medium text-gray-700">Country of Tour</label>
-        <input id="tourCountry" placeholder="Brazil" class="border rounded p-2 w-full" />
+        <input id="tourCountry" placeholder="Brazil" class="border rounded p-2 w-full text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
       </div>
 
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-sm">Confirmation No.</label>
-          <input id="confirmationNo" class="border rounded p-2 w-full" />
+          <label class="block text-sm font-medium text-gray-700">Confirmation No.</label>
+          <input id="confirmationNo" class="border rounded p-2 w-full text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
         </div>
         <div>
-          <label class="block text-sm">Reference (optional)</label>
-          <input id="reference" class="border rounded p-2 w-full" />
+          <label class="block text-sm font-medium text-gray-700">Reference (optional)</label>
+          <input id="reference" class="border rounded p-2 w-full text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
         </div>
       </div>
 
-      <!-- Passenger Details -->
       <div>
-        <label class="block text-sm">Passenger Details (one per line)</label>
-        <textarea id="passengerDetails" rows="3" class="border rounded p-2 w-full" placeholder="Ahmed Abdul Saeed - Passport W3691761"></textarea>
+        <label class="block text-sm font-medium text-gray-700">Passenger Details (one per line)</label>
+        <textarea id="passengerDetails" rows="3" class="border rounded p-2 w-full text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" placeholder="Ahmed Abdul Saeed - Passport W3691761"></textarea>
       </div>
 
-      <!-- Hotels -->
-      <div>
+      <div class="space-y-2">
         <div class="flex items-center justify-between">
           <label class="block text-sm font-medium text-gray-700">Hotels / Stays</label>
-          <button type="button" onclick="addHotel()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded">+ Add</button>
+          <button type="button" onclick="addHotel()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded-full hover:bg-indigo-700 transition">+ Add</button>
         </div>
-        <div id="hotelsList" class="mt-2 space-y-3"></div>
+        <div id="hotelsList" class="space-y-3"></div>
       </div>
 
-      <!-- Extra Days -->
-      <div>
+      <div class="space-y-2">
         <div class="flex items-center justify-between">
           <label class="block text-sm font-medium text-gray-700">Extra Day Entries (optional)</label>
-          <button type="button" onclick="addManualDay()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded">+ Add Day</button>
+          <button type="button" onclick="addManualDay()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded-full hover:bg-indigo-700 transition">+ Add Day</button>
         </div>
-        <div id="manualDays" class="mt-2 space-y-2"></div>
+        <div id="manualDays" class="space-y-2"></div>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="space-y-2">
-        <button type="button" onclick="generatePreview()" class="w-full bg-indigo-600 text-white py-2 rounded font-semibold">Generate Preview</button>
-        <div class="flex gap-2">
-          <button type="button" onclick="copyPreview()" class="flex-1 bg-blue-600 text-white py-2 rounded">Copy</button>
-          <button type="button" onclick="downloadPDF()" class="flex-1 bg-emerald-600 text-white py-2 rounded">Download PDF</button>
-          <button type="button" onclick="saveToSheet(this)" class="flex-1 bg-orange-600 text-white py-2 rounded">Save Itinerary</button>
+      <div class="space-y-3 pt-2">
+        <button type="button" onclick="generateAndRedirectPreview()" class="w-full btn-gold py-3 rounded-xl font-bold text-lg shadow-md hover:shadow-lg transition">Generate Preview</button>
+        
+        <div class="flex gap-2 text-sm">
+          <button type="button" onclick="saveToSheet(this)" class="flex-1 bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700">Save Itinerary</button>
         </div>
       </div>
 
     </form>
 
-    <!-- Preview & Saved List -->
-    <section class="col-span-2">
-      <div class="bg-white rounded-2xl shadow p-6 min-h-[70vh]">
-        <div id="previewWrapper" class="pdf-page" style="display:none;"></div>
-        <div id="emptyMsg" class="text-gray-500 p-8">
-          <p class="font-medium">Professional Itinerary Preview</p>
-          <p class="mt-2">Fill the form on the left and click <b>Generate Preview</b>. Use the buttons to Copy, Download PDF or Save.</p>
+    <section class="lg:col-span-2">
+      <div class="bg-white rounded-2xl shadow-xl p-6 min-h-[70vh]">
+        
+        <div class="mb-4 flex flex-col md:flex-row items-stretch gap-2">
+          <input type="text" id="filterCountry" placeholder="Search by country or confirmation no." class="border rounded p-2 flex-grow text-sm">
+          <button onclick="loadItineraries(true)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Search All</button>
+          <button class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition" onclick="window.open('saveditinerary.html', '_blank')">View All in New Tab</button>
         </div>
+        <hr class="mb-4 border-gray-200" />
 
-        <!-- Filter -->
-        <div class="mt-4 flex items-center gap-2">
-          <input type="text" id="filterCountry" placeholder="Filter by country" class="border rounded p-2 w-1/2">
-          <button class="bg-indigo-600 text-white px-3 py-1 rounded" onclick="loadItineraries()">Filter</button>
-          <button class="bg-gray-600 text-white px-3 py-1 rounded" onclick="window.open('saved.html', '_blank')">Saved Itineraries</button>
+
+        <h3 class="text-lg font-bold text-gray-700 mb-3" id="itineraryListTitle">Recently Saved Itineraries (Last 3)</h3>
+        <div id="itineraryList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div style="padding:10px;color:#1f7a1f;font-weight:600;">Loading itineraries...</div>
         </div>
-
-        <!-- Itineraries List -->
-        <div id="itineraryList" class="mt-4 grid grid-cols-1 gap-2"></div>
       </div>
     </section>
 
   </div>
 </main>
 
-<footer class="max-w-6xl mx-auto text-center py-6 text-sm text-gray-500">
+<footer class="max-w-7xl mx-auto text-center py-6 text-sm text-gray-500 border-t mt-8">
   © <span id="year"></span> AsToursInternational — Powered by Solo2CEO
 </footer>
 
 <script>
 document.getElementById('year').innerText = new Date().getFullYear();
 let logoData = "";
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzFibwNC3mrmwHc1P5GwwXv1AeNYNZD7iggejQAOmsLL1WMH5mDDU0MoU8tVGfmOAD3Zg/exec"; // <-- replace with your web app
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzFibwNC3mrmwHc1P5GwwXv1AeNYNZD7iggejQAOmsLL1WMH5mDDU0MoU8tVGfmOAD3Zg/exec"; 
+
+// --- Navbar Script ---
+document.getElementById('mobileBtn').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+});
+// --- End Navbar Script ---
 
 // Logo upload
 document.getElementById('logoUpload').addEventListener('change', e => {
     const f = e.target.files[0]; 
     if(!f) return;
     const reader = new FileReader();
-    reader.onload = ev => { logoData = ev.target.result; };
+    reader.onload = ev => { 
+        logoData = ev.target.result; 
+        document.getElementById('dashLogo').src = logoData; // Update dashboard logo
+    };
     reader.readAsDataURL(f);
 });
 
 // Add hotel row
 function addHotel(pref={}) {
     const container = document.createElement('div');
-    container.className = 'grid grid-cols-4 gap-2 items-center border rounded p-2 bg-gray-50 hotel-block';
+    container.className = 'grid grid-cols-4 gap-2 items-center border rounded p-3 bg-gray-50 hotel-block shadow-sm';
     container.innerHTML = `
-        <input class="p-2 border rounded hotel-city" placeholder="City" value="${pref.city||''}" />
-        <input class="p-2 border rounded hotel-checkin" type="date" value="${pref.checkin||''}" />
-        <input class="p-2 border rounded hotel-checkout" type="date" value="${pref.checkout||''}" />
-        <div class="col-span-4 grid grid-cols-6 gap-2">
-            <input class="col-span-3 p-2 border rounded hotel-name" placeholder="Hotel Name" value="${pref.hotel||''}" />
-            <input class="col-span-2 p-2 border rounded hotel-contact" placeholder="Contact / Phone (optional)" value="${pref.contact||''}" />
-            <button type="button" class="col-span-1 bg-red-500 text-white rounded px-2" onclick="this.closest('.hotel-block').remove()">Remove</button>
+        <input class="col-span-4 p-2 border rounded hotel-name text-sm" placeholder="Hotel Name" value="${pref.hotel||''}" />
+        <input class="p-2 border rounded hotel-city text-sm" placeholder="City" value="${pref.city||''}" />
+        <input class="p-2 border rounded hotel-checkin text-sm" type="date" value="${pref.checkin||''}" />
+        <input class="p-2 border rounded hotel-checkout text-sm" type="date" value="${pref.checkout||''}" />
+        <div class="col-span-4 grid grid-cols-5 gap-2 mt-1">
+          <input class="col-span-3 p-2 border rounded hotel-contact text-sm" placeholder="Contact / Phone (optional)" value="${pref.contact||''}" />
+          <button type="button" class="col-span-2 bg-red-500 text-white rounded-lg px-2 hover:bg-red-600 text-sm" onclick="this.closest('.hotel-block').remove()">Remove Hotel</button>
         </div>`;
     document.getElementById('hotelsList').appendChild(container);
 }
@@ -181,20 +264,20 @@ function addHotel(pref={}) {
 // Add manual day
 function addManualDay(obj={}) {
     const div = document.createElement('div');
-    div.className = 'grid grid-cols-3 gap-2 items-center';
+    div.className = 'grid grid-cols-4 gap-2 items-center p-2 border rounded bg-gray-50';
     div.innerHTML = `
-        <input type="date" class="p-2 border rounded day-date" value="${obj.date||''}" />
-        <input class="p-2 border rounded day-title" placeholder="Title" value="${obj.title||''}" />
-        <input class="p-2 border rounded day-activities" placeholder="Short activity" value="${obj.activities||''}" />
-        <div class="col-span-3 text-right">
-            <button type="button" class="mt-2 bg-red-500 text-white px-3 py-1 rounded" onclick="this.closest('div.grid').remove()">Remove</button>
+        <input type="date" class="col-span-1 p-2 border rounded day-date text-sm" value="${obj.date||''}" />
+        <input class="col-span-2 p-2 border rounded day-title text-sm" placeholder="Title" value="${obj.title||''}" />
+        <input class="col-span-1 p-2 border rounded day-activities text-sm" placeholder="Activity" value="${obj.activities||''}" />
+        <div class="col-span-4 text-right">
+            <button type="button" class="mt-1 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 text-sm" onclick="this.closest('div.grid').remove()">Remove Day</button>
         </div>`;
     document.getElementById('manualDays').appendChild(div);
 }
 
 function formatDate(d){
     if(!d) return '';
-    const dt = new Date(d);
+    const dt = new Date(d + 'T00:00:00'); // Ensure date is treated as UTC to prevent timezone issues
     const dd = ('0' + dt.getDate()).slice(-2);
     const mm = ('0' + (dt.getMonth()+1)).slice(-2);
     const yyyy = dt.getFullYear();
@@ -240,7 +323,6 @@ function escapeHtml(text){
 }
 
 
-
 // Greeting function
 function getGreeting(passengers, companyName){
     let hasMr=false, hasMrs=false;
@@ -249,31 +331,31 @@ function getGreeting(passengers, companyName){
         if(p.toLowerCase().includes('mrs')) hasMrs=true;
     });
     const greeting = (hasMr && hasMrs) ? "Dear Sir/Ma’am," : hasMr ? "Dear Sir," : "Dear Sir/Ma’am,";
-    const companyShort = companyName.split('(')[0].trim();
+    const companyShort = companyName.split('(')[0].trim() || 'AsTours International';
     const country = document.getElementById('tourCountry').value;
     return `${greeting}\nGreetings from ${companyShort}!!\nAs per our discussion, we are pleased to confirm the below ${country ? country + ' tour' : 'tour'} for you.`;
 
 }
 
-// Build preview HTML
+// Build preview HTML (essential for PDF/Copy functionality here)
 function buildPreviewHTML(data){
     let logoHTML = '';
     if(data.logoData) logoHTML = `<img src="${data.logoData}" alt="logo" class="brand-logo">`;
     else if(data.logoUrl) logoHTML = `<img src="${escapeHtml(data.logoUrl)}" alt="logo" class="brand-logo">`;
-    else logoHTML = `<div style="font-weight:700;color:#1f2937;font-size:18px">${escapeHtml(data.companyName||'')}</div>`;
+    else logoHTML = `<div style="font-weight:700;color:#1f2937;font-size:18px">${escapeHtml(data.companyName||'AsTours International')}</div>`;
 
     const introHTML = `<p style="white-space:pre-line;"><b>${escapeHtml(data.confirmationNo)?('Confirmation No.: '+escapeHtml(data.confirmationNo)):""}</b>\n${escapeHtml(getGreeting(data.passengerDetails, data.companyName))}</p>`;
     const passengersHTML = data.passengerDetails.map(p=>`<div>${escapeHtml(p)}</div>`).join('');
 
     let hotelsHTML = '';
     if(data.hotels.length){
-        hotelsHTML = `<table style="width:100%;border-collapse:collapse;margin-top:10px;">
+        hotelsHTML = `<table style="width:100%;border-collapse:collapse;margin-top:10px;font-size:12px;">
         <thead><tr style="background:#f3f4f6">
-        <th style="padding:8px;border:1px solid #d1d5db">City</th>
-        <th style="padding:8px;border:1px solid #d1d5db">Check In</th>
-        <th style="padding:8px;border:1px solid #d1d5db">Check Out</th>
-        <th style="padding:8px;border:1px solid #d1d5db">Hotel</th>`;
-        if(data.hotels.some(h=>h.contact)) hotelsHTML += `<th style="padding:8px;border:1px solid #d1d5db">Contact</th>`;
+        <th style="padding:8px;border:1px solid #d1d5db;text-align:left">City</th>
+        <th style="padding:8px;border:1px solid #d1d5db;text-align:left">Check In</th>
+        <th style="padding:8px;border:1px solid #d1d5db;text-align:left">Check Out</th>
+        <th style="padding:8px;border:1px solid #d1d5db;text-align:left">Hotel</th>`;
+        if(data.hotels.some(h=>h.contact)) hotelsHTML += `<th style="padding:8px;border:1px solid #d1d5db;text-align:left">Contact</th>`;
         hotelsHTML += `</tr></thead><tbody>`;
         data.hotels.forEach(h=>{
             hotelsHTML += `<tr>
@@ -290,26 +372,27 @@ function buildPreviewHTML(data){
     // Schedule
     const rows = [];
     data.hotels.forEach(h=>{
-        let current = new Date(h.checkin);
-        const end = new Date(h.checkout);
-        while(current<=end){
-            rows.push({date: formatDate(current), detail:`Stay in ${h.city} — ${h.hotel}`});
+        let current = new Date(h.checkin + 'T00:00:00');
+        const end = new Date(h.checkout + 'T00:00:00');
+        while(current.getTime() <= end.getTime()){
+            rows.push({date: formatDate(current.toISOString().split('T')[0]), detail:`Stay in ${h.city} — ${h.hotel}`});
             current.setDate(current.getDate()+1);
         }
     });
     data.manualDays.forEach(md=>{
         if(!md.date) return;
         const content = (md.title?md.title+' — ':'') + (md.activities||'');
-        const idx = rows.findIndex(r=>r.date===formatDate(md.date));
+        const formattedDate = formatDate(md.date);
+        const idx = rows.findIndex(r=>r.date===formattedDate);
         if(idx>=0) rows[idx].detail = content;
-        else rows.push({date:formatDate(md.date),detail:content});
+        else rows.push({date:formattedDate,detail:content});
     });
-    rows.sort((a,b)=>a.date.localeCompare(b.date));
+    rows.sort((a,b)=>a.date.split('/').reverse().join('').localeCompare(b.date.split('/').reverse().join(''))); // Sort dd/mm/yyyy
     let scheduleHTML='';
     if(rows.length){
-        scheduleHTML = `<table style="width:100%;border-collapse:collapse;margin-top:10px;">
-            <thead><tr style="background:#f3f4f6"><th style="padding:8px;border:1px solid #d1d5db">Date</th>
-            <th style="padding:8px;border:1px solid #d1d5db">Day-wise Activity</th></tr></thead><tbody>`;
+        scheduleHTML = `<table style="width:100%;border-collapse:collapse;margin-top:10px;font-size:12px;">
+            <thead><tr style="background:#f3f4f6"><th style="padding:8px;border:1px solid #d1d5db;text-align:left">Date</th>
+            <th style="padding:8px;border:1px solid #d1d5db;text-align:left">Day-wise Activity</th></tr></thead><tbody>`;
         rows.forEach(r=>{
             scheduleHTML += `<tr><td style="padding:8px;border:1px solid #e5e7eb;vertical-align:top">${r.date}</td>
             <td style="padding:8px;border:1px solid #e5e7eb;vertical-align:top">${escapeHtml(r.detail)}</td></tr>`;
@@ -319,7 +402,7 @@ function buildPreviewHTML(data){
 
     let companyInfo='';
     if(data.companyName||data.companyAddress||data.companyEmail||data.companyWebsite){
-        companyInfo = `<div style="margin-top:16px;">`;
+        companyInfo = `<div style="margin-top:16px;font-size:12px;">`;
         if(data.companyName) companyInfo += `<b>${escapeHtml(data.companyName)}</b><br/>`;
         if(data.companyAddress) companyInfo += `${escapeHtml(data.companyAddress)}<br/>`;
         if(data.companyEmail) companyInfo += `Email: ${escapeHtml(data.companyEmail)}<br/>`;
@@ -327,54 +410,82 @@ function buildPreviewHTML(data){
         companyInfo += `</div>`;
     }
 
-    return `<div style="font-family:Inter,Arial,Helvetica,sans-serif;color:#111827;">
+    // Dummy wrapper for existing copy/pdf functions
+    const dummyWrapper = document.getElementById('previewWrapper');
+    dummyWrapper.innerHTML = `<div style="font-family:Inter,Arial,Helvetica,sans-serif;color:#111827;">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">${logoHTML}</div>
         <hr style="margin:6px 0;border-color:#e5e7eb"/>
         ${introHTML}
-        <div style="margin-top:8px;"><b>Passenger Details:</b>${passengersHTML}</div>
+        <div style="margin-top:8px;font-size:12px;"><b>Passenger Details:</b>${passengersHTML}</div>
         ${hotelsHTML}
         ${scheduleHTML}
         ${companyInfo}
         <div style="margin-top:12px;font-size:11px;color:#6b7280;">Generated by AsToursInternational</div>
     </div>`;
+    return dummyWrapper.innerHTML;
 }
 
-// Generate preview
-function generatePreview() {
+
+// **NEW FUNCTION to store data and redirect**
+function generateAndRedirectPreview() {
     const data = collectData();
-    data.passengerDetails = data.passengerDetails || [];
-    data.hotels = data.hotels || [];
-    data.manualDays = data.manualDays || [];
+    // Validate required fields (optional but good practice)
+    if (!data.confirmationNo || !data.tourCountry || data.passengerDetails.length === 0) {
+        alert('Please fill in Confirmation No., Country of Tour, and Passenger Details before generating the preview.');
+        return;
+    }
+
+    // Temporarily build the HTML to populate logoData if a file was selected, needed for PDF/Copy in *this* page
     const html = buildPreviewHTML(data);
-    const wrapper = document.getElementById('previewWrapper');
-    wrapper.innerHTML = html;
-    document.getElementById('emptyMsg').style.display = 'none';
-    wrapper.style.display = 'block';
-    if (data.logoData) document.getElementById('dashLogo').src = data.logoData;
-    else if (data.logoUrl) document.getElementById('dashLogo').src = data.logoUrl;
-    else document.getElementById('dashLogo').src = '../../image/astourlogo.png';
+    
+    // Store the collected data in session storage
+    sessionStorage.setItem('itineraryData', JSON.stringify(data));
+    sessionStorage.setItem('itineraryHTML', html); // Store generated HTML for immediate use
+
+    // Redirect to the preview page
+    window.location.href = 'previeww.html';
 }
 
-// Download PDF
+
+// Download PDF (Modified to first build the HTML, as the preview is now on another page)
 function downloadPDF(){
+    const data = collectData();
+    if (!data.confirmationNo) { alert('Please fill in Confirmation No. and generate data first.'); return; }
+    
+    // Build HTML *before* attempting PDF generation
+    const htmlContent = buildPreviewHTML(data);
     const wrapper = document.getElementById('previewWrapper');
-    if(!wrapper.innerHTML.trim()){ alert('Generate preview first'); return; }
+    wrapper.innerHTML = htmlContent;
+
     const opt = {
-        margin: [10,10,10,10],
+        // Use optimized settings from previous steps
+        margin: [5, 5, 5, 5],
         filename: `Itinerary_${document.getElementById('confirmationNo').value||'confirmation'}.pdf`,
         image: {type:'jpeg',quality:0.98},
-        html2canvas:{scale:2,useCORS:true,logging:false},
-        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+        html2canvas:{scale:2,useCORS:true,logging:false, letterRendering: true},
+        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+        pagebreak: {
+            mode: ['css', 'legacy'],
+            avoid: ['img', 'table', '.itinerary-day', '.no-break']
+        }
     };
     html2pdf().set(opt).from(wrapper).save();
 }
 
-// Copy preview
+// Copy preview (Modified to first build the HTML)
 function copyPreview(){
+    const data = collectData();
+    if (!data.confirmationNo) { alert('Please fill in Confirmation No. and generate data first.'); return; }
+    
+    // Build HTML *before* attempting copy
+    const htmlContent = buildPreviewHTML(data);
     const wrapper = document.getElementById('previewWrapper');
-    if(!wrapper.innerText.trim()){ alert('Generate preview first'); return; }
+    wrapper.innerHTML = htmlContent;
+    
+    // Use the innerText of the generated HTML (which is hidden but populated)
     navigator.clipboard.writeText(wrapper.innerText).then(()=>alert('Itinerary text copied ✅'));
 }
+
 
 // Save to Google Sheet
 let isSaving = false; // prevent multiple clicks
@@ -397,14 +508,14 @@ async function saveToSheet(button){
         const resp = await fetch(WEB_APP_URL, {method:'POST', body: JSON.stringify(payload)});
         const result = await resp.json();
 
-        // Green success message in center
+        // Show success message
         const msgDiv = document.createElement('div');
         msgDiv.innerText = result.status || 'Saved successfully!';
         msgDiv.style.position = 'fixed';
         msgDiv.style.top = '50%';
         msgDiv.style.left = '50%';
-        msgDiv.style.transform = 'translate(-50%, -50%)'; // center horizontally and vertically
-        msgDiv.style.backgroundColor = '#16a34a'; // green
+        msgDiv.style.transform = 'translate(-50%, -50%)'; 
+        msgDiv.style.backgroundColor = '#16a34a'; 
         msgDiv.style.color = 'white';
         msgDiv.style.padding = '12px 20px';
         msgDiv.style.borderRadius = '8px';
@@ -414,9 +525,10 @@ async function saveToSheet(button){
         msgDiv.style.fontSize = '16px';
         document.body.appendChild(msgDiv);
 
-        setTimeout(()=>msgDiv.remove(), 3000); // remove after 3s
+        setTimeout(()=>msgDiv.remove(), 3000); 
 
-        loadItineraries(); // reload cart
+        // Reload itineraries with default setting (last 3)
+        loadItineraries(false); 
 
     } catch(e){
         alert('Error saving to sheet'); 
@@ -431,67 +543,105 @@ async function saveToSheet(button){
 }
 
 
-
-
-// Load itineraries
-async function loadItineraries(){
+// Load itineraries (Updated to show only last 3 or all filtered)
+async function loadItineraries(showAll=false){
     const filter = document.getElementById('filterCountry').value.toLowerCase();
     const list = document.getElementById('itineraryList');
-
+    const title = document.getElementById('itineraryListTitle');
+    const urlParams = new URLSearchParams({ action: 'list' });
+    
     // Show loading message
     list.innerHTML = '<div style="padding:10px;color:#1f7a1f;font-weight:600;">Loading itineraries...</div>';
+    title.innerText = showAll ? 'All Saved Itineraries' : `Recently Saved Itineraries (Last 3)`;
 
     try {
-        const res = await fetch(`${WEB_APP_URL}?action=list`);
+        const res = await fetch(`${WEB_APP_URL}?${urlParams.toString()}`);
         const json = await res.json();
+        
+        // Sort by a timestamp/date if available, otherwise assume the array comes in save order (newest last)
+        let filteredData = json.data.reverse() // Assuming oldest is first, reversing to get newest first
+            .filter(d => 
+                !filter || 
+                (d.tourCountry && d.tourCountry.toLowerCase().includes(filter)) ||
+                (d.confirmationNo && d.confirmationNo.toLowerCase().includes(filter))
+            );
+        
+        // Limit to last 3 if not searching explicitly
+        if (!showAll && !filter) {
+            filteredData = filteredData.slice(0, 3);
+            title.innerText = 'Recently Saved Itineraries (Last 3)';
+        } else if (filter) {
+            title.innerText = `Search Results for "${filter}" (${filteredData.length})`;
+        } else {
+            title.innerText = `All Saved Itineraries (${filteredData.length})`;
+        }
+
 
         // Clear list before appending
         list.innerHTML = '';
+        
+        filteredData.forEach(d=>{
+            const div = document.createElement('div');
+            div.className='cart-item border p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors shadow-sm';
+            
+            // Format passenger details for card display
+            const passengersText = (d.passengerDetails || []).slice(0, 2).join(', ') + ((d.passengerDetails.length > 2) ? '...' : '');
 
-        json.data
-            .filter(d=>!filter || (d.tourCountry||'').toLowerCase().includes(filter))
-            .forEach(d=>{
-                const div = document.createElement('div');
-                div.className='cart-item border p-2 rounded bg-gray-50';
-                div.innerHTML = `<b>${d.confirmationNo || 'No Confirm'}</b> — ${d.tourCountry || ''} — ${d.passengerDetails.join(', ')}`;
-                div.onclick = ()=>loadItineraryIntoForm(d);
-                list.appendChild(div);
-            });
+            div.innerHTML = `
+                <p class="font-bold text-gray-800">${d.confirmationNo || 'No Confirm'}</p> 
+                <p class="text-sm text-gray-600">${d.tourCountry || 'No Country'}</p>
+                <p class="text-xs text-gray-500 mt-1">Passengers: ${passengersText || 'N/A'}</p>
+            `;
+            div.onclick = ()=>loadItineraryIntoForm(d);
+            list.appendChild(div);
+        });
 
         // If no itineraries found after filtering
         if(list.innerHTML.trim() === '') {
-            list.innerHTML = '<div style="padding:10px;color:#6b7280;">No itineraries found.</div>';
+            list.innerHTML = `<div class="p-4 text-center text-gray-500 col-span-full">No itineraries found matching your search.</div>`;
         }
 
     } catch(e) {
-        list.innerHTML = '<div style="padding:10px;color:red;">Error loading itineraries. Please try again.</div>';
+        list.innerHTML = '<div class="p-4 text-center text-red-500 col-span-full">Error loading itineraries. Please check the Web App URL.</div>';
         console.error(e);
     }
 }
 
 // Load itinerary into form
 function loadItineraryIntoForm(d){
-    document.getElementById('companyName').value = d.companyName;
-    document.getElementById('companyAddress').value = d.companyAddress;
-    document.getElementById('companyEmail').value = d.companyEmail;
-    document.getElementById('companyWebsite').value = d.companyWebsite;
-    document.getElementById('confirmationNo').value = d.confirmationNo;
-    document.getElementById('reference').value = d.reference;
-    document.getElementById('tourCountry').value = d.tourCountry;
-    document.getElementById('passengerDetails').value = d.passengerDetails.join('\n');
+    document.getElementById('companyName').value = d.companyName || '';
+    document.getElementById('companyAddress').value = d.companyAddress || '';
+    document.getElementById('companyEmail').value = d.companyEmail || '';
+    document.getElementById('companyWebsite').value = d.companyWebsite || '';
+    document.getElementById('confirmationNo').value = d.confirmationNo || '';
+    document.getElementById('reference').value = d.reference || '';
+    document.getElementById('tourCountry').value = d.tourCountry || '';
+    document.getElementById('passengerDetails').value = (d.passengerDetails || []).join('\n');
+    
+    // Clear and refill hotels
     document.getElementById('hotelsList').innerHTML = '';
-    d.hotels.forEach(h=>addHotel(h));
+    (d.hotels || []).forEach(h=>addHotel(h));
+    
+    // Clear and refill manual days
     document.getElementById('manualDays').innerHTML = '';
-    d.manualDays.forEach(md=>addManualDay(md));
+    (d.manualDays || []).forEach(md=>addManualDay(md));
+    
     document.getElementById('logoUrl').value = d.logoUrl || '';
     logoData = d.logoData || '';
-    generatePreview();
+    
+    const dashLogo = document.getElementById('dashLogo');
+    if (logoData) dashLogo.src = logoData;
+    else if (d.logoUrl) dashLogo.src = d.logoUrl;
+    else dashLogo.src = '../../../image/astourlogo.png'; // Revert to default placeholder
+    
+    alert('Itinerary loaded into form. Click "Generate Preview" to view.');
 }
 
-// Initial load
+// --- Initial Load & Setup ---
 loadItineraries();
 
-
+// Dummy wrapper for PDF/Copy functionality on this page
+document.body.insertAdjacentHTML('beforeend', '<div id="previewWrapper" class="pdf-page" style="position:absolute; left:-9999px; display:none;"></div>');
 </script>
 </body>
 </html>

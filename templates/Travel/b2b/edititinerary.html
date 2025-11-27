@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AsToursInternational — Edit Itinerary</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Custom styles */
+:root {
+	--navy: #07203a;
+	--gold: #d4af37;
+}
+body {
+	font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	margin: 0;
+	background-color: #f3f4f6;
+	padding-top: 80px; /* Space for fixed header */
+}
+.hotel-block, .day-block { border-radius:0.5rem; background:#f9fafb; padding:0.5rem; }
+
+/* --- NAVBAR STYLES --- */
+.btn-gold {
+	background: linear-gradient(90deg, var(--gold), #f3d27a);
+	color: var(--navy);
+	font-weight: 600;
+	font-size: 0.875rem;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.btn-gold:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* Floating Logo badge style */
+.logo-badge {
+	height: 64px; 
+	width: 64px;
+	background-color: #ffd700;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px; 
+	position: fixed; 
+	top: 8px; 
+	left: 1rem;
+	z-index: 60; 
+}
+.logo-badge img {
+	width: 90%;
+	height: auto;
+	padding: 4px;
+}
+.nav-link {
+	font-size: 0.875rem; 
+	font-weight: 500;
+	transition: color 0.3s;
+	color: var(--navy);
+}
+.nav-link:hover {
+	color: var(--gold);
+}
+
+@media (min-width: 1024px) {
+	.logo-badge {
+		height: 64px; /* Reduced large screen size to prevent spreading */
+		width: 64px;
+		left: calc(50% - 35rem); 
+		top: 8px;
+	}
+	body { padding-top: 80px; }
+	.nav-link { font-size: 0.95rem; }
+}
+</style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans antialiased">
+
+<div class="logo-badge">
+    <a href="../../../index.html">
+        <img src="../../../image/astourlogo.png" alt="AS Tours International">
+    </a>
+</div>
+
+<header class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-sm z-50 h-20">
+    <div class="max-w-7xl mx-auto px-4 lg:px-8">
+        <div class="flex items-center justify-end h-20"> 
+            
+                        <div class="w-20 md:w-36 flex-shrink-0 lg:hidden"></div>
+
+            <nav class="hidden lg:flex items-center gap-8 ml-auto">
+                <a href="itinerary.html" class="nav-link">New Itinerary</a> 
+                <a href="saveditinerary.html" class="nav-link">Saved Itineraries</a> 
+                
+                <button type="button" onclick="openPreviewPage()" class="ml-4 px-5 py-2 text-sm rounded-full btn-gold">
+                    👀 Preview Itinerary
+                </button>
+            </nav>
+
+            <div class="lg:hidden flex items-center gap-3">
+                <button type="button" onclick="openPreviewPage()" class="px-3 py-1 text-sm rounded-full btn-gold shadow hover:shadow-md">
+                    👀 Preview
+                </button>
+                <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full absolute top-full left-0">
+        <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+            <a href="itinerary.html" class="nav-link block">New Itinerary</a>             <a href="saveditinerary.html" class="nav-link block">Saved Itineraries</a>             <button type="button" onclick="openPreviewPage()" class="w-full text-left nav-link">Preview Itinerary</button>
+        </div>
+    </div>
+</header>
+<main class="max-w-7xl mx-auto p-6">
+    <div class="md:max-w-3xl mx-auto">
+        <form id="formPanel" class="bg-white rounded-2xl shadow p-5 space-y-4">
+            <h2 class="text-2xl font-bold text-[var(--navy)]">
+                <span id="formTitle">Edit Itinerary</span> 
+                <span id="saveStatus" class="text-sm text-gray-500 font-normal ml-2"></span>
+            </h2>
+
+            <hr class="border-gray-200" />
+            
+            <input type="hidden" id="itineraryId" value="" /> 
+
+            <div class="p-4 bg-yellow-50 rounded">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Company/Logo</label>
+                <div class="space-y-2">
+                    <input id="logoUpload" type="file" accept="image/*" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                    <input id="logoUrl" type="url" placeholder="or paste Logo URL (https://...)" class="border rounded p-2 w-full text-sm" />
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium">Company Name</label>
+                    <input id="companyName" placeholder="AsTours International" class="border rounded p-2 w-full" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Country of Tour</label>
+                    <input id="tourCountry" placeholder="Brazil" class="border rounded p-2 w-full" />
+                </div>
+                <div class="md:col-span-2 grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm">Confirmation No.</label>
+                        <input id="confirmationNo" class="border rounded p-2 w-full" />
+                    </div>
+                    <div>
+                        <label class="block text-sm">Reference (optional)</label>
+                        <input id="reference" class="border rounded p-2 w-full" />
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Passenger Details (one per line)</label>
+                <textarea id="passengerDetails" rows="3" class="border rounded p-2 w-full" placeholder="Mr. Ahmed Abdul Saeed - Passport W3691761"></textarea>
+            </div>
+
+            <hr class="border-gray-200" />
+
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <label class="block text-lg font-bold text-[var(--navy)]">Hotels / Stays</label>
+                    <button type="button" onclick="addHotel()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded-full hover:bg-indigo-700 transition">+ Add Hotel</button>
+                </div>
+                <div id="hotelsList" class="mt-2 space-y-3"></div>
+            </div>
+
+            <hr class="border-gray-200" />
+
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <label class="block text-lg font-bold text-[var(--navy)]">Extra Day Entries (Manual Overrides)</label>
+                    <button type="button" onclick="addManualDay()" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded-full hover:bg-indigo-700 transition">+ Add Day</button>
+                </div>
+                <div id="manualDays" class="mt-2 space-y-2"></div>
+            </div>
+
+            <hr class="border-gray-200" />
+
+            <div class="space-y-4 pt-4">
+                <button type="button" onclick="saveItinerary()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-green-700 transition shadow-lg">💾 Update Itinerary</button>
+                <button type="button" onclick="openPreviewPage()" class="w-full bg-[var(--navy)] text-white py-3 rounded-xl font-bold text-lg hover:bg-[var(--navy)]/90 transition shadow-lg">👀 Preview Changes</button>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<script>
+let logoData = "";
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Mobile Menu Toggle
+    document.getElementById('mobileBtn').addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+    
+    // Check URL for ID to load data
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    if (id) {
+        loadItineraryForEdit(id);
+    } else {
+        // Redirect to the list page if ID is missing
+        alert("No itinerary ID provided. Redirecting to saved list.");
+        window.location.href = 'saveditinerary.html'; 
+    }
+});
+
+
+// --- Form Helpers ---
+
+// Logo upload
+document.getElementById('logoUpload').addEventListener('change', e => {
+    const f = e.target.files[0]; 
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = ev => { logoData = ev.target.result; };
+    reader.readAsDataURL(f);
+});
+
+// Add hotel
+function addHotel(pref={}) {
+    const container = document.createElement('div');
+    container.className='hotel-block grid grid-cols-1 md:grid-cols-4 gap-2 items-center';
+    container.innerHTML=`
+        <input class="p-2 border rounded hotel-city" placeholder="City" value="${pref.city||''}" />
+        <input class="p-2 border rounded hotel-checkin" type="date" value="${pref.checkin||''}" />
+        <input class="p-2 border rounded hotel-checkout" type="date" value="${pref.checkout||''}" />
+        <div class="md:col-span-4 grid grid-cols-3 md:grid-cols-6 gap-2 pt-1 md:pt-0">
+            <input class="col-span-3 md:col-span-3 p-2 border rounded hotel-name" placeholder="Hotel Name" value="${pref.hotel||''}" />
+            <input class="col-span-2 md:col-span-2 p-2 border rounded hotel-contact" placeholder="Contact" value="${pref.contact||''}" />
+            <button type="button" class="col-span-1 md:col-span-1 bg-red-500 text-white rounded px-2 hover:bg-red-600 transition" onclick="this.closest('.hotel-block').remove()">❌</button>
+        </div>
+    `;
+    document.getElementById('hotelsList').appendChild(container);
+}
+
+// Add manual day
+function addManualDay(obj={}) {
+    const div = document.createElement('div');
+    div.className='day-block grid grid-cols-1 md:grid-cols-4 gap-2 items-center';
+    div.innerHTML=`
+        <input type="date" class="p-2 border rounded day-date" value="${obj.date||''}" />
+        <input class="p-2 border rounded day-title" placeholder="Title" value="${obj.title||''}" />
+        <input class="p-2 border rounded day-activities" placeholder="Short activity" value="${obj.activities||''}" />
+        <div class="text-right">
+            <button type="button" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition" onclick="this.closest('.day-block').remove()">❌ Remove</button>
+        </div>
+    `;
+    document.getElementById('manualDays').appendChild(div);
+}
+
+// Collect form data
+function collectData(){
+    // ID is the original confirmationNo passed in the URL
+    const originalId = document.getElementById('itineraryId').value;
+    if (!originalId) {
+        alert("Error: Cannot save, missing itinerary ID. Refresh the list page and try again.");
+        return null;
+    }
+
+    const companyName = document.getElementById('companyName').value || '';
+    const tourCountry = document.getElementById('tourCountry').value || '';
+    // Get the potentially updated confirmation number
+    const confirmationNo = document.getElementById('confirmationNo').value || ''; 
+    const reference = document.getElementById('reference').value || '';
+    const passengerDetails = (document.getElementById('passengerDetails').value||'').split(/\r?\n/).filter(s=>s.trim());
+
+    const hotels = [];
+    document.querySelectorAll('.hotel-block').forEach(h=>{
+        const city = h.querySelector('.hotel-city').value;
+        const checkin = h.querySelector('.hotel-checkin').value;
+        const checkout = h.querySelector('.hotel-checkout').value;
+        const hotel = h.querySelector('.hotel-name').value;
+        const contact = h.querySelector('.hotel-contact').value;
+        if(city && checkin && checkout && hotel) hotels.push({city, checkin, checkout, hotel, contact});
+    });
+
+    const manualDays = [];
+    document.querySelectorAll('.day-block').forEach(d=>{
+        const date = d.querySelector('.day-date').value;
+        const title = d.querySelector('.day-title').value;
+        const activities = d.querySelector('.day-activities').value;
+        if(date || title || activities) manualDays.push({date,title,activities});
+    });
+
+    const logoUrl = document.getElementById('logoUrl').value || '';
+    const finalLogoData = logoData || ''; 
+
+    // Return the object using the ORIGINAL ID for lookups, but the NEW confirmationNo
+    return {id: originalId, companyName,tourCountry,confirmationNo,reference,passengerDetails,hotels,manualDays,logoUrl,logoData: finalLogoData};
+}
+
+// --- Data Persistence (Mock Backend using localStorage) ---
+
+function saveItinerary() {
+    const data = collectData();
+    if (!data) return; 
+
+    // Use the ID (original confirmationNo) stored in the hidden field to match the entry
+    const originalId = data.id; 
+
+    let saved = JSON.parse(localStorage.getItem('savedItineraries') || '[]');
+    
+    // Find the entry in the array by its original confirmationNo
+    const index = saved.findIndex(item => item.confirmationNo === originalId);
+    
+    if (index !== -1) {
+        // If found, replace the entry with the updated data
+        saved[index] = data;
+    } else {
+        // If not found, prepend it (as a new item)
+        saved.unshift(data); 
+    }
+
+    // Save to localStorage
+    localStorage.setItem('savedItineraries', JSON.stringify(saved));
+    
+    document.getElementById('saveStatus').textContent = 'Updated!';
+    setTimeout(() => { document.getElementById('saveStatus').textContent = ''; }, 3000);
+
+    alert('Itinerary updated successfully!');
+}
+
+function loadItineraryForEdit(id) {
+    const saved = JSON.parse(localStorage.getItem('savedItineraries') || '[]');
+    // Look up by confirmationNo, which is passed as the 'id' URL parameter
+    const data = saved.find(item => item.confirmationNo === id); 
+
+    if (!data) {
+        alert("Itinerary not found. Redirecting to saved list.");
+        window.location.href = 'saveditinerary.html'; 
+        return; 
+    }
+
+    // If found, populate the form fields
+    document.getElementById('formTitle').textContent = `Editing: ${data.companyName || data.confirmationNo || 'Itinerary'}`;
+    // CRITICAL: Store the original confirmationNo (ID) in the hidden field for saving/lookups
+    document.getElementById('itineraryId').value = id; 
+
+    // Populate Simple Fields
+    document.getElementById('companyName').value = data.companyName || '';
+    document.getElementById('tourCountry').value = data.tourCountry || '';
+    // This ensures the current confirmation number is editable
+    document.getElementById('confirmationNo').value = data.confirmationNo || ''; 
+    document.getElementById('reference').value = data.reference || '';
+    document.getElementById('logoUrl').value = data.logoUrl || '';
+    
+    // Populate Passenger Details
+    document.getElementById('passengerDetails').value = (data.passengerDetails || []).join('\n');
+    
+    // Store logoData if present (for preview)
+    logoData = data.logoData || ""; 
+
+    // Populate Hotels
+    document.getElementById('hotelsList').innerHTML = '';
+    (data.hotels || []).forEach(h => addHotel(h));
+
+    // Populate Manual Days
+    document.getElementById('manualDays').innerHTML = '';
+    (data.manualDays || []).forEach(d => addManualDay(d));
+}
+
+// Open preview page with data
+function openPreviewPage(){
+    const data = collectData();
+    if (!data) return;
+    sessionStorage.setItem('itineraryDataForPreview', JSON.stringify(data));
+    window.open(`preview.html`,'_blank');
+}
+</script>
+
+</body>
+</html>

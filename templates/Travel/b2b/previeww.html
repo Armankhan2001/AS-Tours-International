@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AsToursInternational — Itinerary Preview</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Custom styles */
+:root {
+  --navy: #07203a;
+  --gold: #d4af37;
+}
+body {
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  background-color: #f3f4f6; /* Lighter background for the preview page */
+}
+.font-playfair { font-family: 'Playfair Display', serif; }
+
+/* PDF Page Styles */
+.pdf-page { 
+  padding: 20mm; 
+  box-sizing: border-box; 
+  background: white; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* --- LOGO SIZING FOR ITINERARY CONTENT (PDF/Print) --- */
+.brand-logo { 
+  max-height: 120px; 
+  object-fit: contain; 
+  display: block; 
+  margin-right: 12px; 
+  border-radius: 4px; 
+}
+
+/* --- NAV BAR STYLES (FROM INPUT) --- */
+.btn-gold {
+    background: linear-gradient(90deg, var(--gold), #f3d27a);
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+.btn-gold:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* Logo badge style (KEPT FROM INPUT) */
+.logo-badge {
+    height: 140px;
+    width: 140px;
+    background-color: #ffd700;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border-radius: 4px; /* Added slight rounding for aesthetics */
+}
+.logo-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+.logo-badge img {
+    width: 90%;
+    height: auto;
+    padding: 4px;
+}
+@media (min-width: 1024px) {
+    .logo-badge {
+        height: 160px;
+        width: 160px;
+    }
+}
+
+/* Style for the Copy button */
+.btn-copy {
+    background-color: #55acee; /* Blue for Copy action */
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+.btn-copy:hover {
+    background-color: #4a9bd9;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.nav-link {
+    font-size: 0.875rem; 
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+/* --- OPTIMIZED PRINT/PDF STYLES --- */
+.itinerary-day, .itinerary-section, .no-break {
+    page-break-inside: avoid;
+}
+
+@media (max-width: 768px) {
+  .pdf-page {
+    width: 100%;
+    min-height: auto;
+    padding: 10px;
+    margin: 10px auto;
+  }
+}
+
+/* Print/PDF styles */
+@media print {
+  body {
+    background-color: white !important;
+  }
+  .pdf-page {
+    margin: 0;
+    box-shadow: none;
+    border: none;
+    padding: 20mm;
+  }
+  .print-hidden {
+    display: none !important;
+  }
+}
+</style>
+</head>
+<body class="antialiased">
+
+<header class="print-hidden relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+
+      <div class="absolute top-0 left-4 z-50">
+        <a href="../../../index.html" class="logo-badge">
+          <img src="../../../image/astourlogo.png" alt="AS Tours International">
+        </a>
+      </div>
+
+      <div class="w-36 flex-shrink-0"></div>
+
+      <nav class="hidden lg:flex items-center gap-4 text-[var(--navy)]">
+        <a href="../b2b/itinerary.html" class="nav-link hover:text-[var(--gold)]">Back to Generator</a>
+        <a href="../b2b/saveditinerary.html" class="nav-link hover:text-[var(--gold)]">Saved Itineraries</a>
+        
+        <button id="copyBtn" class="ml-4 px-5 py-2 rounded-full btn-copy">
+            Copy Text
+        </button>
+        
+        <button id="pdfBtn" class="px-5 py-2 rounded-full btn-gold">
+            Download PDF
+        </button>
+      </nav>
+
+      <div class="lg:hidden ml-auto flex items-center gap-2">
+        <button id="pdfBtnMobileNav" class="px-3 py-1 rounded-full btn-gold text-sm font-semibold">PDF</button>
+
+        <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
+    <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+      <a href="index.html" class="nav-link block hover:text-indigo-600">Back to Generator</a>
+      <a href="#packages" class="nav-link block hover:text-[var(--gold)]">Packages</a>
+      <a href="#visa" class="nav-link block hover:text-[var(--gold)]">Visa Services</a>
+      <a href="#contact" class="nav-link block hover:text-[var(--gold)]">Contact</a>
+      
+      <button id="copyBtnMobile" class="block mt-4 px-4 py-2 rounded-full btn-copy text-center w-full">Copy Text</button>
+      
+      <button id="pdfBtnMobile" class="block mt-2 px-4 py-2 rounded-full btn-gold text-center w-full">Download PDF</button>
+    </div>
+  </div>
+</header>
+<main class="max-w-7xl mx-auto p-0 md:p-6">
+    <div id="previewWrapper" class="pdf-page"> 
+        <div id="loadingMessage" class="text-center p-10 text-gray-500">
+            <p class="font-bold">Loading Itinerary...</p>
+            <p class="mt-2">If this message persists, please go back to the generator page and click "Generate Preview" again.</p>
+            <a href="index.html" class="mt-4 inline-block text-indigo-600 underline">Go to Generator</a>
+        </div>
+    </div>
+</main>
+
+
+<script>
+// Escape HTML 
+function escapeHtml(text){
+    if(!text && text!==0) return '';
+    return String(text).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const previewWrapper = document.getElementById('previewWrapper');
+    const htmlContent = sessionStorage.getItem('itineraryHTML');
+    const dataString = sessionStorage.getItem('itineraryData');
+
+    if (htmlContent) {
+        previewWrapper.innerHTML = htmlContent;
+    } else {
+        // Fallback logic remains the same
+        if (dataString) {
+            const data = JSON.parse(dataString);
+            document.getElementById('loadingMessage').innerHTML = 'Itinerary data found, but failed to load structure. Please go back to the generator.';
+        } else {
+             document.getElementById('loadingMessage').innerHTML = 'No itinerary data found. <a href="index.html" class="text-indigo-600 underline">Go to Generator</a>';
+        }
+    }
+
+
+    // --- Core Action Functions ---
+
+    const handlePdfDownload = () => {
+        if (!previewWrapper.innerText.trim()) { alert('No preview to download.'); return; }
+        
+        const data = dataString ? JSON.parse(dataString) : {};
+        
+        const opt = {
+            // BEST PDF DOWNLOAD SETTINGS: Centered, no character breaks.
+            margin: [5, 5, 5, 5], // [Top, Left, Bottom, Right]
+            filename: `Itinerary_${data.confirmationNo||'confirmation'}.pdf`,
+            image: {type:'jpeg',quality:0.98},
+            html2canvas:{
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                letterRendering: true 
+            },
+            jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+            
+            // Intelligent Page Break Configuration 
+            pagebreak: {
+                mode: ['css', 'legacy'], 
+                before: ['.before-break'], 
+                after: ['.after-break'], 
+                avoid: ['img', 'table', '.itinerary-day', '.no-break'] 
+            }
+        };
+        
+        html2pdf().set(opt).from(previewWrapper).save();
+    };
+
+    const handleCopyText = () => {
+        if (!previewWrapper.innerText.trim()) { alert('No preview to copy.'); return; }
+        navigator.clipboard.writeText(previewWrapper.innerText).then(()=>alert('Itinerary text copied ✅'));
+    };
+
+
+    // --- Event Listeners for Actions ---
+    
+    // PDF Buttons
+    document.getElementById('pdfBtn').addEventListener('click', handlePdfDownload); // Desktop
+    const pdfBtnMobile = document.getElementById('pdfBtnMobile');
+    if (pdfBtnMobile) pdfBtnMobile.addEventListener('click', handlePdfDownload); // Mobile Menu
+    const pdfBtnMobileNav = document.getElementById('pdfBtnMobileNav');
+    if (pdfBtnMobileNav) pdfBtnMobileNav.addEventListener('click', handlePdfDownload); // Mobile Nav Inline
+
+    // Copy Buttons
+    document.getElementById('copyBtn').addEventListener('click', handleCopyText); // Desktop
+    const copyBtnMobile = document.getElementById('copyBtnMobile');
+    if (copyBtnMobile) copyBtnMobile.addEventListener('click', handleCopyText); // Mobile Menu
+
+
+    // Mobile Menu Button Logic
+    document.getElementById('mobileBtn').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+});
+</script>
+</body>
+</html>

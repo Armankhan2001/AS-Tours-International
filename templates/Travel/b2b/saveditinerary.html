@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Saved Itineraries — AsToursInternational</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Custom styles from the navbar and original page combined/updated */
+:root {
+  --navy: #07203a;
+  --gold: #d4af37;
+}
+body {
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  background: #f3f4f6;
+}
+/* Navbar and Button Styles */
+.btn-gold {
+  background: linear-gradient(90deg, var(--gold), #f3d27a);
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 0.875rem; 
+  transition: all 0.3s ease;
+}
+.btn-gold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.logo-badge { height: 64px; width: 64px; background-color: #ffd700; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); display: flex; align-items: center; justify-content: center; border-radius: 4px; flex-shrink: 0; }
+@media (min-width: 1024px) {
+  .logo-badge { height: 160px; width: 160px; position: absolute; top: 0; left: 1rem; z-index: 50; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); }
+}
+.nav-link { font-size: 0.875rem; font-weight: 500; transition: color 0.3s; }
+
+/* Spinner and Card styles */
+.spinner {
+  border: 4px solid rgba(0,0,0,0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: var(--navy); 
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.itinerary-card { transition: all 0.2s ease-in-out; }
+.itinerary-card:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+}
+</style>
+</head>
+<body class="antialiased min-h-screen">
+
+<header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="absolute top-0 left-4 z-50">
+        <a href="../../../index.html" class="logo-badge">
+          <img src="../../../image/astourlogo.png" alt="AS Tours International">
+        </a>
+      </div>
+      <div class="w-36 flex-shrink-0"></div>
+      <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
+        <a href="#" class="nav-link font-bold text-indigo-600 hover:text-[var(--gold)]">Home</a> 
+        <a href="itinerary.html" class="nav-link font-bold text-indigo-600 hover:text-[var(--gold)]">Itinerary Generator</a> 
+        <a href="Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold">Partner with Us</a>
+      </nav>
+      <div class="lg:hidden ml-auto">
+        <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
+    <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+      <a href="edititinerary.html" class="nav-link block font-bold text-indigo-600 hover:text-[var(--gold)]">Itinerary Generator</a>
+      </div>
+  </div>
+</header>
+<main class="max-w-6xl mx-auto p-6 mt-10 lg:mt-24">
+
+<div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <h1 class="text-xl font-bold text-[var(--navy)]">📋 All Saved Itineraries ✈️</h1>
+        <input type="text" id="searchInput" placeholder="🔍 Search by name, country, or confirmation..." 
+               class="border rounded px-3 py-2 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+    </div>
+</div>
+
+<div id="itineraryList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="col-span-full flex justify-center py-10" id="loadingIndicator">
+        <div class="spinner"></div>
+    </div>
+</div>
+
+</main>
+
+<script>
+document.getElementById('mobileBtn').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+});
+
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyHWuCVyvT5qf5IjDSKQxHX7VdEGH_LU6VSCTOmz0GtjAuQtYesdy4qbyq6Re-sgylPPQ/exec";
+let itineraries = [];
+
+function getFlagEmoji(countryCode) {
+    if(!countryCode) return '🏳️';
+    // This is unreliable without ISO data from the backend, but kept for visualization
+    return countryCode.toUpperCase().replace(/./g, char => 
+        String.fromCodePoint(127397 + char.charCodeAt())
+    );
+}
+
+// Render itinerary cards
+function renderItineraries(data){
+    const listEl = document.getElementById('itineraryList');
+    listEl.innerHTML = '';
+    if(!data.length){
+        listEl.innerHTML = '<p class="col-span-full text-gray-500 text-center py-10">No saved itineraries found.</p>';
+        return;
+    }
+
+    data.forEach(d=>{
+        const div = document.createElement('div');
+        div.className = 'itinerary-card cursor-pointer border rounded-xl p-4 bg-white hover:bg-gray-50';
+        const flag = getFlagEmoji(d.countryISO || '');
+        const passengers = d.passengerDetails?.slice(0, 2).join(', ') + (d.passengerDetails?.length > 2 ? '...' : '');
+
+        // Calculate dates dynamically from hotels array
+        let startDate = d.hotels?.[0]?.checkin ? new Date(d.hotels[0].checkin).toLocaleDateString() : 'N/A';
+        let endDate = d.hotels?.slice(-1)[0]?.checkout ? new Date(d.hotels.slice(-1)[0].checkout).toLocaleDateString() : 'N/A';
+        
+        div.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-[var(--navy)] text-lg">${flag} ${d.tourCountry || 'Unknown Country'}</h3>
+            <span class="text-sm font-mono text-gray-500">#${d.confirmationNo || 'N/A'}</span>
+          </div>
+          <p class="text-gray-700 mb-1">👤 ${passengers || 'No passengers listed'}</p>
+          <p class="text-gray-500 text-sm mb-2">🗓 ${startDate} → ${endDate}</p>
+          <div class="flex justify-end gap-2">
+            <button class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 text-sm">Preview ➡️</button>
+            <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">✏️ Edit</button>
+          </div>
+        `;
+
+        // Action 1: Preview (Uses sessionStorage to pass data for rendering)
+        div.querySelector('button:nth-child(1)').onclick = ()=>{
+            // Store the full data object for the preview page to use
+            sessionStorage.setItem('itineraryDataForPreview', JSON.stringify(d)); 
+            // The preview page (preview.html) must now be responsible for rendering the HTML structure.
+            window.open('preview.html', '_blank'); 
+        };
+
+        // Action 2: Edit (Uses localStorage to pass data back to the generator for form population)
+        div.querySelector('button:nth-child(2)').onclick = ()=>{
+            localStorage.setItem('editItinerary', JSON.stringify(d));
+            window.open('edititinerary.html', '_blank'); // Assumes edititinerary.html is your main editor
+        };
+
+        listEl.appendChild(div);
+    });
+}
+
+function filterItineraries(term){
+    const filtered = itineraries.filter(d=>{
+        term = term.toLowerCase();
+        const passengers = (d.passengerDetails || []).join(' ').toLowerCase();
+        return (d.tourCountry?.toLowerCase().includes(term) || 
+                d.confirmationNo?.toLowerCase().includes(term) ||
+                passengers.includes(term));
+    });
+    renderItineraries(filtered);
+}
+
+async function loadItineraries(){
+    // ... (Loading logic remains the same)
+    const listEl = document.getElementById('itineraryList');
+    const loadingEl = document.getElementById('loadingIndicator');
+    loadingEl.style.display = 'flex';
+    try{
+        const res = await fetch(`${WEB_APP_URL}?action=list`);
+        const json = await res.json();
+        // Reverse to show newest first
+        itineraries = (json.data || []).reverse(); 
+        filterItineraries('');
+    } catch(e){
+        listEl.innerHTML = `<p class="col-span-full text-red-500 text-center py-10">Failed to load itineraries: ${e.message}</p>`;
+    } finally {
+        loadingEl.style.display = 'none';
+    }
+}
+
+document.getElementById('searchInput').addEventListener('input', (e)=>{
+    filterItineraries(e.target.value);
+});
+
+loadItineraries();
+</script>
+
+</body>
+</html>
