@@ -4,7 +4,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#07203a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="image/astourlogo.png">
 
     <meta charset="UTF-8">
@@ -33,7 +33,7 @@
 
         .font-playfair { font-family: 'Playfair Display', serif; }
 
-        /* General Heading */
+        /* General Heading - Use Tailwind for size, keep custom color/font */
         h2 {
             font-weight: 700;
             letter-spacing: 1px;
@@ -54,12 +54,12 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.15);
         }
 
-        /* Logo badge style */
+        /* Logo badge style - Adjusted for better responsiveness */
         .logo-badge {
-            height: 140px;
-            width: 140px;
+            height: 80px; /* Mobile size */
+            width: 80px;  /* Mobile size */
             background-color: #ffd700;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -67,6 +67,14 @@
             border-bottom-right-radius: 8px;
             border-bottom-left-radius: 8px;
             overflow: hidden;
+            z-index: 60; /* Higher than header for overlay effect */
+        }
+        @media (min-width: 1024px) { /* lg screens */
+             .logo-badge {
+                height: 140px; 
+                width: 140px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            }
         }
         .logo-badge img {
             width: 90%;
@@ -75,17 +83,16 @@
             object-fit: contain;
         }
 
-        /* Navbar links font size */
-        .nav-link-custom {
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: color 0.3s;
+        /* Content Padding for Fixed Header - Adjusted for smaller logo on mobile */
+        .content-padding {
+            padding-top: 100px; /* Default for mobile/tablet */
+        }
+        @media (min-width: 1024px) { /* lg screens */
+             .content-padding {
+                padding-top: 160px; /* Larger logo needs more space */
+            }
         }
 
-        /* Content Padding for Fixed Header */
-        .content-padding {
-            padding-top: 100px; /* Adjust based on navbar height */
-        }
 
         /* --- Card Styles --- */
         .card {
@@ -93,9 +100,11 @@
             background: white;
             box-shadow: 0 6px 16px rgba(0,0,0,0.08);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
+            /* Added ring on focus for accessibility */
+            outline: none; 
             cursor: pointer;
         }
-        .card:hover {
+        .card:hover, .card:focus-within {
             transform: translateY(-5px);
             box-shadow: 0 12px 28px rgba(0,0,0,0.12);
         }
@@ -128,7 +137,7 @@
             border-radius: 8px;
             font-weight: 600;
             padding: 6px 12px;
-            background: #28a745; /* Success Green */
+            background: #28a745; 
             color: white;
             transition: background 0.3s;
         }
@@ -136,10 +145,21 @@
             background: #218838;
         }
 
-        /* --- Tabs --- */
+        /* --- Tabs (Optimized for horizontal scroll) --- */
+        .nav-tabs-container {
+            /* Makes the container scrollable on smaller screens */
+            overflow-x: auto; 
+            white-space: nowrap; /* Prevents buttons from wrapping */
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Hide scrollbar for Firefox */
+            -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+        }
+        .nav-tabs-container::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+        }
         .nav-tabs-custom {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start; 
             margin-bottom: 1.5rem;
             border-bottom: 2px solid #e0e0e0;
         }
@@ -152,6 +172,9 @@
             text-decoration: none;
             background: none;
             border: none;
+            margin: 0 5px; 
+            flex-shrink: 0; 
+            cursor: pointer;
         }
         .nav-tabs-custom button.active, .nav-tabs-custom a.active {
             color: var(--gold);
@@ -161,34 +184,28 @@
             color: var(--gold);
         }
 
-        /* --- Search --- */
-        .search-box input {
-            border-radius: 12px;
-            border: 2px solid #e0e0e0;
-            padding: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            width: 100%;
-        }
-
-        /* --- Password overlay (Tailwind adapted) --- */
+        /* --- Password overlay --- (Kept as is, it's already functional) */
         #passwordOverlay {
             position: fixed;
             top: 0; left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(7, 32, 58, 0.95); /* Dark Navy transparent */
+            background: rgba(7, 32, 58, 0.95); 
             z-index: 9999;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box; 
         }
 
         #passwordOverlay input {
             padding: 12px;
             border-radius: 8px;
             border: none;
-            width: 280px;
+            max-width: 300px; 
+            width: 100%;
             margin-bottom: 15px;
             font-size: 16px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -210,7 +227,7 @@
         }
 
         #passwordOverlay p {
-            color: #fca5a5; /* Light Red */
+            color: #fca5a5; 
             margin-top: 10px;
             font-size: 14px;
         }
@@ -235,50 +252,118 @@
             background: #1a3c5d;
         }
         
-        /* B2B Discount Highlight */
+        /* --- SERVICE CHARGE ALIGNMENT FIX --- (Crucial for responsiveness) */
+        /* Applying the critical styles to prevent wrapping on small screens */
+        .service-charge-line {
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap; 
+            font-size: 0.9rem; 
+            color: #555;
+            margin-bottom: 6px;
+            min-width: 0; 
+            overflow: hidden; 
+        }
+
         .discount-highlight {
             font-weight: 700;
-            color: #10b981; /* Tailwind emerald-500 */
-            margin-left: 8px;
-            background-color: #ecfdf5; /* Tailwind emerald-50 */
-            padding: 2px 6px;
+            color: #10b981; 
+            background-color: #ecfdf5; 
+            padding: 1px 4px; 
             border-radius: 4px;
+            font-size: 0.85rem; 
+            white-space: nowrap; 
         }
+        
+        .service-charge-label {
+            white-space: nowrap; 
+            margin-right: 4px;
+            font-weight: 600; 
+        }
+        
+        .discount-highlight-wrapper {
+            display: flex; 
+            align-items: baseline;
+            flex-wrap: nowrap; 
+            min-width: 0;
+            /* Allow text to truncate if needed, prioritizing display of discount tag */
+            overflow: hidden; 
+            text-overflow: ellipsis;
+        }
+        .discount-highlight-wrapper .line-through {
+            margin-right: 4px;
+            white-space: nowrap; /* Ensure line-through price stays together */
+        }
+
         /* Note Styling */
         .fee-note {
             font-size: 0.8rem;
-            color: #ef4444; /* Tailwind red-500 */
+            color: #ef4444; 
             margin-top: -4px;
             margin-bottom: 10px;
             font-style: italic;
         }
+
+        /* Global Header Height Fix */
+        header .h-20 {
+            height: 5rem; /* 80px for mobile */
+        }
+        @media (min-width: 1024px) {
+            /* Adjusting the header height for the large logo on desktop */
+            header .h-20 {
+                height: 4rem; /* 64px for desktop to make it sleek */
+            }
+        }
+
+        /* Search Box improvement */
+        .search-box input {
+            /* Inherits most styles, just ensuring it has max-width on desktop */
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block; /* Center input field on desktop */
+        }
+
+        @media (max-width: 767px) {
+             /* Ensure the Apply Now button is full width on small screens */
+            .card .mt-3 a {
+                width: 100%;
+            }
+        }
+
     </style>
 </head>
 <body class="antialiased">
 
+    <div id="passwordOverlay">
+        <input type="password" id="adminPassword" placeholder="Enter Password" aria-label="Enter Password" />
+        <button onclick="checkPassword()">Unlock</button>
+        <p id="errorMessage" role="alert"></p>
+    </div>
+    
     <header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-lg">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+            <div class="flex items-center justify-between h-20 lg:h-16">
 
-                <div class="absolute top-0 left-4 z-50">
-                    <a href="../../../../index.html" class="logo-badge">
-                        <img src="../../../../image/astourlogo.png" alt="AS Tours International">
+                <div class="absolute top-0 left-4 lg:left-8">
+                    <a href="../../../../index.html" class="logo-badge" aria-label="AS Tours International Home">
+                        <img src="../../../../image/astourlogo.png" alt="AS Tours International Logo">
                     </a>
                 </div>
 
-                <div class="w-36 flex-shrink-0"></div>
+                <div class="w-24 lg:w-36 flex-shrink-0"></div>
 
-                <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
+                <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]" aria-label="Main Navigation">
                     <a href="#" class="nav-link-custom hover:text-[var(--gold)]">Home</a>
                     <a href="../../../../packages/packages.html" class="nav-link-custom hover:text-[var(--gold)]">Packages</a>
-                    <a href="../../../../visa/visaservices.html" class="nav-link-custom hover:text-[var(--gold)] font-bold text-[var(--gold)]">Visa Services</a>
+                    <a href="../../../../visa/visaservices.html" class="nav-link-custom hover:text-[var(--gold)] font-bold text-[var(--gold)]" aria-current="page">Visa Services</a>
                     <a href="../about.html" class="nav-link-custom hover:text-[var(--gold)]">About Us</a>
                     <a href="../../../contact.html" class="nav-link-custom hover:text-[var(--gold)]">Contact</a>
                     <a href="../Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold font-bold">Partner with Us</a>
                 </nav>
 
                 <div class="lg:hidden ml-auto">
-                    <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+                    <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors" aria-expanded="false" aria-controls="mobileMenu" aria-label="Toggle Navigation">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
@@ -288,52 +373,60 @@
         </div>
 
         <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
-            <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+            <nav class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium flex flex-col" aria-label="Mobile Navigation">
                 <a href="#" class="nav-link-custom hover:text-[var(--gold)]">Home</a>
                 <a href="../../../../packages/packages.html" class="nav-link-custom hover:text-[var(--gold)]">Packages</a>
-                <a href="../../../../visa/visaservices.html" class="nav-link-custom hover:text-[var(--gold)] font-bold text-[var(--gold)]">Visa Services</a>
+                <a href="../../../../visa/visaservices.html" class="nav-link-custom hover:text-[var(--gold)] font-bold text-[var(--gold)]" aria-current="page">Visa Services</a>
                 <a href="../about.html" class="nav-link-custom hover:text-[var(--gold)]">About Us</a>
                 <a href="../../../contact.html" class="nav-link-custom hover:text-[var(--gold)]">Contact</a>
-                <a href="../Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold font-bold">Partner with Us</a>
-            </div>
+                <a href="../Visa/b2b.html" class="mt-3 px-5 py-2 rounded-full btn-gold font-bold text-center">Partner with Us</a>
+            </nav>
         </div>
     </header>
-    <br>
-    <br>
-    <br>
-    <BR></BR>
-    <BR></BR>
 
-    <div id="passwordOverlay">
-        <input type="password" id="adminPassword" placeholder="Enter Password" />
-        <button onclick="checkPassword()">Unlock</button>
-        <p id="errorMessage"></p>
-    </div>
+    <main class="container mx-auto px-4 py-4 content-padding">
+        <br>
+        <br>
+        <br>
+        <h2 class="text-center mb-6 text-2xl sm:text-3xl">🤝 B2B Visa Rate Sheet</h2>
 
-    <div class="container mx-auto px-4 py-4 content-padding">
-        <h2 class="text-center mb-6 text-3xl">🤝 B2B Visa Rate Sheet</h2>
-
-        <div class="nav-tabs-custom" id="sheetTabs">
-            <button class="active" data-sheet="main">🌐 Main Visa Data</button>
-            <button data-sheet="schengen">🇪🇺 Schengen 29 Countries</button>
-            <button data-sheet="Evisa">🛂 E-visa</button>
+        <div class="nav-tabs-container pb-2 mb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div class="nav-tabs-custom" role="tablist" id="sheetTabs">
+                <button class="active" data-sheet="main" role="tab" aria-selected="true" id="tab-main">🌐 Main Visa Data</button>
+                <button data-sheet="schengen" role="tab" aria-selected="false" id="tab-schengen">🇪🇺 Schengen 29 Countries</button>
+                <button data-sheet="Evisa" role="tab" aria-selected="false" id="tab-evisa">🛂 E-visa</button>
+            </div>
         </div>
-
+        
         <div class="search-box mb-6">
-            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country...">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search country..." aria-label="Search country">
         </div>
 
-        <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    </div>
+        <div id="cardsContainer" role="region" aria-live="polite" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            </div>
+    </main>
 
 <script>
 // TOGGLE MOBILE MENU
-document.getElementById('mobileBtn').addEventListener('click', () => {
-    document.getElementById('mobileMenu').classList.toggle('hidden');
+const mobileBtn = document.getElementById('mobileBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+mobileBtn.addEventListener('click', () => {
+    const isExpanded = mobileMenu.classList.toggle('hidden');
+    mobileBtn.setAttribute('aria-expanded', !isExpanded);
 });
 
+// Hide mobile menu when a link is clicked
+document.querySelectorAll('#mobileMenu a').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        mobileBtn.setAttribute('aria-expanded', 'false');
+    });
+});
+
+
 const SHEET_ID = "1F9RGurjNDCxjw0ydzQPtBuoueLRrNH99uK-fhu3BAQs";
-const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ"; // Replace with your key
+const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ"; 
 
 const sheets = {
     main: "VISA FEES & LINKS",
@@ -341,7 +434,6 @@ const sheets = {
     Evisa: "E-visas",
 };
 
-// Map sheet keys to user-friendly names for the WhatsApp message
 const sheetNames = {
     main: "Main Visa Data",
     schengen: "Schengen Visa",
@@ -350,41 +442,63 @@ const sheetNames = {
 
 let visaData = [];
 let activeSheet = "main";
+const cardsContainer = document.getElementById("cardsContainer");
 
+/**
+ * Renders an alert message in the cards container.
+ * @param {string} message The message to display.
+ * @param {string} className Tailwind classes for styling (e.g., 'text-red-500').
+ */
+function renderMessage(message, className = 'text-gray-500') {
+    cardsContainer.innerHTML = `<p class="text-center ${className} col-span-full py-5">${message}</p>`;
+    visaData = [];
+}
+
+/**
+ * Fetches visa data from the Google Sheet API.
+ * @param {string} sheetKey The key for the sheet to fetch ('main', 'schengen', 'Evisa').
+ */
 async function fetchVisaData(sheetKey) {
     const range = sheets[sheetKey];
-    const container = document.getElementById("cardsContainer");
-    container.innerHTML = `<p class="text-center text-gray-500 col-span-full"><i class="fas fa-spinner fa-spin mr-2"></i> Loading data...</p>`;
+    renderMessage(`<i class="fas fa-spinner fa-spin mr-2"></i> Loading data...`);
     
     try {
+        // NOTE: The API_KEY is exposed in this client-side code, which is NOT a secure practice.
+        // For a real application, this should be handled by a secure backend proxy.
         const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        
         const data = await res.json();
         
-        if (!data.values || data.values.length === 0) {
-            container.innerHTML = `<p class="text-center text-muted col-span-full">No data found</p>`;
-            visaData = [];
+        if (!data.values || data.values.length <= 1) {
+            renderMessage(`No data found for ${sheetNames[sheetKey]}`, 'text-muted');
             return;
         }
         
         const headers = data.values[0];
+        // Map rows to objects and filter out empty country rows
         visaData = data.values.slice(1).map(row => {
             const obj = {};
-            headers.forEach((header, i) => obj[header] = row[i] || "");
+            headers.forEach((header, i) => obj[header] = row[i] ? String(row[i]).trim() : "");
             return obj;
-        });
+        }).filter(row => row["Countries"] && row["Countries"].length > 0);
         
         renderCards(visaData, sheetKey);
     } catch (error) {
         console.error("Error fetching data:", error);
-        container.innerHTML = `<p class="text-center text-red-500 col-span-full">Error loading data.</p>`;
+        renderMessage(`Error loading data. Check console for details.`, 'text-red-500');
     }
 }
 
+/**
+ * Renders the visa data into responsive cards.
+ * @param {Array<Object>} data Array of visa objects.
+ * @param {string} sheetKey The key of the active sheet.
+ */
 function renderCards(data, sheetKey) {
-    const container = document.getElementById("cardsContainer");
-    container.innerHTML = "";
+    cardsContainer.innerHTML = "";
     if (!data || data.length === 0) {
-        container.innerHTML = `<p class="text-center text-muted col-span-full">No data found</p>`;
+        renderMessage(`No countries match your search in the current sheet.`, 'text-gray-600');
         return;
     }
 
@@ -393,62 +507,79 @@ function renderCards(data, sheetKey) {
         
         const countryName = row["Countries"];
         const currentSheetName = sheetNames[sheetKey];
-        const card = document.createElement("div");
-        card.className = "col-span-1";
-
-        // Generate WhatsApp message with country and sheet name
+        
+        // WhatsApp Message Setup
         const whatsappMessage = encodeURIComponent(`Hello, I would like to inquire about the ${currentSheetName} for ${countryName}. Please share the detailed B2B requirements and rates.`);
         const whatsappLink = `https://wa.me/918850102255?text=${whatsappMessage}`;
 
-
-        // Calculate Service Charge 50% discount
+        // Service Charge Calculation and Formatting
+        let serviceChargeRaw = (row["Service Charge"] || "0").replace(/[^0-9.]/g, ''); 
         let serviceCharge = row["Service Charge"] || "N/A";
-        let discountedCharge = (serviceCharge !== "N/A" && !isNaN(parseFloat(serviceCharge)) && parseFloat(serviceCharge) > 0) 
-            ? (parseFloat(serviceCharge) / 2).toFixed(2) 
-            : "N/A";
+        
+        let originalPriceDisplay = serviceCharge;
+        let discountTag = '';
 
+        if (serviceCharge !== "N/A" && parseFloat(serviceChargeRaw) > 0) {
+            const discountedCharge = (parseFloat(serviceChargeRaw) / 2).toFixed(0);
+            // Extract currency prefix (e.g., 'INR')
+            const currencyPrefix = (row["Service Charge"].match(/[^0-9\s.,]+/g) || [''])[0]; 
+            
+            // Apply the special classes for a single-line display
+            originalPriceDisplay = `<span class="line-through text-gray-400">${serviceCharge}</span>`;
+            discountTag = `<span class="discount-highlight ml-1">(50% Off: ${currencyPrefix} ${discountedCharge})</span>`;
+        }
+
+        // Build the main details HTML block
         let detailsHTML = `
-            <p class="info-line"><i class="fa-solid fa-coins"></i><strong>Visa Fees:</strong> ${row["Visa Fees"] || "N/A"}</p>
+            <p class="info-line" role="listitem"><i class="fa-solid fa-coins"></i><strong>Visa Fees:</strong> ${row["Visa Fees"] || "N/A"}</p>
             <p class="fee-note">⚠️ Visa Fees are subject to slight changes (price hike).</p>
-            <p class="info-line"><i class="fa-solid fa-shield-halved"></i><strong>Insurance:</strong> ${row["Insurance"] || "N/A"}</p>
-            <p class="info-line text-base font-medium text-[var(--navy)]">
-                <i class="fa-solid fa-file-invoice" style="color: var(--gold);"></i>
-                <strong>Service Charge:</strong> 
-                <span class="line-through text-gray-500">${serviceCharge}</span> 
-                <span class="discount-highlight">(50% Off: ${discountedCharge})</span>
+            <p class="info-line" role="listitem"><i class="fa-solid fa-shield-halved"></i><strong>Insurance:</strong> ${row["Insurance"] || "N/A"}</p>
+            
+            <p class="service-charge-line" role="listitem">
+                <i class="fa-solid fa-file-invoice" style="color: var(--gold);" aria-hidden="true"></i>
+                <strong class="service-charge-label">Service Charge:</strong> 
+                <span class="discount-highlight-wrapper">
+                    ${originalPriceDisplay} 
+                    ${discountTag}
+                </span>
             </p>
-            <p class="info-line"><i class="fa-solid fa-clock"></i><strong>Processing Time:</strong> ${row["Processing Time"] || "N/A"}</p>
+            <p class="info-line" role="listitem"><i class="fa-solid fa-clock"></i><strong>Processing Time:</strong> ${row["Processing Time"] || "N/A"}</p>
         `;
 
+        // Add sheet-specific details
         if (sheetKey === "main") {
-            if (row["Docs Scanning & Uploading Charges"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-upload"></i><strong>Docs Scanning & Uploading Charges:</strong> ${row["Docs Scanning & Uploading Charges"]}</p>`;
+            if (row["Docs Scanning & Uploading Charges"]) detailsHTML += `<p class="info-line" role="listitem"><i class="fa-solid fa-upload"></i><strong>Docs Scanning & Uploading Charges:</strong> ${row["Docs Scanning & Uploading Charges"]}</p>`;
+        } else if (sheetKey === "schengen") {
+            if (row["Vfs Fees"]) detailsHTML += `<p class="info-line" role="listitem"><i class="fa-solid fa-user-tie"></i><strong>Vfs Fees:</strong> ${row["Vfs Fees"]}</p>`;
+            if (row["Courier Charges"]) detailsHTML += `<p class="info-line" role="listitem"><i class="fa-solid fa-envelope"></i><strong>Courier Charges:</strong> ${row["Courier Charges"]}</p>`;
+            if (row["If We Submit"]) detailsHTML += `<p class="info-line" role="listitem"><i class="fa-solid fa-handshake"></i><strong>If We Submit:</strong> ${row["If We Submit"]}</p>`;
+            if (row["Special Note"]) detailsHTML += `<p class="info-line !text-sm !text-red-500 !mt-2" role="listitem"><i class="fa-solid fa-note-sticky"></i> ${row["Special Note"]}</p>`;
+        } else if (sheetKey === "Evisa") {
+            if (row["Required Docs"]) detailsHTML += `<p class="info-line" role="listitem"><i class="fa-solid fa-file-alt"></i><strong>Required Docs:</strong> ${row["Required Docs"]}</p>`;
         }
+        
+        const flagCode = row["Code"] ? row["Code"].toLowerCase() : null;
 
-        if (sheetKey === "schengen") {
-            if (row["Vfs Fees"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-user-tie"></i><strong>Vfs Fees:</strong> ${row["Vfs Fees"]}</p>`;
-            if (row["Courier Charges"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope"></i><strong>Courier Charges:</strong> ${row["Courier Charges"]}</p>`;
-            if (row["If We Submit"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-handshake"></i><strong>If We Submit:</strong> ${row["If We Submit"]}</p>`;
-            if (row["Special Note"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-note-sticky"></i><strong>Special Note:</strong> ${row["Special Note"]}</p>`;
-        }
-
-        // Evisa: Filtered data display - Removed "3rd Party Mail Id" field
-        if (sheetKey === "Evisa") {
-            if (row["Required Docs"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-file-alt"></i><strong>Required Docs:</strong> ${row["Required Docs"]}</p>`;
-            // The 3rd Party Mail Id field is intentionally excluded here
-        }
-
+        const card = document.createElement("div");
+        card.className = "col-span-1";
         card.innerHTML = `
-            <div class="card h-full p-4 relative">
-                ${row["Checklists"] ? `<a href="${row["Checklists"]}" target="_blank" class="Checklists-ribbon" title="Visa Checklists"><i class="fa-solid fa-clipboard-check"></i></a>` : ""}
-                <h5 class="country-name">
-                    ${row["Code"] ? `<img src="https://flagcdn.com/w40/${row["Code"].toLowerCase()}.png" alt="flag">` : ""}
-                    ${countryName}
-                </h5>
-                ${detailsHTML}
-                <a href="${whatsappLink}" target="_blank" class="btn btn-sm btn-custom mt-3 inline-block"><i class="fa-brands fa-whatsapp"></i> Apply Now</a>
-            </div>
+            <article class="card h-full p-4 relative flex flex-col justify-between" tabindex="0">
+                ${row["Checklists"] ? `<a href="${row["Checklists"]}" target="_blank" class="Checklists-ribbon" title="Visa Checklists" aria-label="View Visa Checklists for ${countryName}"><i class="fa-solid fa-clipboard-check"></i></a>` : ""}
+                <div>
+                    <h3 class="country-name">
+                        ${flagCode ? `<img src="https://flagcdn.com/w40/${flagCode}.png" alt="${countryName} flag" loading="lazy">` : ""}
+                        ${countryName}
+                    </h3>
+                    <div role="list">
+                        ${detailsHTML}
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="${whatsappLink}" target="_blank" class="btn btn-sm btn-custom inline-block w-full text-center" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> Apply Now</a>
+                </div>
+            </article>
         `;
-        container.appendChild(card);
+        cardsContainer.appendChild(card);
     });
 }
 
@@ -463,26 +594,33 @@ document.getElementById("searchInput").addEventListener("input", e => {
 // Tab Switch
 document.querySelectorAll("#sheetTabs button").forEach(btn => {
     btn.addEventListener("click", () => {
-        document.querySelectorAll("#sheetTabs button").forEach(b => b.classList.remove("active"));
+        // Update tab accessibility and styling
+        document.querySelectorAll("#sheetTabs button").forEach(b => {
+            b.classList.remove("active");
+            b.setAttribute("aria-selected", "false");
+        });
         btn.classList.add("active");
+        btn.setAttribute("aria-selected", "true");
+        
+        // Update and fetch data
         activeSheet = btn.getAttribute("data-sheet");
         fetchVisaData(activeSheet);
         document.getElementById("searchInput").value = "";
     });
 });
 
-// Load default sheet
-fetchVisaData("main");
-
-// Password check
+// Password check and initialization
 const encoded = btoa('b2b@ceo');
 function checkPassword() {
     const input = document.getElementById("adminPassword").value;
     const correctPassword = atob(encoded);
+    const errorMessage = document.getElementById("errorMessage");
     if (input === correctPassword) {
         document.getElementById("passwordOverlay").style.display = "none";
+        // Start fetching data immediately after successful login
+        fetchVisaData("main");
     } else {
-        document.getElementById("errorMessage").textContent = "Incorrect password. Try again.";
+        errorMessage.textContent = "Incorrect password. Try again.";
     }
 }
 
@@ -493,6 +631,9 @@ document.getElementById("adminPassword").addEventListener("keypress", function(e
         checkPassword();
     }
 });
+
+// Initial call to load data after the user logs in (handled by checkPassword)
+// The page starts with the overlay visible, so no initial fetch is needed here.
 </script>
 </body>
 </html>
