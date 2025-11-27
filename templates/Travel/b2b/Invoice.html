@@ -23,7 +23,7 @@
             font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: #f1f5f9; 
             margin: 0;
-            /* IMPORTANT: Add padding-top to clear the fixed navbar and logo badge */
+            /* Adaptive padding-top based on mobile or desktop logo size */
             padding-top: 160px; 
         }
 
@@ -48,10 +48,10 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.15);
         }
 
-        /* Logo badge style (for navbar) */
+        /* Logo badge style (for navbar) - Desktop Default */
         .logo-badge {
-            height: 140px;
-            width: 140px;
+            height: 160px;
+            width: 160px;
             background-color: #ffd700;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             display: flex;
@@ -68,28 +68,27 @@
             height: auto;
             padding: 4px;
         }
-
-        /* Responsive Logo Adjustment */
-        @media (min-width: 1024px) {
-            .logo-badge {
-                height: 160px;
-                width: 160px;
-            }
-        }
         
         /* Mobile Logo Adjustment & Body Padding */
         @media (max-width: 1023px) {
             .logo-badge {
-                height: 100px;
+                height: 100px; /* Smaller logo on mobile */
                 width: 100px;
             }
-             body {
-                padding-top: 100px; 
+            body {
+                padding-top: 100px; /* Adjusted padding for smaller mobile logo */
             }
         }
 
         /* Invoice Generator Styles */
-        .invoice-box { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 900px; margin: auto; }
+        .invoice-box { 
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            max-width: 900px; /* Constrains width on large screens */
+            margin: auto; 
+        }
         table { border-collapse: collapse; width: 100%; margin-top: 15px; }
         th, td { border: 1px solid #d1d5db; padding: 10px; text-align: left; }
         th { background: #f3f4f6; }
@@ -102,32 +101,50 @@
         .status-partial { color: orange; font-weight: bold; }
         .status-none { color: red; font-weight: bold; }
         
-        /* 🔥 UPDATE: ENHANCED INVOICE PREVIEW LOGO SIZE */
         #pCompanyLogo {
-            max-width: 200px; /* Bigger Logo */
-            max-height: 100px; /* Bigger Logo */
+            max-width: 200px; 
+            max-height: 100px; 
             object-fit: contain; 
             margin-bottom: 10px;
         }
 
-        /* Print Styles */
+        /* Print Styles (Applied for PDF generation via html2pdf/window.print) */
         @media print {
             body * { visibility: hidden; }
             #invoiceContent, #invoiceContent * { visibility: visible; }
-            #invoiceContent { position: absolute; left: 0; top: 0; padding: 0 !important; margin: 0 !important; }
+            #invoiceContent { 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                padding: 0 !important; 
+                margin: 0 !important; 
+                width: 100%; /* Ensure content fills print area */
+            }
             
-            /* 🔥 UPDATE: Print Logo Size */
             #pCompanyLogo {
                 max-width: 180px; 
                 max-height: 90px;
             }
 
-            /* 🔥 FIX: Ensure Payment Info background is kept for print/PDF (if browser supports background printing) */
             .bg-blue-50 {
                 background-color: #eff6ff !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            
+            /* Enforce two-column layout in Invoice Preview for Print/PDF */
+            .grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+            .col-span-1 {
+                grid-column: span 1 / span 1 !important;
+            }
+            .col-span-2 {
+                grid-column: span 2 / span 2 !important;
+            }
+            
+            /* Remove margins on print */
+            .mb-8 { margin-bottom: 0.5rem !important; }
         }
         
         /* Modern Toast Notification Style */
@@ -136,7 +153,7 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #10b981; /* Emerald Green */
+            background-color: #10b981; 
             color: white;
             padding: 12px 20px;
             border-radius: 8px;
@@ -202,33 +219,33 @@
 
     <div class="invoice-box mb-6" id="invoiceForm">
       <h3 class="font-bold text-lg mb-4 border-b pb-2">Fill Invoice Details</h3>
-      <form id="invoiceForm" class="grid grid-cols-2 gap-4">
+      <form id="invoiceForm" class="grid grid-cols-1 md:grid-cols-2 gap-4"> 
 
-        <input class="border p-2 col-span-2" type="text" id="companyName" placeholder="Your Company Name" value="Solo2CEO Pvt Ltd" required>
-        <input class="border p-2 col-span-2" type="text" id="companyAddress" placeholder="Company Address (optional)" value="Bandra West, Mumbai, India">
-        <input class="border p-2" type="text" id="companyContact" placeholder="Company Contact Number" value="+91 99999 12345">
-        <input class="border p-2" type="email" id="companyEmail" placeholder="Company Email" value="info@solo2ceo.com">
+        <input class="border p-2 col-span-1 md:col-span-2" type="text" id="companyName" placeholder="Your Company Name" value="Solo2CEO Pvt Ltd" required>
+        <input class="border p-2 col-span-1 md:col-span-2" type="text" id="companyAddress" placeholder="Company Address (optional)" value="Bandra West, Mumbai, India">
+        <input class="border p-2 col-span-1" type="text" id="companyContact" placeholder="Company Contact Number" value="+91 99999 12345">
+        <input class="border p-2 col-span-1" type="email" id="companyEmail" placeholder="Company Email" value="info@solo2ceo.com">
 
-        <input class="border p-2" type="text" id="bankName" placeholder="Bank Name" value="HDFC Bank">
-        <input class="border p-2" type="text" id="accountHolder" placeholder="Account Holder Name" value="Solo2CEO Pvt Ltd">
-        <input class="border p-2" type="text" id="accountNumber" placeholder="Account Number" value="12345678901234">
-        <input class="border p-2" type="text" id="ifscCode" placeholder="IFSC Code" value="HDFC0001234">
-        <input class="border p-2 col-span-2" type="text" id="upiID" placeholder="UPI ID (optional)" value="solo2ceo@hdfcbank">
+        <input class="border p-2 col-span-1" type="text" id="bankName" placeholder="Bank Name" value="HDFC Bank">
+        <input class="border p-2 col-span-1" type="text" id="accountHolder" placeholder="Account Holder Name" value="Solo2CEO Pvt Ltd">
+        <input class="border p-2 col-span-1" type="text" id="accountNumber" placeholder="Account Number" value="12345678901234">
+        <input class="border p-2 col-span-1" type="text" id="ifscCode" placeholder="IFSC Code" value="HDFC0001234">
+        <input class="border p-2 col-span-1 md:col-span-2" type="text" id="upiID" placeholder="UPI ID (optional)" value="solo2ceo@hdfcbank">
 
-        <label class="col-span-2 text-sm text-gray-600">Upload Company Logo OR Provide Logo URL</label>
-        <input class="border p-2" type="file" id="companyLogoFile" accept="image/*">
-        <input class="border p-2" type="text" id="companyLogoURL" placeholder="Or paste Logo Image URL">
+        <label class="col-span-1 md:col-span-2 text-sm text-gray-600">Upload Company Logo OR Provide Logo URL</label>
+        <input class="border p-2 col-span-1" type="file" id="companyLogoFile" accept="image/*">
+        <input class="border p-2 col-span-1" type="text" id="companyLogoURL" placeholder="Or paste Logo Image URL">
 
-        <input class="border p-2" type="text" id="invoiceNo" placeholder="Invoice Number" value="INV-1001" required>
-        <input class="border p-2" type="date" id="invoiceDate" required>
-        <input class="border p-2" type="text" id="clientName" placeholder="Client Name" value="AsTours International" required>
-        <input class="border p-2" type="text" id="clientPhone" placeholder="Client Phone" value="+91 9876543210">
-        <input class="border p-2 col-span-2" type="text" id="clientAddress" placeholder="Client Address" value="Mumbai, India" required>
-        <textarea class="border p-2 col-span-2" id="description" placeholder="Service Description">Website Design & SEO Package</textarea>
-        <input class="border p-2" type="number" id="price" placeholder="Price (Rs)" value="25000" required>
-        <input class="border p-2" type="number" id="discount" placeholder="Discount (Rs)" value="1000">
-        <input class="border p-2" type="number" id="advance" placeholder="Advance Paid (Rs)" value="5000">
-        <input class="border p-2" type="number" id="finalPayment" placeholder="Final Payment (Rs)" value="19000">
+        <input class="border p-2 col-span-1" type="text" id="invoiceNo" placeholder="Invoice Number" value="INV-1001" required>
+        <input class="border p-2 col-span-1" type="date" id="invoiceDate" required>
+        <input class="border p-2 col-span-1" type="text" id="clientName" placeholder="Client Name" value="AsTours International" required>
+        <input class="border p-2 col-span-1" type="text" id="clientPhone" placeholder="Client Phone" value="+91 9876543210">
+        <input class="border p-2 col-span-1 md:col-span-2" type="text" id="clientAddress" placeholder="Client Address" value="Mumbai, India" required>
+        <textarea class="border p-2 col-span-1 md:col-span-2" id="description" placeholder="Service Description">Website Design & SEO Package</textarea>
+        <input class="border p-2 col-span-1" type="number" id="price" placeholder="Price (Rs)" value="25000" required>
+        <input class="border p-2 col-span-1" type="number" id="discount" placeholder="Discount (Rs)" value="1000">
+        <input class="border p-2 col-span-1" type="number" id="advance" placeholder="Advance Paid (Rs)" value="5000">
+        <input class="border p-2 col-span-1" type="number" id="finalPayment" placeholder="Final Payment (Rs)" value="19000">
       </form>
 
       <div class="mt-4 text-center">
@@ -241,8 +258,8 @@
     <div class="invoice-box mb-6" id="savedInvoicesSection">
       <h3 class="font-bold text-lg mb-2 border-b pb-2">📜 Saved Invoices</h3>
 
-      <div class="flex gap-2 mb-3">
-        <input id="searchInput" type="text" class="border p-2 flex-grow" placeholder="Search by Invoice No or Client Name">
+      <div class="flex flex-wrap gap-2 mb-3">
+        <input id="searchInput" type="text" class="border p-2 flex-grow min-w-[200px]" placeholder="Search by Invoice No or Client Name">
         <button onclick="searchInvoices()" class="btn btn-primary">Search</button>
       </div>
 
@@ -255,25 +272,25 @@
     <div id="invoicePreview" class="invoice-box hidden">
       <div id="invoiceContent" class="p-6">
         
-        <div class="flex justify-between items-start mb-8 border-b pb-4">
-            <div class="flex flex-col">
+        <div class="flex flex-col sm:flex-row justify-between items-start mb-8 border-b pb-4">
+            <div class="flex flex-col order-2 sm:order-1 mt-4 sm:mt-0">
                 <img id="pCompanyLogo" alt="Company Logo" class="hidden">
-                <h1 id="pCompanyName" class="font-playfair text-3xl font-bold text-blue-800 mt-2"></h1>
-                <p id="pCompanyAddress" class="text-sm text-gray-600 mt-1"></p>
+                <h1 id="pCompanyName" class="font-playfair text-xl sm:text-3xl font-bold text-blue-800 mt-2"></h1>
+                <p id="pCompanyAddress" class="text-xs sm:text-sm text-gray-600 mt-1"></p>
                 <p id="pCompanyContact" class="text-xs text-gray-600"></p>
                 <p id="pCompanyEmail" class="text-xs text-gray-600"></p>
             </div>
-            <h1 class="text-5xl font-playfair font-extrabold text-blue-500/80 tracking-tight">INVOICE</h1>
+            <h1 class="text-4xl sm:text-5xl font-playfair font-extrabold text-blue-500/80 tracking-tight order-1 sm:order-2">INVOICE</h1>
         </div>
 
-        <div class="grid grid-cols-2 gap-y-4 mb-8 text-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 mb-8 text-sm">
             <div class="col-span-1">
                 <h2 class="text-lg font-bold text-gray-700 mb-2 border-b pb-1">BILLED TO</h2>
                 <p id="pClientName" class="font-semibold text-gray-800"></p>
                 <p id="pClientAddress" class="text-gray-600"></p>
                 <p id="pClientPhone" class="text-gray-600"></p>
             </div>
-            <div class="col-span-1 pl-10 text-right">
+            <div class="col-span-1 sm:pl-10 sm:text-right">
                 <h2 class="text-lg font-bold text-gray-700 mb-2 border-b pb-1">INVOICE DETAILS</h2>
                 <p class="mb-1"><b>Invoice No:</b> <span id="pInvoiceNo" class="font-semibold text-blue-700"></span></p>
                 <p class="mb-1"><b>Date:</b> <span id="pInvoiceDate" class="font-semibold"></span></p>
@@ -301,7 +318,7 @@
         <p class="mt-6 text-center text-lg text-blue-700 font-semibold italic">Thank you for your business!</p>
       </div>
 
-      <div class="mt-6 text-center">
+      <div class="mt-6 text-center flex flex-wrap justify-center gap-2 sm:gap-4">
         <button onclick="printInvoice()" class="btn btn-primary">🖨️ Print / Download PDF</button> 
         <button onclick="shareWhatsApp()" class="btn btn-secondary">Share WhatsApp</button>
         <button onclick="shareEmail()" class="btn btn-warning">Share Email</button>
@@ -328,10 +345,10 @@
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 3000); // Hide after 3 seconds
+            }, 3000); 
         }
 
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzw2mZGGCrVv5N7YdIy7Wpc327bso9oSuYHXSddUQKOSvMIZ2tbbje0vuniyy5DaO7B/exec"; // <-- Replace with your actual script URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzw2mZGGCrVv5N7YdIy7Wpc327bso9oSuYHXSddUQKOSvMIZ2tbbje0vuniyy5DaO7B/exec"; 
 
         function formatCurrency(amount) {
             return `Rs ${amount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
@@ -372,13 +389,12 @@
             document.getElementById('pCompanyContact').innerText = "📞 " + companyContact;
             document.getElementById('pCompanyEmail').innerText = "✉️ " + companyEmail;
             
-            // 🔥 UPDATE: Set text content for pBankDetails here (before setting styles in printInvoice if needed)
             const bankDetailsText = `🏦 Bank: ${bankName} | A/C Holder: ${accountHolder} | A/C No: ${accountNumber} | IFSC: ${ifscCode} | UPI ID: ${upiID || 'N/A'}`;
             document.getElementById('pBankDetails').innerText = bankDetailsText;
 
 
             const logoElement = document.getElementById('pCompanyLogo');
-            logoElement.src = ''; // Clear previous source
+            logoElement.src = ''; 
             if (companyLogoFile) {
               const reader = new FileReader();
               reader.onload = e => { logoElement.src = e.target.result; logoElement.classList.remove("hidden"); };
@@ -548,9 +564,8 @@
           if (inputPass === ADMIN_PASSWORD) {
             isAuthenticated = true;
             container.innerHTML = "<p>Loading invoices...</p>";
-            loadInvoices(); // show last 3 invoices
+            loadInvoices(); 
           } else {
-            // 🎯 Using modern notification for password error
             showToast("❌ Incorrect password! Please try again.");
             document.getElementById("adminPass").value = "";
           }
@@ -558,10 +573,10 @@
 
         // ✅ Fetch & show last 3 invoices
         async function loadInvoices() {
-          if (!isAuthenticated) return; // block if password not verified
+          if (!isAuthenticated) return; 
 
           const container = document.getElementById("recentInvoices");
-          container.innerHTML = "<p>⏳ Loading invoices...</p>"; // Added loading message
+          container.innerHTML = "<p>⏳ Loading invoices...</p>"; 
 
           try {
             const res = await fetch(scriptURL);
@@ -589,16 +604,15 @@
         // 🔍 Search invoices (only if logged in)
         async function searchInvoices() {
           if (!isAuthenticated) {
-            showToast("🔐 Please enter the admin password first."); // 🎯 Modern notification
+            showToast("🔐 Please enter the admin password first."); 
             return;
           }
 
           const query = document.getElementById("searchInput").value.trim().toLowerCase();
           const container = document.getElementById("recentInvoices");
 
-          if (!query) return loadInvoices(); // reload last 3 if search is empty
+          if (!query) return loadInvoices(); 
           
-          // NEW: Display searching message
           container.innerHTML = "<p>🔎 Searching for invoices...</p>"; 
 
           try {
@@ -652,7 +666,6 @@
           document.getElementById('finalPayment').value = inv["Final Payment (Rs)"] || '';
           document.getElementById('companyLogoURL').value = inv["Logo URL"] || '';
 
-          // 🎯 Modern message for success
           showToast(`✅ Invoice "${inv["Invoice No"]}" loaded! Click "Generate Invoice" to preview again.`);
         }
 
@@ -672,6 +685,5 @@
           alert("Download invoice and share via any app manually.");
         }
     </script>
-
 </body>
 </html>
