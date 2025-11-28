@@ -146,45 +146,36 @@
         /* * 🎨 CSS for Fixed WhatsApp Ribbon 
         * Positioned on the right side of the screen.
         */
-        .whatsapp-fixed-ribbon {
-            /* * Position: Fixed on the viewport.
-            * Adjusted top position: 200px works well for most desktops 
-            * to clear the initial hero/nav area when scrolling.
-            */
+        #whatsappRibbonContainer {
+            /* Main container for fixed positioning */
             position: fixed;
             top: 200px; 
             right: 0;
             z-index: 1000;
-            
-            /* Styling */
-            padding: 10px 18px 10px 10px; /* More padding on the left to balance the ribbon shape */
-            background-color: #07203a; /* Dark background */
-            color: #ffd700; /* Gold text */
+            transition: transform 0.3s, opacity 0.3s; /* For smooth hide/show */
+        }
+
+        .whatsapp-fixed-ribbon {
+            /* Style for the ribbon link itself */
+            display: flex;
+            align-items: center;
+            padding: 10px 18px 10px 10px; 
+            background-color: #07203a; 
+            color: #ffd700; 
             font-weight: 600;
             font-size: 14px;
             line-height: 1.2;
             text-align: left;
-            text-decoration: none; /* Remove underline */
-            
-            /* Shape and Shadow */
-            border-radius: 6px 0 0 6px; /* Rounded on the left side only */
+            text-decoration: none; 
+            border-radius: 6px 0 0 6px; 
             box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.3);
             cursor: pointer;
-            
-            /* Hover Effects */
-            transition: background-color 0.3s, transform 0.3s;
+            transition: background-color 0.3s;
+            position: relative; /* Needed for the close button positioning */
         }
 
         .whatsapp-fixed-ribbon:hover {
             background-color: #1e3c72;
-            transform: translateX(-5px);
-        }
-
-        .whatsapp-fixed-ribbon p {
-            margin: 0;
-            padding: 0;
-            color: inherit;
-            display: inline;
         }
 
         .whatsapp-icon {
@@ -199,15 +190,43 @@
             display: inline-block;
         }
 
-        /* Optional: Adjust for smaller screens */
-        @media (max-width: 768px) {
-            .whatsapp-fixed-ribbon {
-                top: 150px; /* Move it up slightly on mobile */
-                font-size: 12px;
-                padding: 8px 15px 8px 8px;
-            }
+        .ribbon-text strong {
+            color: white; 
+            font-weight: 700;
+            display: block; /* Make sure the strong text is on a new line */
         }
 
+        /* Close Button Style */
+        .ribbon-close-btn {
+            position: absolute;
+            top: -10px; /* Position above the ribbon */
+            right: 5px; 
+            background: #dc3545; /* Red circle for attention */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            line-height: 1;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 1001; /* Above the ribbon itself */
+            transition: background 0.2s;
+        }
+
+        .ribbon-close-btn:hover {
+            background: #c82333;
+        }
+
+        /* Optional: Adjust for smaller screens */
+        @media (max-width: 768px) {
+            #whatsappRibbonContainer {
+                top: 150px; 
+            }
+        }
 
         /* Advertising / Offer Banner Styles */
         .offer-banner {
@@ -256,17 +275,23 @@
 </head>
 <body>
 
-    <a href="https://wa.me/918850102255?text=Please%20be%20informed%2C%20I%20couldn't%20find%20a%20specific%20country%20on%20your%20list.%20Could%20you%20share%20the%20price%20for%20a%20Visa%3F" 
-    target="_blank" 
-    class="whatsapp-fixed-ribbon"
-    title="WhatsApp Us for Price">
+    <div id="whatsappRibbonContainer">
+        <button class="ribbon-close-btn" onclick="hideRibbon()" aria-label="Dismiss Notification">
+            &times;
+        </button>
         
-        <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
-        <span class="ribbon-text">
-            Country Not Found?<br>
-            <strong style="color: white; font-weight: 700;">Ask for Price</strong>
-        </span>
-    </a>
+        <a href="https://wa.me/918850102255?text=Please%20be%20informed%2C%20I%20couldn't%20find%20a%20specific%20country%20on%20your%20list.%20Could%20you%20share%20the%20price%20for%20a%20Visa%3F" 
+        target="_blank" 
+        class="whatsapp-fixed-ribbon"
+        title="WhatsApp Us for Price">
+            
+            <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
+            <span class="ribbon-text">
+                Country Not Found?<br>
+                <strong>Ask for Price</strong>
+            </span>
+        </a>
+    </div>
     <header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -500,6 +525,18 @@ fetchVisaData("main");
     });
 </script>
 
+<script>
+function hideRibbon() {
+    const ribbon = document.getElementById('whatsappRibbonContainer');
+    // Use opacity and transform for a smoother dismissal effect
+    ribbon.style.opacity = '0';
+    ribbon.style.transform = 'translateX(100%)';
+    // Remove it completely after the animation
+    setTimeout(() => {
+        ribbon.style.display = 'none';
+    }, 300); 
+}
+</script>
 
 </body>
 </html>

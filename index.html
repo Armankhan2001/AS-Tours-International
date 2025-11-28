@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AS Tours International — Luxury Travel & Visa</title>
+  <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/png" href="image/astourlogo.png">
   <meta name="description" content="AS Tours International — bespoke luxury travel planning, visa facilitation, and B2B travel solutions." />
 
@@ -301,8 +302,115 @@
   }
 </style>
 
+<style>
+/* * 🎨 CSS for Fixed Visa Rate Ribbon */
+#visaRateRibbonContainer {
+    /* Main container for fixed positioning */
+    position: fixed;
+    top: 200px; 
+    right: 0;
+    z-index: 1000;
+    transition: transform 0.3s, opacity 0.3s; /* For smooth hide/show */
+}
+
+/* Updated styling for general link/rate check */
+.visa-rate-ribbon {
+    display: flex;
+    align-items: center;
+    padding: 10px 18px 10px 10px; 
+    /* Using your established Navy/Gold theme for consistency */
+    background-color: #d4af37; /* Gold background */
+    color: #07203a; /* Navy text */
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.2;
+    text-align: left;
+    text-decoration: none; 
+    border-radius: 6px 0 0 6px; 
+    box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    position: relative; 
+    transition: background-color 0.3s;
+}
+
+.visa-rate-ribbon:hover {
+    background-color: #f3d27a; /* Lighter gold on hover */
+}
+
+.visa-rate-icon {
+    font-size: 24px; 
+    color: #07203a; /* Match Navy text color */
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.ribbon-text strong {
+    color: #07203a; /* Keep bold text Navy */
+    font-weight: 900;
+    display: block; 
+}
+
+/* Close Button Style (Kept the same for functionality) */
+.ribbon-close-btn {
+    position: absolute;
+    top: -10px; 
+    right: 5px; 
+    background: #dc3545; 
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 1;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 1001; 
+    transition: background 0.2s;
+}
+
+.ribbon-close-btn:hover {
+    background: #c82333;
+}
+
+/* Optional: Adjust for smaller screens */
+@media (max-width: 768px) {
+    #visaRateRibbonContainer {
+        top: 150px; 
+    }
+}
+</style>
+
 </head>
 <body class="antialiased">
+    <div id="visaRateRibbonContainer">
+        <button class="ribbon-close-btn" onclick="hideRibbon()" aria-label="Dismiss Notification">
+            &times;
+        </button>
+        
+        <a href="templates/Travel/b2b/Visa/clientvisaquotations.html" 
+          target="_blank" 
+          class="visa-rate-ribbon"
+          title="Check our Latest Visa Rate Sheet">
+            
+            <i class="fa-solid fa-file-invoice visa-rate-icon"></i>
+            
+            <span class="ribbon-text">
+                Check Our Latest Rates<br>
+                <strong>VISA QUOTATIONS</strong>
+            </span>
+        </a>
+    </div>
+
+    <!-- PWA INSTALL BUTTON -->
+     <!-- Custom PWA Install Button -->
+    <button id="installButton" style="display:none; background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 15px;">
+        <i class="fa-solid fa-download"></i> Install App
+    </button>
+    <!-- PWA Installation Logic Script (MOVE THIS TO THE ABSOLUTE END) -->
+<script src="./pwa-install.js"></script>
 
   <!-- NAVIGATION -->
   <header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
@@ -1301,10 +1409,42 @@ async function checkVisaRequirements() {
 }
 </script>
 
+<script>
+function hideRibbon() {
+    const ribbon = document.getElementById('visaRateRibbonContainer');
+    // Smoothly hide the ribbon
+    ribbon.style.opacity = '0';
+    ribbon.style.transform = 'translateX(100%)';
+    // Remove it completely after the animation
+    setTimeout(() => {
+        ribbon.style.display = 'none';
+    }, 300); 
+}
+</script>
 
     <!-- Font Awesome (for icons) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    
+  
 
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // OLD: Tries to find it at http://127.0.0.1:5500/sw.js
+        // navigator.serviceWorker.register('/sw.js') 
+        
+        // NEW: Looks in the same directory as index.html
+        navigator.serviceWorker.register('./sw.js') 
+          .then(reg => {
+            console.log('Service Worker registered! Scope:', reg.scope);
+          })
+          .catch(err => {
+            console.log('Service Worker registration failed:', err);
+          });
+      });
+    }
+</script>
+
+<!-- PWA Installation Logic Script (MOVE THIS TO THE ABSOLUTE END) -->
+<script src="./pwa-install.js"></script>
 </body>
 </html>
