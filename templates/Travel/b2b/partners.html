@@ -1,202 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Partner With Us | AsTours International</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Partner With Us | AsTours International</title>
 
-  <style>
-    body {
-      background: linear-gradient(to bottom right, #f0fdfa, #ffffff);
-      font-family: 'Inter', sans-serif;
-    }
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    /* Navbar */
-    .navbar {
-      background: #ffffff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-      padding: 0.75rem 1.25rem;
-    }
-    .logo {
-      width: 110px;
-      height: auto;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    /* Buttons */
-    .btn-primary {
-      background-color: #0d9488;
-      color: white;
-      font-weight: 600;
-      border-radius: 8px;
-      transition: background 0.3s ease;
-    }
-    .btn-primary:hover {
-      background-color: #0f766e;
-    }
+    <style>
+        :root {
+            /* Colors from the provided navbar */
+            --navy: #07203a;
+            --gold: #d4af37;
+            /* Kept for form/focus consistency from original code */
+            --teal-primary: #0d9488; 
+            --teal-hover: #0f766e;
+        }
 
-    /* Form styling */
-    input, select, textarea {
-      border: 1px solid #e5e7eb;
-      border-radius: 6px;
-      width: 100%;
-      padding: 12px;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: #0d9488;
-      box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2);
-    }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(to bottom right, #f0fdfa, #ffffff);
+            color: var(--navy); 
+            margin: 0;
+        }
 
-    /* Responsive alignment */
-    .container-section {
-      max-width: 900px;
-      margin: auto;
-      padding: 1.5rem;
-    }
+        .font-playfair { 
+            font-family: 'Playfair Display', serif; 
+        }
 
-    @media (max-width: 768px) {
-      .navbar-menu {
-        display: none;
-      }
-      .navbar-menu.active {
-        display: block;
-        background: white;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        border-top: 1px solid #e5e7eb;
-        padding: 1rem 0;
-      }
-      .navbar-menu a {
-        display: block;
-        padding: 0.5rem 1rem;
-        text-align: center;
-      }
-    }
-  </style>
+        /* --- Navbar Styles --- */
+        .nav-link {
+            font-size: 0.875rem; 
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .btn-gold {
+            background: linear-gradient(90deg, var(--gold), #f3d27a);
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.875rem; 
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        .logo-badge {
+            height: 140px;
+            width: 140px;
+            background-color: #ffd700;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .logo-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo-badge img {
+            width: 90%;
+            height: auto;
+            padding: 4px;
+        }
+
+        @media (min-width: 1024px) {
+            .logo-badge {
+                height: 160px;
+                width: 160px;
+            }
+        }
+        /* ----------------------------------- */
+
+        /* Primary Form/Submit Button */
+        .btn-primary {
+            background-color: var(--teal-primary);
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: var(--teal-hover);
+        }
+
+        /* --- MODERN FORM STYLES --- */
+        /* Basic input/select/textarea style for a clean look */
+        .form-field input, .form-field select, .form-field textarea {
+            border: 1px solid #d1d5db; /* Gray-300 */
+            border-radius: 0.5rem; /* rounded-lg */
+            width: 100%;
+            padding: 12px;
+            outline: none;
+            background-color: #ffffff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            color: var(--navy);
+        }
+        
+        /* Modern Focus Style: subtle ring and primary color border */
+        .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+            border-color: var(--teal-primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1); /* Lighter shadow ring */
+        }
+        
+        .form-field label {
+            display: block;
+            font-size: 0.875rem; /* sm text */
+            font-weight: 500;
+            color: #4b5563; /* Gray-600 */
+            margin-bottom: 4px;
+        }
+        /* -------------------------- */
+
+        /* Container Section */
+        .container-section {
+            max-width: 900px;
+            margin: auto;
+            padding: 1.5rem;
+        }
+    </style>
 </head>
 
-<body class="text-gray-800">
+<body class="antialiased">
 
-  <!-- Navbar -->
-  <nav class="navbar flex items-center justify-between relative">
-    <a href="../.././astours.html">
-      <img src="../../../image/astourlogo.png" alt="ASTours Logo" class="logo">
-    </a>
-    <button id="menuToggle" class="md:hidden text-gray-600 text-3xl focus:outline-none">&#9776;</button>
-    <div id="navbarMenu" class="navbar-menu md:flex md:items-center md:gap-6 text-gray-700">
-      <a href="../.././astours.html" class="hover:text-teal-600">Home</a>
-      <a href="./Visa/b2b.html" class="hover:text-teal-600">B2B Services</a>
-      <a href="./partners.html" class="text-teal-600 font-semibold">Become a Partner</a>
-    </div>
-  </nav>
+    <header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="flex items-center justify-between h-16">
 
-  <!-- Hero Section -->
-  <section class="text-center py-16 px-4">
-    <h2 class="text-4xl font-extrabold mb-4 text-gray-800">Become a Partner with AsTours International</h2>
-    <p class="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-      Join hands with AsTours International to expand your business reach. Whether you’re a B2B agent, travel partner, or corporate firm — 
-      we offer exclusive collaborations, monthly visa packages, and reliable business solutions.
-    </p>
-  </section>
+                <div class="absolute top-0 left-4 z-50">
+                    <a href="../../../index.html" class="logo-badge">
+                        <img src="../../../image/astourlogo.png" alt="AS Tours International">
+                    </a>
+                </div>
 
-  <!-- Partner Form -->
-  <section class="container-section bg-white rounded-xl shadow-lg mb-16 p-6 sm:p-10">
-    <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Partner Registration Form</h3>
-    <form id="partnerForm" method="POST" class="grid md:grid-cols-2 gap-5">
-      <input name="company_name" type="text" placeholder="Company Name" required>
-      <input name="contact_person" type="text" placeholder="Contact Person" required>
-      <input name="email" type="email" placeholder="Email Address" required>
-      <input name="phone" type="tel" placeholder="Phone Number" required>
+                <div class="w-36 flex-shrink-0"></div>
 
-      <select name="business_type" required class="md:col-span-2">
-        <option value="">Select Business Type</option>
-        <option>Travel Agency</option>
-        <option>Visa Consultant</option>
-        <option>Corporate Company</option>
-        <option>Freelancer / Agent</option>
-        <option>Other</option>
-      </select>
+                <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
+                    <a href="#" class="nav-link text-[var(--gold)] font-bold]">Home</a>
+                    <a href="#contact" class="nav-link hover:text-[var(--gold)]">Contact</a>
+                    <a href="Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold">Partner with Us</a>
+                </nav>
 
-      <textarea name="message" rows="4" placeholder="Tell us about your business or partnership goals" class="md:col-span-2"></textarea>
+                <div class="lg:hidden ml-auto">
+                    <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
 
-      <button type="submit" id="submitBtn" class="md:col-span-2 btn-primary py-3 text-lg">Submit Form</button>
-    </form>
+            </div>
+        </div>
 
-    <!-- Messages -->
-    <p id="submittingMessage" class="hidden mt-5 text-center text-blue-600 font-semibold">Submitting your details, please wait...</p>
-    <p id="successMessage" class="hidden mt-5 text-center text-green-600 font-semibold">✅ Thank you! Your partnership request has been submitted successfully.</p>
-    <p id="errorMessage" class="hidden mt-5 text-center text-red-600 font-semibold">❌ Something went wrong. Please try again.</p>
-  </section>
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
+            <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+                <br>
+                <br>
+                <br>
+                <a href="#" class="nav-link block  text-[var(--gold)] font-bold]">Home</a>
+                <a href="../../contact.html" class="nav-link block hover:text-[var(--gold)]">Contact</a>
+                <a href="Visa/b2b.html" class="ml-4 btn-gold">Partner with Us</a>
+            </div>
+        </div>
+    </header>
+    <section class="text-center py-16 px-4 pt-28 lg:pt-16"> 
+        <h2 class="text-4xl font-extrabold mb-4 text-[var(--navy)]">Become a Partner with AsTours International</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Join hands with AsTours International to expand your business reach. Whether you’re a B2B agent, travel partner, or corporate firm — 
+            we offer exclusive collaborations, monthly visa packages, and reliable business solutions.
+        </p>
+    </section>
 
-  <!-- Contact Info -->
-  <section class="text-center pb-16 px-4">
-    <h3 class="text-2xl font-bold mb-3">Let’s Get In Touch</h3>
-    <p class="text-gray-600 max-w-xl mx-auto mb-6">
-      Ready to elevate your brand? Reach out to us and we’ll get back to you within 24 hours.
-    </p>
-    <div class="space-y-2 text-gray-700">
-      <p>📧 Email: <a href="mailto:astoursinternational@gmail.com" class="text-teal-600">astoursinternational@gmail.com</a></p>
-      <p>📞 Phone: <a href="tel:+917021360582" class="text-teal-600">+91 7021360582</a></p>
-      <p>📍 Location: Mumbai, India</p>
-    </div>
-  </section>
+    <section class="container-section bg-white rounded-xl shadow-xl border border-gray-100 mb-16 p-6 sm:p-10">
+        <h3 class="text-2xl font-semibold text-center text-[var(--navy)] mb-8">Partner Registration Form</h3>
+        <form id="partnerForm" method="POST" class="grid md:grid-cols-2 gap-6">
 
-  <!-- Footer -->
-  <footer class="bg-gray-100 text-center text-sm text-gray-500 py-6">
-    © <span id="year"></span> AsTours International — All Rights Reserved.
-  </footer>
+            <div class="form-field">
+                <label for="company_name">Company Name <span class="text-red-500">*</span></label>
+                <input id="company_name" name="company_name" type="text" placeholder="e.g., Global Travel Agency" required>
+            </div>
 
-  <!-- Script -->
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+            <div class="form-field">
+                <label for="contact_person">Contact Person <span class="text-red-500">*</span></label>
+                <input id="contact_person" name="contact_person" type="text" placeholder="Full Name" required>
+            </div>
 
-    // Navbar toggle for mobile
-    const menuToggle = document.getElementById('menuToggle');
-    const navbarMenu = document.getElementById('navbarMenu');
-    menuToggle.addEventListener('click', () => {
-      navbarMenu.classList.toggle('active');
-    });
+            <div class="form-field">
+                <label for="email">Email Address <span class="text-red-500">*</span></label>
+                <input id="email" name="email" type="email" placeholder="you@company.com" required>
+            </div>
 
-    // Google Apps Script integration
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzCsxLcf5-zgDpAKCFj_GWLEtLlaPVx1lfFGHT3V9Li0UaMi_HXt63UfSxm3v-bTTiRtA/exec";
-    const form = document.getElementById('partnerForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const submittingMessage = document.getElementById('submittingMessage');
-    const successMessage = document.getElementById('successMessage');
-    const errorMessage = document.getElementById('errorMessage');
+            <div class="form-field">
+                <label for="phone">Phone Number <span class="text-red-500">*</span></label>
+                <input id="phone" name="phone" type="tel" placeholder="+91 XXXX XXXXX" required>
+            </div>
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      submittingMessage.classList.remove('hidden');
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Submitting...";
-      successMessage.classList.add('hidden');
-      errorMessage.classList.add('hidden');
+            <div class="form-field md:col-span-2">
+                <label for="business_type">Select Business Type <span class="text-red-500">*</span></label>
+                <select id="business_type" name="business_type" required>
+                    <option value="">Select Business Type</option>
+                    <option>Travel Agency</option>
+                    <option>Visa Consultant</option>
+                    <option>Corporate Company</option>
+                    <option>Freelancer / Agent</option>
+                    <option>Other</option>
+                </select>
+            </div>
 
-      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => {
-          if (response.ok) {
-            submittingMessage.classList.add('hidden');
-            successMessage.classList.remove('hidden');
-            form.reset();
-          } else {
-            throw new Error('Network error');
-          }
-        })
-        .catch(error => {
-          submittingMessage.classList.add('hidden');
-          errorMessage.classList.remove('hidden');
-          console.error('Error!', error.message);
-        })
-        .finally(() => {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Submit Form";
+            <div class="form-field md:col-span-2">
+                <label for="message">About your business or partnership goals</label>
+                <textarea id="message" name="message" rows="4" placeholder="Briefly describe what kind of partnership you are looking for..."></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn" class="md:col-span-2 btn-primary py-3 text-lg shadow-md mt-4">Submit Partnership Request</button>
+        </form>
+
+        <p id="submittingMessage" class="hidden mt-5 text-center text-blue-600 font-semibold">Submitting your details, please wait...</p>
+        <p id="successMessage" class="hidden mt-5 text-center text-green-600 font-semibold">✅ Thank you! Your partnership request has been submitted successfully.</p>
+        <p id="errorMessage" class="hidden mt-5 text-center text-red-600 font-semibold">❌ Something went wrong. Please try again.</p>
+    </section>
+
+    <section id="contact" class="text-center pb-16 px-4">
+        <h3 class="text-2xl font-bold mb-3 text-[var(--navy)]">Let’s Get In Touch</h3>
+        <p class="text-gray-600 max-w-xl mx-auto mb-6">
+            Ready to elevate your brand? Reach out to us and we’ll get back to you within 24 hours.
+        </p>
+        <div class="space-y-2 text-gray-700">
+            <p>📧 Email: <a href="mailto:astoursinternational@gmail.com" class="text-[var(--teal-primary)] hover:text-[var(--teal-hover)]">astoursinternational@gmail.com</a></p>
+            <p>📞 Phone: <a href="tel:+917021360582" class="text-[var(--teal-primary)] hover:text-[var(--teal-hover)]">+91 7021360582</a></p>
+            <p>📍 Location: Mumbai, India</p>
+        </div>
+    </section>
+
+    <footer class="bg-gray-100 text-center text-sm text-gray-500 py-6">
+        © <span id="year"></span> AsTours International — All Rights Reserved.
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Navbar toggle for mobile (Using the new script for the integrated navbar)
+        document.getElementById('mobileBtn').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
         });
-    });
-  </script>
+
+        // Google Apps Script integration
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzCsxLcf5-zgDpAKCFj_GWLEtLlaPVx1lfFGHT3V9Li0UaMi_HXt63UfSxm3v-bTTiRtA/exec";
+        const form = document.getElementById('partnerForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const submittingMessage = document.getElementById('submittingMessage');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            submittingMessage.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Submitting...";
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    if (response.ok) {
+                        submittingMessage.classList.add('hidden');
+                        successMessage.classList.remove('hidden');
+                        form.reset();
+                    } else {
+                        throw new Error('Network error');
+                    }
+                })
+                .catch(error => {
+                    submittingMessage.classList.add('hidden');
+                    errorMessage.classList.remove('hidden');
+                    console.error('Error!', error.message);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Submit Partnership Request";
+                });
+        });
+    </script>
 </body>
 </html>

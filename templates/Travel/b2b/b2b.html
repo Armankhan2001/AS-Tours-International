@@ -55,6 +55,8 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
+            /* Ensure the badge is a circle */
+            border-radius: 50%;
         }
 
         .logo-badge:hover {
@@ -92,17 +94,21 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* Card Styling to enhance B2B look */
+        /* Standard Card Styling for core features */
         .dashboard-card {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(8px);
             border: 1px solid #e5e7eb;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
+            /* Added standard rounded-2xl to the class list to remove need for repetition */
+            border-radius: 1rem;
         }
-        .dashboard-card:hover {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            transform: translateY(-5px);
+        /* Hover Effect applied to all clickable cards (group-hover for clarity) */
+        .dashboard-card:hover, .group:hover .dashboard-card {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15); /* Stronger shadow */
+            transform: translateY(-5px) scale(1.01); /* Lift and slight scale */
+            border-color: var(--gold); /* Highlight border on hover */
         }
         
         /* Card Headings (using Navy or Soft-Blue/Gold accents) */
@@ -111,9 +117,31 @@
         }
 
         /* Specific Link Text Colors for dashboard clarity */
-        .text-purple-700 { color: #8b5cf6; } /* Adjusted to a lighter purple/indigo for clarity */
+        .text-purple-700 { color: #8b5cf6; } 
         .text-blue-700 { color: var(--soft-blue); }
-        .text-green-700 { color: var(--gold); } 
+        .text-green-700 { color: #10b981; } /* Adjusted green for better contrast */
+        .text-gold { color: var(--gold); }
+
+        /* Style for the 'Coming Soon' / 'Manage Bookings' cards */
+        .placeholder-card {
+            background-color: rgba(243, 244, 246, 0.7); /* bg-gray-100/70 equivalent */
+            border-style: dashed;
+            border-width: 2px;
+            border-color: #d1d5db; /* border-gray-300 equivalent */
+            transition: all 0.3s ease;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        /* Hover for 'Coming Soon'/'Manage Bookings' (made consistent with others) */
+        .placeholder-card:hover {
+            border-color: var(--navy);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
 
         /* Footer */
         footer {
@@ -155,14 +183,17 @@
         </div>
 
         <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full fixed top-16 shadow-lg z-40">
-            <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+            <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium flex flex-col">
+                <br>
+                <br>
+                <br>
                 <a href="../../../index.html" class="nav-link hover:text-[var(--gold)]">Home</a>
-                    <a href="../../../packages/packages.html" class="nav-link hover:text-[var(--gold)]">Packages</a>
-                    <a href="./Visa/clientvisaquotations.html" class="nav-link hover:text-[var(--gold)]">Visa Services</a>
-                    <a href="../About.html" class="nav-link hover:text-[var(--gold)]">Why Choose Us</a>
-                    <a href="../Customerreview.html" class="nav-link hover:text-[var(--gold)]">Testimonials</a>
-                    <a href="../../contact.html" class="nav-link hover:text-[var(--gold)]">Contact</a>
-                    <a href="../b2b/Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold font-bold">Partner with Us</a> 
+                <a href="../../../packages/packages.html" class="nav-link hover:text-[var(--gold)]">Packages</a>
+                <a href="./Visa/clientvisaquotations.html" class="nav-link hover:text-[var(--gold)]">Visa Services</a>
+                <a href="../About.html" class="nav-link hover:text-[var(--gold)]">Why Choose Us</a>
+                <a href="../Customerreview.html" class="nav-link hover:text-[var(--gold)]">Testimonials</a>
+                <a href="../../contact.html" class="nav-link hover:text-[var(--gold)]">Contact</a>
+                <a href="../b2b/Visa/b2b.html" class="mt-3 px-5 py-2 rounded-full btn-gold font-bold text-center">Partner with Us</a> 
             </div>
         </div>
     </header>
@@ -173,51 +204,63 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
 
             <a href="Visa/visaquotations.html" 
-                class="group dashboard-card rounded-2xl p-6 md:p-8 hover:shadow-2xl transition transform hover:-translate-y-1 duration-300">
-                <div class="flex items-center space-x-3 mb-3">
-                    <span class="text-3xl">📄</span>
-                    <h3 class="text-lg md:text-xl font-bold text-purple-700">Check B2B Visa Quotations</h3>
+                class="group block w-full h-full cursor-pointer">
+                <div class="dashboard-card p-6 md:p-8 h-full transition transform duration-300">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <span class="text-3xl">📄</span>
+                        <h3 class="text-lg md:text-xl font-bold text-purple-700">Check B2B Visa Quotations</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm md:text-base">Access all B2B visa quotations quickly. View, download, or share quotes with your clients directly from the dashboard.</p>
                 </div>
-                <p class="text-gray-600 text-sm md:text-base">Access all B2B visa quotations quickly. View, download, or share quotes with your clients directly from the dashboard.</p>
             </a>
 
             <a href="Quotations.html" 
-                class="group dashboard-card rounded-2xl p-6 md:p-8 hover:shadow-2xl transition transform hover:-translate-y-1 duration-300">
-                <div class="flex items-center space-x-3 mb-3">
-                    <span class="text-3xl">📝</span>
-                    <h3 class="text-lg md:text-xl font-bold text-blue-700">Visa & Docs Checklist Quotation</h3>
+                class="group block w-full h-full cursor-pointer">
+                <div class="dashboard-card p-6 md:p-8 h-full transition transform duration-300">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <span class="text-3xl">📝</span>
+                        <h3 class="text-lg md:text-xl font-bold text-blue-700">Visa & Docs Checklist Quotation</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm md:text-base">Generate professional visa quotations & document checklists with company branding. Options to <b>download</b>, <b>share</b>, and <b>copy</b> instantly.</p>
                 </div>
-                <p class="text-gray-600 text-sm md:text-base">Generate professional visa quotations & document checklists with company branding. Options to <b>download</b>, <b>share</b>, and <b>copy</b> instantly.</p>
             </a>
 
             <a href="Invoice.html" 
-                class="group dashboard-card rounded-2xl p-6 md:p-8 hover:shadow-2xl transition transform hover:-translate-y-1 duration-300">
-                <div class="flex items-center space-x-3 mb-3">
-                    <span class="text-3xl">💰</span>
-                    <h3 class="text-lg md:text-xl font-bold text-green-700">Invoice Generator</h3>
+                class="group block w-full h-full cursor-pointer">
+                <div class="dashboard-card p-6 md:p-8 h-full transition transform duration-300">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <span class="text-3xl">💰</span>
+                        <h3 class="text-lg md:text-xl font-bold text-green-700">Invoice Generator</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm md:text-base">Create detailed invoices with tracking for advance, pending, and cleared payments. Export and share with your clients easily.</p>
                 </div>
-                <p class="text-gray-600 text-sm md:text-base">Create detailed invoices with tracking for advance, pending, and cleared payments. Export and share with your clients easily.</p>
             </a>
 
             <a href="itinerary.html" 
-                class="group dashboard-card rounded-2xl p-6 md:p-8 hover:shadow-2xl transition transform hover:-translate-y-1 duration-300">
-                <div class="flex items-center space-x-3 mb-3">
-                    <span class="text-3xl">🗺️</span>
-                    <h3 class="text-lg md:text-xl font-bold text-gold">Itinerary Generator</h3>
+                class="group block w-full h-full cursor-pointer">
+                <div class="dashboard-card p-6 md:p-8 h-full transition transform duration-300">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <span class="text-3xl">🗺️</span>
+                        <h3 class="text-lg md:text-xl font-bold text-gold">Itinerary Generator</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm md:text-base">Create Detailed Itinerary just by adding few details. Export and share with your clients easily.</p>
                 </div>
-                <p class="text-gray-600 text-sm md:text-base">Create Detailed Itinerary just by adding few details. Export and share with your clients easily.</p>
             </a>
 
-            <div class="bg-gray-100/70 border-2 border-dashed border-gray-300 rounded-2xl p-6 md:p-8 flex flex-col items-center justify-center text-gray-500 hover:border-navy transition">
-                <span class="text-4xl mb-2">➕</span>
-                <p class="font-medium text-sm md:text-base text-center">More Tools Coming Soon</p>
-            </div>
-            
-            <div class="bg-gray-100/70 border-2 border-dashed border-gray-300 rounded-2xl p-6 md:p-8 flex flex-col items-center justify-center text-gray-500 hover:border-navy transition">
-                <span class="text-4xl mb-2">🛠️</span>
-                <p class="font-medium text-sm md:text-base text-center">Manage Bookings</p>
-            </div>
+            <a href="Partnersreferrals.html" class="block w-full h-full cursor-pointer">
+                <div class="placeholder-card p-6 md:p-8 h-full text-gray-500 hover:border-navy transition duration-300">
+                    <span class="text-4xl mb-2">🛠️</span>
+                    <p class="font-medium text-sm md:text-base text-center">Manage Bookings</p>
+                </div>
+            </a>
 
+            <a href="#" class="block w-full h-full cursor-pointer">
+                <div class="placeholder-card p-6 md:p-8 h-full text-gray-500 hover:border-navy transition duration-300">
+                    <span class="text-4xl mb-2">➕</span>
+                    <p class="font-medium text-sm md:text-base text-center">More Tools Coming Soon</p>
+                </div>
+            </a>
+            
         </div>
     </main>
 
