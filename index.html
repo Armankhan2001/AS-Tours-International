@@ -452,17 +452,6 @@
         </a>
     </div>
 
-    <!-- PWA INSTALL BUTTON -->
-     <div id="installBanner" class="install-banner">
-          <button id="closeButton" class="close-button" aria-label="Dismiss install prompt">
-              &times;
-          </button>
-          <button id="installButton" class="install-button">
-              <svg class="svg-inline--fa fa-download" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M480 352h-133.5l-45.25 45.25C289.2 409.3 273.1 416 256 416s-33.16-6.656-45.25-18.75L165.5 352H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h448c17.67 0 32-14.33 32-32v-96C512 366.3 497.7 352 480 352zM432 456c-13.2 0-24-10.8-24-24c0-13.2 10.8-24 24-24s24 10.8 24 24C456 445.2 445.2 456 432 456zM233.4 374.6C239.6 380.9 247.8 384 256 384s16.38-3.125 22.62-9.375l128-128c12.49-12.5 12.49-32.75 0-45.25c-12.5-12.5-32.76-12.5-45.25 0L288 274.8V32c0-17.67-14.33-32-32-32C238.3 0 224 14.33 224 32v242.8L150.6 201.4c-12.49-12.5-32.75-12.5-45.25 0c-12.49 12.5-12.49 32.75 0 45.25L233.4 374.6z"></path></svg>
-              Install App
-          </button>
-      </div>
-
   <!-- NAVIGATION -->
   <header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
     <div class="max-w-7xl mx-auto px-4 lg:px-8">
@@ -1205,10 +1194,34 @@ contactForm.addEventListener('submit', async (e) => {
     }
 });
 </script>
-
-
-
+       <!-- PWA INSTALL BANNER -->
+    <!-- Best Ribbon Styles: Fixed position at the bottom center, semi-transparent white background (bg-white/95), blur effect (backdrop-blur-md), and responsive sizing. Starts hidden using the 'hidden' class. -->
+    <div id="installBanner" class="hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 
+                                    p-3 bg-white/95 backdrop-blur-md shadow-2xl rounded-xl 
+                                    flex items-center gap-4 border border-gray-100 z-50 
+                                    max-w-xs sm:max-w-md w-11/12 transition-opacity duration-300">
         
+        <!-- CLOSE BUTTON (X icon) - Styled with hover effects and rounded shape -->
+        <button id="closeButton" class="text-gray-500 hover:text-gray-900 text-2xl p-1 
+                                         rounded-full hover:bg-gray-100 transition" 
+                aria-label="Dismiss install prompt">
+            &times;
+        </button>
+
+        <!-- INSTALL BUTTON - Styled with blue gradient, shadow, and scale-down effect on click -->
+        <button id="installButton" class="install-button 
+                                          flex-grow bg-blue-600 hover:bg-blue-700 text-white 
+                                          font-semibold py-2 px-4 rounded-lg transition 
+                                          duration-200 flex items-center justify-center gap-2 
+                                          shadow-lg hover:shadow-xl active:scale-[0.99]">
+            
+            <!-- Download Icon SVG -->
+            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" fill="currentColor">
+                <path d="M480 352h-133.5l-45.25 45.25C289.2 409.3 273.1 416 256 416s-33.16-6.656-45.25-18.75L165.5 352H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h448c17.67 0 32-14.33 32-32v-96C512 366.3 497.7 352 480 352zM432 456c-13.2 0-24-10.8-24-24c0-13.2 10.8-24 24-24s24 10.8 24 24C456 445.2 445.2 456 432 456zM233.4 374.6C239.6 380.9 247.8 384 256 384s16.38-3.125 22.62-9.375l128-128c12.49-12.5 12.49-32.75 0-45.25c-12.5-12.5-32.76-12.5-45.25 0L288 274.8V32c0-17.67-14.33-32-32-32C238.3 0 224 14.33 224 32v242.8L150.6 201.4c-12.49-12.5-32.75-12.5-45.25 0c-12.49 12.5-12.49 32.75 0 45.25L233.4 374.6z"></path>
+            </svg>
+            <span class="text-base">Install App</span>
+        </button>
+    </div>
         <!-- B2B Callout / B2B Service Section -->
         <section id="b2b" class="py-20 bg-accent-gold text-primary-dark">
             <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
@@ -1494,6 +1507,115 @@ function hideRibbon() {
       });
     }
 </script>
+
+<!-- Install Dismiss Button Script -->
+ <!-- PWA Service Worker & Install Logic (Dismissal Script) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const installBanner = document.getElementById('installBanner');
+            const installButton = document.getElementById('installButton');
+            const closeButton = document.getElementById('closeButton');
+            
+            if (!installBanner || !installButton || !closeButton) {
+                console.warn("PWA Install script failed: Missing required HTML elements.");
+                return;
+            }
+
+            let deferredPrompt = null;
+            const DISMISS_FLAG = 'installBannerDismissed'; 
+
+            // --- Helper Functions ---
+            
+            /** Hides the banner using Tailwind's 'hidden' class. */
+            const hideBanner = () => {
+                installBanner.classList.add('hidden');
+                installBanner.style.opacity = '0'; // For smooth transition effect
+            };
+            
+            /** Shows the banner by removing the hidden class. */
+            const showBanner = () => {
+                // Only show if the user hasn't dismissed it previously
+                if (localStorage.getItem(DISMISS_FLAG) !== 'true') {
+                    installBanner.classList.remove('hidden');
+                    // Add a slight delay for the transition effect
+                    setTimeout(() => {
+                        installBanner.style.opacity = '1';
+                    }, 50);
+                }
+            };
+            
+            /** Hides the banner and sets the dismissal state in localStorage. */
+            const dismissBanner = () => {
+                hideBanner();
+                localStorage.setItem(DISMISS_FLAG, 'true');
+                console.log('Install banner dismissed and preference saved.');
+            };
+
+            // Initial Check: If the banner was dismissed or app is installed, keep it hidden
+            if (localStorage.getItem(DISMISS_FLAG) === 'true' || 
+                window.matchMedia('(display-mode: standalone)').matches || 
+                document.referrer.includes('android-app://')) {
+                hideBanner();
+                console.log('Banner hidden due to dismissal or installed status.');
+            }
+
+            // --- Event Listeners ---
+            closeButton.addEventListener('click', dismissBanner);
+
+
+            // --- Service Worker Registration (Placeholder) ---
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    // NOTE: You must provide a valid sw.js file in your deployment
+                    navigator.serviceWorker.register('./sw.js') 
+                        .then(reg => {
+                            console.log('Service Worker registered! Scope:', reg.scope);
+                        })
+                        .catch(err => {
+                            console.log('Service Worker registration failed:', err);
+                        });
+                });
+            }
+
+            // 1. Listen for the native installation prompt event 
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                console.log('BeforeInstallPrompt fired. Showing custom Install Banner.');
+                showBanner();
+            });
+
+            // 2. Handle the "Install App" button click
+            installButton.addEventListener('click', () => {
+                if (deferredPrompt) {
+                    // Hide the banner immediately upon click
+                    hideBanner();
+                    
+                    // Show the native browser prompt
+                    deferredPrompt.prompt();
+                    
+                    // Wait for user choice and log it
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the A2HS prompt');
+                        } else {
+                            console.log('User dismissed the A2HS prompt');
+                        }
+                        deferredPrompt = null;
+                    });
+                } else {
+                    console.warn('Install button clicked, but deferredPrompt is null (App may already be installed or criteria not met).');
+                }
+            });
+
+            // 3. Listen for the app being successfully installed (after the prompt)
+            window.addEventListener('appinstalled', () => {
+                hideBanner();
+                localStorage.removeItem(DISMISS_FLAG); // Clear dismissal flag
+                console.log('PWA successfully installed by user. Dismissal preference reset.');
+            });
+        });
+    </script>
 
 <!-- PWA Installation Logic Script (MOVE THIS TO THE ABSOLUTE END) -->
 <script src="./pwa-install.js"></script>
