@@ -275,7 +275,7 @@
                                 <th>Visa Country</th>
                                 <th>Status</th>
                                 <th>Amount Paid</th>
-                                <th>Bifurcation</th>
+                                <!-- <th>Bifurcation</th> -->
                             </tr>
                         </thead>
                         <tbody id="referralTable"></tbody>
@@ -421,7 +421,7 @@
                     referrals.forEach(r => {
                         const desc = r["description"] && r["description"].trim() !== "" ? r["description"] : "N/A";
                         const amount = r["amount paid"] || "N/A";
-                        const bifurcation = r["bifurcation"] || "N/A";
+                        // const bifurcation = r["bifurcation"] || "N/A";
                         
                         table.innerHTML += `
                             <tr>
@@ -433,7 +433,6 @@
                                 <td>${r["visa country"] || "N/A"}</td>
                                 <td>${r["status"] || "N/A"}</td>
                                 <td>${amount}</td>
-                                <td>${bifurcation}</td>
                             </tr>`;
                     });
                 }
