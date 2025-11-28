@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itinerary View</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AS Tours International — Package Itinerary</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Using Playfair Display for headers and Inter for body text -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://unpkg.com/papaparse@5.3.2/papaparse.min.js"></script>
 
@@ -21,66 +22,89 @@
             --accent-red: #e63946;
         }
 
-        /* --- Navbar Component Styles (Restored to match your request) --- */
+        /* --- Global Styles & Navbar Adjustments --- */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background: #f0f2f5; 
+            /* Mobile: Padding for h-16 (4rem) header */
+            padding-top: 4rem; 
+        }
+
+        .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* Premium CTA button */
         .btn-gold {
             background: linear-gradient(90deg, var(--gold), #f3d27a);
             color: var(--navy);
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 0.875rem; 
             transition: all 0.3s ease;
         }
         .btn-gold:hover {
             transform: translateY(-1px);
             box-shadow: 0 3px 8px rgba(0,0,0,0.15);
         }
+        
+        /* --- Navbar Component Styles --- */
+        
+        /* Base Logo Badge Size (Mobile) */
         .logo-badge {
-            height: 140px; /* Base height for logo */
-            width: 140px;
-            background-color: #ffd700;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            height: 4rem; /* Fits in h-16 header */
+            width: auto;
+            background-color: transparent; /* Removed badge background */
+            box-shadow: none;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             transition: all 0.3s ease;
-            /* Ensure the logo image is correctly sourced, adjust path if needed */
+            border-radius: 0; 
         }
         .logo-badge img {
-            width: 90%;
+            width: 80%; /* Mobile size */
             height: auto;
-            padding: 4px;
+            max-height: 100%;
         }
-        @media (min-width: 1024px) {
-            .logo-badge {
-                height: 160px; /* Desktop height */
-                width: 160px;
-            }
-        }
+        
         .nav-link {
             font-size: 0.875rem; 
             font-weight: 500;
             transition: color 0.3s;
         }
+
+        @media (min-width: 1024px) {
+            /* Desktop Body Padding: 6rem (h-24) to accommodate the new slimmer fixed header */
+            body {
+                padding-top: 6rem; /* Reduced from 12rem */
+            }
+
+            /* Desktop Logo: Fixed width as requested */
+            .logo-badge {
+                height: 5rem; /* ~80px, fits well inside h-24 (96px) */
+                width: 140px; /* New requested fixed width */
+            }
+            .logo-badge img {
+                width: 100%;
+                height: auto;
+            }
+        }
         /* --- End Navbar Styles --- */
 
-        /* Original Itinerary Styles */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: #f0f2f5; 
-            margin:0; 
-            /* FIX: Set body padding to match the fixed navbar height (h-16 = 64px) */
-            padding-top: 64px; 
-            color:#333; 
+
+        /* --- Loading and Content Styles --- */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--gold);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
         }
-        
-        /* Adjust padding for the large logo on desktop to prevent visual overlap */
-        @media (min-width: 1024px) {
-             body {
-                padding-top: 64px; /* Matches h-16 height */
-             }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        
-        .font-playfair { font-family: 'Playfair Display', serif; }
-        .container { width: 100%; max-width: 900px; margin:auto; background:#fff; padding:30px; border-radius:18px; box-shadow:0 10px 25px rgba(0,0,0,0.1); }
+
+        .container { width: 100%; max-width: 900px; margin:20px auto; background:#fff; padding:30px; border-radius:18px; box-shadow:0 10px 25px rgba(0,0,0,0.1); }
         .logo { text-align:center; margin-bottom:20px; }
         .logo img { width:140px; max-width: 100%; border-radius:10px; }
         .title { text-align:center; font-size:2.2rem; font-weight:bold; color:var(--navy); margin-bottom:30px; word-wrap: break-word; font-family: 'Playfair Display', serif; }
@@ -95,20 +119,20 @@
             border-radius:6px; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .day { padding:15px; margin-bottom:20px; border-left:4px solid var(--secondary-blue); background:#f8faff; border-radius:10px; page-break-inside: avoid; }
+        .day { padding:15px; margin-bottom:20px; border-left:4px solid var(--secondary-blue); background:#f8faff; border-radius:10px; }
         .day strong { font-size:1.1rem; color:var(--accent-red); display:block; margin-bottom:6px; }
         .day ul { margin:0; padding-left:20px; color:#555; }
-        table { width:100%; border-collapse:collapse; margin-top:15px; border-radius:10px; overflow:hidden; page-break-inside: avoid; }
+        table { width:100%; border-collapse:collapse; margin-top:15px; border-radius:10px; overflow:hidden; }
         table th, table td { border:1px solid #ccc; padding:10px; text-align:center; }
         table th { background:var(--navy); color:#fff; font-weight:600; }
-        .cost-row { background:#ffe0e0; font-weight:bold; text-align:center; padding:12px; margin-top:8px; border-radius:8px; font-size:1rem; page-break-inside: avoid; }
-        .info-list { background:#fafafa; padding:15px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); page-break-inside: avoid; }
+        .cost-row { background:#ffe0e0; font-weight:bold; text-align:center; padding:12px; margin-top:8px; border-radius:8px; font-size:1rem; }
+        .info-list { background:#fafafa; padding:15px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
         .info-list ul { margin:0; padding-left:20px; }
         .info-list li { margin-bottom:6px; line-height:1.5; }
-        .btn-group { text-align:center; margin-top:30px; }
+        .btn-group { text-align:center; margin-top:30px; padding-bottom: 20px; }
         .btn { background:var(--secondary-blue); color:white; padding:12px 20px; border-radius:10px; text-decoration:none; font-weight:600; margin:10px; display:inline-flex; align-items:center; gap:8px; transition: background 0.3s; cursor:pointer; }
         .btn:hover { background:#023e8a; }
-
+        
         /* Responsive */
         @media (max-width: 768px){
             .container { padding:15px; }
@@ -116,63 +140,71 @@
             table th, table td { padding:6px; font-size:0.9rem; }
             .btn { padding:10px 15px; font-size:0.9rem; }
         }
-
-        /* Print styles */
-        @media print {
-            body { background: white; padding:0 !important; }
-            .navbar-print-hide { display: none !important; } /* Hide Navbar when printing */
-            .container { box-shadow: none; border-radius: 0; padding:0; margin:0; }
-            .btn-group { display: none; }
-            h2.section { page-break-after: avoid; }
-            .day, table, .cost-row, .info-list { page-break-inside: avoid; }
-        }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-    <header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm navbar-print-hide fixed w-full">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+    <!-- NAVIGATION (Fixed to the top) -->
+    <!-- Updated header height from lg:h-48 to lg:h-24 (6rem) for a slimmer look -->
+    <header class="fixed-header fixed w-full top-0 z-50 bg-white/95 backdrop-blur-md shadow-lg navbar-print-hide h-16 lg:h-24">
+        
+        <!-- Main container now uses flex to arrange logo and navigation horizontally -->
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 h-full flex items-center justify-between">
+            
+            <!-- 1. Logo (Now a flex item) -->
+            <div>
+                <a href="../index.html" class="logo-badge">
+                    <img src="../image/astourlogo.png" alt="AS Tours International">
+                </a>
+            </div>
 
-                <div class="absolute top-0 left-4 z-50">
-                    <a href="../templates/astours.html" class="logo-badge">
-                        <img src="../image/astourlogo.png" alt="AS Tours International">
-                    </a>
-                </div>
+            <!-- 2. Desktop Navigation Links / Mobile Menu Button Wrapper -->
+            <div class="flex items-center gap-6">
 
-                <div class="w-36 flex-shrink-0"></div>
-
+                <!-- Desktop Nav Links -->
                 <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
-                    <a href="../templates/astours.html" class="nav-link hover:text-[var(--gold)]">Home</a>
-                    <a href="../packages/packages.html" class="nav-link hover:text-[var(--gold)] font-bold text-[var(--gold)] border-b-2 border-[var(--gold)]">Packages</a>
-                    <a href="../visa/visaservices.html" class="nav-link hover:text-[var(--gold)]">Visa Services</a>
-                    <a href="../templates/Travel/About.html" class="nav-link hover:text-[var(--gold)]">About</a>
-                    <a href="../templates/contact.html" class="nav-link hover:text-[var(--gold)]">Contact</a>
-                    <a href="../b2b/Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold">Partner with Us</a>
+                    <a href="#home" class="nav-link hover:text-[var(--gold)]">Home</a>
+                    <a href="#packages" class="nav-link hover:text-[var(--gold)] font-bold text-[var(--gold)] border-b-2 border-[var(--gold)] pb-1">Packages</a>
+                    <a href="#visa" class="nav-link hover:text-[var(--gold)]">Visa Services</a>
+                    <a href="#why" class="nav-link hover:text-[var(--gold)]">Why Choose Us</a>
+                    <a href="#reviews" class="nav-link hover:text-[var(--gold)]">Testimonials</a>
+                    <a href="#contact" class="nav-link hover:text-[var(--gold)]">Contact</a>
+                    <a href="#b2b" class="ml-4 px-5 py-2 rounded-full btn-gold">Partner with Us</a>
                 </nav>
 
-                <div class="lg:hidden ml-auto">
-                    <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
-                        <i class="fas fa-bars fa-lg text-[var(--navy)]"></i>
-                    </button>
-                </div>
-
+                <!-- 3. Mobile Menu Button -->
+                <button id="mobileBtn" class="lg:hidden p-2 rounded-md hover:bg-gray-100 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
             </div>
         </div>
 
-        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
+        <!-- Mobile Menu (Absolutely positioned right below the h-16 header, no change here) -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full absolute top-16 left-0 shadow-lg">
             <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
-                <div class="h-10"></div> 
-                <a href="../templates/astours.html" class="nav-link block hover:text-[var(--gold)]">Home</a>
-                <a href="../packages/packages.html" class="nav-link block hover:text-[var(--gold)] font-bold text-[var(--gold)]">Packages</a>
-                <a href="../visa/visaservices.html" class="nav-link block hover:text-[var(--gold)]">Visa Services</a>
-                <a href="../templates/Travel/About.html" class="nav-link block hover:text-[var(--gold)]">About</a>
-                <a href="../templates/contact.html" class="nav-link block hover:text-[var(--gold)]">Contact</a>
-                <a href="../b2b/Visa/b2b.html" class="block mt-2 px-4 py-2 rounded-full btn-gold text-center">Partner with Us</a>
+                <a href="#home" class="nav-link block hover:text-[var(--gold)]">Home</a>
+                <a href="#packages" class="nav-link block hover:text-[var(--gold)] font-bold text-[var(--gold)]">Packages</a>
+                <a href="#visa" class="nav-link block hover:text-[var(--gold)]">Visa Services</a>
+                <a href="#why" class="nav-link block hover:text-[var(--gold)]">Why Choose Us</a>
+                <a href="#reviews" class="nav-link block hover:text-[var(--gold)]">Testimonials</a>
+                <a href="#contact" class="nav-link block hover:text-[var(--gold)]">Contact</a>
+                <a href="#b2b" class="block mt-4 px-4 py-2 rounded-full btn-gold text-center">Partner with Us</a>
             </div>
         </div>
     </header>
-    <div class="container" id="preview">
+    <!-- END NAVIGATION -->
+
+    <!-- LOADING SCREEN -->
+    <div id="loadingScreen" class="fixed inset-0 bg-white/90 backdrop-blur-sm z-[60] flex flex-col items-center justify-center">
+        <div class="spinner"></div>
+        <p class="mt-4 text-xl font-semibold text-[var(--navy)]">Loading Package Itinerary...</p>
+        <p class="mt-1 text-sm text-gray-500">Please wait while we fetch the latest travel data.</p>
+    </div>
+
+    <!-- MAIN CONTENT (Hidden until data is loaded) -->
+    <div class="container hidden" id="preview">
         <div class="logo" id="logoBox"></div>
         <div class="title" id="packageTitle">PACKAGE TITLE</div>
 
@@ -180,12 +212,14 @@
         <div id="itinerary"></div>
 
         <h2 class="section">HOTEL OPTIONS :</h2>
-        <table>
-            <thead>
-                <tr><th>CITY NAME</th><th>HOTEL NAME</th><th>NO. OF NIGHT</th><th>MEAL PLAN</th></tr>
-            </thead>
-            <tbody id="hotelTable"></tbody>
-        </table>
+        <div class="overflow-x-auto">
+             <table>
+                <thead>
+                    <tr><th>CITY NAME</th><th>HOTEL NAME</th><th>NO. OF NIGHT</th><th>MEAL PLAN</th></tr>
+                </thead>
+                <tbody id="hotelTable"></tbody>
+            </table>
+        </div>
         <div class="cost-row" id="totalCost"></div>
 
         <h2 class="section">INCLUSIONS</h2>
@@ -198,97 +232,168 @@
         <div class="info-list" id="noteContent" style="display:none;"></div>
     </div>
 
-    <div class="btn-group navbar-print-hide">
+    <!-- Buttons hidden on print -->
+    <div class="btn-group navbar-print-hide hidden" id="btnGroup">
         <button class="btn" id="downloadBtn"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-        <button class="btn" id="shareBtn"><i class="fa-solid fa-share-nodes"></i> Share</button>
+        <button class="btn" id="shareBtn"><i class="fa-solid fa-share-nodes"></i> Share Link</button>
     </div>
 
     <script>
-        // Mobile menu toggle logic
-        document.getElementById('mobileBtn').addEventListener('click', () => {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        });
+        // --- DOM Elements ---
+        const mobileBtn = document.getElementById('mobileBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const previewDiv = document.getElementById('preview');
+        const btnGroupDiv = document.getElementById('btnGroup');
+        const logoBox = document.getElementById("logoBox");
+        const packageTitle = document.getElementById("packageTitle");
+        const itineraryDiv = document.getElementById("itinerary");
+        const hotelTable = document.getElementById("hotelTable");
+        const totalCost = document.getElementById("totalCost");
+        const inclusionsDiv = document.getElementById("inclusions");
+        const exclusionsDiv = document.getElementById("exclusions");
+        const noteHeader = document.getElementById("noteHeader");
+        const noteContent = document.getElementById("noteContent");
 
-        // Original script logic
+        // --- Configuration ---
+        // NOTE: I am using the existing Google Sheets CSV URL provided in the original request.
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKWpvBUstFi-xtd__NDN3MqnMBb04fzGfAb9Ce27ao0gMGejfXqCp9V_Dh4G_Z8ungzPf4MHsy0hkx/pub?output=csv";
-        const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(sheetUrl);
         const params = new URLSearchParams(window.location.search);
-        const packageName = params.get("package");
-        let currentPkg = null;
+        const packageName = params.get("package"); 
 
-        Papa.parse(proxyUrl, { download:true, header:true, complete:function(results){
-            const allData = results.data;
-            currentPkg = allData.find(r => r['Package Name'] === packageName);
+        // --- Mobile Menu Toggle ---
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
 
-            if(!currentPkg){ document.getElementById("preview").innerHTML = "<p class='text-center py-5'>Package not found. Please go back to the packages page.</p>"; return; }
+        // --- Data Loading Logic ---
+        function hideLoaderAndShowContent() {
+            loadingScreen.classList.add('hidden');
+            previewDiv.classList.remove('hidden');
+            btnGroupDiv.classList.remove('hidden');
+        }
 
-            if(currentPkg["Logo"]){ document.getElementById("logoBox").innerHTML = `<img src="${currentPkg["Logo"]}" alt="Logo">`; }
-            document.getElementById("packageTitle").innerText = currentPkg["Package Name"] + " – " + currentPkg["Duration"];
+        function displayError(message) {
+            loadingScreen.classList.add('hidden');
+            previewDiv.classList.remove('hidden');
+            previewDiv.innerHTML = `<p class='text-center py-10 text-red-600 font-semibold text-xl'>❌ ${message}</p>`;
+            btnGroupDiv.classList.add('hidden');
+        }
 
-            // Itinerary
-            if(currentPkg["Itinerary"]){
-                const days = currentPkg["Itinerary"].split(/Day\s*\d+:/i);
-                let matches = currentPkg["Itinerary"].match(/Day\s*\d+:/gi) || [];
-                let formatted = "";
-                for(let i=1;i<days.length;i++){
-                    let lines = days[i].trim().split("\n").filter(l=>l);
-                    formatted += `<div class="day"><strong>${matches[i-1]} ${lines[0]||""}</strong><ul>` 
-                                    + lines.map(l=>`<li>${l}</li>`).join("") 
-                                    + "</ul></div>";
+        // Use direct CSV download for speed
+        Papa.parse(sheetUrl, { 
+            download: true, 
+            header: true, 
+            skipEmptyLines: true, 
+            complete: function(results) {
+                const allData = results.data;
+                const currentPkg = allData.find(r => r['Package Name'] === packageName);
+
+                if (!currentPkg) { 
+                    displayError("Package not found. Please check the URL or go back to the packages page.");
+                    return; 
                 }
-                document.getElementById("itinerary").innerHTML = formatted;
+                
+                hideLoaderAndShowContent();
+
+                // 1. Logo and Title
+                if(currentPkg["Logo"]){ logoBox.innerHTML = `<img src="${currentPkg["Logo"]}" alt="Logo">`; }
+                packageTitle.innerText = currentPkg["Package Name"] + " – " + currentPkg["Duration"];
+
+                // 2. Itinerary
+                if(currentPkg["Itinerary"]){
+                    const days = currentPkg["Itinerary"].split(/Day\s*\d+:/i);
+                    let matches = currentPkg["Itinerary"].match(/Day\s*\d+:/gi) || [];
+                    let formatted = "";
+                    for(let i=1;i<days.length;i++){
+                        let lines = days[i].trim().split("\n").map(l=>l.trim()).filter(l=>l.length > 0); 
+                        if (lines.length > 0) {
+                            formatted += `<div class="day"><strong>${matches[i-1].trim()} ${lines[0]||""}</strong><ul>` 
+                                            + lines.slice(1).map(l=>`<li>${l}</li>`).join("")
+                                            + "</ul></div>";
+                        }
+                    }
+                    itineraryDiv.innerHTML = formatted;
+                }
+
+                // 3. Hotels
+                if(currentPkg["Hotels"]){
+                    let hotelData = currentPkg["Hotels"].split("\n").map(h=>h.trim()).filter(h=>h.length > 0);
+                    let rows = hotelData.map(h=>{
+                        let [city,hotel,nights,meals] = h.split("|").map(s=>s.trim());
+                        return `<tr><td>${city||"-"}</td><td>${hotel||"-"}</td><td>${nights||"-"}</td><td>${meals||"-"}</td></tr>`;
+                    }).join("");
+                    hotelTable.innerHTML = rows;
+                }
+
+                // 4. Price
+                totalCost.innerText = currentPkg["Price"]||"Price not specified.";
+
+                // 5. Inclusions
+                inclusionsDiv.innerHTML = currentPkg["Inclusions"] 
+                    ? "<ul>" + currentPkg["Inclusions"].split("\n").map(i=>i.trim()).filter(i=>i.length > 0).map(i=>`<li>${i}</li>`).join("") + "</ul>" 
+                    : "Not specified.";
+
+                // 6. Exclusions
+                exclusionsDiv.innerHTML = currentPkg["Exclusions"] 
+                    ? "<ul>" + currentPkg["Exclusions"].split("\n").map(i=>i.trim()).filter(i=>i.length > 0).map(i=>`<li>${i}</li>`).join("") + "</ul>" 
+                    : "Not specified.";
+
+                // 7. Note
+                const noteText = currentPkg["Note"] ? currentPkg["Note"].trim() : "";
+                const noteContentLines = noteText.split("\n").map(i=>i.trim()).filter(i=>i.length > 0);
+                
+                if (noteContentLines.length > 0) {
+                     noteHeader.style.display = "block";
+                     noteContent.style.display = "block";
+                     noteContent.innerHTML = "<ul>" + noteContentLines.map(i=>`<li>${i}</li>`).join("") + "</ul>";
+                } else {
+                    noteHeader.style.display = "none";
+                    noteContent.style.display = "none";
+                }
+            },
+            error: function(err, file, inputElem, reason) {
+                displayError(`Error loading data: ${reason}. Please check your connection or try again later.`);
             }
+        });
 
-            // Hotels
-            if(currentPkg["Hotels"]){
-                let rows = currentPkg["Hotels"].split("\n").map(h=>{
-                    let [city,hotel,nights,meals] = h.split("|");
-                    return `<tr><td>${city||""}</td><td>${hotel||""}</td><td>${nights||""}</td><td>${meals||""}</td></tr>`;
-                }).join("");
-                document.getElementById("hotelTable").innerHTML = rows;
-            }
-
-            document.getElementById("totalCost").innerText = currentPkg["Price"]||"";
-
-            // Inclusions
-            document.getElementById("inclusions").innerHTML = currentPkg["Inclusions"] 
-                ? "<ul>" + currentPkg["Inclusions"].split("\n").map(i=>`<li>${i}</li>`).join("") + "</ul>" 
-                : "Not specified.";
-
-            // Exclusions
-            document.getElementById("exclusions").innerHTML = currentPkg["Exclusions"] 
-                ? "<ul>" + currentPkg["Exclusions"].split("\n").map(i=>`<li>${i}</li>`).join("") + "</ul>" 
-                : "Not specified.";
-
-            // Note
-            if(currentPkg["Note"] && currentPkg["Note"].trim() !== ""){
-                document.getElementById("noteHeader").style.display = "block";
-                document.getElementById("noteContent").style.display = "block";
-                document.getElementById("noteContent").innerHTML = "<ul>" 
-                    + currentPkg["Note"].split("\n").map(i=>`<li>${i}</li>`).join("") 
-                    + "</ul>";
-            } else {
-                document.getElementById("noteHeader").style.display = "none";
-                document.getElementById("noteContent").style.display = "none";
-            }
-
-        }});
-
-        // Print (native) for PDF
+        // --- Button Handlers ---
         document.getElementById("downloadBtn").addEventListener("click", () => {
-            window.print();
+            window.print(); // Triggers the print dialog, allowing the user to Save as PDF
         });
 
-        // Share button
         document.getElementById("shareBtn").addEventListener("click", () => {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(window.location.href).then(()=>{ alert("Share link copied!"); })
-                .catch(()=>{ alert("Failed to copy link. Please copy manually."); });
-            } else {
-                alert("Your browser does not support clipboard API. Please copy the URL manually.");
-            }
-        });
+             // Use document.execCommand('copy') for better compatibility in iframes
+             const url = window.location.href;
+             const textarea = document.createElement('textarea');
+             textarea.value = url;
+             textarea.style.position = 'fixed'; // Prevent scrolling to bottom
+             document.body.appendChild(textarea);
+             textarea.focus();
+             textarea.select();
+             try {
+                 const successful = document.execCommand('copy');
+                 if(successful) {
+                     // Using a custom modal/message box instead of alert()
+                     const msgBox = document.createElement('div');
+                     msgBox.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-2xl transition-opacity duration-300';
+                     msgBox.innerText = '✅ Share link copied to clipboard!';
+                     document.body.appendChild(msgBox);
+                     setTimeout(() => { msgBox.remove(); }, 2000);
+                 } else {
+                     throw new Error('Copy failed');
+                 }
+             } catch (err) {
+                 // Fallback for manual copy
+                 const msgBox = document.createElement('div');
+                 msgBox.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white px-6 py-3 rounded-xl shadow-2xl transition-opacity duration-300';
+                 msgBox.innerText = '❌ Failed to copy link. Please copy manually.';
+                 document.body.appendChild(msgBox);
+                 setTimeout(() => { msgBox.remove(); }, 3000);
+             } finally {
+                 document.body.removeChild(textarea);
+             }
+         });
     </script>
-
 </body>
 </html>
