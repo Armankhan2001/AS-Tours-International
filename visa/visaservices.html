@@ -1,367 +1,477 @@
+..templates/Travel/b2b/Visa/clientvisaquotations.html
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visa Services | AS Tours International</title>
-  <link rel="icon" type="image/png" href="/image/astourlogo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visa Services | AS Tours International</title>
+    <link rel="icon" type="image/png" href="/image/astourlogo.png">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --navy: #07203a;
-      --gold: #d4af37;
-      --gold-light: #f3d27a;
-    }
+    <style>
+        :root {
+            --navy: #07203a;
+            --gold: #d4af37;
+            --gold-light: #f3d27a;
+        }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f9fafb;
-      color: #333;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #333;
+        }
 
-    .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
 
-    /* Premium Button Style */
-    .btn-gold {
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
-      color: var(--navy);
-      font-weight: 600;
-      transition: all 0.3s ease;
-      display: inline-block;
-    }
+        /* Premium Button Style */
+        .btn-gold {
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            color: var(--navy);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
 
-    .btn-gold:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
-    }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
 
-    .btn-outline {
-      border: 2px solid var(--navy);
-      color: var(--navy);
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-    .btn-outline:hover {
-      background: var(--navy);
-      color: white;
-    }
+        .btn-outline {
+            border: 2px solid var(--navy);
+            color: var(--navy);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover {
+            background: var(--navy);
+            color: white;
+        }
 
-    /* Logo Badge (From your snippet) */
-    .logo-badge {
-      height: 120px;
-      width: 120px;
-      background-color: #ffd700; /* Bright gold for badge bg */
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      border-bottom-right-radius: 8px;
-      border-bottom-left-radius: 8px;
-    }
+        /* Logo Badge (From your snippet) */
+        .logo-badge {
+            height: 140px;
+            width: 140px;
+            background-color: #ffd700; /* Bright gold for badge bg */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-bottom-right-radius: 8px;
+            border-bottom-left-radius: 8px;
+            border-radius: 0px;
+        }
 
-    .logo-badge:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-    }
+        .logo-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+        }
 
-    .logo-badge img {
-      width: 90%;
-      height: auto;
-      object-fit: contain;
-    }
+        .logo-badge img {
+            width: 90%;
+            height: auto;
+            padding: 4px;
+        }
 
-    @media (min-width: 1024px) {
-      .logo-badge {
-        height: 150px;
-        width: 150px;
-      }
-    }
+        @media (min-width: 1024px) {
+            .logo-badge {
+                height: 150px;
+                width: 150px;
+            }
+        }
 
-    /* Dynamic Content Styling (injected via JS) */
-    #visaInfo h3 { color: var(--navy); font-size: 1.5rem; font-family: 'Playfair Display', serif; margin-top: 1rem; border-bottom: 2px solid var(--gold); display: inline-block; }
-    #visaInfo h4 { color: #555; font-size: 1.1rem; margin-top: 10px; font-weight: 700; }
-    #visaInfo ul { list-style-type: disc; padding-left: 20px; margin-bottom: 10px; }
-    #visaInfo li { margin-bottom: 5px; color: #4b5563; }
-    #visaInfo .category { background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #e5e7eb; }
-  </style>
+        /* Dynamic Content Styling (injected via JS) */
+        #visaInfo h3 { color: var(--navy); font-size: 1.5rem; font-family: 'Playfair Display', serif; margin-top: 1rem; border-bottom: 2px solid var(--gold); display: inline-block; }
+        #visaInfo h4 { color: #555; font-size: 1.1rem; margin-top: 10px; font-weight: 700; }
+        #visaInfo ul { list-style-type: disc; padding-left: 20px; margin-bottom: 10px; }
+        #visaInfo li { margin-bottom: 5px; color: #4b5563; }
+        #visaInfo .category { background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #e5e7eb; }
+
+        /* Modal Specific Styles */
+        .modal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75); /* Dark overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none; /* Allows clicks underneath when hidden */
+        }
+
+        .modal-container.open {
+            opacity: 1;
+            pointer-events: auto; /* Re-enables clicks when open */
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            max-width: 90%;
+            width: 450px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: translateY(-50px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            position: relative;
+        }
+        
+        .modal-container.open .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+    </style>
 </head>
 <body class="antialiased flex flex-col min-h-screen">
 
-  <header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-
-        <div class="absolute top-0 left-4 lg:left-8 z-50">
-          <a href="/index.html" class="logo-badge">
-            <img src="../image/astourlogo.png" alt="AS Tours Logo">
-          </a>
-        </div>
-
-        <div class="hidden lg:block w-32 flex-shrink-0"></div>
-
-        <nav class="hidden lg:flex items-center gap-8 text-[#07203a]">
-          <a href="../index.html" class="hover:text-[#d4af37]">Home</a>
-        <a href="../templates/Travel/b2b/Visa/clientvisaquotations.html" class="hover:text-[#d4af37]">Global Visa</a>
-        <!-- <a href="../packages/packages.html" class="hover:text-[#d4af37]">Packages</a> -->
-        <a href="#" class="text-[#d4af37] font-bold">Visa Services</a>
-        <!-- <a href="../templates/contact.html" class="hover:text-[#d4af37]">Contact</a> -->
-        <a href="../templates/Travel/b2b/Visa/b2b.html" class="mt-2 px-4 py-3 rounded-lg btn-gold text-center">Partner with Us</a>
-        </nav>
-
-        <div class="lg:hidden ml-auto">
-          <button id="mobileBtn" class="p-2 text-[#07203a] hover:bg-gray-100 rounded-md transition-colors">
-            <i class="fas fa-bars fa-lg"></i>
-          </button>
-        </div>
-
-      </div>
-    </div>
-
-    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 absolute w-full shadow-lg">
-      <div class="flex flex-col px-6 py-6 space-y-4 text-[#07203a] font-medium">
-        <div class="h-16"></div> 
-        <a href="../index.html" class="hover:text-[#d4af37]">Home</a>
-        <a href="../templates/Travel/b2b/Visa/clientvisaquotations.html" class="hover:text-[#d4af37]">Global Visa</a>
-        <!-- <a href="../packages/packages.html" class="hover:text-[#d4af37]">Packages</a> -->
-        <a href="#" class="text-[#d4af37] font-bold">Visa Services</a>
-        <!-- <a href="../templates/contact.html" class="hover:text-[#d4af37]">Contact</a> -->
-        <a href="../templates/Travel/b2b/Visa/b2b.html" class="mt-2 px-4 py-3 rounded-lg btn-gold text-center">Partner with Us</a>
-      </div>
-    </div>
-  </header>
-
-  <section class="relative pt-40 pb-20 lg:pt-48 lg:pb-32 bg-[#07203a] text-white overflow-hidden">
-    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-[#d4af37] opacity-10 blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-[#0077b6] opacity-20 blur-3xl"></div>
-
-    <div class="container mx-auto px-4 text-center relative z-10">
-      <h1 class="font-playfair text-4xl lg:text-6xl font-bold mb-6 text-[#d4af37]">
-        Global Visa Services
-      </h1>
-      <p class="text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-        Seamless processing for tourist, business, and student visas. We navigate the complexities so you can focus on the journey.
-      </p>
-    </div>
-  </section>
-
-  <main class="flex-grow">
-    <section class="py-16 -mt-10 relative z-20">
-      <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-          <div class="text-center mb-8">
-            <h2 class="font-playfair text-3xl font-bold text-[#07203a]">
-              Check Visa Requirements
-            </h2>
-            <p class="text-gray-500 mt-2">Select your destination to view details instantly</p>
-          </div>
-
-          <div class="flex flex-col items-center">
-            <div class="relative w-full max-w-sm">
-              <select id="countrySelect" class="w-full appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg focus:outline-none focus:bg-white focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] transition-colors">
-                <option value="">-- Choose Country --</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-              </div>
-            </div>
-
-            <div id="visaInfo" class="w-full mt-8 text-left"></div>
+    <div id="rateUpdateModal" class="modal-container hidden">
+        <div class="modal-content text-center">
             
-            <div class="mt-8">
-              <a href="applynow.html" class="btn-gold px-8 py-3 rounded-lg shadow-lg">
-                Start Visa Application
-              </a>
+            <button id="closeModalBtn" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 transition-colors" title="Close">
+                <i class="fas fa-times fa-lg"></i>
+            </button>
+
+            <div class="text-[#d4af37] mb-4">
+                <i class="fas fa-bell fa-3x animate-bounce"></i>
             </div>
-          </div>
+            <h2 class="font-playfair text-2xl font-bold text-[#07203a] mb-3">
+                Important Update!
+            </h2>
+            <p class="text-gray-600 mb-6">
+                Our **new competitive visa rates** are now available. Click below to view the updated quotations.
+            </p>
+
+            <a href="../templates/Travel/b2b/Visa/clientvisaquotations.html" class="btn-gold px-8 py-3 rounded-lg shadow-xl text-lg w-full">
+                View New Visa Rates
+            </a>
+            
+            <p class="text-xs text-gray-400 mt-4">
+                (You will be redirected to the new rates page)
+            </p>
         </div>
-      </div>
-    </section>
-
-    <section class="py-10 bg-white">
-      <div class="container mx-auto px-4">
-        <div class="flex flex-wrap justify-center gap-4">
-          <a href="e-visa.html" class="btn-outline px-6 py-2 rounded-full text-sm">Check E-Visa</a>
-          <a href="schengen.html" class="btn-outline px-6 py-2 rounded-full text-sm">Schengen Visa</a>
-          <a href="GCC.html" class="btn-outline px-6 py-2 rounded-full text-sm">GCC Visa</a>
-          <a href="freevisacountries.html" class="btn-outline px-6 py-2 rounded-full text-sm">Visa Free Countries</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-16 bg-gray-50">
-      <div class="container mx-auto px-4">
-        <h2 class="text-center font-playfair text-3xl md:text-4xl font-bold text-[#07203a] mb-12">
-          Popular Destinations
-        </h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-            <div class="h-48 overflow-hidden">
-              <img src="https://flagcdn.com/w640/gb.png" alt="UK" class="w-full h-full object-cover">
-            </div>
-            <div class="p-6">
-              <h3 class="font-playfair text-xl font-bold text-[#07203a] mb-2">United Kingdom</h3>
-              <p class="text-gray-600 text-sm mb-4">Priority processing for tourist, business, and student visa applications.</p>
-              <a href="applynow.html?country=UK" class="text-[#d4af37] font-bold text-sm hover:underline">Apply Now &rarr;</a>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-            <div class="h-48 overflow-hidden">
-              <img src="https://flagcdn.com/w640/gr.png" alt="Greece" class="w-full h-full object-cover">
-            </div>
-            <div class="p-6">
-              <h3 class="font-playfair text-xl font-bold text-[#07203a] mb-2">Greece (Schengen)</h3>
-              <p class="text-gray-600 text-sm mb-4">Expert guidance on Schengen documentation and appointment slots.</p>
-              <a href="applynow.html?country=Greece" class="text-[#d4af37] font-bold text-sm hover:underline">Apply Now &rarr;</a>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-            <div class="h-48 overflow-hidden">
-              <img src="https://flagcdn.com/w640/au.png" alt="Australia" class="w-full h-full object-cover">
-            </div>
-            <div class="p-6">
-              <h3 class="font-playfair text-xl font-bold text-[#07203a] mb-2">Australia</h3>
-              <p class="text-gray-600 text-sm mb-4">Subclass 600 Visitor visa assistance with high success rates.</p>
-              <a href="applynow.html?country=Australia" class="text-[#d4af37] font-bold text-sm hover:underline">Apply Now &rarr;</a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <section class="py-16 bg-white">
-      <div class="container mx-auto px-4">
-        <h2 class="text-center font-playfair text-3xl md:text-4xl font-bold text-[#07203a] mb-12">
-          Client Success Stories
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          
-          <div class="p-8 bg-gray-50 rounded-xl border border-gray-100">
-            <div class="text-[#d4af37] text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
-            <p class="text-gray-600 italic mb-6">"Super fast service for my UK visa — got it in less than a week! Highly recommend AS Tours International."</p>
-            <h4 class="font-bold text-[#07203a]">- Ramesh P.</h4>
-          </div>
-
-          <div class="p-8 bg-gray-50 rounded-xl border border-gray-100">
-            <div class="text-[#d4af37] text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
-            <p class="text-gray-600 italic mb-6">"The team guided me through Canada visitor visa documents smoothly. Very professional and responsive."</p>
-            <h4 class="font-bold text-[#07203a]">- Meena D.</h4>
-          </div>
-
-          <div class="p-8 bg-gray-50 rounded-xl border border-gray-100">
-            <div class="text-[#d4af37] text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
-            <p class="text-gray-600 italic mb-6">"AS Tours handled my Schengen visa application perfectly. Seamless process from start to finish."</p>
-            <h4 class="font-bold text-[#07203a]">- Arvind S.</h4>
-          </div>
-
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="bg-[#07203a] text-white py-8 border-t border-[#d4af37]">
-    <div class="container mx-auto px-4 text-center">
-      <p class="text-gray-400 text-sm">
-        &copy; 2025 AS Tours International | Designed by 
-        <a href="https://solo2ceo.info" target="_blank" class="text-[#d4af37] hover:underline">Solo2Ceo</a>
-      </p>
     </div>
-  </footer>
+    <header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="flex items-center justify-between h-20">
 
-  <script>
-    // Navbar Toggle
-    document.getElementById('mobileBtn').addEventListener('click', () => {
-      document.getElementById('mobileMenu').classList.toggle('hidden');
-    });
+                <div class="absolute top-0 left-4 lg:left-8 z-50">
+                    <a href="/index.html" class="logo-badge">
+                        <img src="../image/astourlogo.png" alt="AS Tours Logo">
+                    </a>
+                </div>
 
-    // Visa Database Logic
-    const apiUrl = 'https://raw.githubusercontent.com/Armankhan2001/visaDatabase/refs/heads/main/visaDatabase.json';
-    let visaDatabase = [];
+                <div class="hidden lg:block w-32 flex-shrink-0"></div>
 
-    async function fetchData() {
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        visaDatabase = data.visaDatabase;
-        populateCountrySelect();
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        document.getElementById('visaInfo').innerHTML = "<p class='text-red-500 font-bold'>Failed to load visa data. Please try again later.</p>";
-      }
-    }
+                <nav class="hidden lg:flex items-center gap-8 text-[#07203a]">
+                    <a href="../index.html" class="hover:text-[#d4af37]">Home</a>
+                    <a href="../templates/Travel/b2b/Visa/clientvisaquotations.html" class="hover:text-[#d4af37]">Global Visa</a>
+                    <a href="#" class="text-[#d4af37] font-bold">Visa Services</a>
+                    <a href="../templates/Travel/b2b/Visa/b2b.html" class="mt-2 px-4 py-3 rounded-lg btn-gold text-center">Partner with Us</a>
+                </nav>
 
-    function populateCountrySelect() {
-      const select = document.getElementById('countrySelect');
-      visaDatabase.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.country;
-        option.textContent = item.country;
-        select.appendChild(option);
-      });
+                <div class="lg:hidden ml-auto">
+                    <button id="mobileBtn" class="p-2 text-[#07203a] hover:bg-gray-100 rounded-md transition-colors">
+                        <i class="fas fa-bars fa-lg"></i>
+                    </button>
+                </div>
 
-      select.addEventListener('change', showVisaInfo);
-    }
+            </div>
+        </div>
 
-    function showVisaInfo() {
-      const selectedCountry = document.getElementById('countrySelect').value;
-      const infoDiv = document.getElementById('visaInfo');
-      infoDiv.innerHTML = '';
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 absolute w-full shadow-lg">
+            <div class="flex flex-col px-6 py-6 space-y-4 text-[#07203a] font-medium">
+                <div class="h-16"></div> 
+                <a href="../index.html" class="hover:text-[#d4af37]">Home</a>
+                <a href="../templates/Travel/b2b/Visa/clientvisaquotations.html" class="hover:text-[#d4af37]">Global Visa</a>
+                <a href="#" class="text-[#d4af37] font-bold">Visa Services</a>
+                <a href="../templates/Travel/b2b/Visa/b2b.html" class="mt-2 px-4 py-3 rounded-lg btn-gold text-center">Partner with Us</a>
+            </div>
+        </div>
+    </header>
 
-      if (!selectedCountry) return;
+    <section class="relative pt-40 pb-20 lg:pt-48 lg:pb-32 bg-[#07203a] text-white overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-[#d4af37] opacity-10 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-[#0077b6] opacity-20 blur-3xl"></div>
 
-      const countryData = visaDatabase.find(item => item.country === selectedCountry);
-      if (!countryData) {
-        infoDiv.innerHTML = "<p class='text-gray-500'>No visa information found for this country.</p>";
-        return;
-      }
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="font-playfair text-4xl lg:text-6xl font-bold mb-6 text-[#d4af37]">
+                Global Visa Services
+            </h1>
+            <p class="text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Seamless processing for tourist, business, and student visas. We navigate the complexities so you can focus on the journey.
+            </p>
+        </div>
+    </section>
 
-      countryData.visaTypes.forEach(visa => {
-        const visaTypeDiv = document.createElement('div');
-        visaTypeDiv.className = 'category fade-in'; // Added fade-in class if you want animation
-        
-        // Add styling handled in CSS via .category selector, but structure is here
-        let htmlContent = `<h3>${visa.type}</h3>`;
+    <main class="flex-grow">
+        <section class="py-16 -mt-10 relative z-20">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                    <div class="text-center mb-8">
+                        <h2 class="font-playfair text-3xl font-bold text-[#07203a]">
+                            Check Visa Requirements
+                        </h2>
+                        <p class="text-gray-500 mt-2">Select your destination to view details instantly</p>
+                    </div>
 
-        visa.categories.forEach(cat => {
-          htmlContent += `
-            <div class="mt-4 p-4 bg-gray-50 rounded border border-gray-200">
-              <p class="text-[#07203a] text-lg font-bold mb-2">${cat.name}</p>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
-                <div><span class="font-semibold">Max Stay:</span> ${cat.maxStay}</div>
-                <div><span class="font-semibold">Validity:</span> ${cat.visaValidity}</div>
-                <div><span class="font-semibold">Processing:</span> ${cat.processingTime}</div>
-                <div><span class="font-semibold">Fees:</span> ${cat.fees}</div>
-              </div>
-          `;
+                    <div class="flex flex-col items-center">
+                        <div class="relative w-full max-w-sm">
+                            <select id="countrySelect" class="w-full appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg focus:outline-none focus:bg-white focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] transition-colors">
+                                <option value="">-- Choose Country --</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
 
-          cat.documentsRequired.forEach(docCat => {
-            htmlContent += `<h4 class="text-sm uppercase tracking-wide text-gray-500 mb-2 mt-3">${docCat.category}</h4><ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">`;
-            docCat.documents.forEach(doc => {
-              htmlContent += `<li><strong class="text-[#07203a]">${doc.name}</strong>: ${doc.description}</li>`;
+                        <div id="visaInfo" class="w-full mt-8 text-left"></div>
+                        
+                        <div class="mt-8">
+                            <a href="applynow.html" class="btn-gold px-8 py-3 rounded-lg shadow-lg">
+                                Start Visa Application
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-10 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="e-visa.html" class="btn-outline px-6 py-2 rounded-full text-sm">Check E-Visa</a>
+                    <a href="schengen.html" class="btn-outline px-6 py-2 rounded-full text-sm">Schengen Visa</a>
+                    <a href="GCC.html" class="btn-outline px-6 py-2 rounded-full text-sm">GCC Visa</a>
+                    <a href="freevisacountries.html" class="btn-outline px-6 py-2 rounded-full text-sm">Visa Free Countries</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <h2 class="text-center font-playfair text-3xl md:text-4xl font-bold text-[#07203a] mb-12">
+                    Popular Destinations
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:-translate-y-2 transition-transform duration-300">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://flagcdn.com/w640/gb.png" alt="UK" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-playfair text-xl font-bold text-[#07203a] mb-2">United Kingdom</h3>
+                            <p class="text-gray-600 text-sm mb-4">Priority processing for tourist, business, and student visa applications.</p>
+                            <a href="applynow.html?country=UK" class="text-[#d4af37] font-bold text-sm hover:underline">Apply Now &rarr;</a>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:-translate-y-2 transition-transform duration-300">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://flagcdn.com/w640/gr.png" alt="Greece" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-playfair text-xl font-bold text-[#07203a] mb-2">Greece (Schengen)</h3>
+                            <p class="text-gray-600 text-sm mb-4">Expert guidance on Schengen documentation and appointment slots.</p>
+                            <a href="applynow.html?country=Greece" class="text-[#d4af37] font-bold text-sm hover:underline">Apply Now &rarr;</a>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:-translate-y-2 transition-transform duration-300">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://flagcdn.com/w640/au.png" alt="Australia" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-playfair text-xl font-bold text-[#07203a] mb-2">Australia</h3>
+                            <p class="text-gray-600 text-sm mb-4">Subclass 600 Visitor visa assistance with high success rates.</p>
+                            <a href="applynow.html?country=Australia" class="text-[#d4af37] font-bold text-sm hover:underline">Apply Now &rarr;</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-center font-playfair text-3xl md:text-4xl font-bold text-[#07203a] mb-12">
+                    Client Success Stories
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    
+                    <div class="p-8 bg-gray-50 rounded-xl border border-gray-100">
+                        <div class="text-[#d4af37] text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
+                        <p class="text-gray-600 italic mb-6">"Super fast service for my UK visa — got it in less than a week! Highly recommend AS Tours International."</p>
+                        <h4 class="font-bold text-[#07203a]">- Ramesh P.</h4>
+                    </div>
+
+                    <div class="p-8 bg-gray-50 rounded-xl border border-gray-100">
+                        <div class="text-[#d4af37] text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
+                        <p class="text-gray-600 italic mb-6">"The team guided me through Canada visitor visa documents smoothly. Very professional and responsive."</p>
+                        <h4 class="font-bold text-[#07203a]">- Meena D.</h4>
+                    </div>
+
+                    <div class="p-8 bg-gray-50 rounded-xl border border-gray-100">
+                        <div class="text-[#d4af37] text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
+                        <p class="text-gray-600 italic mb-6">"AS Tours handled my Schengen visa application perfectly. Seamless process from start to finish."</p>
+                        <h4 class="font-bold text-[#07203a]">- Arvind S.</h4>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#07203a] text-white py-8 border-t border-[#d4af37]">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm">
+                &copy; 2025 AS Tours International | Designed by 
+                <a href="https://solo2ceo.info" target="_blank" class="text-[#d4af37] hover:underline">Solo2Ceo</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // --- POPUP (MODAL) LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('rateUpdateModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+
+            // Function to show the modal
+            function showModal() {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.add('open');
+                }, 10); // Small delay to trigger transition
+            }
+
+            // Function to hide the modal
+            function hideModal() {
+                modal.classList.remove('open');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300); // Wait for transition to finish before hiding
+            }
+
+            // Show modal on page load
+            showModal();
+
+            // Close button click handler
+            closeModalBtn.addEventListener('click', hideModal);
+
+            // Close modal when clicking outside (on the overlay)
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    hideModal();
+                }
             });
-            htmlContent += '</ul>';
-          });
-          htmlContent += `</div>`; // Close inner div
+
+            // Close modal on Escape key press
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('open')) {
+                    hideModal();
+                }
+            });
+        });
+        
+        // --- ORIGINAL SCRIPTS ---
+
+        // Navbar Toggle
+        document.getElementById('mobileBtn').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
         });
 
-        visaTypeDiv.innerHTML = htmlContent;
-        infoDiv.appendChild(visaTypeDiv);
-      });
-    }
+        // Visa Database Logic
+        const apiUrl = 'https://raw.githubusercontent.com/Armankhan2001/visaDatabase/refs/heads/main/visaDatabase.json';
+        let visaDatabase = [];
 
-    fetchData();
-  </script>
+        async function fetchData() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                visaDatabase = data.visaDatabase;
+                populateCountrySelect();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('visaInfo').innerHTML = "<p class='text-red-500 font-bold'>Failed to load visa data. Please try again later.</p>";
+            }
+        }
+
+        function populateCountrySelect() {
+            const select = document.getElementById('countrySelect');
+            visaDatabase.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.country;
+                option.textContent = item.country;
+                select.appendChild(option);
+            });
+
+            select.addEventListener('change', showVisaInfo);
+        }
+
+        function showVisaInfo() {
+            const selectedCountry = document.getElementById('countrySelect').value;
+            const infoDiv = document.getElementById('visaInfo');
+            infoDiv.innerHTML = '';
+
+            if (!selectedCountry) return;
+
+            const countryData = visaDatabase.find(item => item.country === selectedCountry);
+            if (!countryData) {
+                infoDiv.innerHTML = "<p class='text-gray-500'>No visa information found for this country.</p>";
+                return;
+            }
+
+            countryData.visaTypes.forEach(visa => {
+                const visaTypeDiv = document.createElement('div');
+                visaTypeDiv.className = 'category fade-in'; // Added fade-in class if you want animation
+                
+                // Add styling handled in CSS via .category selector, but structure is here
+                let htmlContent = `<h3>${visa.type}</h3>`;
+
+                visa.categories.forEach(cat => {
+                    htmlContent += `
+                        <div class="mt-4 p-4 bg-gray-50 rounded border border-gray-200">
+                            <p class="text-[#07203a] text-lg font-bold mb-2">${cat.name}</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
+                                <div><span class="font-semibold">Max Stay:</span> ${cat.maxStay}</div>
+                                <div><span class="font-semibold">Validity:</span> ${cat.visaValidity}</div>
+                                <div><span class="font-semibold">Processing:</span> ${cat.processingTime}</div>
+                                <div><span class="font-semibold">Fees:</span> ${cat.fees}</div>
+                            </div>
+                    `;
+
+                    cat.documentsRequired.forEach(docCat => {
+                        htmlContent += `<h4 class="text-sm uppercase tracking-wide text-gray-500 mb-2 mt-3">${docCat.category}</h4><ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">`;
+                        docCat.documents.forEach(doc => {
+                            htmlContent += `<li><strong class="text-[#07203a]">${doc.name}</strong>: ${doc.description}</li>`;
+                        });
+                        htmlContent += '</ul>';
+                    });
+                    htmlContent += `</div>`; // Close inner div
+                });
+
+                visaTypeDiv.innerHTML = htmlContent;
+                infoDiv.appendChild(visaTypeDiv);
+            });
+        }
+
+        fetchData();
+    </script>
 
 </body>
 </html>
