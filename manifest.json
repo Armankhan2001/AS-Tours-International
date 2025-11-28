@@ -1,6 +1,6 @@
 {
     "name": "AS Tours International",
-    "short_name": "ASTours",
+    "short_name": "AS Tours",
     "description": "AS Tours International - Luxury Travel & Visa Services",
     "start_url": "./index.html", 
     "display": "standalone",
