@@ -56,16 +56,16 @@
 
         /* Logo badge style (made slightly smaller for mobile header space) */
         .logo-badge {
-            height: 80px; /* Reduced height */
-            width: 80px; /* Reduced width */
+            height: 140px; /* Reduced height */
+            width: 140px; /* Reduced width */
             background-color: #ffd700;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            border-bottom-right-radius: 8px;
-            border-bottom-left-radius: 8px;
+            /* border-bottom-right-radius: 8px; */
+            /* border-bottom-left-radius: 8px; */
             overflow: hidden;
         }
         /* Adjusted logo size for larger screens to original 140px */
@@ -304,7 +304,10 @@
 
         <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
             <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
-                <a href="#Home" class="nav-link-custom block hover:text-[var(--gold)]">Home</a>
+                <br>
+                <br>
+                <br>
+                <a href="#" class="text-[#d4af37] font-bold">Home</a>
                 <a href="../../templates/Travel/b2b/Visa/clientvisaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">Client Visa Rate</a>
                 <a href="../../templates/Travel/b2b/Visa/visaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">B2B Visa Rates</a>
                 <a href="../../templates/Travel/b2b/Visa/b2bvisaquotations.html" class="nav-link-custom block hover:text-[var(--gold)]">B2B Offer rate</a>
@@ -320,9 +323,15 @@
         <p id="errorMessage"></p>
     </div>
 
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <div class="container mx-auto px-4 py-4 content-padding">
         <h2 class="text-center mb-6 text-2xl sm:text-3xl">🌍 Visa Data Admin Panel</h2>
-
         <div class="nav-tabs-custom" id="sheetTabs">
             <button class="active" data-sheet="main">🌐 Main Visa Data</button>
             <button data-sheet="schengen">🇪🇺 Schengen 29 Countries</button>
