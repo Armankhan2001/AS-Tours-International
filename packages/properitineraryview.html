@@ -6,15 +6,15 @@
     <title>AS Tours International — Package Itinerary</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Using Playfair Display for headers and Inter for body text -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
+
     <script src="https://unpkg.com/papaparse@5.3.2/papaparse.min.js"></script>
 
     <style>
+        /* --- Root Variables & Base Styles --- */
         :root {
             --navy: #07203a;
             --gold: #d4af37;
@@ -22,16 +22,17 @@
             --accent-red: #e63946;
         }
 
-        /* --- Global Styles & Navbar Adjustments --- */
         body {
             font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
-            background: #f0f2f5; 
+            background: #f0f2f5;
             /* Mobile: Padding for h-16 (4rem) header */
-            padding-top: 4rem; 
+            /* padding-top: 4rem;  */
         }
 
         .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* --- Custom Component Styles --- */
 
         /* Premium CTA button */
         .btn-gold {
@@ -45,197 +46,196 @@
             transform: translateY(-1px);
             box-shadow: 0 3px 8px rgba(0,0,0,0.15);
         }
-        
-        /* --- Navbar Component Styles --- */
-        
-        /* Base Logo Badge Size (Mobile) */
+
+        /* Logo badge style */
         .logo-badge {
-            height: 4rem; /* Fits in h-16 header */
-            width: auto;
-            background-color: transparent; /* Removed badge background */
-            box-shadow: none;
+            height: 140px;
+            width: 140px;
+            background-color: #ffd700;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             transition: all 0.3s ease;
-            border-radius: 0; 
+            /* border-radius: 9999px; Make it fully round */
         }
+
+        .logo-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+        }
+
         .logo-badge img {
-            width: 80%; /* Mobile size */
+            width: 90%;
             height: auto;
-            max-height: 100%;
-        }
-        
-        .nav-link {
-            font-size: 0.875rem; 
-            font-weight: 500;
-            transition: color 0.3s;
+            padding: 4px;
         }
 
         @media (min-width: 1024px) {
-            /* Desktop Body Padding: 6rem (h-24) to accommodate the new slimmer fixed header */
-            body {
-                padding-top: 6rem; /* Reduced from 12rem */
-            }
-
-            /* Desktop Logo: Fixed width as requested */
             .logo-badge {
-                height: 5rem; /* ~80px, fits well inside h-24 (96px) */
-                width: 140px; /* New requested fixed width */
+                height: 160px;
+                width: 160px;
             }
-            .logo-badge img {
-                width: 100%;
-                height: auto;
+            body {
+                 /* Desktop: Padding for h-24 (6rem) header */
+                padding-top: 0rem;
             }
         }
-        /* --- End Navbar Styles --- */
 
+        /* Responsive Table Refactor (Mobile-first list view) */
+        @media (max-width: 768px) {
+            /* Hide the table header on small screens */
+            .responsive-table thead {
+                display: none;
+            }
+            /* Make table rows act like blocks for vertical stacking */
+            .responsive-table tbody, .responsive-table tr {
+                display: block;
+            }
+            /* Add margin/padding to separate rows */
+            .responsive-table tr {
+                margin-bottom: 0.75rem; /* Space between "rows" (now blocks) */
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            }
+            /* Make table cells act like blocks */
+            .responsive-table td {
+                display: block;
+                text-align: right !important; /* Align content to the right */
+                border: none !important;
+                border-bottom: 1px dotted #e5e7eb !important;
+                padding: 0.5rem 1rem !important;
+                position: relative;
+            }
+            /* Use 'data-label' attribute to display the column header */
+            .responsive-table td::before {
+                content: attr(data-label);
+                float: left;
+                font-weight: 600;
+                color: var(--navy);
+            }
+            /* Last cell in the block row */
+            .responsive-table tr td:last-child {
+                border-bottom: none !important;
+            }
+        }
 
-        /* --- Loading and Content Styles --- */
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--gold);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .container { width: 100%; max-width: 900px; margin:20px auto; background:#fff; padding:30px; border-radius:18px; box-shadow:0 10px 25px rgba(0,0,0,0.1); }
-        .logo { text-align:center; margin-bottom:20px; }
-        .logo img { width:140px; max-width: 100%; border-radius:10px; }
-        .title { text-align:center; font-size:2.2rem; font-weight:bold; color:var(--navy); margin-bottom:30px; word-wrap: break-word; font-family: 'Playfair Display', serif; }
-        h2.section { 
-            background: var(--gold); 
-            color: var(--navy);
-            padding:6px 14px; 
-            font-size:1.2rem; 
-            font-weight:bold; 
-            margin:30px 0 15px; 
-            display:inline-block; 
-            border-radius:6px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .day { padding:15px; margin-bottom:20px; border-left:4px solid var(--secondary-blue); background:#f8faff; border-radius:10px; }
-        .day strong { font-size:1.1rem; color:var(--accent-red); display:block; margin-bottom:6px; }
-        .day ul { margin:0; padding-left:20px; color:#555; }
-        table { width:100%; border-collapse:collapse; margin-top:15px; border-radius:10px; overflow:hidden; }
-        table th, table td { border:1px solid #ccc; padding:10px; text-align:center; }
-        table th { background:var(--navy); color:#fff; font-weight:600; }
-        .cost-row { background:#ffe0e0; font-weight:bold; text-align:center; padding:12px; margin-top:8px; border-radius:8px; font-size:1rem; }
-        .info-list { background:#fafafa; padding:15px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
-        .info-list ul { margin:0; padding-left:20px; }
-        .info-list li { margin-bottom:6px; line-height:1.5; }
-        .btn-group { text-align:center; margin-top:30px; padding-bottom: 20px; }
-        .btn { background:var(--secondary-blue); color:white; padding:12px 20px; border-radius:10px; text-decoration:none; font-weight:600; margin:10px; display:inline-flex; align-items:center; gap:8px; transition: background 0.3s; cursor:pointer; }
-        .btn:hover { background:#023e8a; }
-        
-        /* Responsive */
-        @media (max-width: 768px){
-            .container { padding:15px; }
-            .title { font-size:1.6rem; }
-            table th, table td { padding:6px; font-size:0.9rem; }
-            .btn { padding:10px 15px; font-size:0.9rem; }
+        /* Print-specific styles to hide navbar and buttons */
+        @media print {
+            .navbar-print-hide, .btn-group {
+                display: none !important;
+            }
+            body {
+                padding-top: 0 !important;
+                background: #fff !important;
+            }
+            .container {
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
         }
     </style>
 </head>
 <body class="antialiased">
+<header class="relative top-1 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+    
+    <div class="max-w-7xl mx-auto px-4 lg:px-8">
+        <div class="flex items-center justify-between h-16">
 
-    <!-- NAVIGATION (Fixed to the top) -->
-    <!-- Updated header height from lg:h-48 to lg:h-24 (6rem) for a slimmer look -->
-    <header class="fixed-header fixed w-full top-0 z-50 bg-white/95 backdrop-blur-md shadow-lg navbar-print-hide h-16 lg:h-24">
-        
-        <!-- Main container now uses flex to arrange logo and navigation horizontally -->
-        <div class="max-w-7xl mx-auto px-4 lg:px-8 h-full flex items-center justify-between">
-            
-            <!-- 1. Logo (Now a flex item) -->
-            <div>
-                <a href="../index.html" class="logo-badge">
-                    <img src="../image/astourlogo.png" alt="AS Tours International">
-                </a>
+            <!-- Logo Badge -->
+            <div class="absolute top-0 left-4 z-50">
+            <a href="../index.html" class="logo-badge">
+                <img src="../image/astourlogo.png" alt="AS Tours International">
+            </a>
             </div>
 
-            <!-- 2. Desktop Navigation Links / Mobile Menu Button Wrapper -->
-            <div class="flex items-center gap-6">
+            <!-- Spacer for logo -->
+            <div class="w-36 flex-shrink-0"></div>
 
-                <!-- Desktop Nav Links -->
-                <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
-                    <a href="#home" class="nav-link hover:text-[var(--gold)]">Home</a>
-                    <a href="#packages" class="nav-link hover:text-[var(--gold)] font-bold text-[var(--gold)] border-b-2 border-[var(--gold)] pb-1">Packages</a>
-                    <a href="#visa" class="nav-link hover:text-[var(--gold)]">Visa Services</a>
-                    <a href="#why" class="nav-link hover:text-[var(--gold)]">Why Choose Us</a>
-                    <a href="#reviews" class="nav-link hover:text-[var(--gold)]">Testimonials</a>
-                    <a href="#contact" class="nav-link hover:text-[var(--gold)]">Contact</a>
-                    <a href="#b2b" class="ml-4 px-5 py-2 rounded-full btn-gold">Partner with Us</a>
-                </nav>
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex items-center gap-8 text-sm font-medium">
+            <a href="packages.html" class="text-[#d4af37] font-bold">Packages</a>
+            <a href="../templates/Travel/b2b/Visa/clientvisaquotations.html" class="hover:text-[#d4af37]">Visa Services</a>
+            <a href="../templates/Travel/b2b/Visa/b2b.html" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm border border-transparent btn-gold">Partner with Us</a>
+            </nav>
 
-                <!-- 3. Mobile Menu Button -->
-                <button id="mobileBtn" class="lg:hidden p-2 rounded-md hover:bg-gray-100 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
+            <div class="lg:hidden">
+            <button id="mobileBtn" class="p-2 rounded-md ring-1 ring-slate-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
             </div>
         </div>
+    </div>
 
-        <!-- Mobile Menu (Absolutely positioned right below the h-16 header, no change here) -->
-        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full absolute top-16 left-0 shadow-lg">
-            <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
-                <a href="#home" class="nav-link block hover:text-[var(--gold)]">Home</a>
-                <a href="#packages" class="nav-link block hover:text-[var(--gold)] font-bold text-[var(--gold)]">Packages</a>
-                <a href="#visa" class="nav-link block hover:text-[var(--gold)]">Visa Services</a>
-                <a href="#why" class="nav-link block hover:text-[var(--gold)]">Why Choose Us</a>
-                <a href="#reviews" class="nav-link block hover:text-[var(--gold)]">Testimonials</a>
-                <a href="#contact" class="nav-link block hover:text-[var(--gold)]">Contact</a>
-                <a href="#b2b" class="block mt-4 px-4 py-2 rounded-full btn-gold text-center">Partner with Us</a>
-            </div>
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full absolute top-16 left-0 shadow-lg">
+        <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+            <br>
+            <br>
+            <br>
+            <a href="packages.html" class="text-[#d4af37] font-bold">Package</a>
+            <a href="../templates/Travel/b2b/Visa/clientvisaquotations.html" class="block hover:text-[var(--gold)]">Visa Services</a>
+            <a href="../templates/Travel/b2b/Visa/b2b.html" class="block mt-4 px-4 py-2 rounded-full btn-gold text-center">Partner with Us</a>
         </div>
+    </div>
     </header>
-    <!-- END NAVIGATION -->
-
-    <!-- LOADING SCREEN -->
     <div id="loadingScreen" class="fixed inset-0 bg-white/90 backdrop-blur-sm z-[60] flex flex-col items-center justify-center">
-        <div class="spinner"></div>
+        <div class="spinner border-4 border-gray-200 border-l-[var(--gold)] rounded-full w-10 h-10 animate-spin"></div>
         <p class="mt-4 text-xl font-semibold text-[var(--navy)]">Loading Package Itinerary...</p>
         <p class="mt-1 text-sm text-gray-500">Please wait while we fetch the latest travel data.</p>
     </div>
 
-    <!-- MAIN CONTENT (Hidden until data is loaded) -->
-    <div class="container hidden" id="preview">
-        <div class="logo" id="logoBox"></div>
-        <div class="title" id="packageTitle">PACKAGE TITLE</div>
+    <br>
+    <br>
 
-        <h2 class="section">DAYWISE ITINERARY</h2>
-        <div id="itinerary"></div>
+    <main class="container w-full max-w-4xl mx-auto mt-5 mb-10 bg-white p-4 sm:p-8 md:p-10 rounded-xl shadow-2xl hidden" id="preview">
+        
+        <div class="text-center mb-6" id="logoBox"></div>
+        
+        <div class="text-center text-[var(--navy)] font-playfair text-2xl sm:text-3xl md:text-4xl font-extrabold mb-8 break-words" id="packageTitle">PACKAGE TITLE</div>
 
-        <h2 class="section">HOTEL OPTIONS :</h2>
+        <h2 class="section bg-[var(--gold)] text-[var(--navy)] p-2 px-4 text-lg font-bold inline-block rounded-lg shadow-md mb-4 mt-8">DAYWISE ITINERARY</h2>
+        <div id="itinerary">
+            </div>
+
+        <h2 class="section bg-[var(--gold)] text-[var(--navy)] p-2 px-4 text-lg font-bold inline-block rounded-lg shadow-md mb-4 mt-8">HOTEL OPTIONS :</h2>
         <div class="overflow-x-auto">
-             <table>
+            <table class="responsive-table w-full border-collapse mt-4 rounded-xl overflow-hidden text-sm md:text-base">
                 <thead>
-                    <tr><th>CITY NAME</th><th>HOTEL NAME</th><th>NO. OF NIGHT</th><th>MEAL PLAN</th></tr>
+                    <tr class="bg-[var(--navy)] text-white font-semibold">
+                        <th class="p-3 border border-gray-300">CITY NAME</th>
+                        <th class="p-3 border border-gray-300">HOTEL NAME</th>
+                        <th class="p-3 border border-gray-300">NO. OF NIGHT</th>
+                        <th class="p-3 border border-gray-300">MEAL PLAN</th>
+                    </tr>
                 </thead>
-                <tbody id="hotelTable"></tbody>
+                <tbody id="hotelTable" class="text-gray-700 bg-white"></tbody>
             </table>
         </div>
-        <div class="cost-row" id="totalCost"></div>
+        
+        <div class="bg-red-100 text-[var(--accent-red)] font-extrabold text-center p-3 mt-4 rounded-lg text-lg shadow-inner" id="totalCost"></div>
 
-        <h2 class="section">INCLUSIONS</h2>
-        <div class="info-list" id="inclusions"></div>
+        <h2 class="section bg-[var(--gold)] text-[var(--navy)] p-2 px-4 text-lg font-bold inline-block rounded-lg shadow-md mb-4 mt-8">INCLUSIONS</h2>
+        <div class="bg-gray-50 p-4 rounded-xl shadow-inner text-gray-700 leading-relaxed" id="inclusions">
+            </div>
 
-        <h2 class="section">EXCLUSIONS</h2>
-        <div class="info-list" id="exclusions"></div>
+        <h2 class="section bg-[var(--gold)] text-[var(--navy)] p-2 px-4 text-lg font-bold inline-block rounded-lg shadow-md mb-4 mt-8">EXCLUSIONS</h2>
+        <div class="bg-gray-50 p-4 rounded-xl shadow-inner text-gray-700 leading-relaxed" id="exclusions">
+            </div>
 
-        <h2 class="section" id="noteHeader" style="display:none;">NOTE</h2>
-        <div class="info-list" id="noteContent" style="display:none;"></div>
-    </div>
+        <h2 class="section bg-[var(--gold)] text-[var(--navy)] p-2 px-4 text-lg font-bold inline-block rounded-lg shadow-md mb-4 mt-8" id="noteHeader" style="display:none;">NOTE</h2>
+        <div class="bg-gray-50 p-4 rounded-xl shadow-inner text-gray-700 leading-relaxed" id="noteContent" style="display:none;">
+            </div>
+    </main>
 
-    <!-- Buttons hidden on print -->
-    <div class="btn-group navbar-print-hide hidden" id="btnGroup">
-        <button class="btn" id="downloadBtn"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-        <button class="btn" id="shareBtn"><i class="fa-solid fa-share-nodes"></i> Share Link</button>
+    <div class="btn-group text-center mt-8 pb-8 navbar-print-hide hidden" id="btnGroup">
+        <button class="bg-[var(--secondary-blue)] text-white px-5 py-3 rounded-xl font-semibold shadow-lg hover:bg-[#023e8a] transition duration-300 inline-flex items-center gap-2 m-2" id="downloadBtn">
+            <i class="fa-solid fa-file-pdf"></i> Download PDF
+        </button>
+        <button class="bg-[var(--secondary-blue)] text-white px-5 py-3 rounded-xl font-semibold shadow-lg hover:bg-[#023e8a] transition duration-300 inline-flex items-center gap-2 m-2" id="shareBtn">
+            <i class="fa-solid fa-share-nodes"></i> Share Link
+        </button>
     </div>
 
     <script>
@@ -256,7 +256,6 @@
         const noteContent = document.getElementById("noteContent");
 
         // --- Configuration ---
-        // NOTE: I am using the existing Google Sheets CSV URL provided in the original request.
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKWpvBUstFi-xtd__NDN3MqnMBb04fzGfAb9Ce27ao0gMGejfXqCp9V_Dh4G_Z8ungzPf4MHsy0hkx/pub?output=csv";
         const params = new URLSearchParams(window.location.search);
         const packageName = params.get("package"); 
@@ -297,7 +296,7 @@
                 hideLoaderAndShowContent();
 
                 // 1. Logo and Title
-                if(currentPkg["Logo"]){ logoBox.innerHTML = `<img src="${currentPkg["Logo"]}" alt="Logo">`; }
+                if(currentPkg["Logo"]){ logoBox.innerHTML = `<img src="${currentPkg["Logo"]}" alt="Logo" class="w-36 mx-auto rounded-xl shadow-md">`; }
                 packageTitle.innerText = currentPkg["Package Name"] + " – " + currentPkg["Duration"];
 
                 // 2. Itinerary
@@ -308,20 +307,28 @@
                     for(let i=1;i<days.length;i++){
                         let lines = days[i].trim().split("\n").map(l=>l.trim()).filter(l=>l.length > 0); 
                         if (lines.length > 0) {
-                            formatted += `<div class="day"><strong>${matches[i-1].trim()} ${lines[0]||""}</strong><ul>` 
-                                            + lines.slice(1).map(l=>`<li>${l}</li>`).join("")
-                                            + "</ul></div>";
+                            // Apply modern Tailwind classes to the day block
+                            formatted += `<div class="day p-4 mb-4 rounded-xl border-l-4 border-[var(--secondary-blue)] bg-blue-50 shadow-sm">
+                                <strong><span class="text-lg text-[var(--accent-red)]">${matches[i-1].trim()}</span> ${lines[0]||""}</strong>
+                                <ul class="list-disc pl-5 mt-2 text-gray-700 space-y-1">` 
+                                + lines.slice(1).map(l=>`<li>${l}</li>`).join("")
+                                + "</ul></div>";
                         }
                     }
                     itineraryDiv.innerHTML = formatted;
                 }
 
                 // 3. Hotels
+                const headers = ["CITY NAME", "HOTEL NAME", "NO. OF NIGHT", "MEAL PLAN"];
                 if(currentPkg["Hotels"]){
                     let hotelData = currentPkg["Hotels"].split("\n").map(h=>h.trim()).filter(h=>h.length > 0);
                     let rows = hotelData.map(h=>{
-                        let [city,hotel,nights,meals] = h.split("|").map(s=>s.trim());
-                        return `<tr><td>${city||"-"}</td><td>${hotel||"-"}</td><td>${nights||"-"}</td><td>${meals||"-"}</td></tr>`;
+                        let parts = h.split("|").map(s=>s.trim());
+                        let cells = parts.map((cell, index) => {
+                            // Added data-label for responsive table view on mobile
+                            return `<td class="p-2 md:p-3 border border-gray-200 text-center" data-label="${headers[index] || ''}">${cell||"-"}</td>`;
+                        }).join("");
+                        return `<tr class="border-b border-gray-200">${cells}</tr>`;
                     }).join("");
                     hotelTable.innerHTML = rows;
                 }
@@ -329,24 +336,24 @@
                 // 4. Price
                 totalCost.innerText = currentPkg["Price"]||"Price not specified.";
 
-                // 5. Inclusions
+                // 5. Inclusions (Improved list formatting with bullet points)
                 inclusionsDiv.innerHTML = currentPkg["Inclusions"] 
-                    ? "<ul>" + currentPkg["Inclusions"].split("\n").map(i=>i.trim()).filter(i=>i.length > 0).map(i=>`<li>${i}</li>`).join("") + "</ul>" 
+                    ? `<ul class="list-disc pl-5 space-y-1">${currentPkg["Inclusions"].split("\n").map(i=>i.trim()).filter(i=>i.length > 0).map(i=>`<li>${i}</li>`).join("")}</ul>`
                     : "Not specified.";
 
-                // 6. Exclusions
+                // 6. Exclusions (Improved list formatting with bullet points)
                 exclusionsDiv.innerHTML = currentPkg["Exclusions"] 
-                    ? "<ul>" + currentPkg["Exclusions"].split("\n").map(i=>i.trim()).filter(i=>i.length > 0).map(i=>`<li>${i}</li>`).join("") + "</ul>" 
+                    ? `<ul class="list-disc pl-5 space-y-1">${currentPkg["Exclusions"].split("\n").map(i=>i.trim()).filter(i=>i.length > 0).map(i=>`<li>${i}</li>`).join("")}</ul>`
                     : "Not specified.";
 
-                // 7. Note
+                // 7. Note (Improved list formatting with bullet points)
                 const noteText = currentPkg["Note"] ? currentPkg["Note"].trim() : "";
                 const noteContentLines = noteText.split("\n").map(i=>i.trim()).filter(i=>i.length > 0);
                 
                 if (noteContentLines.length > 0) {
                      noteHeader.style.display = "block";
                      noteContent.style.display = "block";
-                     noteContent.innerHTML = "<ul>" + noteContentLines.map(i=>`<li>${i}</li>`).join("") + "</ul>";
+                     noteContent.innerHTML = `<ul class="list-disc pl-5 space-y-1">${noteContentLines.map(i=>`<li>${i}</li>`).join("")}</ul>`;
                 } else {
                     noteHeader.style.display = "none";
                     noteContent.style.display = "none";
@@ -357,26 +364,24 @@
             }
         });
 
-        // --- Button Handlers ---
+        // --- Button Handlers (Kept the original logic for copy/print) ---
         document.getElementById("downloadBtn").addEventListener("click", () => {
             window.print(); // Triggers the print dialog, allowing the user to Save as PDF
         });
 
         document.getElementById("shareBtn").addEventListener("click", () => {
-             // Use document.execCommand('copy') for better compatibility in iframes
              const url = window.location.href;
              const textarea = document.createElement('textarea');
              textarea.value = url;
-             textarea.style.position = 'fixed'; // Prevent scrolling to bottom
+             textarea.style.position = 'fixed'; 
              document.body.appendChild(textarea);
              textarea.focus();
              textarea.select();
              try {
                  const successful = document.execCommand('copy');
                  if(successful) {
-                     // Using a custom modal/message box instead of alert()
                      const msgBox = document.createElement('div');
-                     msgBox.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-2xl transition-opacity duration-300';
+                     msgBox.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-2xl transition-opacity duration-300 z-[70]';
                      msgBox.innerText = '✅ Share link copied to clipboard!';
                      document.body.appendChild(msgBox);
                      setTimeout(() => { msgBox.remove(); }, 2000);
@@ -384,16 +389,15 @@
                      throw new Error('Copy failed');
                  }
              } catch (err) {
-                 // Fallback for manual copy
                  const msgBox = document.createElement('div');
-                 msgBox.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white px-6 py-3 rounded-xl shadow-2xl transition-opacity duration-300';
+                 msgBox.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white px-6 py-3 rounded-xl shadow-2xl transition-opacity duration-300 z-[70]';
                  msgBox.innerText = '❌ Failed to copy link. Please copy manually.';
                  document.body.appendChild(msgBox);
                  setTimeout(() => { msgBox.remove(); }, 3000);
              } finally {
                  document.body.removeChild(textarea);
              }
-         });
+           });
     </script>
 </body>
 </html>

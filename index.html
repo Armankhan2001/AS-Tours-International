@@ -69,7 +69,7 @@
             background-image: linear-gradient(rgba(0, 33, 71, 0.7), rgba(0, 33, 71, 0.6)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            /* background-attachment: fixed; */
         }
 
         /* AI Output Formatting */
@@ -136,15 +136,15 @@
         }
         
         /* Hero Background - Placeholder Image with Dark Overlay */
-        .hero-bg {
+        /* .hero-bg {
             background-image: url('image/packagebgimage.avif');
             background-size: cover;
             background-position: center;
             position: relative;
-        }
-        .hero-overlay {
+        } */
+        /* .hero-overlay {
             background-color: rgba(0, 0, 0, 0.65);
-        }
+        } */
 
         /* Card Hover Effect */
         .feature-card {
@@ -188,7 +188,7 @@
 
     /* Hero cinematic overlay */
     /* Hero cinematic overlay */
-.hero-bg {
+/* .hero-bg {
   background-image: linear-gradient(
       180deg,
       rgba(7, 32, 58, 0.50) 0%,
@@ -198,7 +198,7 @@
     url('image/packagebgimage.png');
   background-size: cover;
   background-position: center;
-}
+} */
 
 
     /* Premium CTAs */
@@ -306,9 +306,9 @@
 /* * 🎨 CSS for Fixed Visa Rate Ribbon */
 #visaRateRibbonContainer {
     /* Main container for fixed positioning */
-    position: fixed;
-    top: 200px; 
-    right: 0;
+    position: absolute;
+    top: 350px; 
+    /* right: 0; */
     z-index: 1000;
     transition: transform 0.3s, opacity 0.3s; /* For smooth hide/show */
 }
@@ -326,7 +326,7 @@
     line-height: 1.2;
     text-align: left;
     text-decoration: none; 
-    border-radius: 6px 0 0 6px; 
+    border-radius: 0 6px 6px 0 ; 
     box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     position: relative; 
@@ -384,133 +384,12 @@
 </style>
 
 <!-- #Install app button style -->
- <style>
-  /* * 🎨 UPDATED CUSTOM CSS FOR PWA INSTALL RIBBON */
-        /* ---------------------------------------------------- */
-        .install-banner {
-            /* Fixed position at the bottom center */
-            position: fixed;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 50;
-
-            /* Modern Look */
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem 1rem;
-            
-            /* Soft gradient and blur */
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            
-            /* Aesthetics */
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
-            
-            /* Responsive Width */
-            max-width: 400px;
-            width: 90%;
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        .install-button {
-            /* Primary button style */
-            flex-grow: 1;
-            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); /* Deep Blue Gradient */
-            color: #fff;
-            font-weight: 600;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            
-            /* Hover/Active effects */
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
-            transition: all 0.2s ease-out;
-        }
-        
-        .install-button:hover {
-            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.6);
-            transform: translateY(-1px); /* Subtle lift */
-        }
-        
-        .install-button:active {
-            transform: scale(0.98);
-        }
-
-        .close-button {
-            /* Subtle Close button */
-            background: none;
-            border: none;
-            color: #6b7280; /* Gray color */
-            font-size: 24px;
-            cursor: pointer;
-            padding: 4px;
-            line-height: 1; 
-            opacity: 0.8;
-            transition: color 0.2s, background-color 0.2s;
-            border-radius: 50%;
-        }
-
-        .close-button:hover {
-            opacity: 1;
-            color: #1f2937; /* Darker gray */
-            background-color: #e5e7eb;
-        }
-        
-        /* Custom styles for the PWA banner SVG */
-        .install-button svg {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
- </style>
 
 </head>
 <body class="antialiased">
-    <div id="visaRateRibbonContainer">
-        <button class="ribbon-close-btn" onclick="hideRibbon()" aria-label="Dismiss Notification">
-            &times;
-        </button>
-        
-        <a href="templates/Travel/b2b/Visa/clientvisaquotations.html" 
-          target="_blank" 
-          class="visa-rate-ribbon"
-          title="Check our Latest Visa Rate Sheet">
-            
-            <i class="fa-solid fa-file-invoice visa-rate-icon"></i>
-            
-            <span class="ribbon-text">
-                Check Our Latest Rates<br>
-                <strong>VISA QUOTATIONS</strong>
-            </span>
-        </a>
-    </div>
+    
     <!-- PWA INSTALL BANNER (existing) -->
-    <!-- The Tailwind classes are replaced with the custom CSS classes defined above -->
-    <div id="installBanner" class="install-banner hidden">
-        
-        <!-- CLOSE BUTTON (X icon) -->
-        <button id="closeButton" class="close-button" aria-label="Dismiss install prompt">
-            &times;
-        </button>
-
-        <!-- INSTALL BUTTON -->
-        <button id="installButton" class="install-button">
-            
-            <!-- Download Icon SVG -->
-            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" fill="currentColor">
-                <path d="M480 352h-133.5l-45.25 45.25C289.2 409.3 273.1 416 256 416s-33.16-6.656-45.25-18.75L165.5 352H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h448c17.67 0 32-14.33 32-32v-96C512 366.3 497.7 352 480 352zM432 456c-13.2 0-24-10.8-24-24c0-13.2 10.8-24 24-24s24 10.8 24 24C456 445.2 445.2 456 432 456zM233.4 374.6C239.6 380.9 247.8 384 256 384s16.38-3.125 22.62-9.375l128-128c12.49-12.5 12.49-32.75 0-45.25c-12.5-12.5-32.76-12.5-45.25 0L288 274.8V32c0-17.67-14.33-32-32-32C238.3 0 224 14.33 224 32v242.8L150.6 201.4c-12.49-12.5-32.75-12.5-45.25 0c-12.49 12.5-12.49 32.75 0 45.25L233.4 374.6z"></path>
-            </svg>
-            <span class="text-base">Install App</span>
-        </button>
-    </div>
+    
 
   <!-- NAVIGATION -->
   <header class="relative top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
@@ -519,7 +398,7 @@
 
         <!-- Logo Badge -->
         <div class="absolute top-0 left-4 z-50">
-          <a href="#home" class="logo-badge">
+          <a href="#" class="logo-badge">
             <img src="image/astourlogo.png" alt="AS Tours International">
           </a>
         </div>
@@ -529,7 +408,7 @@
 
         <!-- Desktop Nav -->
         <nav class="hidden lg:flex items-center gap-8 text-sm font-medium">
-          <a href="#home" class="text-[#d4af37] font-bold">Home</a>
+          <a href="#" class="text-[#d4af37] font-bold">Home</a>
           <a href="packages/packages.html" class="hover:text-[#d4af37]">Packages</a>
           <a href="visa/visaservices.html" class="hover:text-[#d4af37]">Visa Services</a>
           <a href="templates/Travel/About.html" class="hover:text-[#d4af37]">Why Choose Us</a>
@@ -555,8 +434,7 @@
     <br>
     <br>
     <br>
-    <!-- <a href="#home" class="block text-slate-800 hover:underline text-base font-medium">Home</a> -->
-          <a href="#home" class="hover:underline text-slate-800">Home</a>
+          <a href="#" class="text-[#d4af37] font-bold">Home</a>
           <a href="packages/packages.html" class="hover:underline">Packages</a>
           <a href="visa/visaservices.html" class="hover:underline">Visa Services</a>
           <a href="templates/Travel/About.html" class="hover:underline">Why Choose Us</a>
@@ -610,6 +488,24 @@
               <div class="text-sm font-semibold">Featured Package</div>
               <div class="text-xs text-slate-600">Azerbaijan — 6 Nights, Baku City Escape</div>
             </div>
+            <div id="visaRateRibbonContainer">
+        <button class="ribbon-close-btn" onclick="hideRibbon()" aria-label="Dismiss Notification">
+            &times;
+        </button>
+        
+        <a href="templates/Travel/b2b/Visa/clientvisaquotations.html" 
+          target="_blank" 
+          class="visa-rate-ribbon"
+          title="Check our Latest Visa Rate Sheet">
+            
+            <i class="fa-solid fa-file-invoice visa-rate-icon"></i>
+            
+            <span class="ribbon-text">
+                Check Our Latest Rates<br>
+                <strong>VISA QUOTATIONS</strong>
+            </span>
+        </a>
+    </div>
           </div>
         </div>
 
@@ -1540,162 +1436,6 @@ function hideRibbon() {
     }
 </script>
 
-<!-- Install Dismiss Button Script -->
- <!-- PWA Service Worker & Install Logic (Dismissal Script) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- PWA Banner Elements ---
-            const installBanner = document.getElementById('installBanner');
-            const installButton = document.getElementById('installButton');
-            const closeButton = document.getElementById('closeButton');
-            const PWA_DISMISS_FLAG = 'installBannerDismissed'; 
-            
-            // --- Visa Rate Ribbon Elements ---
-            const ribbonContainer = document.getElementById('visaRateRibbonContainer');
-            const ribbonCloseButton = document.getElementById('ribbonCloseButton');
-            const RIBBON_DISMISS_FLAG = 'visaRateRibbonDismissed';
-
-            if (!installBanner || !installButton || !closeButton || !ribbonContainer || !ribbonCloseButton) {
-                console.warn("PWA or Ribbon script failed: Missing required HTML elements.");
-                // continue execution for any elements that might be present
-            }
-
-            let deferredPrompt = null;
-
-            // --- Helper Functions ---
-            
-            /** Hides a target banner using the 'hidden' class and zero opacity. */
-            const hideElement = (element) => {
-                if (element) {
-                    element.classList.add('hidden');
-                    element.style.opacity = '0';
-                }
-            };
-            
-            /** Shows a target banner by removing the hidden class. */
-            const showElement = (element) => {
-                if (element) {
-                    element.classList.remove('hidden');
-                    setTimeout(() => {
-                        element.style.opacity = '1';
-                    }, 50);
-                }
-            };
-            
-            /** Hides the banner and sets the dismissal state in localStorage. */
-            const dismissBanner = (element, flag) => {
-                if (element) {
-                    hideElement(element);
-                    localStorage.setItem(flag, 'true'); // ONLY used by the Visa Ribbon now
-                    console.log(`${flag} dismissed and preference saved.`);
-                }
-            };
-            
-            // --- Visa Rate Ribbon Logic (Permanent Dismissal kept as requested previously) ---
-            const showRibbon = () => {
-                if (localStorage.getItem(RIBBON_DISMISS_FLAG) !== 'true') {
-                    ribbonContainer.classList.remove('hidden');
-                    // Ensure the initial state for the ribbon is correct for transition
-                    setTimeout(() => {
-                         ribbonContainer.style.opacity = '1';
-                         ribbonContainer.style.transform = 'translateY(-50%) translateX(0)'; // Slide into view
-                    }, 50);
-                }
-            };
-            
-            const dismissRibbon = () => {
-                // Apply transition class to slide out of view
-                ribbonContainer.style.transform = 'translateY(-50%) translateX(100%)'; 
-                ribbonContainer.style.opacity = '0';
-                
-                setTimeout(() => {
-                    ribbonContainer.classList.add('hidden');
-                    localStorage.setItem(RIBBON_DISMISS_FLAG, 'true');
-                    console.log('Visa Rate Ribbon dismissed and preference saved.');
-                }, 400); // Wait for transition
-            };
-
-            if (ribbonCloseButton) {
-                ribbonCloseButton.addEventListener('click', dismissRibbon);
-                if (localStorage.getItem(RIBBON_DISMISS_FLAG) !== 'true') {
-                     // Initial positioning/check for the ribbon
-                     showRibbon();
-                } else {
-                     // Ensure it is translated out if already dismissed
-                     ribbonContainer.style.transform = 'translateY(-50%) translateX(100%)'; 
-                }
-            }
-            
-            // --- PWA Banner Logic (Now shows on every refresh unless installed) ---
-
-            // Initial Check: Only hide if the app is already installed. The dismissal check is removed.
-            const isInstalled = window.matchMedia('(display-mode: standalone)').matches || document.referrer.includes('android-app://');
-            if (isInstalled) {
-                hideElement(installBanner);
-                console.log('PWA Banner hidden due to installed status.');
-            }
-
-            // Update Close Button: Only hides the banner for the current session, does not save to localStorage.
-            if (closeButton) {
-                closeButton.addEventListener('click', () => {
-                    hideElement(installBanner);
-                    console.log('PWA Banner dismissed (will reappear on next load if prompt fires).');
-                    // We explicitly do NOT call dismissBanner here to prevent saving to localStorage.
-                });
-            }
-
-            // 1. Listen for the native installation prompt event 
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                console.log('BeforeInstallPrompt fired. Showing custom Install Banner.');
-                
-                // Only show if it's not currently hidden (the initial installed check passed)
-                // We rely on the hideElement on the close button for temporary session dismissal
-                showElement(installBanner);
-            });
-
-            // 2. Handle the "Install App" button click
-            if (installButton) {
-                installButton.addEventListener('click', () => {
-                    if (deferredPrompt) {
-                        hideElement(installBanner);
-                        deferredPrompt.prompt();
-                        
-                        deferredPrompt.userChoice.then((choiceResult) => {
-                            console.log(`User response to the install prompt: ${choiceResult.outcome}`);
-                            deferredPrompt = null;
-                        });
-                    } else {
-                        console.warn('Install button clicked, but deferredPrompt is null.');
-                    }
-                });
-            }
-
-            // 3. Listen for the app being successfully installed (after the prompt)
-            window.addEventListener('appinstalled', () => {
-                hideElement(installBanner);
-                // We don't need to clear the PWA_DISMISS_FLAG anymore since we don't use it for dismissal state.
-                console.log('PWA successfully installed by user.');
-            });
-            
-            // --- Service Worker Registration (Placeholder) ---
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    // NOTE: You must provide a valid sw.js file in your deployment
-                    navigator.serviceWorker.register('./sw.js') 
-                        .then(reg => {
-                            console.log('Service Worker registered! Scope:', reg.scope);
-                        })
-                        .catch(err => {
-                            console.log('Service Worker registration failed:', err);
-                        });
-                });
-            }
-        });
-    </script>
-
-<!-- PWA Installation Logic Script (MOVE THIS TO THE ABSOLUTE END) -->
 <script src="./pwa-install.js"></script>
 </body>
 </html>
