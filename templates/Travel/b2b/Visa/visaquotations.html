@@ -56,16 +56,16 @@
 
         /* Logo badge style - Adjusted for better responsiveness */
         .logo-badge {
-            height: 80px; /* Mobile size */
-            width: 80px;  /* Mobile size */
+            height: 140px; /* Mobile size */
+            width: 140px;  /* Mobile size */
             background-color: #ffd700;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            border-bottom-right-radius: 8px;
-            border-bottom-left-radius: 8px;
+            /* border-bottom-right-radius: 8px; */
+            /* border-bottom-left-radius: 8px; */
             overflow: hidden;
             z-index: 60; /* Higher than header for overlay effect */
         }
@@ -373,7 +373,8 @@
         </div>
 
         <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
-            <nav class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium flex flex-col" aria-label="Mobile Navigation">
+            <nav class="px-6 py-20 space-y-3 text-[var(--navy)] font-medium flex flex-col" aria-label="Mobile Navigation">
+
                 <a href="#" class="text-[#d4af37] font-bold">Home</a>
                 <a href="../../../../packages/packages.html" class="nav-link-custom hover:text-[var(--gold)]">Packages</a>
                 <a href="../../../../visa/visaservices.html" class="nav-link-custom hover:text-[var(--gold)]" aria-current="page">Visa Services</a>
@@ -384,7 +385,8 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-4 content-padding">
+    <main class="container mx-auto px-4 py-20 content-padding">
+        <br>
         <br>
         <br>
         <br>
