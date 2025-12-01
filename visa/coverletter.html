@@ -1,82 +1,810 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Generator</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      background: #f5f5f5;
-      margin: 0;
-    }
-    h1 {
-      color: #333;
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px 0;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
-      background: #0077b6;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #023e8a;
-    }
-    #qrcode {
-      margin-top: 20px;
-      padding: 15px;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-    }
-  </style>
-</head>
-<body>
-  <h1>QR Code Generator</h1>
-  <input type="text" id="text" placeholder="Enter text or URL">
-  <button onclick="generateQR()">Generate QR Code</button>
-  <div id="qrcode"></div>
-  <button id="downloadBtn" style="display:none;" onclick="downloadQR()">Download QR</button>
-
-  <script>
-    function generateQR() {
-      const text = document.getElementById('text').value.trim();
-      if (!text) {
-        alert("Please enter text or URL!");
-        return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print-Ready Visa Cover Letter Generator</title>
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f0f4f8; 
+      }
+      .card {
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        border-radius: 1.5rem; 
+      }
+      .input-field {
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .input-field:focus {
+        border-color: #10b981; 
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+      }
+      .loader {
+        border-top-color: #10b981;
+        -webkit-animation: spinner 1s linear infinite;
+        animation: spinner 1s linear infinite;
+      }
+      @-webkit-keyframes spinner {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+      @keyframes spinner {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Professional Letter Styling for Output */
+      #cover-letter-content {
+          font-family: 'Georgia', serif; 
+          font-size: 11pt;
+          line-height: 1.6;
+          white-space: normal;
+          /* Screen display only styles, which will be removed in print media */
+          max-height: 60vh;
+          overflow-y: auto;
+          scrollbar-width: thin;
+          scrollbar-color: #10b981 #f0f4f8;
+          padding: 30px; /* Internal padding to mimic paper margins */
+      }
+      
+      /* Styling the centered sender header block */
+      .sender-header {
+          text-align: center;
+          margin-bottom: 20px;
+          line-height: 1.5;
+          padding: 10px 0;
+          background-color: #f7fbf8; 
+          border-radius: 8px;
+          border: 1px solid #d1fae5;
+      }
+      .sender-header b {
+          font-size: 14pt;
+          color: #047857;
+      }
+      .sender-header .contact-info {
+          font-size: 10pt;
+          color: #6b7280;
+          margin-top: 5px;
       }
 
-      const qrContainer = document.getElementById('qrcode');
-      qrContainer.innerHTML = "";
+      /* Styled Line after Header */
+      .letter-divider {
+          border: none;
+          height: 1px;
+          background-image: linear-gradient(to right, #e5e7eb, #10b981, #e5e7eb);
+          margin: 15px 0 25px 0;
+      }
 
-      QRCode.toCanvas(document.createElement('canvas'), text, { width: 250 }, function (error, canvas) {
-        if (error) console.error(error);
-        qrContainer.appendChild(canvas);
-        document.getElementById('downloadBtn').style.display = 'inline-block';
-      });
-    }
+      /* Subject line specific styling */
+      .subject-line {
+          text-align: center;
+          margin-top: 15px;
+          margin-bottom: 25px;
+      }
 
-    function downloadQR() {
-      const canvas = document.querySelector('#qrcode canvas');
-      if (!canvas) return;
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL("image/png");
-      link.download = "qr-code.png";
-      link.click();
-    }
-  </script>
+      /* Document list styling */
+      #cover-letter-content ul {
+          list-style-type: disc;
+          margin-left: 20px;
+          padding-left: 0;
+          margin-top: 10px;
+          margin-bottom: 15px;
+      }
+      
+      .section-heading {
+          border-left: 4px solid #10b981;
+          padding-left: 1rem;
+      }
+
+      /* --- CRITICAL: Print Media Styles for Exact Layout Match --- */
+      @media print {
+        /* Step 1: Prepare body and wrapper for printing */
+        body { 
+            background-color: white !important; 
+            margin: 0; 
+            padding: 0; 
+        }
+        /* Main application container */
+        #app-wrapper {
+            box-shadow: none !important;
+            border: none !important;
+            width: 100% !important;
+            max-width: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        /* Step 2: Hide all UI elements *except* the letter content */
+        #generator-form,
+        #app-wrapper > header, /* Hide the main title/button area */
+        #output-area > .flex.justify-between, /* Hide the copy/print buttons */
+        #status-message, 
+        #sources-area {
+            display: none !important;
+        }
+        
+        /* Step 3: Ensure the letter container is visible and styled correctly */
+        #cover-letter-container {
+            /* This is the key element we want to print */
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+            page-break-after: always;
+        }
+        #cover-letter-content {
+            /* Mimics 1 inch margin on all sides of the paper */
+            padding: 72px !important; 
+            max-height: none !important;
+            overflow-y: visible !important;
+            width: 100%;
+        }
+      }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-12 px-4">
+
+    <!-- Primary Application Wrapper -->
+    <div id="app-wrapper" class="w-full max-w-5xl card bg-white shadow-2xl p-8 lg:p-14">
+        <header class="text-center mb-10">
+            <h1 class="text-5xl font-extrabold text-gray-900 mb-3">
+                Print-Ready Visa Letter Pro
+            </h1>
+            <p class="text-lg text-gray-500">
+                Generate professional, multi-applicant cover letters with a perfect print layout.
+            </p>
+            <button id="load-example-data" class="mt-4 px-4 py-2 bg-yellow-500 text-white text-sm font-medium rounded-xl hover:bg-yellow-600 transition duration-150 shadow-xl flex items-center space-x-2 mx-auto">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.284-8.284z"></path></svg>
+                <span>Load Example Data (Single Click)</span>
+            </button>
+        </header>
+
+        <!-- Form Area -->
+        <form id="generator-form" class="space-y-8">
+
+            <!-- Primary Inputs Section -->
+            <h2 class="text-2xl font-bold text-gray-800 section-heading">1. Visa & Destination</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <label for="visa-type" class="block text-base font-semibold text-gray-700 mb-2">Visa Type <span class="text-red-500">*</span></label>
+                    <select id="visa-type" name="visa-type" required class="input-field w-full p-4 border border-gray-300 rounded-xl bg-gray-50 appearance-none shadow-sm">
+                        <option value="">Select Visa Type</option>
+                        <option value="Tourist">Tourist Visa (Leisure, Visiting Friends/Family)</option>
+                        <option value="Business">Business Visa (Meetings, Conferences, Contracts)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="target-country" class="block text-base font-semibold text-gray-700 mb-2">Destination Country <span class="text-red-500">*</span></label>
+                    <input type="text" id="target-country" name="target-country" required placeholder="e.g., New Zealand, Schengen Area, USA" class="input-field w-full p-4 border border-gray-300 rounded-xl shadow-sm">
+                </div>
+            </div>
+            
+            <!-- Recipient Address Section -->
+            <h2 class="text-2xl font-bold text-gray-800 section-heading pt-6 border-t border-gray-100">2. Application Consulate/Embassy Lookup</h2>
+            <p class="text-sm text-gray-600 mb-4">Provide only the submission city. The system will automatically find the correct Embassy/Consulate address using Google Search.</p>
+            <div>
+                <label for="consulate-city-country" class="block text-sm font-medium text-gray-700 mb-1">Application City, Country <span class="text-red-500">*</span></label>
+                <input type="text" id="consulate-city-country" required placeholder="e.g., Mumbai, India or London, UK" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm">
+            </div>
+
+            <!-- Traveler Details Section -->
+            <h2 class="text-2xl font-bold text-gray-800 section-heading mt-6">3. Primary Applicant Information</h2>
+            
+            <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="passport-holder" class="block text-sm font-medium text-gray-700 mb-1">Full Name (as per Passport) <span class="text-red-500">*</span></label>
+                    <input type="text" id="passport-holder" required class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm" data-applicant="primary" data-field="name">
+                </div>
+                <div>
+                    <label for="passport-number" class="block text-sm font-medium text-gray-700 mb-1">Passport Number <span class="text-red-500">*</span></label>
+                    <input type="text" id="passport-number" required class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm" data-applicant="primary" data-field="passport">
+                </div>
+                <div>
+                    <label for="passport-validity" class="block text-sm font-medium text-gray-700 mb-1">Passport Expiry Date</label>
+                    <input type="date" id="passport-validity" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm" data-applicant="primary" data-field="expiry">
+                </div>
+            </div>
+
+            <!-- New Contact Fields for the Header -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label for="applicant-email" class="block text-sm font-medium text-gray-700 mb-1">Applicant Email <span class="text-red-500">*</span></label>
+                    <input type="email" id="applicant-email" required placeholder="Email Address" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm" data-applicant="primary" data-field="email">
+                </div>
+                <div>
+                    <label for="applicant-phone" class="block text-sm font-medium text-gray-700 mb-1">Applicant Phone Number <span class="text-red-500">*</span></label>
+                    <input type="tel" id="applicant-phone" required placeholder="Phone Number" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm" data-applicant="primary" data-field="phone">
+                </div>
+            </div>
+
+            <div>
+                <label for="residence-address" class="block text-sm font-medium text-gray-700 mb-1">Applicant's Current Residence Address (One Line) <span class="text-red-500">*</span></label>
+                <textarea id="residence-address" rows="2" required placeholder="Full residential address for correspondence in one continuous line" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm"></textarea>
+            </div>
+            
+            <div>
+                <label for="employment-details" class="block text-sm font-medium text-gray-700 mb-1">Employment / Business Details (Crucial for showing ties) <span class="text-red-500">*</span></label>
+                <textarea id="employment-details" rows="2" required placeholder="Job title, Company Name/Address, or Business Name and Nature." class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm"></textarea>
+            </div>
+            
+            <!-- Dynamic Co-Applicants/Dependents Section -->
+            <h2 class="text-2xl font-bold text-gray-800 section-heading mt-6 pt-6 border-t border-gray-100">4. Co-Applicants / Dependents (PAX Details)</h2>
+            <p class="text-sm text-gray-600 mb-4">Add details for all accompanying family members/travelers. If only one traveler, leave this section empty.</p>
+            <div id="co-applicants-container" class="space-y-6">
+                <!-- Co-Applicant fields will be inserted here dynamically -->
+            </div>
+
+            <button type="button" id="add-co-applicant" class="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-xl hover:bg-blue-600 transition duration-150 shadow-xl flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>Add Co-Applicant / Dependent</span>
+            </button>
+
+
+            <!-- Dynamic Visa Type Specific Inputs -->
+            <div id="tourist-fields" class="space-y-6 hidden pt-6 border-t border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-800 section-heading">5. Tourist Travel Details</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="stay-details" class="block text-sm font-medium text-gray-700 mb-1">Planned Travel Dates & Duration <span class="text-red-500">*</span></label>
+                        <input type="text" id="stay-details" placeholder="e.g., 20 Nov 2025 to 05 Dec 2025 (15 days)" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <div>
+                        <label for="accommodation" class="block text-sm font-medium text-gray-700 mb-1">Accommodation Details (First Location)</label>
+                        <input type="text" id="accommodation" placeholder="Hotel booking name/address or Host's details" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="sponsorship" class="block text-sm font-medium text-gray-700 mb-1">Invitation / Host Details (If Applicable)</label>
+                        <input type="text" id="sponsorship" placeholder="Host Name, Relationship, Address, and Invitation Status" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <div>
+                        <label for="trip-expenses" class="block text-sm font-medium text-gray-700 mb-1">Who is Bearing the Trip Expenses? <span class="text-red-500">*</span></label>
+                        <input type="text" id="trip-expenses" required placeholder="Self-funded, Company, Parents, etc. (Must be specific)" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                </div>
+            </div>
+
+            <div id="business-fields" class="space-y-6 hidden pt-6 border-t border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-800 section-heading">5. Business Travel Details</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="invite-company" class="block text-sm font-medium text-gray-700 mb-1">Inviting Company / Organization in Destination Country <span class="text-red-500">*</span></label>
+                        <input type="text" id="invite-company" placeholder="Company Name, Contact Person, Phone/Email (as in Invitation Letter)" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                    <div>
+                        <label for="business-dates" class="block text-sm font-medium text-gray-700 mb-1">Planned Business Travel Dates <span class="text-red-500">*</span></label>
+                        <input type="text" id="business-dates" placeholder="e.g., May 10, 2026 to May 17, 2026" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm">
+                    </div>
+                </div>
+                <div>
+                    <label for="purpose-of-visit" class="block text-sm font-medium text-gray-700 mb-1">Detailed Purpose of Business Visit <span class="text-red-500">*</span></label>
+                    <textarea id="purpose-of-visit" rows="2" placeholder="e.g., Attend the 'Global Tech Summit 2025' from X to Y, and sign a distribution contract." class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm"></textarea>
+                </div>
+            </div>
+
+            <!-- Stability and Ties Section -->
+            <h2 class="text-2xl font-bold text-gray-800 section-heading pt-6 border-t border-gray-100">6. Stability & History (Proof of Return)</h2>
+
+            <div>
+                <label for="travel-history" class="block text-sm font-medium text-gray-700 mb-1">Significant International Travel History (Last 5 years)</label>
+                <textarea id="travel-history" rows="2" placeholder="List all major countries visited recently, dates, and purpose (if relevant)." class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm"></textarea>
+            </div>
+            
+            <div>
+                <label for="financial-ties" class="block text-sm font-medium text-gray-700 mb-1">Financial Ties / Other Important Context</label>
+                <textarea id="financial-ties" rows="2" placeholder="e.g., Property ownership, family ties (spouse/children staying behind), significant financial investments, or any context proving intent to return." class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="generate-button" class="w-full flex items-center justify-center space-x-3 px-6 py-4 bg-emerald-500 text-white font-extrabold text-xl rounded-xl hover:bg-emerald-600 transition duration-300 shadow-xl disabled:bg-gray-400 transform hover:scale-[1.005]">
+                <svg id="generate-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span id="button-text">Generate Professional Cover Letter</span>
+                <div id="loader" class="hidden loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-6 w-6"></div>
+            </button>
+
+        </form>
+
+        <!-- Output Area - Now formatted like a formal document -->
+        <div id="output-area" class="mt-12 pt-8 border-t border-gray-200 hidden">
+            <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
+                <h2 class="text-3xl font-bold text-gray-800">Final Cover Letter Draft</h2>
+                <div class="flex space-x-3">
+                    <button id="print-letter-button" class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition duration-150 flex items-center space-x-2 shadow-md disabled:bg-red-300">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0l-3 3m3-3l3 3m-3-3v-4"></path></svg>
+                        <span id="print-text">Print Letter</span>
+                    </button>
+                    <button id="copy-button" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition duration-150 flex items-center space-x-2 shadow-md">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v10a2 2 0 002 2h2m0-14h8m-8 0V3h8v2m-8 0v2m0 0h8m-2 4h4m-4 4h4m-4 4h4"></path></svg>
+                        <span id="copy-text">Copy Letter Text</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Error/Status Message Box -->
+            <div id="status-message" class="hidden p-4 rounded-xl text-sm mb-4" role="alert"></div>
+
+            <!-- Letter Content Container: max-w-3xl for paper width simulation -->
+            <div id="cover-letter-container" class="max-w-3xl mx-auto bg-white border border-gray-300 shadow-lg rounded-lg">
+                <!-- Content Area -->
+                <div id="cover-letter-content" class="text-gray-800">
+                    <p class="text-center text-gray-400 italic">Click "Generate Professional Cover Letter" to see the output.</p>
+                </div>
+            </div>
+
+            <div id="sources-area" class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400 text-blue-800 rounded-r-lg text-sm hidden shadow-md">
+                <p class="font-semibold mb-2">Sources Used for Grounding (Consulate Address Lookup):</p>
+                <ul id="sources-list" class="list-disc pl-5 space-y-1"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- API Configuration ---
+        const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
+        const apiKey = "AIzaSyAGT0nOvNHg-ApdLO_UvyWkLncG4VTwilU"; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+
+        // --- Example Data for Quick Fill ---
+        const EXAMPLE_DATA = {
+            'target-country': 'Canada',
+            'consulate-city-country': 'Mumbai, India',
+            'passport-holder': 'Shyam Sadoromal Wadhwani',
+            'passport-number': 'C8345467',
+            'passport-validity': '2035-02-09',
+            'applicant-email': 'shyam.wadhwani@example.com',
+            'applicant-phone': '+91 98200 12345',
+            'residence-address': '601, Carlton Court, Opp. Kotak Mahindra Bank, Turner Road, Bandra West, Mumbai 400050, India',
+            'employment-details': 'Self-employed businessman in Mumbai, India (Director, Wadhwani Trading Ltd.)',
+            'stay-details': '20 December 2025 to 20 February 2026 (Approximately 2 months)',
+            'accommodation': 'Residing with daughter at 44B Godley Road, Green Bay, Auckland 0604', 
+            'sponsorship': 'Daughter Nidhi Wadhwani and Son-in-law Suraj Dhameja (Permanent Residents of Canada)',
+            'trip-expenses': 'Self-funded (Applicant) and family hosts covering accommodation/local expenses.',
+            'travel-history': 'Frequent travel to Dubai, Thailand, and Singapore in the last 5 years for business and leisure.',
+            'financial-ties': 'I have an established business and extensive property ownership in Mumbai, ensuring strong financial ties to India.',
+            'co-applicants': [
+                { name: 'Kaajal Shyam Wadhwani', relationship: 'Wife', passport: 'P8346770', expiry: '2035-02-09' }
+            ]
+        };
+
+
+        // --- DOM Elements ---
+        const form = document.getElementById('generator-form');
+        const visaTypeSelect = document.getElementById('visa-type');
+        const touristFields = document.getElementById('tourist-fields');
+        const businessFields = document.getElementById('business-fields');
+        const generateButton = document.getElementById('generate-button');
+        const buttonText = document.getElementById('button-text');
+        const loader = document.getElementById('loader');
+        const generateIcon = document.getElementById('generate-icon');
+        const outputArea = document.getElementById('output-area');
+        const coverLetterContent = document.getElementById('cover-letter-content');
+        const sourcesArea = document.getElementById('sources-area');
+        const sourcesList = document.getElementById('sources-list');
+        const statusMessage = document.getElementById('status-message');
+        const copyButton = document.getElementById('copy-button');
+        const copyText = document.getElementById('copy-text');
+        const printLetterButton = document.getElementById('print-letter-button'); 
+        const coApplicantsContainer = document.getElementById('co-applicants-container');
+        const addCoApplicantButton = document.getElementById('add-co-applicant');
+        const loadExampleDataButton = document.getElementById('load-example-data');
+
+        // --- Helper Functions ---
+
+        /** Shows a status/error message */
+        function showStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.className = isError 
+                ? 'p-4 rounded-xl text-red-800 bg-red-100 border border-red-200 text-sm mb-4 block'
+                : 'p-4 rounded-xl text-emerald-800 bg-emerald-100 border border-emerald-200 text-sm mb-4 block';
+            statusMessage.classList.remove('hidden');
+        }
+
+        /** Hides the status message */
+        function hideStatus() {
+            statusMessage.classList.add('hidden');
+        }
+
+        /** Templates and manages dynamic co-applicant fields */
+        function createCoApplicantField(data = {}) {
+            const container = document.createElement('div');
+            container.className = 'co-applicant-item p-4 border border-gray-200 rounded-xl bg-gray-50 flex flex-col space-y-3';
+            container.innerHTML = `
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Name (as per Passport) <span class="text-red-500">*</span></label>
+                        <input type="text" data-field="name" value="${data.name || ''}" required class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Relationship <span class="text-red-500">*</span></label>
+                        <input type="text" data-field="relationship" value="${data.relationship || ''}" required class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm text-sm">
+                    </div>
+                    <div class="flex items-end">
+                         <button type="button" class="remove-co-applicant w-full px-3 py-3 bg-red-100 text-red-600 text-sm font-medium rounded-lg hover:bg-red-200 transition duration-150 shadow-md">Remove</button>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Passport Number <span class="text-red-500">*</span></label>
+                        <input type="text" data-field="passport" value="${data.passport || ''}" required class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm text-sm">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Passport Expiry Date</label>
+                        <input type="date" data-field="expiry" value="${data.expiry || ''}" class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm text-sm">
+                    </div>
+                </div>
+            `;
+            // Attach remove listener
+            container.querySelector('.remove-co-applicant').addEventListener('click', () => {
+                container.remove();
+            });
+            coApplicantsContainer.appendChild(container);
+        }
+
+        /** Populates the form fields with example data */
+        function loadDefaultData() {
+            // Populate primary fields
+            for (const key in EXAMPLE_DATA) {
+                const element = document.getElementById(key);
+                if (element && key !== 'co-applicants') {
+                    if (element.tagName === 'SELECT') {
+                        element.value = EXAMPLE_DATA[key];
+                        // Trigger change event for select to show/hide relevant sections
+                        element.dispatchEvent(new Event('change')); 
+                    } else {
+                        element.value = EXAMPLE_DATA[key];
+                    }
+                }
+            }
+
+            // Clear and populate co-applicants
+            coApplicantsContainer.innerHTML = '';
+            EXAMPLE_DATA['co-applicants'].forEach(data => createCoApplicantField(data));
+
+            showStatus("Example data loaded successfully. Review fields and click 'Generate'.", false);
+            loadExampleDataButton.classList.add('hidden'); // Hide after use
+        }
+
+        // --- Event Listeners and Initialization ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Remove any initial hardcoded content
+            coApplicantsContainer.innerHTML = '';
+            
+            // Add listeners
+            addCoApplicantButton.addEventListener('click', () => createCoApplicantField());
+            loadExampleDataButton.addEventListener('click', loadDefaultData);
+
+            // Set initial visibility of visa fields
+            visaTypeSelect.dispatchEvent(new Event('change'));
+
+            // Disable Print button initially
+            printLetterButton.disabled = true;
+        });
+
+
+        /** Collects all co-applicant data into a structured array */
+        function collectCoApplicants() {
+            const applicants = [];
+            document.querySelectorAll('.co-applicant-item').forEach(item => {
+                const applicant = {};
+                let isValid = true;
+                item.querySelectorAll('input').forEach(input => {
+                    const field = input.dataset.field;
+                    const value = input.value.trim();
+                    applicant[field] = value;
+                    if (input.required && !value) {
+                        isValid = false;
+                    }
+                });
+                if (isValid) {
+                    applicants.push(applicant);
+                }
+            });
+            return applicants;
+        }
+
+        /** Shows/hides specific fields based on visa type selection */
+        visaTypeSelect.addEventListener('change', () => {
+            const type = visaTypeSelect.value;
+            touristFields.classList.add('hidden');
+            businessFields.classList.add('hidden');
+            
+            if (type === 'Tourist') {
+                touristFields.classList.remove('hidden');
+            } else if (type === 'Business') {
+                businessFields.classList.remove('hidden');
+            }
+        });
+
+        // Copy to clipboard functionality
+        copyButton.addEventListener('click', () => {
+            const textToCopy = coverLetterContent.innerText; 
+            try {
+                const el = document.createElement('textarea');
+                el.value = textToCopy;
+                el.setAttribute('readonly', '');
+                el.style.position = 'absolute';
+                el.style.left = '-9999px';
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy'); 
+                document.body.removeChild(el);
+
+                copyText.textContent = 'Copied!';
+                copyButton.classList.add('bg-emerald-500', 'text-white');
+                copyButton.classList.remove('bg-gray-100', 'text-gray-700');
+                setTimeout(() => {
+                    copyText.textContent = 'Copy Letter Text';
+                    copyButton.classList.remove('bg-emerald-500', 'text-white');
+                    copyButton.classList.add('bg-gray-100', 'text-gray-700');
+                }, 2000);
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+                showStatus("Failed to copy to clipboard. Please copy manually.", true);
+            }
+        });
+
+        /** Triggers the standard browser print dialog. */
+        printLetterButton.addEventListener('click', () => {
+            window.print();
+        });
+
+
+        /** Calls the Gemini API with exponential backoff for reliability. */
+        async function fetchWithBackoff(payload, maxRetries = 5, delay = 1000) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                    
+                    if (response.status === 429 || response.status >= 500) {
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2; 
+                        continue;
+                    }
+
+                    throw new Error(`API returned status ${response.status}: ${response.statusText}`);
+
+                } catch (error) {
+                    if (i === maxRetries - 1) {
+                        throw new Error(`Failed to fetch content after ${maxRetries} attempts. Error: ${error.message}`);
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2; 
+                }
+            }
+        }
+
+
+        /** Processes the form data and calls the Gemini API */
+        async function generateCoverLetter(formData, coApplicants) {
+            // Get current date for the letter header
+            const today = new Date();
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = today.toLocaleDateString('en-US', dateOptions);
+
+            // System instruction guides the model on HOW to respond (role, format)
+            const systemPrompt = `You are an expert immigration consultant. Write a highly persuasive and professional visa cover letter based on the user's details.
+
+**CRITICAL TASK:** Use Google Search to find the *official title and full street address* of the Consulate/Embassy of the Destination Country in the Application City/Country provided. Include this address in the Recipient Block.
+
+OUTPUT FORMAT MUST BE CLEAN HTML TEXT (NO WRAPPING MARKDOWN). Use <br> for line breaks.
+
+HTML USAGE MANDATE:
+1.  SENDER HEADER: Wrap the entire sender header block (Applicant Name, Address, Contact) in a single HTML <div> with the class "sender-header" (which is pre-styled for centering). This block MUST contain exactly three lines, separated by <br>:
+    Line 1: <b>[Applicant Name]</b>
+    Line 2: [Applicant Residence Address in one continuous line]
+    Line 3: Contact: [Phone] | Email: [Email]
+    The Date is NO LONGER included here.
+2.  DIVIDER LINE: Immediately after the "sender-header" div, include a horizontal rule: <hr class="letter-divider">
+3.  DATE PLACEMENT: Immediately after the divider line, place the current date string (provided in the user query) on a single, left-aligned line. Use the HTML structure: <div style="text-align: Right; margin-bottom: 20px;">[Date String]</div>
+4.  RECIPIENT BLOCK START: The Recipient Block MUST start with 'To,<br>' on the first line, followed by the Consulate's Title and Address found via Google Search. Place the entire block immediately after the Date block, left-aligned, using <br> for new lines.
+5.  BOLDING: Use the <b> tag for ALL key details within the body paragraphs. This includes: Applicant Name(s) (e.g., <b>Shyam Sadoromal Wadhwani</b>), Passport Numbers (e.g., Passport No: <b>C8345467</b>), Total Number of PAX, Travel Dates, Host Names/Relationships, and Applicant's Strong Ties/Employment details. 
+6.  SUBJECT LINE: Wrap the subject line text in <u> and <b> tags, and center it using a <div class="subject-line"> wrapper.
+7.  ENCLOSED DOCUMENTS: Use a proper <ul><li> list structure for the "Enclosed Documents" section, just before the closing paragraphs.
+8.  SPACING: Use <br><br> tags instead of double newlines for vertical spacing between text blocks (like between paragraphs). Do NOT use <p> tags.
+
+BLOCK STRUCTURE (MUST FOLLOW EXACTLY):
+- <div class="sender-header">... (including Applicant's details in 3-line format) ...</div>
+- <hr class="letter-divider">
+- <div style="text-align: left; margin-bottom: 20px;">[Date String]</div>
+- Recipient Block (Must start with 'To,<br>' on the first line, then Consulate Address, use <br> for new lines)
+- <br><br>
+- <div class="subject-line"><b><u>Subject: ...</u></b></div>
+- Salutation (Dear Sir/Madam or The Visa Officer)
+- <br><br>
+- Body Paragraphs (using <b> tags for emphasis)
+- <br><br>
+- Enclosed Documents <ul><li> list
+- <br><br>
+- Closing (Yours faithfully,)
+- <br><br>
+- Signature Space (<br><br>)
+- Typed Name (<b>Applicant Name</b>)
+
+Ensure the output text is clean and professional.`;
+
+            
+            const totalPax = 1 + coApplicants.length;
+
+            // Format Co-Applicants for the prompt
+            const coApplicantList = coApplicants.map((a, index) => 
+                `PAX ${index + 2}: Name: ${a.name}, Relationship: ${a.relationship}, Passport No: ${a.passport} (Expiry: ${a.expiry || 'Not provided'})`
+            ).join('\n');
+
+
+            // User query is the content/data the model acts upon (WHAT to write)
+            let userQuery = `Write a Cover Letter for a ${formData['visa-type']} Visa application to the country of ${formData['target-country']}.
+            The letter must use the current date string: ${dateString}.
+
+            Total PAX (Travelers): ${totalPax}
+
+            --- Recipient Lookup Request ---
+            Destination Country: ${formData['target-country']}
+            Application City/Country: ${formData['consulate-city-country']}
+            **Please perform a Google Search to find the full address of the Embassy/Consulate/High Commission that serves this application city for the destination country.**
+
+            --- Traveler Profile ---
+            Primary Applicant (PAX 1):
+            Applicant Name: ${formData['passport-holder']}
+            Passport No: ${formData['passport-number']} (Expiry: ${formData['passport-validity'] || 'Not provided'})
+            Residence Address (One Line): ${formData['residence-address']}
+            Contact Phone: ${formData['applicant-phone']}
+            Contact Email: ${formData['applicant-email']}
+            Employment/Business Details (Ties to Home Country): ${formData['employment-details']}
+            Travel History: ${formData['travel-history'] || 'None.'}
+            Financial/Family Ties (Proof of Intent to Return): ${formData['financial-ties'] || 'Not specified.'}
+
+            ${coApplicants.length > 0 ? `Co-Applicants (${coApplicants.length}):\n${coApplicantList}` : 'Co-Applicants: None.'}
+            `;
+            
+            if (formData['visa-type'] === 'Tourist') {
+                userQuery += "\n--- Tourist Details ---\n";
+                userQuery += `Planned Dates and Duration of Stay: ${formData['stay-details']}\n`;
+                userQuery += `Accommodation: ${formData['accommodation'] || 'To be determined.'}\n`;
+                userQuery += `Sponsorship/Invitation: ${formData['sponsorship'] || 'Not applicable (Self-arranged trip).'}\n`;
+                userQuery += `Expenses Bearer: ${formData['trip-expenses']}\n`;
+
+            } else if (formData['visa-type'] === 'Business') {
+                userQuery += "\n--- Business Details ---\n";
+                userQuery += `Inviting Company/Contact: ${formData['invite-company']}\n`;
+                userQuery += `Travel Dates: ${formData['business-dates'] || 'Not specified'}\n`;
+                userQuery += `Detailed Purpose of Visit: ${formData['purpose-of-visit']}\n`;
+                userQuery += `Expenses Bearer: ${formData['trip-expenses'] || 'The company is funding the trip.'}\n`;
+            }
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                tools: [{ "google_search": {} }], 
+            };
+
+            const result = await fetchWithBackoff(payload);
+            return result;
+        }
+
+        // --- Form Submission Logic ---
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideStatus();
+            
+            // Collect form data
+            const formData = {};
+            const elements = form.elements;
+            for (let i = 0; i < elements.length; i++) {
+                if (elements[i].id && elements[i].value) {
+                    formData[elements[i].id] = elements[i].value.trim();
+                }
+            }
+            
+            // Collect co-applicant data
+            const coApplicants = collectCoApplicants();
+
+
+            // Basic Validation Check
+            const requiredFields = ['visa-type', 'target-country', 'consulate-city-country', 'passport-holder', 'passport-number', 'applicant-email', 'applicant-phone', 'residence-address', 'employment-details'];
+            let isValid = true;
+            requiredFields.forEach(id => {
+                if (!formData[id]) isValid = false;
+            });
+
+            const visaType = formData['visa-type'];
+            if (visaType === 'Tourist' && (!formData['stay-details'] || !formData['trip-expenses'])) isValid = false;
+            if (visaType === 'Business' && (!formData['invite-company'] || !formData['purpose-of-visit'] || !formData['business-dates'])) isValid = false;
+
+            // Validate co-applicants
+            coApplicants.forEach(a => {
+                if (!a.name || !a.relationship || !a.passport) {
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                showStatus("Please ensure all mandatory fields (marked with *) are filled, including all primary traveler contact details, visa-specific, and co-applicant fields.", true);
+                return;
+            }
+
+            // Disable button and show loading state
+            generateButton.disabled = true;
+            printLetterButton.disabled = true;
+            buttonText.textContent = "Searching Address & Drafting Letter...";
+            loader.classList.remove('hidden');
+            generateIcon.classList.add('hidden');
+            outputArea.classList.add('hidden');
+            sourcesArea.classList.add('hidden');
+            sourcesList.innerHTML = '';
+            // Clear content and show loading state
+            coverLetterContent.innerHTML = '<p class="text-center text-lg text-gray-500">Generating professional cover letter...</p>';
+
+            try {
+                const apiResponse = await generateCoverLetter(formData, coApplicants);
+                const candidate = apiResponse.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const text = candidate.content.parts[0].text;
+                    
+                    // Directly inject the HTML output from the model
+                    coverLetterContent.innerHTML = text;
+                    
+                    outputArea.classList.remove('hidden');
+                    printLetterButton.disabled = false;
+                    
+                    // Extract and display grounding sources (for address lookup)
+                    let sources = [];
+                    const groundingMetadata = candidate.groundingMetadata;
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        sources = groundingMetadata.groundingAttributions
+                            .map(attribution => ({
+                                uri: attribution.web?.uri,
+                                title: attribution.web?.title,
+                            }))
+                            .filter(source => source.uri && source.title);
+                    }
+
+                    if (sources.length > 0) {
+                        sources.forEach(source => {
+                            const li = document.createElement('li');
+                            const a = document.createElement('a');
+                            a.href = source.uri;
+                            a.target = "_blank";
+                            a.textContent = source.title;
+                            a.className = "text-blue-600 hover:underline";
+                            li.appendChild(a);
+                            sourcesList.appendChild(li);
+                        });
+                        sourcesArea.classList.remove('hidden');
+                    }
+                    showStatus("Cover letter generated successfully. Please review and use the Copy or Print options.", false);
+
+                } else {
+                    showStatus("Generation failed: The model returned an empty or malformed response.", true);
+                }
+
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                showStatus(`An API error occurred: ${error.message}. Please try again later.`, true);
+            } finally {
+                // Re-enable button and hide loader
+                generateButton.disabled = false;
+                buttonText.textContent = "Generate Professional Cover Letter";
+                loader.classList.add('hidden');
+                generateIcon.classList.remove('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
