@@ -4,288 +4,485 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B2B Visa Services | AsTours International</title>
-    <link rel="icon" type="image/png" href="../image/astourlogo.png">
-
+    
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Load Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
+    <!-- Load custom fonts: Playfair Display (Serif/Headers) and Inter (Sans/Body) -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Configure Tailwind for custom colors and fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'navy': '#07203a', // Primary Dark Color
+                        'gold': '#d4af37', // Primary Accent Gold
+                        'light-gold': '#f3d27a', // Softer Gold for gradients
+                        'off-white': '#f9fafb', // Light background
+                        'soft-blue': '#2575fc', // Secondary Accent (Original)
+                        'dark-red': '#8B0000', // Used for Premium (redefined original red-800)
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
         /* Custom Variables */
         :root {
-            --navy: #07203a; /* Primary dark color for titles and text */
-            --gold: #d4af37; /* Primary accent color for buttons and highlights */
-            --soft-blue: #2575fc; /* Used for subtle accents or buttons */
+            --navy: #07203a; 
+            --gold: #d4af37; 
+            --light-gold: #f3d27a;
         }
 
         body {
             font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #ece9e6, #ffffff); 
-            /* CRITICAL: Padding to clear the fixed, large logo badge */
-            /* Mobile padding-top is 140px + navbar height (h-16 = 64px). Let's use 64px + margin (approx 160px for mobile header area) */
-            padding-top: 160px; 
+            background: linear-gradient(135deg, var(--off-white), #ffffff); 
+            /* Padding to clear the fixed, large logo badge area */
+            padding-top: 100px; 
         }
 
-        /* --- Navbar Styles (Navy/Gold) --- */
-        .font-playfair { font-family: 'Playfair Display', serif; }
-
+        @media (min-width: 1024px) {
+            body {
+                /* Desktop padding for fixed navbar/logo combo */
+                padding-top: 140px;
+            }
+        }
+        
+        /* --- Custom Button Styles (Gold Gradient) --- */
         .btn-gold {
-            background: linear-gradient(90deg, var(--gold), #f3d27a);
+            background: linear-gradient(90deg, var(--gold), var(--light-gold));
             color: var(--navy);
-            font-weight: 600;
-            font-size: 0.875rem; 
             transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
         .btn-gold:hover {
+            opacity: 0.9;
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
         }
 
+        /* --- Logo Badge Styling (Fixed element for premium feel) --- */
         .logo-badge {
+            /* Reduced size for better flow, especially on mobile */
             height: 140px;
             width: 140px;
-            background-color: #ffd700;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            background-color: #ffd700; 
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            border-radius: 0;
+            /* border-radius: 50%; Made it circular */
+            overflow: hidden; 
+            z-index: 60; /* Higher than the navbar */
+            /* border: 4px solid white; White border for contrast */
         }
-
         .logo-badge img {
             width: 90%;
             height: auto;
             padding: 4px;
         }
-
         @media (min-width: 1024px) {
             .logo-badge {
-                height: 160px;
-                width: 160px;
-            }
-            body {
-                /* Desktop padding-top is 160px + a small buffer (180px) */
-                padding-top: 180px;
+                height: 140px;
+                width: 140px;
             }
         }
 
-        .nav-link-new { 
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        /* --- Hero Section UPDATE --- */
+        /* --- Hero Section --- */
         .hero {
-            background-color: var(--navy); 
+            background: var(--navy); 
             color: white;
             text-align: center;
-            padding: 80px 20px; 
-            text-shadow: none; 
-        }
-        .hero h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-        .hero p {
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-        }
-        /* --- End Hero Section UPDATE --- */
-
-
-        /* --- Main Content Styling (Clean, Navy Focus) --- */
-
-        /* Section Title (Navy) */
-        .section-title {
-            color: var(--navy);
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 40px;
-            font-family: 'Playfair Display', serif;
+            padding: 4rem 1.25rem 6rem; /* Increased bottom padding */
+            /* Adjusted clip-path for a smoother look */
+            clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%); 
+            margin-bottom: -2rem; /* Pull content slightly up */
         }
 
-        /* Cards */
-        .card {
-            border: none;
-            border-radius: 18px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
-            text-align: center;
+        /* --- Pricing Card Styles --- */
+        .card-package {
+            border-radius: 1.5rem; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
             transition: transform 0.3s, box-shadow 0.3s;
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(5px);
+            background: white;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
         }
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
-        }
-        .card h5 {
-            color: var(--navy); 
-            font-weight: 600;
-        }
-        .card h3 {
-            color: var(--gold); 
-            font-weight: 700;
-        }
-
-        /* Buttons */
-        .btn-custom {
-            background-color: #2d2539; 
-            color: white;
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-        .btn-custom:hover {
-            background-color: #0c335a; 
-            color: white;
-        }
-        /* Complementary button color for 'Other B2B Services' (Soft Blue) */
-        .btn-success { 
-            --bs-btn-bg: var(--soft-blue); 
-            --bs-btn-border-color: var(--soft-blue);
-            --bs-btn-hover-bg: #1e60cb;
-            --bs-btn-hover-border-color: #1e60cb;
-        }
-
-        /* Footer */
-        footer {
-            background: #ffffff;
-            border-top: 1px solid #ddd;
-            padding: 20px;
-            text-align: center;
-            color: #555;
-            font-size: 14px;
+        .card-package:hover {
+            transform: translateY(-5px); /* Less aggressive hover */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
         }
     </style>
 </head>
 <body>
 
-    <header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-sm">
+    <!-- Fixed Header and Navigation -->
+    <header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm shadow-md">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+            <div class="flex items-center justify-between h-20 lg:h-24">
 
+                <!-- LOGO BADGE (FIXED: Adjusted Position) -->
+                <!-- Logo Badge -->
                 <div class="absolute top-0 left-4 z-50">
-                    <a href="../../../../index.html" class="logo-badge">
+                    <a href="#" class="logo-badge">
                         <img src="../../../../image/astourlogo.png" alt="AS Tours International">
                     </a>
                 </div>
 
-                <div class="w-[140px] lg:w-[180px] flex-shrink-0"></div>
+                <!-- Spacer to clear the logo on the left -->
+                <!-- Adjusted spacer size to match new logo size -->
+                <div class="w-[90px] lg:w-[120px] flex-shrink-0"></div> 
 
-                <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
-                    <a href="#" class="nav-link-new text-[var(--gold)] font-bold">Home</a>
-                    <a href="../../../../packages/packages.html" class="nav-link-new block hover:text-[var(--gold)]">Packages</a>
-                    <a href="clientvisaquotations.html" class="nav-link-new block hover:text-[var(--gold)]">Visa Services</a>
-                    <a href="../../About.html" class="nav-link-new block hover:text-[var(--gold)]">Why Choose Us</a>
-                    <a href="../../Customerreview.html" class="nav-link-new block hover:text-[var(--gold)]">Testimonials</a>
-                    <a href="../../../contact.html" class="nav-link-new block hover:text-[var(--gold)]">Contact</a>
-                    <a href="../partners.html" class="ml-4 px-5 py-2 rounded-full btn-gold font-bold">Partner with Us</a>
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex items-center gap-6 text-navy ml-auto">
+                    <a href="#" class="text-gold font-bold">Home</a>
+                    <a href="../../../../packages/packages.html" class="text-sm font-semibold hover:text-gold transition-colors">Packages</a>
+                    <a href="clientvisaquotations.html" class="text-sm font-semibold hover:text-gold transition-colors">Visa Services</a>
+                    <a href="../../About.html" class="text-sm font-semibold hover:text-gold transition-colors">Why Choose Us</a>
+                    <a href="../../Customerreview.html" class="text-sm font-semibold hover:text-gold transition-colors">Testimonials</a>
+                    <a href="../../../contact.html" class="text-sm font-semibold hover:text-gold transition-colors">Contact</a>
+                    <a href="../partners.html" class="ml-2 inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold border border-transparent btn-gold uppercase">Partner with Us</a>
                 </nav>
 
+                <!-- Mobile Menu Button -->
                 <div class="lg:hidden ml-auto">
-                    <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
-                        <i class="fas fa-bars fa-lg text-[var(--navy)]"></i>
+                    <button id="mobileBtn" class="p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors shadow-sm">
+                        <i class="fas fa-bars fa-lg text-navy"></i>
                     </button>
                 </div>
-
             </div>
         </div>
 
-        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full absolute top-16 shadow-lg z-40">
-            <div class="px-6 py-6 space-y-3 text-[var(--navy)] font-medium">
+        <!-- Mobile Menu (Drops down) -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full absolute top-20 shadow-xl z-40">
+            <div class="px-6 py-4 space-y-4 text-navy font-medium">
                 <br>
                 <br>
-                <br>
-                <a href="#" class="nav-link-new text-[var(--gold)] font-bold">Home</a>
-                <a href="../../../../packages/packages.html" class="nav-link-new block hover:text-[var(--gold)]">Packages</a>
-                <a href="clientvisaquotations.html" class="nav-link-new block hover:text-[var(--gold)]">Visa Services</a>
-                <a href="../../About.html" class="nav-link-new block hover:text-[var(--gold)]">Why Choose Us</a>
-                <a href="../../Customerreview.html" class="nav-link-new block hover:text-[var(--gold)]">Testimonials</a>
-                <a href="../../../contact.html" class="nav-link-new block hover:text-[var(--gold)]">Contact</a>
-                <a href="../partners.html" class="block mt-2 px-4 py-2 rounded-full btn-gold text-center font-bold">Partner with Us</a>
+                <a href="#" class="block text-gold font-bold">Home</a>
+                <a href="../../../../packages/packages.html" class="block hover:text-gold">Packages</a>
+                <a href="clientvisaquotations.html" class="block hover:text-gold">Visa Services</a>
+                <a href="../../About.html" class="block hover:text-gold">Why Choose Us</a>
+                <a href="../../Customerreview.html" class="block hover:text-gold">Testimonials</a>
+                <a href="../../../contact.html" class="block hover:text-gold">Contact</a>
+                <a href="../partners.html" class="block mt-4 px-4 py-3 rounded-full btn-gold text-center font-bold uppercase">Partner with Us</a>
             </div>
         </div>
     </header>
     
-    <section class="hero">
-        <div class="container">
-            <h1 class="font-playfair">B2B Visa Partnership Program</h1>
-            <p class="lead mb-4">Grow your travel business with our exclusive monthly visa packages.</p>
-            <a href="../b2b.html" class="btn btn-success me-2">Other B2B Services</a>
-            <a href="./visaquotations.html" class="btn btn-custom">B2B Visa Services</a>
-        </div>
-    </section>
-
-    <section class="py-5">
-        <div class="container">
-            <h2 class="section-title">Exclusive Monthly Visa Packages</h2>
-            <div class="row g-4 justify-content-center">
-                <div class="col-sm-6 col-md-4">
-                    <div class="card p-4">
-                        <h5 class="mb-2">20 Visa Package</h5>
-                        <p class="text-secondary">Monthly Any Visa</p>
-                        <h3>₹35,000/-</h3>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="card p-4">
-                        <h5 class="mb-2">30 Visa Package</h5>
-                        <p class="text-secondary">Monthly Any Visa</p>
-                        <h3>₹45,000/-</h3>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="card p-4">
-                        <h5 class="mb-2">40 Visa Package</h5>
-                        <p class="text-secondary">Monthly Any Visa</p>
-                        <h3>₹60,000/-</h3>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="card p-4">
-                        <h5 class="mb-2">50 Visa Package</h5>
-                        <p class="text-secondary">Monthly Any Visa</p>
-                        <h3>₹75,000/-</h3>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="card p-4">
-                        <h5 class="mb-2">80 Visa Package</h5>
-                        <p class="text-secondary">Monthly Any Visa</p>
-                        <h3>₹1,00,000/-</h3>
-                    </div>
+    <main>
+        <!-- HERO SECTION: High Impact Banner -->
+        <section class="hero">
+            <div class="max-w-4xl mx-auto px-4">
+                <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">
+                    Premium B2B Visa Solutions
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto font-light">
+                    Elevate your agency's offerings with our exclusive, bulk-rate visa partnership program and guaranteed service fees.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="../b2b.html" class="px-8 py-3 rounded-full text-white font-semibold bg-soft-blue hover:bg-blue-700 transition duration-300 shadow-lg hover:shadow-xl">
+                        Other B2B Services
+                    </a>
+                    <a href="./visaquotations.html" class="px-8 py-3 rounded-full font-bold btn-gold shadow-lg hover:shadow-xl uppercase">
+                        View Visa Quotations
+                    </a>
                 </div>
             </div>
-            <div class="text-center mt-5">
-                <a href="../partners.html" class="btn btn-custom">Partner With Us</a>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <footer>
-        <p>&copy; <span id="year"></span> AsTours International. All Rights Reserved.</p>
-        <p><i class="fas fa-globe"></i> Designed with passion for travel.</p>
+        <!-- MONTHLY PACKAGES SECTION: Focus on Volume Savings -->
+        <section class="py-12 px-4 lg:py-16 bg-white shadow-inner">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-serif font-bold text-center text-navy mb-12">
+                    Exclusive Monthly Visa Packages
+                </h2>
+                
+                <!-- Grid structure fixed for 5 items: 3 columns on large, 2 columns on medium, 1 column on small -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Package 1 -->
+                    <div class="card-package">
+                        <h5 class="text-2xl font-bold text-navy mb-1">20 Visa Package</h5>
+                        <p class="text-gray-500 mb-4">Monthly Commitment</p>
+                        <h3 class="text-5xl font-serif font-extrabold text-gold tracking-tighter">₹35,000/-</h3>
+                        <p class="text-sm text-gray-400 mt-2">Best for small to medium agencies.</p>
+                    </div>
+                    <!-- Package 2 -->
+                    <div class="card-package">
+                        <h5 class="text-2xl font-bold text-navy mb-1">30 Visa Package</h5>
+                        <p class="text-gray-500 mb-4">Monthly Commitment</p>
+                        <h3 class="text-5xl font-serif font-extrabold text-gold tracking-tighter">₹45,000/-</h3>
+                        <p class="text-sm text-gray-400 mt-2">Ideal for growing volume.</p>
+                    </div>
+                    <!-- Package 3 (Highlighted) -->
+                    <div class="card-package bg-navy text-white transform scale-[1.03] shadow-2xl ring-4 ring-gold/70 hover:scale-[1.05]">
+                        <span class="inline-block bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest shadow-md">
+                            Most Popular
+                        </span>
+                        <h5 class="text-2xl font-bold text-white mb-1">50 Visa Package</h5>
+                        <p class="text-gray-300 mb-4">Monthly Commitment</p>
+                        <h3 class="text-6xl font-serif font-extrabold text-gold tracking-tighter">₹75,000/-</h3>
+                        <p class="text-sm text-gray-300 mt-2">Maximum savings for high-volume partners.</p>
+                    </div>
+                    <!-- Package 4 -->
+                    <div class="card-package">
+                        <h5 class="text-2xl font-bold text-navy mb-1">40 Visa Package</h5>
+                        <p class="text-gray-500 mb-4">Monthly Commitment</p>
+                        <h3 class="text-5xl font-serif font-extrabold text-gold tracking-tighter">₹60,000/-</h3>
+                        <p class="text-sm text-gray-400 mt-2">High processing capacity.</p>
+                    </div>
+                    <!-- Package 5 - Centered on MD, takes full width on SM, on its own column on LG -->
+                    <div class="card-package md:col-start-2 lg:col-start-auto">
+                        <h5 class="text-2xl font-bold text-navy mb-1">80 Visa Package</h5>
+                        <p class="text-gray-500 mb-4">Monthly Commitment</p>
+                        <h3 class="text-5xl font-serif font-extrabold text-gold tracking-tighter">₹1,00,000/-</h3>
+                        <p class="text-sm text-gray-400 mt-2">Enterprise-level volume.</p>
+                    </div>
+                    
+                </div>
+
+                <div class="text-center mt-12">
+                    <a href="../partners.html" class="px-10 py-3 rounded-full btn-gold font-bold text-lg uppercase shadow-lg hover:shadow-xl">
+                        Become a Partner Now
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- DETAILED B2B SERVICE FEE STRUCTURE (PER CASE) - The Core New Section -->
+        <section id="detailed-rates" class="py-16 bg-off-white">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <header class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-serif font-black text-navy mb-4 tracking-tight">
+                        Transparent Service Fee Structure
+                    </h2>
+                    <p class="text-lg md:text-xl font-medium text-gray-600 max-w-3xl mx-auto">
+                        Fixed service charges per case, allowing you to easily calculate your margins. All prices are our B2B fees in <span class="font-extrabold text-navy">₹ INR</span>.
+                    </p>
+                </header>
+
+                <!-- Marketing Snapshot Card (Large Table/Summary) -->
+                <div id="summary-card-container" class="mb-20">
+                    <!-- Summary Card injected here by JS -->
+                </div>
+
+                <!-- Section H3 Title: Detailed Categories -->
+                <h3 class="text-3xl md:text-4xl font-extrabold text-navy mb-10 pb-3 border-b-4 border-gold tracking-tight text-center sm:text-left">
+                    Service Categories Breakdown
+                </h3>
+                
+                <!-- Detailed Rate Cards Grid (Responsive 1/2/3 columns) -->
+                <div id="rate-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                    <!-- Individual Cards injected here by JS -->
+                </div>
+
+                <div class="text-center mt-16">
+                    <p class="text-xl font-semibold text-navy">Ready to calculate your profits?</p>
+                    <a href="../../../contact.html" class="mt-4 inline-block px-10 py-4 rounded-full btn-gold text-lg font-extrabold shadow-xl hover:shadow-2xl uppercase tracking-wider">
+                        Start Partnership Today
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- END DETAILED RATES SECTION -->
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy text-white p-8 text-center mt-12">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-xl font-serif font-bold text-gold mb-2">AsTours International</p>
+            <p class="text-sm mb-1">&copy; <span id="year"></span> All Rights Reserved.</p>
+            <p class="text-sm text-gray-400"><i class="fas fa-plane-departure mr-2"></i> Designed for seamless global travel partnerships.</p>
+        </div>
     </footer>
 
     <script>
+        // --- DATA ---
+        const visaRates = [
+            {
+                title: "Premium Destinations",
+                countries: "USA, UK, Canada, Australia, New Zealand (NZ) visa applications with priority processing.",
+                charge: "₹1,500",
+                description: "Full service application handling for high-scrutiny Western countries.",
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21v-4.5m0 0V5.25m0 11.25h-1.5m1.5 0h1.5m-6 3.75h3m-3 0h-3.75A9.004 9.004 0 0 1 3 10.5m18 0a9.004 9.004 0 0 0-3.75-3.75M4.5 9.75h7.5M4.5 12V6.75M4.5 12A9.004 9.004 0 0 0 3 13.5m18 0a9.004 9.004 0 0 1 3-1.5m-15.75-9.75h6.3C13.5 10.5 13.5 15.75 13.5 19.5" /></svg>',
+                color: 'bg-dark-red' /* Using the new custom dark-red color */
+            },
+            {
+                title: "Schengen Zone Visas",
+                countries: "All 29 European Schengen Countries (France, Germany, Italy, Spain, etc.).",
+                charge: "₹1,200",
+                description: "Unified, efficient processing for all Schengen applications.",
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75A2.25 2.25 0 0 0 9.75 4.5h-1.5a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 8.25 19.5h7.5A2.25 2.25 0 0 0 18 17.25V6.75A2.25 2.25 0 0 0 15.75 4.5h-1.5m-3 6.75L12 11m0 0V5.25m0 5.75L9 11m3 0L15 11" /></svg>',
+                color: 'bg-soft-blue' 
+            },
+            {
+                title: "Short-Haul & Transit",
+                countries: "UAE (Dubai), Singapore, Thailand, Malaysia, Vietnam, Indonesia.",
+                charge: "₹500",
+                description: "Streamlined processing for popular short-haul and connecting destinations.",
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>',
+                color: 'bg-green-600'
+            },
+            {
+                title: "E-Visa Processing",
+                countries: "Turkey, Cambodia, Kenya, Vietnam, etc. Fully digital applications.",
+                charge: "₹500",
+                description: "Expedited service for electronic visa application submissions.",
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.5a9 9 0 0 1 9-9h.75a8.25 8.25 0 0 1 8.25 8.25v2.25A9.75 9.75 0 0 1 12 21a9.75 9.75 0 0 1-9.75-9.75v-2.25Zm12-3.75L9 9m9 3-6 3" /></svg>',
+                color: 'bg-teal-600'
+            },
+            {
+                title: "Visa Free Destinations",
+                countries: "Documentation and advisory for visa-free entry destinations (Nepal, Bhutan, Maldives).",
+                charge: "₹250",
+                description: "Advisory services for destinations requiring minimal entry formalities.",
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V7.5a4.5 4.5 0 1 1 9 0v3m-15.75 1.5l3.5 3.5m-3.5-3.5v7.5m7.5 0l3.5-3.5m-3.5 3.5v-7.5M4.5 12h7.5" /></svg>',
+                color: 'bg-gray-600'
+            },
+            
+            {
+                title: "Complex/Refusal Cases",
+                countries: "Consultation and re-application strategy for complex profiles or prior refusals.",
+                charge: "₹3,000",
+                description: "Custom quote based on complexity. Includes deep document review.",
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.857 3.376 2.707 3.376h14.71c1.85 0 3.573-1.876 2.706-3.376L13.5 7.756a1.94 1.94 0 0 0-3 0l-7.303 12.376Z" /></svg>',
+                color: 'bg-navy'
+            },
+            {
+                title: "USA/Early Appointments",
+                countries: "Specialized service for securing expedited or hard-to-find US visa interview slots.",
+                charge: "₹7,800",
+                description: "Premium service charge for US visa appointment management.",
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>',
+                color: 'bg-sky-700' /* Changed to a distinct blue for US */
+            },
+        ];
+
+        // --- RENDERING FUNCTIONS ---
+        
+        /**
+         * Renders the prominent summary card with responsive grid layout.
+         */
+        function renderSummaryCard() {
+            const container = document.getElementById('summary-card-container');
+            if (!container) return;
+
+            const tableRows = visaRates.map(rate => `
+                <!-- Row: Responsive Grid: 2 columns (mobile), 3 columns (tablet/desktop) -->
+                <div class="grid grid-cols-2 md:grid-cols-3 items-center hover:bg-off-white transition-colors border-b border-gray-100 last:border-b-0 py-4 px-6">
+                    <!-- Title/Category -->
+                    <div class="col-span-1">
+                        <p class="font-bold text-navy text-base lg:text-lg">${rate.title}</p>
+                    </div>
+                    
+                    <!-- Description (Hidden on mobile for better space) -->
+                    <div class="hidden md:block col-span-1 text-sm text-gray-500 font-medium pr-4">
+                        <p class="truncate">${rate.description}</p>
+                    </div>
+                    
+                    <!-- Charge (HUGE FONT) -->
+                    <p class="font-serif font-black text-3xl lg:text-4xl text-gold text-right tracking-tight">
+                        ${rate.charge}
+                    </p>
+                </div>
+            `).join('');
+
+            const summaryCardHtml = `
+                <div id="summary-card" class="bg-white rounded-3xl p-6 md:p-10 w-full mx-auto max-w-6xl shadow-2xl overflow-hidden border-t-8 border-gold"> 
+                    <!-- Header -->
+                    <h3 class="text-3xl md:text-4xl font-serif font-black text-navy mb-4 text-center tracking-tight">
+                        <span class="text-gold">PARTNER</span> Pricing Snapshot
+                    </h3>
+                    <p class="text-base md:text-lg text-gray-600 mb-8 text-center font-medium">
+                        Your fixed costs per application, guaranteed.
+                    </p>
+                    <div class="bg-gray-50 rounded-xl overflow-hidden shadow-inner border border-gray-200">
+                        <!-- Table Header (Dark Navy for High Contrast, responsive grid structure) -->
+                        <div class="grid grid-cols-2 md:grid-cols-3 bg-navy text-white font-bold py-3 px-6 text-sm uppercase tracking-wider">
+                            <p>Service Tier</p>
+                            <p class="hidden md:block">Service Details</p>
+                            <p class="text-right">Fixed Service Fee</p>
+                        </div>
+                        <!-- Table Rows -->
+                        ${tableRows}
+                    </div>
+                    <p class="text-xs md:text-sm text-gray-500 mt-6 italic text-center">
+                        Note: Government/Embassy fees, VFS charges, and taxes are always additional and billed separately.
+                    </p>
+                </div>
+            `;
+            container.innerHTML = summaryCardHtml;
+        }
+
+        /**
+         * Renders the individual rate cards.
+         */
+        function renderRateCards() {
+            const container = document.getElementById('rate-cards-container');
+            if (!container) return; 
+
+            container.innerHTML = visaRates.map(rate => `
+                <div class="bg-white rounded-xl flex flex-col justify-between shadow-xl ring-1 ring-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    
+                    <!-- Title Bar (Colored) -->
+                    <div class="p-6 ${rate.color} text-white rounded-t-xl">
+                        <div class="flex items-center space-x-4">
+                            <!-- Icon -->
+                            <div class="p-3 bg-white/20 rounded-full">
+                                ${rate.icon}
+                            </div>
+                            <!-- Title -->
+                            <h3 class="text-xl font-extrabold">${rate.title}</h3>
+                        </div>
+                    </div>
+
+                    <div class="p-6 flex flex-col h-full">
+                        
+                        <!-- Countries Affected -->
+                        <div class="mb-5 flex-grow">
+                            <p class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Target Countries</p>
+                            <p class="text-base text-gray-700 leading-snug">${rate.countries}</p>
+                        </div>
+
+                        <!-- Service Charge and Note -->
+                        <div class="border-t border-gray-100 pt-6 mt-auto">
+                            <p class="text-sm font-bold text-gray-500 uppercase tracking-wider">Your Fixed Fee</p>
+                            <div class="flex items-baseline justify-between mt-1">
+                                <span class="text-4xl font-serif font-black text-navy">${rate.charge}</span>
+                                <span class="text-md text-gold font-bold">per case</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2 italic">${rate.description}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // --- INITIALIZATION ---
         document.getElementById('year').textContent = new Date().getFullYear();
         
-        // Mobile menu toggle logic for the working Navbar
+        // Mobile menu toggle logic
         document.getElementById('mobileBtn').addEventListener('click', () => {
             const mobileMenu = document.getElementById('mobileMenu');
-            // Toggles the 'hidden' class to show/hide the menu
             mobileMenu.classList.toggle('hidden'); 
         });
-    </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        // Run the rendering functions for the detailed rates
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSummaryCard();
+            renderRateCards();
+        });
+    </script>
 </body>
 </html>
