@@ -108,11 +108,39 @@
             box-shadow: 0 6px 16px rgba(0,0,0,0.08);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             cursor: pointer;
+            position: relative; /* Ensure children are positioned correctly */
+            /* Removed watermark styles */
         }
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 28px rgba(0,0,0,0.12);
         }
+
+        /* NEW/UPDATED STYLE: Top Right Logo */
+        .card-logo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px; /* Small size */
+            height: 40px;
+            border-radius: 50%; /* Optional: round logo */
+            overflow: hidden;
+            
+            /* --- UPDATED STYLES for Color and Shadow --- */
+            background-color: #fffaf0; /* Light gold/off-white background */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+            border: 1px solid rgba(212, 175, 55, 0.5); /* Optional light gold border */
+            /* --- END UPDATED STYLES --- */
+            
+            z-index: 10;
+        }
+        .card-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 2px;
+        }
+
         .country-name {
             font-size: 1.25rem;
             font-weight: 700;
@@ -148,6 +176,21 @@
         }
         .btn-custom:hover {
             background: #1a3c5d;
+        }
+        /* NEW STYLE: Checklist Button (bottom right) */
+        .btn-checklist {
+            background: var(--gold);
+            color: var(--navy) !important;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            margin-left: 8px; /* Space it from the Official Link button */
+        }
+        .btn-checklist:hover {
+            background: #e3c46e;
         }
 
         /* --- Tabs (Adjusted for better mobile overflow) --- */
@@ -239,33 +282,6 @@
             color: #fca5a5; /* Light Red */
             margin-top: 10px;
             font-size: 14px;
-        }
-
-        /* Checklists Ribbon */
-        .Checklists-ribbon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #28a745;
-            color: white !important;
-            padding: 6px 10px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 8px;
-            text-decoration: none;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            transition: background 0.3s;
-            z-index: 10;
-            /* Adjust font size for smaller screens if needed */
-            font-size: 12px; 
-        }
-        @media (min-width: 640px) {
-            .Checklists-ribbon {
-                font-size: 14px;
-            }
-        }
-        .Checklists-ribbon:hover {
-            background: #218838;
         }
     </style>
 </head>
@@ -359,6 +375,7 @@
 
         const SHEET_ID = "1F9RGurjNDCxjw0ydzQPtBuoueLRrNH99uK-fhu3BAQs";
         const API_KEY = "AIzaSyD9f_BNJQ77S-K9LJTXVBtHoXlvHyZS3HQ"; // Note: This key should be treated as sensitive/API should be restricted.
+        const LOGO_PATH = '../../image/astourlogo.png'; // Logo path variable
 
         const sheets = {
             main: "VISA FEES & LINKS",
@@ -439,25 +456,48 @@
                     if (row["Sales Manager Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope"></i><strong>Sales Manager Mail Id:</strong> ${row["Sales Manager Mail Id"]}</p>`;
                     if (row["3rd Party Mail Id"]) detailsHTML += `<p class="info-line"><i class="fa-solid fa-envelope-circle-check"></i><strong>3rd Party Mail Id:</strong> ${row["3rd Party Mail Id"]}</p>`;
                 }
+                
+                // Construct the Link/Checklist section
+                let actionButtons = '';
+
+                // Add Official Link button
+                if (row["Links"]) {
+                    actionButtons += `<a href="${row["Links"]}" target="_blank" class="btn btn-sm btn-custom mt-3 inline-block">
+                        <i class="fa-solid fa-link"></i> Official Link</a>`;
+                }
+                
+                // Add Checklist button (new position/style)
+                if (row["Checklists"]) {
+                    actionButtons += `<a href="${row["Checklists"]}" target="_blank" class="btn btn-sm btn-checklist mt-3 inline-block" title="Visa Checklists">
+                        <i class="fa-solid fa-clipboard-check"></i></a>`;
+                }
 
                 card.innerHTML = `
                     <div class="card h-full p-4 relative">
-                        ${row["Checklists"] ? `<a href="${row["Checklists"]}" target="_blank" class="Checklists-ribbon" title="Visa Checklists">
-                            <i class="fa-solid fa-clipboard-check"></i> Checklists
-                        </a>` : ""}
+                        <div class="card-logo">
+                            <img src="${LOGO_PATH}" alt="AS Tours Logo">
+                        </div>
+                        
                         <h5 class="country-name">
                             ${row["Code"] ? `<img src="https://flagcdn.com/w40/${row["Code"].toLowerCase()}.png" alt="flag">` : ""}
                             ${row["Countries"]}
                         </h5>
                         ${detailsHTML}
-                        ${row["Links"] ? `<a href="${row["Links"]}" target="_blank" class="btn btn-sm btn-custom mt-3 inline-block">
-                            <i class="fa-solid fa-link"></i> Official Link</a>` : ""}
+                        
+                        <div class="flex justify-end pt-2">
+                            ${actionButtons}
+                        </div>
                     </div>
                 `;
 
                 // Make the whole card clickable
                 const cardElement = card.querySelector(".card");
-                cardElement.addEventListener("click", async () => {
+                cardElement.addEventListener("click", async (event) => {
+                    // Prevent card click if a button inside the card was clicked
+                    if (event.target.closest('a')) {
+                        return;
+                    }
+
                     let fileName;
 
                     // If this card belongs to the Schengen sheet → always open denmark.html
