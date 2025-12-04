@@ -91,7 +91,7 @@
         /* --- End Navbar Styles --- */
 
 
-        /* Remaining custom styles (removed duplicate body style) */
+        /* Remaining custom styles */
         h2 { font-weight: 700; letter-spacing: 1px; color: #2c3e50; }
 
         .card {
@@ -100,13 +100,37 @@
             backdrop-filter: blur(12px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative; /* Added for logo positioning */
         }
         .card:hover { transform: translateY(-8px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
-        /* ... (rest of the CSS for cards, ribbon, etc., remains the same) ... */
+        
+        /* NEW/UPDATED STYLE: Top Right Logo with Shadow and Color */
+        .card-logo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px; /* Small size */
+            height: 40px;
+            border-radius: 50%; /* round logo */
+            overflow: hidden;
+            /* UPDATED STYLES for Color and Shadow */
+            background-color: #fffaf0; /* Light gold/off-white background */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+            border: 1px solid rgba(212, 175, 55, 0.5); /* Optional light gold border */
+            z-index: 10;
+        }
+        .card-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 2px;
+        }
 
         .country-name {
             font-size: 1.25rem; font-weight: 600;
             display: flex; align-items: center; color: #34495e;
+            /* Adjusted margin-top to account for the logo position */
+            margin-top: 10px; 
         }
         .country-name img {
             width: 35px; height: 24px; border-radius: 6px;
@@ -127,28 +151,37 @@
         }
         .nav-tabs .nav-link.active { background: #007bff; color: white; }
 
-        .card-clickable { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .card-clickable:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .card-clickable { cursor: default; transition: transform 0.2s, box-shadow 0.2s; }
+        /* .card-clickable:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); } */ /* Removed for button only click */
 
-        /* Checklist Ribbon (inside card) */
-        .Checklists-ribbon {
-            position: absolute; top: 10px; right: -10px;
-            background: #28a745; color: white !important;
-            padding: 6px 10px; font-size: 14px; font-weight: bold;
-            border-radius: 0 6px 6px 0; text-decoration: none;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        /* OLD Checklist Ribbon (REMOVED) */
+        .Checklists-ribbon { display: none; } 
+        
+        /* NEW STYLE: Checklist Button (bottom right) */
+        .btn-checklist {
+            background: var(--gold);
+            color: var(--navy) !important;
+            font-weight: 600;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
             transition: background 0.3s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            margin-left: 8px; /* Space it from the WhatsApp button */
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-        .Checklists-ribbon:hover {
-            background: #218838;
-            text-decoration: none; color: white !important;
+        .btn-checklist:hover {
+            background: #e3c46e;
         }
-        .Checklists-ribbon i { font-size: 16px; }
+
 
         /* WhatsApp Ribbon Styles */
         #whatsappRibbonContainer {
             position: fixed;
-            top: 200px; 
+            top: 480px; 
             right: 0;
             z-index: 1000;
             transition: transform 0.3s, opacity 0.3s;
@@ -217,10 +250,18 @@
             background: #c82333;
         }
 
+        
+        
         /* Optional: Adjust for smaller screens */
-        @media (max-width: 768px) {
+        @media (max-width: 780px) {
             #whatsappRibbonContainer {
-                top: 150px; 
+                top: 450px; 
+            }
+        }
+        /* Optional: Adjust for smaller screens */
+        @media (max-width: 500px) {
+            #whatsappRibbonContainer {
+                top: 480px; 
             }
         }
 
@@ -341,7 +382,7 @@
             <div class="discount-box">
                 <div class="text-sm uppercase tracking-wider text-gray-300">Service Charges Dropped To</div>
                 <div class="text-4xl font-bold text-white mt-1">
-                    70% <span class="text-lg font-normal opacity-80">of Standard Rates</span>
+                    90% <span class="text-lg font-normal opacity-80">of Standard Rates</span>
                 </div>
             </div>
         </div>
@@ -377,14 +418,20 @@ const sheets = {
 
 let visaData = [];
 let activeSheet = "main";
+const LOGO_PATH = '../../../../image/astourlogo.png';
+
 
 async function fetchVisaData(sheetKey) {
     const range = sheets[sheetKey];
+    const container = document.getElementById("cardsContainer");
+    container.innerHTML = `<p class="text-center text-muted col-12"><i class="fas fa-spinner fa-spin me-2"></i> Loading data...</p>`;
+
     try {
         const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`);
         const data = await res.json();
         if (!data.values || data.values.length === 0) {
-            document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-muted">No data found</p>`;
+            container.innerHTML = `<p class="text-center text-muted col-12">No data found</p>`;
+            visaData = [];
             return;
         }
         const headers = data.values[0];
@@ -396,7 +443,7 @@ async function fetchVisaData(sheetKey) {
         renderCards(visaData, sheetKey);
     } catch (error) {
         console.error("Error fetching data:", error);
-        document.getElementById("cardsContainer").innerHTML = `<p class="text-center text-danger">Error loading data</p>`;
+        container.innerHTML = `<p class="text-center text-danger col-12">Error loading data</p>`;
     }
 }
 
@@ -404,7 +451,7 @@ function renderCards(data, sheetKey) {
     const container = document.getElementById("cardsContainer");
     container.innerHTML = "";
     if (!data || data.length === 0) {
-        container.innerHTML = `<p class="text-center text-muted">No data found</p>`;
+        container.innerHTML = `<p class="text-center text-muted col-12">No data found</p>`;
         return;
     }
 
@@ -416,22 +463,21 @@ function renderCards(data, sheetKey) {
         const card = document.createElement("div");
         card.className = "col-md-4 mb-4";
 
-        // --- CALCULATE B2B RATE (90% of Service Charge, corrected from 70% in original code) ---
+        // --- CALCULATE B2B RATE (90% of Service Charge) ---
         let rawServiceCharge = row["Service Charge"];
         let displayServiceCharge = rawServiceCharge || "N/A";
 
         if (rawServiceCharge) {
-            // Find numeric parts (handles commas like 1,000)
             let match = rawServiceCharge.toString().match(/[\d,]+/); 
             if (match) {
-                let numberStr = match[0].replace(/,/g, ''); // remove commas to parse
+                let numberStr = match[0].replace(/,/g, '');
                 let originalValue = parseFloat(numberStr);
                 
                 if (!isNaN(originalValue)) {
-                    // Calculate 90% (Matching the original code's calculation logic)
+                    // Calculate 90%
                     let discountedValue = Math.round(originalValue * 0.90);
                     // Replace the found number in the original string (keeps currency symbols)
-                    displayServiceCharge = rawServiceCharge.toString().replace(match[0], discountedValue.toLocaleString('en-IN')); // Use toLocaleString for Indian style commas
+                    displayServiceCharge = rawServiceCharge.toString().replace(match[0], discountedValue.toLocaleString('en-IN')); 
                 }
             }
         }
@@ -462,16 +508,29 @@ function renderCards(data, sheetKey) {
         const whatsappMsg = `Hello, I'm interested in the B2B price for ${country} - ${visaType}. Can you please provide the full details?`;
         const whatsappLink = `https://wa.me/918850102255?text=${encodeURIComponent(whatsappMsg)}`;
 
+        // NEW ACTION BUTTONS SECTION (Bottom Right)
+        const whatsappButton = `<a href="${whatsappLink}" target="_blank" class="btn btn-sm btn-success btn-custom mt-2"><i class="fa-brands fa-whatsapp"></i> Claim Offer for ${country}</a>`;
+        
+        const checklistButton = row["Checklists"] 
+            ? `<a href="${row["Checklists"]}" target="_blank" class="btn-checklist mt-2" title="Visa Checklists"><i class="fa-solid fa-clipboard-check"></i></a>` 
+            : "";
+
 
         card.innerHTML = `
             <div class="card h-100 p-3 position-relative card-clickable">
-                ${row["Checklists"] ? `<a href="${row["Checklists"]}" target="_blank" class="Checklists-ribbon" title="Visa Checklists"><i class="fa-solid fa-clipboard-check"></i></a>` : ""}
+                <div class="card-logo">
+                    <img src="${LOGO_PATH}" alt="AS Tours Logo">
+                </div>
+                
                 <h5 class="country-name">
                     ${row["Code"] ? `<img src="https://flagcdn.com/w40/${row["Code"].toLowerCase()}.png" alt="flag">` : ""}
                     ${country}
                 </h5>
                 ${detailsHTML}
-                <a href="${whatsappLink}" target="_blank" class="btn btn-sm btn-success btn-custom w-100 mt-2"><i class="fa-brands fa-whatsapp"></i> Claim Offer for ${country}</a>
+                <div class="d-flex justify-content-end align-items-center mt-2">
+                    ${whatsappButton}
+                    ${checklistButton}
+                </div>
             </div>
         `;
         container.appendChild(card);
