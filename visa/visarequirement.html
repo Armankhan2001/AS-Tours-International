@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visa Requirement Checklist | AS Tours</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        --navy: #07203a;
+        --gold: #d4af37;
+      }
+      
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f9fafb; /* Use Navbar background color */
+        margin-top: 60px; /* Space for the fixed Navbar */
+      }
+      .font-playfair { font-family: 'Playfair Display', serif; }
+      
+      /* Checklist App Styles */
+      .input-field:focus {
+        border-color: #3b82f6; 
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        outline: none;
+      }
+      .loader {
+        border-top-color: #3b82f6;
+        -webkit-animation: spinner 1s linear infinite;
+        animation: spinner 1s linear infinite;
+      }
+      @keyframes spinner {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .verdict-badge {
+          display: inline-block;
+          padding: 0.5rem 1.5rem;
+          border-radius: 9999px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          font-size: 0.9rem;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .checklist-box {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          white-space: pre-wrap; /* Preserves the AI's newlines */
+          line-height: 1.8;
+          color: #333;
+          font-size: 1.05rem;
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 8px;
+          border: 1px solid #e5e7eb;
+      }
+
+      /* Navbar Styles (Merged) */
+      .btn-gold {
+        background: linear-gradient(90deg, var(--gold), #f3d27a);
+        color: var(--navy);
+        font-weight: 600;
+        font-size: 0.875rem; 
+        transition: all 0.3s ease;
+      }
+      .btn-gold:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      }
+      
+      
+      .nav-link {
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+      /* Logo badge style (kept as-is) */
+    .logo-badge {
+      height: 140px;
+      width: 140px;
+      background-color: #ffd700;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .logo-badge:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .logo-badge img {
+      width: 90%;
+      height: auto;
+      padding: 4px;
+    }
+
+    @media (min-width: 1024px) {
+      .logo-badge {
+        height: 160px;
+        width: 160px;
+      }
+
+    
+    }
+
+    @media (max-width: 550px) {
+      .logo-badge {
+        height: 120px;
+        width: 120px;
+      }
+
+    
+    }
+
+
+      /* PRINT STYLES */
+      @media print {
+        body { background-color: white !important; margin: 0; padding: 0; }
+        header, #input-section, #action-buttons, #status-message, #disclaimer { display: none !important; }
+        #app-container { box-shadow: none !important; max-width: 100% !important; padding: 0 !important; margin-top: 0 !important; }
+        #output-area { display: block !important; }
+        #result-card { border: none !important; box-shadow: none !important; }
+        .checklist-box { border: none !important; padding: 0 !important; font-size: 12pt; }
+      }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center px-4">
+
+    <header class="fixed top-0 z-50 w-full bg-white/95 backdrop-blur-md shadow-md">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="flex items-center justify-end h-16">
+
+                <!-- Logo Badge -->
+                <div class="absolute top-0 left-4 z-50">
+                <a href="../index.html" class="logo-badge">
+                    <img src="../image/astourlogo.png" alt="AS Tours International">
+                </a>
+                </div>
+
+                <div class="hidden lg:w-40 flex-shrink-0"></div>
+
+                <nav class="hidden lg:flex items-center gap-6 text-[var(--navy)]">
+                    <br>
+                    <br>
+                    <br>
+                    <a href="#" class="text-[#d4af37] font-bold">Home</a>
+                    <a href="../templates/Travel/b2b/Visa/b2b.html" class="ml-4 px-5 py-2 rounded-full btn-gold">Partner with Us</a>
+                </nav>
+
+                <div class="lg:hidden ml-auto">
+                    <button id="mobileBtn" class="p-2 rounded-md hover:bg-gray-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--navy)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 w-full">
+            <div class="px-6 py-4 space-y-3 text-[var(--navy)] font-medium">
+                <br>
+                <br>
+                <br>
+                <a href="#" class="text-[#d4af37] font-bold">Home</a>
+                <a href="../templates/Travel/b2b/Visa/b2b.html" class="block mt-2 px-4 py-2 rounded-full btn-gold text-center">Partner with Us</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="app-container" class="w-full max-w-3xl bg-white rounded-3xl shadow-xl overflow-hidden mt-20 lg:mt-32 p-8 lg:p-12">
+        
+        <header class="p-0 text-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-900 mb-2 font-playfair">Instant Visa Document Checklist</h1>
+            <p class="text-slate-500 text-sm">Powered by Gemini AI. Check requirements for your journey.</p>
+        </header>
+
+        <div id="input-section" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Citizenship (Passport)</label>
+                    <input type="text" id="citizenship" placeholder="e.g. Indian" class="input-field w-full p-3 border border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Destination Country</label>
+                    <input type="text" id="destination" placeholder="e.g. United Kingdom" class="input-field w-full p-3 border border-gray-300 rounded-lg">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Visa Type / Purpose</label>
+                    <select id="purpose" class="input-field w-full p-3 border border-gray-300 rounded-lg bg-white">
+                        <option value="Tourist">Tourist / Visit</option>
+                        <option value="Business">Business</option>
+                        <option value="Student">Student</option>
+                        <option value="Transit">Transit</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Duration</label>
+                    <input type="text" id="duration" placeholder="e.g. 15 Days" class="input-field w-full p-3 border border-gray-300 rounded-lg">
+                </div>
+            </div>
+
+            <button type="button" id="analyze-btn" class="w-full py-4 bg-blue-600 text-white font-bold text-lg rounded-xl hover:bg-blue-700 transition shadow-lg flex justify-center items-center gap-2">
+                <span id="btn-text">Get Checklist</span>
+                <div id="loader" class="hidden loader ease-linear rounded-full border-4 border-t-4 border-white h-5 w-5"></div>
+            </button>
+        </div>
+
+        <div id="status-message" class="hidden mt-6 p-4 rounded-lg bg-red-100 text-red-700 text-sm border border-red-200"></div>
+
+        <div id="output-area" class="hidden mt-10 border-t border-gray-100 pt-8">
+            
+            <div id="action-buttons" class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Result</h2>
+                <div class="flex gap-3">
+                    <button onclick="copyChecklist()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5h2M8 5V3m9 3v12m-9-3h12a2 2 0 002-2v-12a2 2 0 00-2-2H9a2 2 0 00-2 2v1"></path></svg>
+                        Copy Checklist
+                    </button>
+
+                    <button onclick="window.print()" class="px-4 py-2 bg-gray-800 text-white text-sm rounded hover:bg-black transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0l-3 3m3-3l3 3m-3-3v-4"></path></svg>
+                        Print
+                    </button>
+                </div>
+            </div>
+
+            <div id="result-card" class="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                <div class="flex justify-between items-start mb-6 border-b border-gray-200 pb-4">
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Visa Status</p>
+                        <div id="verdict-container" class="mt-2">
+                            </div>
+                    </div>
+                    <div class="text-right">
+                         <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Embassy / Portal</p>
+                         <p id="embassy-info" class="text-sm font-medium text-blue-600 mt-1 max-w-[200px]"></p>
+                    </div>
+                </div>
+
+                <div id="checklist-content" class="checklist-box">
+                    </div>
+
+                <div id="disclaimer" class="mt-6 text-xs text-gray-400 text-center">
+                    * Information generated by AI. Verify with official sources.
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script>
+        // --- Navbar Mobile Toggle Script ---
+        document.getElementById('mobileBtn').addEventListener('click', () => {
+          document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+        
+        // --- Copy Checklist Function ---
+        function copyChecklist() {
+            const checklistText = document.getElementById('checklist-content').textContent;
+            navigator.clipboard.writeText(checklistText).then(() => {
+                alert('Checklist copied to clipboard!');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy checklist. Please copy manually.');
+            });
+        }
+        
+        // ***************************************************************
+        // *** PASTE YOUR GOOGLE SHEET CSV URL BELOW ***
+        // ***************************************************************
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQY2BokImG-lKK2HjjAPxJIi2kwTLVuELWKB8BQXDEFRjG5cXn4Tj0x_qivopk9DPCCBBGDUF06FBvU/pub?output=csv"; 
+        
+        const MODEL_NAME = "gemini-2.5-flash"; // Use the latest stable model
+        let apiKey = null;
+
+        // UI Elements
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const btnText = document.getElementById('btn-text');
+        const loader = document.getElementById('loader');
+        const outputArea = document.getElementById('output-area');
+        const statusMessage = document.getElementById('status-message');
+
+        // Fetch API Key
+        function fetchApiKey() {
+            return new Promise((resolve, reject) => {
+                if (!CSV_URL || CSV_URL.includes("YOUR_GOOGLE_SHEET")) {
+                    reject(new Error("Please edit the HTML file and paste your Google Sheet CSV URL."));
+                    return;
+                }
+                Papa.parse(CSV_URL, {
+                    download: true, header: false,
+                    complete: function(results) {
+                        if (results.data && results.data.length > 1 && results.data[1].length > 1) {
+                            resolve(results.data[1][1].trim());
+                        } else {
+                            reject(new Error("API Key not found in Cell B2."));
+                        }
+                    },
+                    error: function(err) { reject(new Error("CSV Error: " + err.message)); }
+                });
+            });
+        }
+
+        // Button Click Event
+        analyzeBtn.addEventListener('click', async () => {
+            
+            // 1. Basic Validation
+            const citizenship = document.getElementById('citizenship').value;
+            const destination = document.getElementById('destination').value;
+            const purpose = document.getElementById('purpose').value;
+            
+            if(!citizenship || !destination) {
+                showError("Please enter Citizenship and Destination.");
+                return;
+            }
+
+            // 2. UI State -> Loading
+            setLoading(true);
+            hideError();
+            outputArea.classList.add('hidden');
+
+            try {
+                // 3. Get Key
+                if (!apiKey) apiKey = await fetchApiKey();
+
+                // 4. Construct Prompt
+                const prompt = `
+                Act as an expert Visa Consultant.
+                User: Citizen of ${citizenship} traveling to ${destination} for ${purpose} (Duration: ${document.getElementById('duration').value}).
+
+                Strictly output a JSON object with these 3 fields:
+                1. "verdict": "VISA REQUIRED" or "VISA FREE" or "E-VISA".
+                2. "portal": "Short name/link of official portal or 'Nearest Embassy'".
+                3. "checklist": "A plain text numbered list. The first line must be '${destination} ${purpose} Visa Documents Checklist:'. Then list items 1 to 10. Do not use asterisks or markdown bolding. Just Number dot Text."
+
+                Example output format for checklist:
+                UK Tourist Visa Documents Checklist:
+                1. Valid Passport
+                2. Passport-Sized Photograph
+                ...
+                `;
+
+                // 5. Call API
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                const data = await response.json();
+                
+                if (!data.candidates) throw new Error("AI Service Unavailable");
+
+                // 6. Process Result
+                let rawText = data.candidates[0].content.parts[0].text;
+                rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const json = JSON.parse(rawText);
+
+                // 7. Update UI
+                renderVerdict(json.verdict);
+                document.getElementById('embassy-info').textContent = json.portal;
+                document.getElementById('checklist-content').textContent = json.checklist; // Preserves format
+
+                outputArea.classList.remove('hidden');
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // --- Helpers ---
+
+        function renderVerdict(verdict) {
+            const container = document.getElementById('verdict-container');
+            let colorClass = 'bg-red-100 text-red-800 border-red-200'; // Default Required
+            
+            if (verdict.includes("FREE")) colorClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+            else if (verdict.includes("E-VISA") || verdict.includes("ARRIVAL")) colorClass = 'bg-yellow-100 text-yellow-800 border-yellow-200';
+
+            container.innerHTML = `<span class="verdict-badge ${colorClass}">${verdict}</span>`;
+        }
+
+        function setLoading(isLoading) {
+            analyzeBtn.disabled = isLoading;
+            if(isLoading) {
+                btnText.textContent = "Analyzing...";
+                loader.classList.remove('hidden');
+            } else {
+                btnText.textContent = "Get Checklist";
+                loader.classList.add('hidden');
+            }
+        }
+
+        function showError(msg) {
+            statusMessage.textContent = msg;
+            statusMessage.classList.remove('hidden');
+        }
+
+        function hideError() {
+            statusMessage.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
