@@ -344,11 +344,19 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script>
         // --- API Configuration ---
         const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
-        const apiKey = "AIzaSyAGT0nOvNHg-ApdLO_UvyWkLncG4VTwilU"; 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+        
+        // ***************************************************************
+        // *** CRITICAL STEP 1: PASTE YOUR CSV URL HERE ***
+        // ***************************************************************
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQY2BokImG-lKK2HjjAPxJIi2kwTLVuELWKB8BQXDEFRjG5cXn4Tj0x_qivopk9DPCCBBGDUF06FBvU/pub?output=csv"; // <--- REPLACE THIS PLACEHOLDER
+        
+        let apiKey = null; // Key will be fetched asynchronously
+        let apiUrl = null; // URL will be set after API key is fetched
+
 
         // --- Example Data for Quick Fill ---
         const EXAMPLE_DATA = {
@@ -425,7 +433,7 @@
                         <input type="text" data-field="relationship" value="${data.relationship || ''}" required class="input-field w-full p-3 border border-gray-300 rounded-lg shadow-sm text-sm">
                     </div>
                     <div class="flex items-end">
-                         <button type="button" class="remove-co-applicant w-full px-3 py-3 bg-red-100 text-red-600 text-sm font-medium rounded-lg hover:bg-red-200 transition duration-150 shadow-md">Remove</button>
+                        <button type="button" class="remove-co-applicant w-full px-3 py-3 bg-red-100 text-red-600 text-sm font-medium rounded-lg hover:bg-red-200 transition duration-150 shadow-md">Remove</button>
                     </div>
                 </div>
                 <div class="grid md:grid-cols-3 gap-4">
@@ -470,24 +478,6 @@
             loadExampleDataButton.classList.add('hidden'); // Hide after use
         }
 
-        // --- Event Listeners and Initialization ---
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Remove any initial hardcoded content
-            coApplicantsContainer.innerHTML = '';
-            
-            // Add listeners
-            addCoApplicantButton.addEventListener('click', () => createCoApplicantField());
-            loadExampleDataButton.addEventListener('click', loadDefaultData);
-
-            // Set initial visibility of visa fields
-            visaTypeSelect.dispatchEvent(new Event('change'));
-
-            // Disable Print button initially
-            printLetterButton.disabled = true;
-        });
-
-
         /** Collects all co-applicant data into a structured array */
         function collectCoApplicants() {
             const applicants = [];
@@ -508,56 +498,47 @@
             });
             return applicants;
         }
-
-        /** Shows/hides specific fields based on visa type selection */
-        visaTypeSelect.addEventListener('change', () => {
-            const type = visaTypeSelect.value;
-            touristFields.classList.add('hidden');
-            businessFields.classList.add('hidden');
-            
-            if (type === 'Tourist') {
-                touristFields.classList.remove('hidden');
-            } else if (type === 'Business') {
-                businessFields.classList.remove('hidden');
-            }
-        });
-
-        // Copy to clipboard functionality
-        copyButton.addEventListener('click', () => {
-            const textToCopy = coverLetterContent.innerText; 
-            try {
-                const el = document.createElement('textarea');
-                el.value = textToCopy;
-                el.setAttribute('readonly', '');
-                el.style.position = 'absolute';
-                el.style.left = '-9999px';
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy'); 
-                document.body.removeChild(el);
-
-                copyText.textContent = 'Copied!';
-                copyButton.classList.add('bg-emerald-500', 'text-white');
-                copyButton.classList.remove('bg-gray-100', 'text-gray-700');
-                setTimeout(() => {
-                    copyText.textContent = 'Copy Letter Text';
-                    copyButton.classList.remove('bg-emerald-500', 'text-white');
-                    copyButton.classList.add('bg-gray-100', 'text-gray-700');
-                }, 2000);
-            } catch (err) {
-                console.error('Could not copy text: ', err);
-                showStatus("Failed to copy to clipboard. Please copy manually.", true);
-            }
-        });
-
-        /** Triggers the standard browser print dialog. */
-        printLetterButton.addEventListener('click', () => {
-            window.print();
-        });
+        
+        /** Fetch API Key from CSV URL using Papa Parse. */
+        function fetchApiKey() {
+            return new Promise((resolve, reject) => {
+                if (!CSV_URL || CSV_URL === "YOUR_GOOGLE_SHEET_CSV_URL_HERE") {
+                    reject(new Error("CSV URL is missing. Please edit the script."));
+                    return;
+                }
+                
+                Papa.parse(CSV_URL, {
+                    download: true, // Crucial for fetching the remote file
+                    header: false,
+                    complete: function(results) {
+                        // Assuming API Key is in the second row (index 1), second column (index 1)
+                        if (results.data && results.data.length > 1 && results.data[1].length > 1) {
+                            const key = results.data[1][1].trim();
+                            if (key && key.startsWith('AIzaSy')) {
+                                resolve(key);
+                            } else {
+                                reject(new Error("CSV content error: API Key not found or format is incorrect at cell B2."));
+                            }
+                        } else {
+                            reject(new Error("CSV structure error: Sheet is empty or API Key cell (B2) is missing."));
+                        }
+                    },
+                    error: function(error) {
+                         // This is where CORS errors will typically land for local files
+                        reject(new Error(`Failed to download CSV. (Possible CORS/Network error for local file). Papa Parse Error: ${error.message}`));
+                    },
+                    // Add credentials might be necessary for some private URLs, but not standard CSV
+                    withCredentials: false 
+                });
+            });
+        }
 
 
         /** Calls the Gemini API with exponential backoff for reliability. */
         async function fetchWithBackoff(payload, maxRetries = 5, delay = 1000) {
+            if (!apiUrl) {
+                throw new Error("API URL is not configured. API Key is missing.");
+            }
             for (let i = 0; i < maxRetries; i++) {
                 try {
                     const response = await fetch(apiUrl, {
@@ -576,7 +557,10 @@
                         continue;
                     }
 
-                    throw new Error(`API returned status ${response.status}: ${response.statusText}`);
+                    // Log detailed API error response if available
+                    const errorDetails = await response.text();
+                    console.error("API Error Response Details:", errorDetails);
+                    throw new Error(`API returned status ${response.status}: ${response.statusText}. Check console for details.`);
 
                 } catch (error) {
                     if (i === maxRetries - 1) {
@@ -588,9 +572,10 @@
             }
         }
 
-
-        /** Processes the form data and calls the Gemini API */
+        /** Processes the form data and calls the Gemini API (Logic remains the same) */
         async function generateCoverLetter(formData, coApplicants) {
+            // ... (The rest of the generateCoverLetter function is the same as the previous version) ...
+            
             // Get current date for the letter header
             const today = new Date();
             const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -604,18 +589,18 @@
 OUTPUT FORMAT MUST BE CLEAN HTML TEXT (NO WRAPPING MARKDOWN). Use <br> for line breaks.
 
 HTML USAGE MANDATE:
-1.  SENDER HEADER: Wrap the entire sender header block (Applicant Name, Address, Contact) in a single HTML <div> with the class "sender-header" (which is pre-styled for centering). This block MUST contain exactly three lines, separated by <br>:
-    Line 1: <b>[Applicant Name]</b>
-    Line 2: [Applicant Residence Address in one continuous line]
-    Line 3: Contact: [Phone] | Email: [Email]
-    The Date is NO LONGER included here.
-2.  DIVIDER LINE: Immediately after the "sender-header" div, include a horizontal rule: <hr class="letter-divider">
-3.  DATE PLACEMENT: Immediately after the divider line, place the current date string (provided in the user query) on a single, left-aligned line. Use the HTML structure: <div style="text-align: Right; margin-bottom: 20px;">[Date String]</div>
-4.  RECIPIENT BLOCK START: The Recipient Block MUST start with 'To,<br>' on the first line, followed by the Consulate's Title and Address found via Google Search. Place the entire block immediately after the Date block, left-aligned, using <br> for new lines.
-5.  BOLDING: Use the <b> tag for ALL key details within the body paragraphs. This includes: Applicant Name(s) (e.g., <b>Shyam Sadoromal Wadhwani</b>), Passport Numbers (e.g., Passport No: <b>C8345467</b>), Total Number of PAX, Travel Dates, Host Names/Relationships, and Applicant's Strong Ties/Employment details. 
-6.  SUBJECT LINE: Wrap the subject line text in <u> and <b> tags, and center it using a <div class="subject-line"> wrapper.
-7.  ENCLOSED DOCUMENTS: Use a proper <ul><li> list structure for the "Enclosed Documents" section, just before the closing paragraphs.
-8.  SPACING: Use <br><br> tags instead of double newlines for vertical spacing between text blocks (like between paragraphs). Do NOT use <p> tags.
+1.  SENDER HEADER: Wrap the entire sender header block (Applicant Name, Address, Contact) in a single HTML <div> with the class "sender-header" (which is pre-styled for centering). This block MUST contain exactly three lines, separated by <br>:
+    Line 1: <b>[Applicant Name]</b>
+    Line 2: [Applicant Residence Address in one continuous line]
+    Line 3: Contact: [Phone] | Email: [Email]
+    The Date is NO LONGER included here.
+2.  DIVIDER LINE: Immediately after the "sender-header" div, include a horizontal rule: <hr class="letter-divider">
+3.  DATE PLACEMENT: Immediately after the divider line, place the current date string (provided in the user query) on a single, left-aligned line. Use the HTML structure: <div style="text-align: Right; margin-bottom: 20px;">[Date String]</div>
+4.  RECIPIENT BLOCK START: The Recipient Block MUST start with 'To,<br>' on the first line, followed by the Consulate's Title and Address found via Google Search. Place the entire block immediately after the Date block, left-aligned, using <br> for new lines.
+5.  BOLDING: Use the <b> tag for ALL key details within the body paragraphs. This includes: Applicant Name(s) (e.g., <b>Shyam Sadoromal Wadhwani</b>), Passport Numbers (e.g., Passport No: <b>C8345467</b>), Total Number of PAX, Travel Dates, Host Names/Relationships, and Applicant's Strong Ties/Employment details. 
+6.  SUBJECT LINE: Wrap the subject line text in <u> and <b> tags, and center it using a <div class="subject-line"> wrapper.
+7.  ENCLOSED DOCUMENTS: Use a proper <ul><li> list structure for the "Enclosed Documents" section, just before the closing paragraphs.
+8.  SPACING: Use <br><br> tags instead of double newlines for vertical spacing between text blocks (like between paragraphs). Do NOT use <p> tags.
 
 BLOCK STRUCTURE (MUST FOLLOW EXACTLY):
 - <div class="sender-header">... (including Applicant's details in 3-line format) ...</div>
@@ -696,11 +681,110 @@ Ensure the output text is clean and professional.`;
             return result;
         }
 
+
+        // --- Event Listeners and Initialization ---
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Clear any initial hardcoded content (if any)
+            coApplicantsContainer.innerHTML = '';
+            
+            // Add listeners
+            addCoApplicantButton.addEventListener('click', () => createCoApplicantField());
+            loadExampleDataButton.addEventListener('click', loadDefaultData);
+
+            // Set initial visibility of visa fields
+            visaTypeSelect.dispatchEvent(new Event('change'));
+
+            // Disable Print button initially
+            printLetterButton.disabled = true;
+            generateButton.disabled = true; // Disable until key is loaded
+
+            // Attempt to fetch the API Key
+            try {
+                showStatus("Attempting to fetch API Key from CSV URL...", false);
+                apiKey = await fetchApiKey();
+                apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+                
+                showStatus("✅ API Key successfully loaded from CSV. Ready to generate.", false);
+                generateButton.disabled = false;
+                generateButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                buttonText.textContent = "Generate Professional Cover Letter";
+
+            } catch (error) {
+                console.error("API Key Fetch Error:", error);
+                
+                // If fetching fails (likely CORS), provide instructions for manual fix
+                generateButton.disabled = true;
+                generateButton.classList.add('opacity-50', 'cursor-not-allowed');
+                buttonText.textContent = "Error: Key Fetch Failed";
+                
+                showStatus(`CRITICAL FAILURE: API Key fetch failed. This is likely due to **browser security (CORS)** preventing access to the external CSV file from a local HTML file. Please **manually paste your key** into the 'apiKey' variable in the script's configuration section. Error: ${error.message}`, true);
+            }
+        });
+
+
+        /** Shows/hides specific fields based on visa type selection */
+        visaTypeSelect.addEventListener('change', () => {
+            const type = visaTypeSelect.value;
+            touristFields.classList.add('hidden');
+            businessFields.classList.add('hidden');
+            
+            if (type === 'Tourist') {
+                touristFields.classList.remove('hidden');
+            } else if (type === 'Business') {
+                businessFields.classList.remove('hidden');
+            }
+        });
+
+        // Copy to clipboard functionality
+        copyButton.addEventListener('click', () => {
+            const textToCopy = coverLetterContent.innerText; 
+            try {
+                const el = document.createElement('textarea');
+                el.value = textToCopy;
+                el.setAttribute('readonly', '');
+                el.style.position = 'absolute';
+                el.style.left = '-9999px';
+                document.body.appendChild(el);
+                el.select();
+                
+                // Fallback for older browsers
+                if (!document.execCommand('copy')) {
+                    throw new Error("Copy command failed.");
+                }
+
+                document.body.removeChild(el);
+
+                copyText.textContent = 'Copied!';
+                copyButton.classList.add('bg-emerald-500', 'text-white');
+                copyButton.classList.remove('bg-gray-100', 'text-gray-700');
+                setTimeout(() => {
+                    copyText.textContent = 'Copy Letter Text';
+                    copyButton.classList.remove('bg-emerald-500', 'text-white');
+                    copyButton.classList.add('bg-gray-100', 'text-gray-700');
+                }, 2000);
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+                showStatus("Failed to copy to clipboard. Please copy manually.", true);
+            }
+        });
+
+        /** Triggers the standard browser print dialog. */
+        printLetterButton.addEventListener('click', () => {
+            window.print();
+        });
+
+
         // --- Form Submission Logic ---
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             hideStatus();
+
+            if (!apiKey) {
+                showStatus("API Key is missing or failed to load. Cannot proceed with generation.", true);
+                return;
+            }
             
             // Collect form data
             const formData = {};
@@ -716,14 +800,14 @@ Ensure the output text is clean and professional.`;
 
 
             // Basic Validation Check
-            const requiredFields = ['visa-type', 'target-country', 'consulate-city-country', 'passport-holder', 'passport-number', 'applicant-email', 'applicant-phone', 'residence-address', 'employment-details'];
+            const requiredFields = ['visa-type', 'target-country', 'consulate-city-country', 'passport-holder', 'passport-number', 'applicant-email', 'applicant-phone', 'residence-address', 'employment-details', 'financial-ties', 'trip-expenses'];
             let isValid = true;
             requiredFields.forEach(id => {
                 if (!formData[id]) isValid = false;
             });
 
             const visaType = formData['visa-type'];
-            if (visaType === 'Tourist' && (!formData['stay-details'] || !formData['trip-expenses'])) isValid = false;
+            if (visaType === 'Tourist' && !formData['stay-details']) isValid = false;
             if (visaType === 'Business' && (!formData['invite-company'] || !formData['purpose-of-visit'] || !formData['business-dates'])) isValid = false;
 
             // Validate co-applicants
@@ -734,7 +818,7 @@ Ensure the output text is clean and professional.`;
             });
             
             if (!isValid) {
-                showStatus("Please ensure all mandatory fields (marked with *) are filled, including all primary traveler contact details, visa-specific, and co-applicant fields.", true);
+                showStatus("Please ensure all mandatory fields (marked with *) are filled.", true);
                 return;
             }
 
@@ -776,6 +860,7 @@ Ensure the output text is clean and professional.`;
                     }
 
                     if (sources.length > 0) {
+                        sourcesList.innerHTML = '';
                         sources.forEach(source => {
                             const li = document.createElement('li');
                             const a = document.createElement('a');
@@ -796,7 +881,7 @@ Ensure the output text is clean and professional.`;
 
             } catch (error) {
                 console.error("Gemini API Error:", error);
-                showStatus(`An API error occurred: ${error.message}. Please try again later.`, true);
+                showStatus(`An API error occurred: ${error.message}. Please check your API key validity and network connection.`, true);
             } finally {
                 // Re-enable button and hide loader
                 generateButton.disabled = false;

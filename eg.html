@@ -383,64 +383,7 @@
 }
 </style>
 
-<style>
-    /* --- START ANIMATION STYLES --- */
-
-/* Keyframe for the Slide-Up and Fade-In Entrance */
-@keyframes slideUpFade {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Keyframe for the Blinking Cursor
-@keyframes blink {
-    50% {
-        opacity: 0;
-    }
-} */
-
-/* 1. Staggered Entrance Animations */
-.animate-h1-in {
-    opacity: 0;
-    animation: slideUpFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s forwards; 
-}
-.animate-p-in {
-    opacity: 0;
-    animation: slideUpFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.6s forwards; 
-}
-.animate-buttons-in {
-    opacity: 0;
-    animation: slideUpFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) 1.1s forwards; 
-}
-.animate-features-in {
-    opacity: 0;
-    animation: slideUpFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) 1.4s forwards; 
-}
-.animate-image-in {
-    opacity: 0;
-    animation: slideUpFade 1s cubic-bezier(0.25, 1, 0.5, 1) 1.5s forwards; 
-}
-
-/* 3. Button Interaction Effect */
-.btn-gold { 
-    /* Include transition in your base .btn-gold style */
-    transition: all 0.3s ease; 
-}
-
-/* The style for the outline button hover */
-.border-white\/30:hover {
-    border-color: rgba(255, 255, 255, 0.8);
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* --- END ANIMATION STYLES --- */
-</style>
+<!-- #Install app button style -->
 
 </head>
 <body class="antialiased">
@@ -508,46 +451,44 @@
   <!-- HERO -->
   <section id="home" class="hero-bg hero-safe min-h-[72vh] lg:min-h-[86vh] flex items-center">
 
-  <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
 
-      <div class="relative z-10 text-white py-12">
-    <h1 class="font-playfair text-4xl sm:text-5xl lg:text-6xl leading-tight font-extrabold">
-        <span class="animate-h1-static">Travel in Style.</span> 
-        <span class="accent-gold" id="typing-text"></span>
-    </h1>
-    
-    <p class="mt-6 max-w-xl text-lg text-gray-100/90 animate-p-in">Bespoke luxury itineraries, expert visa facilitation, and curated experiences — crafted for the discerning traveler.</p>
+        <div class="relative z-10 text-white py-12">
+          <h1 class="font-playfair text-4xl sm:text-5xl lg:text-6xl leading-tight font-extrabold">
+            Travel in Style. <span class="accent-gold">Discover the World</span>
+          </h1>
+          <p class="mt-6 max-w-xl text-lg text-gray-100/90">Bespoke luxury itineraries, expert visa facilitation, and curated experiences — crafted for the discerning traveler.</p>
 
-    <div class="mt-8 flex flex-wrap gap-4 animate-buttons-in">
-        <a href="#packages" class="inline-flex items-center gap-3 btn-gold px-6 py-3 rounded-full shadow-soft hover:scale-[1.03] active:scale-[0.98]">Explore Packages</a>
-        <a href="#visa" class="inline-flex items-center gap-3 border border-white/30 text-white px-6 py-3 rounded-full hover:scale-[1.03] active:scale-[0.98]">Visa Assistance</a>
-    </div>
-
-    <div class="mt-8 grid grid-cols-3 gap-4 max-w-md animate-features-in">
-        <div class="glass-card p-3 rounded-xl soft-shadow text-center">
-            <div class="text-sm font-semibold">Expert Visa Support</div>
-            <div class="text-xs text-gray-100">High success rate</div>
-        </div>
-        <div class="glass-card p-3 rounded-xl soft-shadow text-center">
-            <div class="text-sm font-semibold">Private Transfers</div>
-            <div class="text-xs text-gray-100">Luxury vehicles</div>
-        </div>
-        <div class="glass-card p-3 rounded-xl soft-shadow text-center">
-            <div class="text-sm font-semibold">Tailored Itineraries</div>
-            <div class="text-xs text-gray-100">Handcrafted experiences</div>
-        </div>
-    </div>
-</div>
-
-      <div class="hidden lg:block relative animate-image-in">
-        <div class="rounded-3xl overflow-hidden soft-shadow">
-          <img src="./image/Azerbaijan.jpeg" alt="Luxury travel" class="w-full h-[520px] object-cover" />
-          <div class="absolute bottom-6 left-6 bg-white/90 p-4 rounded-xl border shadow-md">
-            <div class="text-sm font-semibold">Featured Package</div>
-            <div class="text-xs text-slate-600">Azerbaijan — 6 Nights, Baku City Escape</div>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#packages" class="inline-flex items-center gap-3 btn-gold px-6 py-3 rounded-full shadow-soft">Explore Packages</a>
+            <a href="#visa" class="inline-flex items-center gap-3 border border-white/30 text-white px-6 py-3 rounded-full">Visa Assistance</a>
           </div>
-          <div id="visaRateRibbonContainer">
+
+          <div class="mt-8 grid grid-cols-3 gap-4 max-w-md">
+            <div class="glass-card p-3 rounded-xl soft-shadow text-center">
+              <div class="text-sm font-semibold">Expert Visa Support</div>
+              <div class="text-xs text-gray-100">High success rate</div>
+            </div>
+            <div class="glass-card p-3 rounded-xl soft-shadow text-center">
+              <div class="text-sm font-semibold">Private Transfers</div>
+              <div class="text-xs text-gray-100">Luxury vehicles</div>
+            </div>
+            <div class="glass-card p-3 rounded-xl soft-shadow text-center">
+              <div class="text-sm font-semibold">Tailored Itineraries</div>
+              <div class="text-xs text-gray-100">Handcrafted experiences</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden lg:block relative">
+          <div class="rounded-3xl overflow-hidden soft-shadow">
+            <img src="./image/Azerbaijan.jpeg" alt="Luxury travel" class="w-full h-[520px] object-cover" />
+            <div class="absolute bottom-6 left-6 bg-white/90 p-4 rounded-xl border shadow-md">
+              <div class="text-sm font-semibold">Featured Package</div>
+              <div class="text-xs text-slate-600">Azerbaijan — 6 Nights, Baku City Escape</div>
+            </div>
+            <div id="visaRateRibbonContainer">
         <button class="ribbon-close-btn" onclick="hideRibbon()" aria-label="Dismiss Notification">
             &times;
         </button>
@@ -571,7 +512,8 @@
       </div>
     </div>
   </section>
-  <!-- Services -->
+
+    <!-- Services -->
         <section id="services" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         
@@ -1495,67 +1437,5 @@ function hideRibbon() {
 </script>
 
 <script src="./pwa-install.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const textElement = document.getElementById('typing-text');
-        
-        const phrases = [
-            "Discover the World",
-            "Craft Bespoke Journeys",
-            "Expert Visa Solutions",
-            "Redefine Luxury Travel"
-        ];
-
-        const typingSpeed = 100; // milliseconds per character
-        const restartDelay = 2000; // 2 seconds delay before erasing
-        let phraseIndex = 0;
-
-        // Function to handle the typing animation
-        function typeText() {
-            const currentPhrase = phrases[phraseIndex];
-            let charIndex = 0;
-            textElement.textContent = ''; // Start empty
-
-            function type() {
-                if (charIndex < currentPhrase.length) {
-                    textElement.textContent += currentPhrase.charAt(charIndex);
-                    charIndex++;
-                    setTimeout(type, typingSpeed);
-                } else {
-                    // Once typing is complete, wait and then start the erasing process
-                    setTimeout(eraseText, restartDelay);
-                }
-            }
-            
-            // Start typing after 700ms, which is when the "Travel in Style." text finishes its slide-in.
-            setTimeout(type, 700); 
-        }
-
-        // Function to handle the erasing animation
-        function eraseText() {
-            const currentPhrase = phrases[phraseIndex];
-            let charIndex = currentPhrase.length;
-            
-            function erase() {
-                if (charIndex > 0) {
-                    textElement.textContent = currentPhrase.substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(erase, typingSpeed / 3); 
-                } else {
-                    // Move to the next phrase
-                    phraseIndex = (phraseIndex + 1) % phrases.length;
-                    
-                    // Once erased, wait briefly and then start typing the next phrase
-                    setTimeout(typeText, 500);
-                }
-            }
-
-            erase(); // Start the erasing process
-        }
-
-        // Start the continuous loop when the page loads
-        typeText();
-    });
-</script>
-  </body>
-  </html>
+</body>
+</html>
