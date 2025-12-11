@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPEN SHIELD | The Transparent Safety Net</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Manrope', sans-serif; 
+            background-color: #020617; 
+            color: #F8FAFC; 
+            overflow-x: hidden; 
+        }
+
+        /* --- GLASSMORPHISM UI --- */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.6) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px -10px rgba(56, 189, 248, 0.15);
+        }
+
+        /* --- NAVIGATION STATES --- */
+        .nav-item.active {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            border-left: 3px solid #38BDF8;
+        }
+
+        /* --- UTILITIES --- */
+        .hidden-section { display: none !important; }
+        
+        .blob {
+            position: absolute;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Spinner */
+        .loader {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #38BDF8;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="antialiased selection:bg-sky-500 selection:text-white">
+
+    <div class="blob top-[-10%] left-[-10%]"></div>
+    <div class="blob bottom-[-10%] right-[-10%]"></div>
+
+    <div id="app-loader" class="fixed inset-0 z-50 bg-[#020617] flex flex-col justify-center items-center transition-opacity duration-500">
+        <div class="w-16 h-16 border-4 border-slate-800 border-t-sky-500 rounded-full animate-spin mb-4"></div>
+        <p class="text-sky-500 font-bold animate-pulse text-lg">Syncing Secure Ledger...</p>
+        <p class="text-slate-500 text-sm mt-2">Verifying Integrity</p>
+    </div>
+
+    <div id="toast" class="fixed top-5 right-5 z-[100] bg-slate-800 border border-slate-700 px-6 py-4 rounded-xl shadow-2xl translate-x-[200%] transition-transform duration-300 text-white flex items-center gap-3">
+        <i class="fa-solid fa-bell text-sky-400"></i>
+        <span id="toast-msg">Notification</span>
+    </div>
+
+    <header class="lg:hidden fixed top-0 w-full z-40 glass-panel border-b border-gray-800 p-4 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-shield-cat text-sky-400 text-xl"></i>
+            <span class="font-bold text-lg tracking-wide">OPEN<span class="text-sky-400">SHIELD</span></span>
+        </div>
+        <button onclick="document.getElementById('mobile-menu').classList.toggle('translate-x-full')" class="text-gray-300"><i class="fa-solid fa-bars text-2xl"></i></button>
+    </header>
+
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-slate-950/98 transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col justify-center items-center gap-8 p-8">
+        <button onclick="nav('home')" class="text-2xl font-bold text-gray-300 hover:text-white">Home</button>
+        <button onclick="nav('campaigns')" class="text-2xl font-bold text-red-400 hover:text-red-300">Campaigns</button>
+        <button onclick="nav('treasury')" class="text-2xl font-bold text-gray-300 hover:text-white">Financials</button>
+        <button onclick="nav('members')" class="text-2xl font-bold text-gray-300 hover:text-white">Members</button>
+        <button onclick="nav('about')" class="text-2xl font-bold text-gray-300 hover:text-white">Mission</button>
+        <button onclick="nav('join')" class="text-xl font-bold bg-sky-600 px-8 py-3 rounded-full text-white">Join Now</button>
+        <button onclick="document.getElementById('mobile-menu').classList.add('translate-x-full')" class="absolute top-6 right-6 text-gray-400"><i class="fa-solid fa-xmark text-3xl"></i></button>
+    </div>
+
+    <div class="flex h-screen overflow-hidden pt-16 lg:pt-0">
+        
+        <aside class="hidden lg:flex w-72 glass-panel flex-col border-r border-gray-800 z-10 h-full">
+            <div class="p-8 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-lg shadow-lg shadow-sky-500/20">
+                        <i class="fa-solid fa-shield-cat"></i>
+                    </div>
+                    <div><h1 class="font-bold text-xl leading-none">OPEN<br><span class="text-sky-400">SHIELD</span></h1></div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 space-y-1 mt-4">
+                <button onclick="nav('home')" id="link-home" class="nav-item active w-full flex items-center gap-4 p-3 rounded-r-lg text-sm font-semibold transition-all hover:bg-white/5 text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-chart-line w-5 text-center"></i> Dashboard
+                </button>
+                <button onclick="nav('campaigns')" id="link-campaigns" class="nav-item w-full flex items-center gap-4 p-3 rounded-r-lg text-sm font-semibold transition-all hover:bg-white/5 text-red-400 hover:text-red-300">
+                    <i class="fa-solid fa-fire w-5 text-center animate-pulse"></i> Urgent Camps
+                </button>
+                <button onclick="nav('treasury')" id="link-treasury" class="nav-item w-full flex items-center gap-4 p-3 rounded-r-lg text-sm font-semibold transition-all hover:bg-white/5 text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-building-columns w-5 text-center"></i> Treasury & Ops
+                </button>
+                <button onclick="nav('members')" id="link-members" class="nav-item w-full flex items-center gap-4 p-3 rounded-r-lg text-sm font-semibold transition-all hover:bg-white/5 text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-users w-5 text-center"></i> Members
+                </button>
+                <button onclick="nav('about')" id="link-about" class="nav-item w-full flex items-center gap-4 p-3 rounded-r-lg text-sm font-semibold transition-all hover:bg-white/5 text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-book-open w-5 text-center"></i> Mission & Impact
+                </button>
+            </nav>
+
+            <div class="p-6">
+                <button onclick="nav('join')" class="w-full py-3 bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2">BECOME A MEMBER</button>
+                <button onclick="openDonateModal('General Donation')" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-500 to-indigo-600 hover:to-indigo-500 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2"><i class="fa-solid fa-qrcode"></i> SCAN TO DONATE</button>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto relative p-4 lg:p-10 scroll-smooth">
+            
+            <div id="view-home" class="fade-in max-w-6xl mx-auto space-y-8">
+                <div class="glass-card rounded-3xl p-8 lg:p-12 relative overflow-hidden border-0">
+                    <div class="relative z-10 max-w-2xl">
+                        <div class="inline-flex items-center gap-2 mb-4 px-3 py-1 bg-sky-500/10 rounded-full border border-sky-500/20">
+                            <span class="h-2 w-2 rounded-full bg-sky-400 animate-pulse"></span>
+                            <span class="text-xs font-bold uppercase tracking-widest text-sky-400">Live Mutual Aid System</span>
+                        </div>
+                        <h2 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+                            The Safety Net <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">Owned by You.</span>
+                        </h2>
+                        <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                            We pool <span class="text-white font-bold">₹50/month</span>. We lock 30% for disasters. We pay vendors directly. No profit. No secrets.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button onclick="nav('join')" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-sky-50 transition transform hover:scale-[1.02]">
+                                Join Membership
+                            </button>
+                            <button onclick="nav('campaigns')" class="px-8 py-4 glass-card border border-red-500/30 text-red-300 font-bold rounded-xl hover:bg-red-500/10 transition">
+                                View Urgent Needs
+                            </button>
+                        </div>
+                    </div>
+                    <div class="absolute right-0 top-0 h-full w-2/3 bg-gradient-to-l from-sky-500/10 to-transparent pointer-events-none hidden lg:block"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-sky-500">
+                        <p class="text-gray-500 text-xs font-bold uppercase">Available Balance</p>
+                        <p class="text-3xl font-bold text-white mt-1">₹ <span id="dash-balance">0</span></p>
+                        <p class="text-[10px] text-sky-400 mt-1">Live Calculation</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-amber-500">
+                        <p class="text-gray-500 text-xs font-bold uppercase">Reserve (30%)</p>
+                        <p class="text-3xl font-bold text-white mt-1">₹ <span id="dash-reserve">0</span></p>
+                        <p class="text-[10px] text-amber-500 mt-1">Locked for Critical Cases</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-green-500 relative overflow-hidden">
+                        <p class="text-gray-500 text-xs font-bold uppercase">Claims Paid (Total)</p>
+                        <p class="text-3xl font-bold text-white mt-1">₹ <span id="dash-claims">0</span></p>
+                        <div class="flex items-center gap-1 mt-1">
+                            <i class="fa-regular fa-clock text-[10px] text-green-400"></i>
+                            <p class="text-[10px] text-green-400" id="dash-claims-date">Syncing...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500">
+                        <p class="text-gray-500 text-xs font-bold uppercase">Active Members</p>
+                        <p class="text-3xl font-bold text-white mt-1" id="dash-members">0</p>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-700 bg-slate-900/50 flex justify-between items-center">
+                        <h3 class="font-bold text-sm uppercase text-gray-400">Live Transaction Stream</h3>
+                        <span class="text-[10px] bg-sky-500/10 text-sky-400 px-2 py-1 rounded">Real-Time</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-400">
+                            <thead class="bg-slate-800 text-xs uppercase font-bold text-gray-500">
+                                <tr><th class="px-6 py-3">Date</th><th class="px-6 py-3">User</th><th class="px-6 py-3">Category</th><th class="px-6 py-3">Status</th><th class="px-6 py-3 text-right">Amount</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800" id="ledger-body">
+                                <tr><td colspan="5" class="p-6 text-center">Loading transactions...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-campaigns" class="hidden-section fade-in max-w-5xl mx-auto space-y-8">
+                <div class="text-center mb-10">
+                    <span class="px-3 py-1 bg-red-500/10 text-red-400 rounded-full text-xs font-bold uppercase border border-red-500/20">Crowdfunding & Relief</span>
+                    <h2 class="text-4xl font-bold mt-4">Active Donation Drives</h2>
+                    <p class="text-gray-400 mt-2">Special funds for critical situations or community projects.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="glass-card p-0 rounded-3xl overflow-hidden border border-red-500/30">
+                        <div class="bg-red-500/10 p-6 border-b border-red-500/20 flex justify-between items-center">
+                            <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">System Alert</span>
+                            <span class="text-red-400 text-xs font-bold">Ends in 3 Days</span>
+                        </div>
+                        <div class="p-8">
+                            <h3 class="text-2xl font-bold mb-2">Emergency Fund Replenishment</h3>
+                            <p class="text-gray-400 text-sm mb-6">Critical low balance alert. We had 3 heart surgeries this month. We need to raise ₹50,000 to stabilize operations.</p>
+                            <div class="mb-2 flex justify-between text-xs font-bold"><span class="text-white">₹35,000 Raised</span><span class="text-gray-500">Goal: ₹50,000</span></div>
+                            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden mb-6"><div class="h-full bg-gradient-to-r from-red-500 to-orange-500" style="width: 70%"></div></div>
+                            <button onclick="openDonateModal('Emergency Fund Refill')" class="w-full py-4 bg-white text-red-600 font-bold rounded-xl hover:bg-gray-100 transition shadow-lg">Donate to Refill</button>
+                        </div>
+                    </div>
+                    <div class="glass-card p-0 rounded-3xl overflow-hidden">
+                        <div class="bg-sky-500/10 p-6 border-b border-sky-500/20 flex justify-between items-center">
+                            <span class="bg-sky-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">Community Project</span>
+                            <span class="text-sky-400 text-xs font-bold">Ongoing</span>
+                        </div>
+                        <div class="p-8">
+                            <h3 class="text-2xl font-bold mb-2">Winter Blanket Drive</h3>
+                            <p class="text-gray-400 text-sm mb-6">Providing high-quality thermal blankets to 200 homeless families. 100% of funds go to purchase receipts.</p>
+                            <div class="mb-2 flex justify-between text-xs font-bold"><span class="text-white">₹12,000 Raised</span><span class="text-gray-500">Goal: ₹60,000</span></div>
+                            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden mb-6"><div class="h-full bg-gradient-to-r from-sky-400 to-blue-500" style="width: 20%"></div></div>
+                            <button onclick="openDonateModal('Winter Blanket Drive')" class="w-full py-4 glass-card border border-sky-500 text-sky-400 font-bold rounded-xl hover:bg-sky-500 hover:text-white transition">Donate for Blankets</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-treasury" class="hidden-section fade-in max-w-5xl mx-auto space-y-8">
+                <div class="flex flex-col md:flex-row justify-between items-end">
+                    <div><h2 class="text-3xl font-bold">Open Treasury</h2><p class="text-gray-400">Monthly Analysis of Inflow & Outflow.</p></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-2xl"><h4 class="text-xs font-bold text-gray-500 uppercase">Total Collected</h4><p class="text-2xl font-bold text-green-400 mt-2">₹ <span id="treasury-collected">0</span></p></div>
+                    <div class="glass-card p-6 rounded-2xl"><h4 class="text-xs font-bold text-gray-500 uppercase">Total Claims Paid</h4><p class="text-2xl font-bold text-red-400 mt-2">₹ <span id="treasury-disbursed">0</span></p></div>
+                    <div class="glass-card p-6 rounded-2xl"><h4 class="text-xs font-bold text-gray-500 uppercase">Operational Cost</h4><p class="text-2xl font-bold text-gray-300 mt-2">₹ <span id="treasury-opcost">0</span></p></div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl">
+                     <h3 class="text-sm font-bold text-gray-400 mb-4 uppercase">Monthly Inflow vs Outflow</h3>
+                     <div class="h-80 relative w-full">
+                        <canvas id="financeChart"></canvas>
+                     </div>
+                </div>
+            </div>
+
+            <div id="view-members" class="hidden-section fade-in max-w-5xl mx-auto space-y-6">
+                <div class="flex justify-between items-end">
+                    <h2 class="text-3xl font-bold">Registered Members</h2>
+                    <p class="text-sm text-gray-400">Fetched from Secure Database</p>
+                </div>
+                <div class="glass-card rounded-2xl overflow-hidden border border-gray-700">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-800 text-xs uppercase font-bold text-gray-500 border-b border-gray-700">
+                                <tr><th class="px-6 py-4">Status</th><th class="px-6 py-4">Name</th><th class="px-6 py-4">Joined</th><th class="px-6 py-4 text-right">Pledge</th></tr>
+                            </thead>
+                            <tbody id="members-list-body" class="text-sm divide-y divide-gray-800">
+                                <tr><td colspan="4" class="p-6 text-center text-gray-500">Loading members...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-about" class="hidden-section fade-in max-w-4xl mx-auto space-y-12">
+                <div class="text-center space-y-4">
+                    <h2 class="text-3xl lg:text-5xl font-bold">Restoring Dignity to Uncertainty.</h2>
+                    <p class="text-xl text-gray-400 max-w-2xl mx-auto">We are not selling a product. We are building a loop of kindness.</p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl border-l-4 border-sky-500">
+                    <h3 class="text-2xl font-bold text-white mb-4">Our Mission</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        To create a decentralized, transparent, and sustainable financial safety net for every member of society, regardless of their income. We believe that help should be a right, not a privilege reserved for the wealthy.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="glass-card p-8 rounded-3xl border-l-4 border-red-500">
+                        <h3 class="text-xl font-bold text-white mb-3">The Problem</h3>
+                        <p class="text-gray-400 leading-relaxed text-sm">
+                            Traditional insurance is profit-driven. They use complex terms to avoid paying you. Charity is reactive. Both strip you of dignity.
+                        </p>
+                    </div>
+                    <div class="glass-card p-8 rounded-3xl border-l-4 border-green-500">
+                        <h3 class="text-xl font-bold text-white mb-3">The Open Shield Solution</h3>
+                        <p class="text-gray-400 leading-relaxed text-sm">
+                            We use the <strong>Law of Large Numbers</strong> for good. If 5,000 people donate just ₹50, we have ₹2.5 Lakhs every month. This is enough to save 5-10 neighbors without anyone feeling the financial pinch.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-join" class="hidden-section fade-in flex justify-center py-10">
+                <div class="w-full max-w-md glass-card p-8 rounded-3xl border border-sky-500/20 shadow-2xl">
+                    <h2 class="text-2xl font-bold text-center mb-6">New Member Registration</h2>
+                    <form onsubmit="submitForm(event, 'register')" class="space-y-4">
+                        <input type="hidden" name="action" value="register">
+                        <input type="text" name="Name" required placeholder="Full Name" class="w-full bg-slate-900 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:border-sky-500 outline-none text-white">
+                        <input type="text" name="Phone" required placeholder="Phone Number" class="w-full bg-slate-900 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:border-sky-500 outline-none text-white">
+                        <input type="email" name="Email" required placeholder="Email" class="w-full bg-slate-900 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:border-sky-500 outline-none text-white">
+                        <div class="relative">
+                            <input type="text" name="Aadhar" required placeholder="Aadhar Number (Unique ID)" class="w-full bg-slate-900 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:border-sky-500 outline-none text-white pl-10">
+                            <i class="fa-solid fa-id-card absolute left-3 top-3.5 text-gray-500"></i>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <label class="cursor-pointer text-center"><input type="radio" name="Amount" value="50" class="peer sr-only" checked><div class="p-3 bg-slate-800 rounded-xl border border-gray-700 peer-checked:border-sky-500 font-bold text-white">₹50</div></label>
+                            <label class="cursor-pointer text-center"><input type="radio" name="Amount" value="100" class="peer sr-only"><div class="p-3 bg-slate-800 rounded-xl border border-gray-700 peer-checked:border-sky-500 font-bold text-white">₹100</div></label>
+                        </div>
+                        <button type="submit" class="w-full py-4 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl mt-4">Confirm Registration</button>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="donate-modal" class="fixed inset-0 z-[60] bg-slate-950/90 backdrop-blur-md hidden flex justify-center items-center p-4">
+        <div class="bg-slate-900 border border-gray-700 rounded-3xl p-6 w-full max-w-sm relative shadow-2xl">
+            <button onclick="document.getElementById('donate-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div class="text-center mb-4"><h3 class="text-xl font-bold text-white">Donate & Verify</h3><p class="text-xs text-gray-400" id="donate-title">General Donation</p></div>
+            <div class="bg-white p-2 rounded-xl mb-4 mx-auto w-40 h-40 flex items-center justify-center">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=your-upi@bank&pn=OpenShield" class="w-full h-full object-contain">
+            </div>
+            <form onsubmit="submitForm(event, 'donate')" class="space-y-3">
+                <input type="hidden" name="action" value="donate">
+                <input type="hidden" name="Reference" id="donate-ref" value="General">
+                <input type="text" name="Name" required placeholder="Donor Name" class="w-full bg-slate-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500">
+                <input type="text" name="Aadhar" placeholder="Aadhar (Optional - If Member)" class="w-full bg-slate-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500">
+                <input type="number" name="Amount" required placeholder="Amount (₹)" class="w-full bg-slate-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500">
+                <input type="text" name="TxID" required placeholder="Transaction ID (UPI Ref)" class="w-full bg-slate-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500">
+                <button type="submit" class="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl shadow-lg">Verify Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // *** CONFIGURATION ***
+        // PASTE YOUR DEPLOYED GOOGLE SCRIPT URL HERE:
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyQ37dqVHuEi1lIwNn4eAQJNkDYBePcrbwcJ_gcO396bJ8tLnJ6Z9bu9h7MtzK4heRI/exec';
+
+        // --- GLOBAL DATA ---
+        window.globalData = { members: [], ledger: [], snapshot: null };
+        window.financialStats = { credit: 0, claims: 0, opcost: 0, balance: 0 };
+
+        // --- NAVIGATION ---
+        function nav(view) {
+            const sections = ['home','campaigns','treasury','members','about','join'];
+            sections.forEach(v => {
+                const el = document.getElementById('view-'+v);
+                const link = document.getElementById('link-'+v);
+                
+                if(el) el.classList.add('hidden-section');
+                if(link) link.classList.remove('active','text-white');
+            });
+
+            const targetEl = document.getElementById('view-'+view);
+            const targetLink = document.getElementById('link-'+view);
+            
+            if(targetEl) {
+                targetEl.classList.remove('hidden-section');
+                targetEl.classList.remove('fade-in');
+                void targetEl.offsetWidth; // Reflow
+                targetEl.classList.add('fade-in');
+            }
+            if(targetLink) targetLink.classList.add('active','text-white');
+            
+            document.getElementById('mobile-menu').classList.add('translate-x-full');
+
+            if(view === 'members') renderMembersTable();
+            if(view === 'treasury') setTimeout(() => renderChart(), 100); 
+        }
+
+        function openDonateModal(cause) { 
+            document.getElementById('donate-modal').classList.remove('hidden'); 
+            document.getElementById('donate-title').innerText = cause || "General Donation";
+            document.getElementById('donate-ref').value = cause || "General";
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('translate-x-[200%]');
+            setTimeout(() => toast.classList.add('translate-x-[200%]'), 3000);
+        }
+
+        // --- DATA ENGINE ---
+        function fetchData() {
+            fetch(scriptURL)
+                .then(r => r.json())
+                .then(data => {
+                    window.globalData = data;
+                    
+                    // Fallback Demo Data if Sheet is Empty
+                    if(!window.globalData.members || window.globalData.members.length === 0) {
+                        loadDemoData();
+                    } else {
+                        processData();
+                    }
+                    document.getElementById('app-loader').classList.add('opacity-0', 'pointer-events-none');
+                })
+                .catch(err => {
+                    console.error(err);
+                    loadDemoData(); // Load demo on fail
+                    showToast("Network Error. Showing Demo.");
+                    document.getElementById('app-loader').classList.add('opacity-0', 'pointer-events-none');
+                });
+        }
+
+        function loadDemoData() {
+            window.globalData.members = [
+                {Name: 'Rahul Kumar', Date: new Date(), Amount: 50}, {Name: 'Priya S.', Date: new Date(), Amount: 100}
+            ];
+            window.globalData.ledger = [
+                {Date: new Date(), Name: 'Rahul Kumar', Amount: 50, Type: 'Credit', Category: 'Donation', Status: 'Approved'}
+            ];
+            processData();
+        }
+
+        function processData() {
+            // 1. Live Calculations (Total Credits from Ledger)
+            let totalCredit = 0;
+            if(window.globalData.ledger) {
+                window.globalData.ledger.forEach(tx => {
+                    if(tx.Status === 'Approved' && tx.Type === 'Credit') {
+                        totalCredit += parseFloat(tx.Amount) || 0;
+                    }
+                });
+            }
+
+            // 2. Snapshot Data (Sheet3: Claims & OpCost)
+            let displayClaims = 0;
+            let displayOpCost = 0;
+            let displayDate = "Live";
+
+            if (window.globalData.snapshot) {
+                displayClaims = parseFloat(window.globalData.snapshot.Claims) || 0;
+                displayOpCost = parseFloat(window.globalData.snapshot.OpCost) || 0;
+                if(window.globalData.snapshot.Date) {
+                    const d = new Date(window.globalData.snapshot.Date);
+                    displayDate = "Audit: " + d.toLocaleDateString();
+                }
+            }
+
+            const balance = totalCredit - (displayClaims + displayOpCost);
+            const reserve = Math.floor(balance * 0.3);
+
+            // Store for Chart
+            window.financialStats = { credit: totalCredit, claims: displayClaims, opcost: displayOpCost, balance: balance };
+
+            // 3. Update DOM
+            const set = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val.toLocaleString('en-IN'); };
+            
+            set('dash-balance', balance);
+            set('dash-reserve', reserve);
+            set('dash-claims', displayClaims);
+            if(document.getElementById('dash-claims-date')) document.getElementById('dash-claims-date').innerText = displayDate;
+            
+            const memCount = window.globalData.members ? window.globalData.members.length : 0;
+            set('dash-members', memCount);
+            
+            // Update Treasury View Numbers
+            set('treasury-collected', totalCredit);
+            set('treasury-disbursed', displayClaims);
+            set('treasury-opcost', displayOpCost);
+
+            renderLedger();
+        }
+
+        function renderLedger() {
+            const tbody = document.getElementById('ledger-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            
+            if(!window.globalData.ledger || window.globalData.ledger.length === 0) return;
+
+            window.globalData.ledger.slice().reverse().slice(0, 10).forEach(tx => {
+                const color = tx.Type === 'Credit' ? 'text-green-400' : 'text-red-400';
+                const statusColor = tx.Status === 'Approved' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400';
+                tbody.innerHTML += `<tr class="hover:bg-white/5 border-b border-gray-800"><td class="px-6 py-4 text-xs text-gray-500">${new Date(tx.Date).toLocaleDateString()}</td><td class="px-6 py-4 font-bold text-white">${tx.Name}</td><td class="px-6 py-4 text-xs uppercase">${tx.Category}</td><td class="px-6 py-4"><span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${statusColor}">${tx.Status}</span></td><td class="px-6 py-4 text-right font-mono font-bold ${color}">${tx.Type === 'Credit' ? '+' : '-'} ₹${tx.Amount}</td></tr>`;
+            });
+        }
+
+        function renderMembersTable() {
+            const tbody = document.getElementById('members-list-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            if(!window.globalData.members) return;
+
+            window.globalData.members.slice().reverse().forEach(m => {
+                let name = m.Name || "User";
+                if(name.includes(' ')) name = name.split(' ')[0] + " " + name.split(' ')[1][0] + ".";
+                tbody.innerHTML += `<tr class="hover:bg-white/5 border-b border-gray-800"><td class="px-6 py-4"><span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-[10px] font-bold">ACTIVE</span></td><td class="px-6 py-4 font-bold text-white">${name}</td><td class="px-6 py-4 text-xs text-gray-500">${new Date(m.Date).toLocaleDateString()}</td><td class="px-6 py-4 text-right font-mono text-sky-400">₹${m.Amount}</td></tr>`;
+            });
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('financeChart');
+            if(!ctx) return;
+            
+            if(window.myChart) window.myChart.destroy();
+            
+            window.myChart = new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Balance', 'Claims', 'Ops'],
+                    datasets: [{
+                        label: 'Distribution',
+                        data: [window.financialStats.balance, window.financialStats.claims, window.financialStats.opcost],
+                        backgroundColor: ['#38BDF8', '#ef4444', '#64748b'],
+                        borderRadius: 5
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#334155' } }, x: { grid: { display: false } } } }
+            });
+        }
+
+        function submitForm(e, action) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>'; btn.disabled = true;
+            const formData = new FormData(e.target);
+            fetch(scriptURL, { method: 'POST', body: formData})
+                .then(r => r.json())
+                .then(res => {
+                    showToast(res.message);
+                    if(res.result === 'success') {
+                        e.target.reset();
+                        if(action === 'donate') document.getElementById('donate-modal').classList.add('hidden');
+                        fetchData();
+                    }
+                    btn.innerHTML = originalText; btn.disabled = false;
+                })
+                .catch(err => {
+                    showToast("Error connecting to server.");
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                });
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Shield | Admin Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>body { background-color: #1e293b; color: white; font-family: sans-serif; }</style>
+</head>
+<body class="p-10">
+    <div class="max-w-2xl mx-auto bg-slate-900 p-8 rounded-2xl border border-slate-700 shadow-2xl">
+        <h1 class="text-2xl font-bold mb-6 text-sky-400">Admin Audit Manager (Sheet3)</h1>
+        
+        <div id="loading" class="text-center p-4 animate-pulse">Fetching Live Data...</div>
+
+        <form id="adminForm" class="space-y-6 hidden" onsubmit="submitSnapshot(event)">
+            <input type="hidden" name="action" value="snapshot">
+            
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Live Balance (Auto)</label>
+                    <input type="text" id="inp-balance" name="Balance" readonly class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono font-bold text-green-400 cursor-not-allowed">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Active Members (Auto)</label>
+                    <input type="text" id="inp-members" name="Members" readonly class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono font-bold text-white cursor-not-allowed">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Total Claims Paid (Manual)</label>
+                    <input type="number" id="inp-claims" name="Claims" required class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono text-red-400 focus:border-red-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Operational Cost (Manual)</label>
+                    <input type="number" id="inp-opcost" name="OpCost" required class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono text-gray-300 focus:border-gray-500 outline-none">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Reserve 30% (Auto/Edit)</label>
+                    <input type="text" id="inp-reserve" name="Reserve" class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono text-amber-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Approved By</label>
+                    <input type="text" name="ApprovedBy" required placeholder="Admin Name" class="w-full bg-slate-800 border border-slate-600 rounded p-3 text-white focus:border-sky-500 outline-none">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Description / Notes</label>
+                <input type="text" name="Description" required placeholder="e.g. Monthly Audit - Dec 2025" class="w-full bg-slate-800 border border-slate-600 rounded p-3 text-white focus:border-sky-500 outline-none">
+            </div>
+
+            <button type="submit" id="btn-save" class="w-full py-4 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition">
+                Save Audit to Sheet3
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyQ37dqVHuEi1lIwNn4eAQJNkDYBePcrbwcJ_gcO396bJ8tLnJ6Z9bu9h7MtzK4heRI/exec'; 
+
+        function loadData() {
+            fetch(scriptURL)
+                .then(r => r.json())
+                .then(data => {
+                    // Calculate Total Credits
+                    let totalCredit = 0;
+                    (data.ledger || []).forEach(tx => {
+                        if (tx.Status === 'Approved' && tx.Type === 'Credit') {
+                            totalCredit += parseFloat(tx.Amount) || 0;
+                        }
+                    });
+                    
+                    // Pre-fill fields
+                    const membersCount = (data.members || []).length;
+                    document.getElementById('inp-balance').value = "Calculating..."; // Depends on OpCost input
+                    document.getElementById('inp-members').value = membersCount;
+                    
+                    // Listen for inputs to update balance live on admin screen
+                    const updateCalc = () => {
+                        const claims = parseFloat(document.getElementById('inp-claims').value) || 0;
+                        const opcost = parseFloat(document.getElementById('inp-opcost').value) || 0;
+                        const balance = totalCredit - (claims + opcost);
+                        document.getElementById('inp-balance').value = balance;
+                        document.getElementById('inp-reserve').value = Math.floor(balance * 0.3);
+                    };
+
+                    document.getElementById('inp-claims').addEventListener('input', updateCalc);
+                    document.getElementById('inp-opcost').addEventListener('input', updateCalc);
+
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('adminForm').classList.remove('hidden');
+                });
+        }
+
+        function submitSnapshot(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save');
+            btn.innerText = "Saving..."; btn.disabled = true;
+            const formData = new FormData(e.target);
+            fetch(scriptURL, { method: 'POST', body: formData})
+                .then(r => r.json())
+                .then(res => {
+                    alert(res.message);
+                    btn.innerText = "Save Snapshot to Sheet3"; btn.disabled = false;
+                });
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
