@@ -2,115 +2,292 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open Shield | Admin Console</title>
+    <title>Open Shield Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>body { background-color: #1e293b; color: white; font-family: sans-serif; }</style>
-</head>
-<body class="p-10">
-    <div class="max-w-2xl mx-auto bg-slate-900 p-8 rounded-2xl border border-slate-700 shadow-2xl">
-        <h1 class="text-2xl font-bold mb-6 text-sky-400">Admin Audit Manager (Sheet3)</h1>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; font-family: sans-serif; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .bg-Approved, .bg-Active { background-color: #059669; color: white; }
+        .bg-Pending { background-color: #d97706; color: white; }
+        .bg-Banned { background-color: #dc2626; color: white; }
         
-        <div id="loading" class="text-center p-4 animate-pulse">Fetching Live Data...</div>
+        /* Loading Overlay */
+        #loader { position: fixed; inset: 0; background: rgba(15,23,42,0.9); z-index: 50; display: none; justify-content: center; align-items: center; flex-direction: column; }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
 
-        <form id="adminForm" class="space-y-6 hidden" onsubmit="submitSnapshot(event)">
-            <input type="hidden" name="action" value="snapshot">
+    <div id="loader"><i class="fa-solid fa-circle-notch fa-spin text-4xl text-sky-500"></i><p class="mt-4 text-sky-500 font-bold">Processing...</p></div>
+
+    <div id="login-modal" class="fixed inset-0 z-40 bg-slate-900 flex items-center justify-center p-4">
+        <div class="glass p-8 rounded-2xl w-full max-w-sm text-center">
+            <h1 class="text-2xl font-bold mb-6 text-white"><i class="fa-solid fa-shield-cat text-sky-500"></i> Admin Access</h1>
+            <input type="password" id="admin-pass" placeholder="Enter Admin Password" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white focus:border-sky-500 outline-none mb-4">
+            <button onclick="login()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-lg">Authenticate</button>
+        </div>
+    </div>
+
+    <div class="flex flex-1 overflow-hidden">
+        <aside class="w-64 bg-slate-900 border-r border-slate-700 flex flex-col z-10">
+            <div class="p-6 font-bold text-xl tracking-wider text-white">OPEN<span class="text-sky-500">ADMIN</span></div>
+            <nav class="flex-1 px-4 space-y-2">
+                <button onclick="switchTab('members')" class="w-full text-left p-3 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center gap-3"><i class="fa-solid fa-users w-5"></i> Members (Sheet 1)</button>
+                <button onclick="switchTab('ledger')" class="w-full text-left p-3 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center gap-3"><i class="fa-solid fa-file-invoice-dollar w-5"></i> Ledger (Sheet 2)</button>
+                <button onclick="switchTab('outflow')" class="w-full text-left p-3 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white flex items-center gap-3"><i class="fa-solid fa-money-bill-transfer w-5"></i> Claims/Ops (Sheet 3)</button>
+                
+                <button onclick="switchTab('sheet')" class="w-full text-left p-3 rounded-lg hover:bg-slate-800 text-green-400 hover:text-white flex items-center gap-3 mt-4 border border-green-500/20 bg-green-500/10"><i class="fa-solid fa-table w-5"></i> Live Database</button>
+            </nav>
+            <div class="p-4 border-t border-slate-700">
+                <button onclick="fetchData()" class="w-full bg-slate-800 text-sky-400 py-2 rounded-lg text-sm font-bold"><i class="fa-solid fa-sync"></i> Refresh Data</button>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-hidden bg-slate-950 p-8 relative flex flex-col">
             
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Live Balance (Auto)</label>
-                    <input type="text" id="inp-balance" name="Balance" readonly class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono font-bold text-green-400 cursor-not-allowed">
-                </div>
-                <div>
-                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Active Members (Auto)</label>
-                    <input type="text" id="inp-members" name="Members" readonly class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono font-bold text-white cursor-not-allowed">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Total Claims Paid (Manual)</label>
-                    <input type="number" id="inp-claims" name="Claims" required class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono text-red-400 focus:border-red-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Operational Cost (Manual)</label>
-                    <input type="number" id="inp-opcost" name="OpCost" required class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono text-gray-300 focus:border-gray-500 outline-none">
+            <div id="view-members" class="tab-view h-full overflow-auto">
+                <h2 class="text-2xl font-bold mb-6">Member Registry <span class="text-xs text-slate-500 ml-2" id="count-members">0 records</span></h2>
+                <div class="overflow-x-auto glass rounded-xl">
+                    <table class="w-full text-left text-sm text-slate-400">
+                        <thead class="bg-slate-800 text-xs uppercase font-bold text-slate-300">
+                            <tr><th>Name</th><th>Phone</th><th>Amount</th><th>Aadhar</th><th>Status</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="tbody-members" class="divide-y divide-slate-700"></tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Reserve 30% (Auto/Edit)</label>
-                    <input type="text" id="inp-reserve" name="Reserve" class="w-full bg-slate-800 border border-slate-600 rounded p-3 font-mono text-amber-400">
-                </div>
-                <div>
-                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Approved By</label>
-                    <input type="text" name="ApprovedBy" required placeholder="Admin Name" class="w-full bg-slate-800 border border-slate-600 rounded p-3 text-white focus:border-sky-500 outline-none">
+            <div id="view-ledger" class="tab-view hidden h-full overflow-auto">
+                <h2 class="text-2xl font-bold mb-6">Transaction Ledger <span class="text-xs text-slate-500 ml-2">Approve Donations Here</span></h2>
+                <div class="overflow-x-auto glass rounded-xl">
+                    <table class="w-full text-left text-sm text-slate-400">
+                        <thead class="bg-slate-800 text-xs uppercase font-bold text-slate-300">
+                            <tr><th>Date</th><th>Name</th><th>Amt</th><th>TxID</th><th>Type</th><th>Status</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="tbody-ledger" class="divide-y divide-slate-700"></tbody>
+                    </table>
                 </div>
             </div>
 
-            <div>
-                <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Description / Notes</label>
-                <input type="text" name="Description" required placeholder="e.g. Monthly Audit - Dec 2025" class="w-full bg-slate-800 border border-slate-600 rounded p-3 text-white focus:border-sky-500 outline-none">
+            <div id="view-outflow" class="tab-view hidden h-full overflow-auto">
+                <div class="max-w-2xl mx-auto glass p-8 rounded-2xl border border-slate-700">
+                    <h2 class="text-2xl font-bold mb-6 text-white border-b border-slate-700 pb-4">Record Outflow (Sheet 3)</h2>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
+                            <label class="text-xs text-slate-500 uppercase font-bold">Current System Balance</label>
+                            <div class="text-2xl font-bold text-sky-500 mt-1">₹ <span id="calc-balance">0</span></div>
+                        </div>
+                         <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
+                            <label class="text-xs text-slate-500 uppercase font-bold">Calculated Reserve (30%)</label>
+                            <div class="text-2xl font-bold text-amber-500 mt-1">₹ <span id="calc-reserve">0</span></div>
+                        </div>
+                    </div>
+                    <form onsubmit="submitOutflow(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Type of Outflow</label>
+                            <select id="outflow-type" class="w-full bg-slate-800 border border-slate-600 rounded p-3 text-white">
+                                <option value="claim">Claim Payout (Medical/Emergency)</option>
+                                <option value="opcost">Operational Cost (Server/Maint)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Amount (₹)</label>
+                            <input type="number" name="Amount" id="out-amount" required class="w-full bg-slate-800 border border-slate-600 rounded p-3 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Description / Reason</label>
+                            <input type="text" name="Desc" required class="w-full bg-slate-800 border border-slate-600 rounded p-3 text-white" placeholder="e.g. Heart Surgery for ID 256...">
+                        </div>
+                        <button type="submit" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-lg shadow-lg">Confirm & Deduct from Balance</button>
+                    </form>
+                </div>
             </div>
 
-            <button type="submit" id="btn-save" class="w-full py-4 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition">
-                Save Audit to Sheet3
-            </button>
-        </form>
+            <div id="view-sheet" class="tab-view hidden h-full flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Master Database</h2>
+                        <p class="text-xs text-slate-400">Read-Only Preview</p>
+                    </div>
+                    <a href="https://docs.google.com/spreadsheets/d/1BpvO0xFVIBUc_udrZkUI_MU01OUNi-GkGp9v2KWEVNU/edit" target="_blank" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg transition">
+                        <span>Open Editor</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+                <div class="flex-1 bg-slate-900 rounded-xl overflow-hidden border border-slate-700 relative">
+                    <iframe 
+                        src="https://docs.google.com/spreadsheets/d/1BpvO0xFVIBUc_udrZkUI_MU01OUNi-GkGp9v2KWEVNU/preview" 
+                        class="w-full h-full border-0"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+        </main>
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyQ37dqVHuEi1lIwNn4eAQJNkDYBePcrbwcJ_gcO396bJ8tLnJ6Z9bu9h7MtzK4heRI/exec'; 
+        let PASSWORD = '';
+        let GLOBAL_DATA = { members: [], ledger: [], audit: [] };
+        
+        // PASTE YOUR WEB APP URL HERE IF IT DOESN'T AUTO-LOAD
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxImJenLnjsMht93rAW4_sOfymLs3gcIXwliHFNK45NIAeklQeXR4E66wkLi2zm7Rj/exec'; 
 
-        function loadData() {
-            fetch(scriptURL)
-                .then(r => r.json())
-                .then(data => {
-                    // Calculate Total Credits
-                    let totalCredit = 0;
-                    (data.ledger || []).forEach(tx => {
-                        if (tx.Status === 'Approved' && tx.Type === 'Credit') {
-                            totalCredit += parseFloat(tx.Amount) || 0;
-                        }
-                    });
-                    
-                    // Pre-fill fields
-                    const membersCount = (data.members || []).length;
-                    document.getElementById('inp-balance').value = "Calculating..."; // Depends on OpCost input
-                    document.getElementById('inp-members').value = membersCount;
-                    
-                    // Listen for inputs to update balance live on admin screen
-                    const updateCalc = () => {
-                        const claims = parseFloat(document.getElementById('inp-claims').value) || 0;
-                        const opcost = parseFloat(document.getElementById('inp-opcost').value) || 0;
-                        const balance = totalCredit - (claims + opcost);
-                        document.getElementById('inp-balance').value = balance;
-                        document.getElementById('inp-reserve').value = Math.floor(balance * 0.3);
-                    };
-
-                    document.getElementById('inp-claims').addEventListener('input', updateCalc);
-                    document.getElementById('inp-opcost').addEventListener('input', updateCalc);
-
-                    document.getElementById('loading').classList.add('hidden');
-                    document.getElementById('adminForm').classList.remove('hidden');
-                });
+        function login() {
+            PASSWORD = document.getElementById('admin-pass').value;
+            if(!PASSWORD) return alert("Enter password");
+            document.getElementById('login-modal').style.display = 'none';
+            fetchData();
         }
 
-        function submitSnapshot(e) {
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById('view-'+tab).classList.remove('hidden');
+        }
+
+        function toggleLoader(show) {
+            document.getElementById('loader').style.display = show ? 'flex' : 'none';
+        }
+
+        function fetchData() {
+            toggleLoader(true);
+            const formData = new FormData();
+            formData.append('action', 'admin_fetch');
+            formData.append('pass', PASSWORD);
+
+            fetch(SCRIPT_URL, { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                toggleLoader(false);
+                if(data.result === 'error') {
+                    alert(data.message);
+                    document.getElementById('login-modal').style.display = 'flex'; // Re-login
+                    return;
+                }
+                GLOBAL_DATA = data;
+                renderMembers();
+                renderLedger();
+                calculateStats();
+            });
+        }
+
+        function renderMembers() {
+            const tbody = document.getElementById('tbody-members');
+            tbody.innerHTML = '';
+            document.getElementById('count-members').innerText = GLOBAL_DATA.members.length + ' records';
+            
+            GLOBAL_DATA.members.forEach((row) => {
+                const aadhar = String(row[5]).replace(/'/g, ''); 
+                const status = row[6];
+                const btnAction = status === 'Active' 
+                    ? `<button onclick="toggleMember('${aadhar}', 'Banned')" class="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded border border-red-500/50">Ban</button>`
+                    : `<button onclick="toggleMember('${aadhar}', 'Active')" class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded border border-green-500/50">Activate</button>`;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-800">
+                        <td class="p-4 font-bold text-white">${row[1]}</td>
+                        <td class="p-4">${row[2]}</td>
+                        <td class="p-4">₹${row[4]}</td>
+                        <td class="p-4 font-mono">${aadhar}</td>
+                        <td class="p-4"><span class="status-badge bg-${status}">${status}</span></td>
+                        <td class="p-4">${btnAction}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderLedger() {
+            const tbody = document.getElementById('tbody-ledger');
+            tbody.innerHTML = '';
+            
+            GLOBAL_DATA.ledger.slice().reverse().forEach((row, index) => {
+                const realIndex = GLOBAL_DATA.ledger.length - 1 - index; 
+                const status = row[6];
+                const action = status === 'Pending' 
+                    ? `<button onclick="approveTx(${realIndex})" class="text-xs bg-sky-600 text-white px-3 py-1 rounded hover:bg-sky-500 font-bold">Approve</button>` 
+                    : `<span class="text-slate-600 text-xs"><i class="fa-solid fa-check"></i> Done</span>`;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-800 border-b border-slate-800">
+                        <td class="p-4 text-xs">${new Date(row[0]).toLocaleDateString()}</td>
+                        <td class="p-4 font-bold text-white">${row[1]}</td>
+                        <td class="p-4 text-emerald-400 font-bold">+₹${row[2]}</td>
+                        <td class="p-4 font-mono text-xs">${row[3]}</td>
+                        <td class="p-4 text-xs">${row[4]}</td>
+                        <td class="p-4"><span class="status-badge bg-${status}">${status}</span></td>
+                        <td class="p-4">${action}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function calculateStats() {
+            let totalIn = 0;
+            GLOBAL_DATA.ledger.forEach(r => {
+                if(r[6] === 'Approved' && r[4] === 'Credit') totalIn += Number(r[2]);
+            });
+            let totalOut = 0;
+            GLOBAL_DATA.audit.forEach(r => {
+                totalOut += (Number(r[3]) || 0) + (Number(r[7]) || 0); 
+            });
+            const bal = totalIn - totalOut;
+            document.getElementById('calc-balance').innerText = bal.toLocaleString();
+            document.getElementById('calc-reserve').innerText = Math.floor(totalIn * 0.3).toLocaleString();
+            return { balance: bal, reserve: Math.floor(totalIn * 0.3), members: GLOBAL_DATA.members.length };
+        }
+
+        function approveTx(index) {
+            if(!confirm("Approve transaction?")) return;
+            toggleLoader(true);
+            const fd = new FormData();
+            fd.append('action', 'admin_approve_tx');
+            fd.append('pass', PASSWORD);
+            fd.append('row', index);
+            fd.append('status', 'Approved');
+            fetch(SCRIPT_URL, { method:'POST', body:fd }).then(r=>r.json()).then(d=>{
+                if(d.result==='success') fetchData(); else alert(d.message);
+            });
+        }
+
+        function toggleMember(aadhar, status) {
+            toggleLoader(true);
+            const fd = new FormData();
+            fd.append('action', 'admin_toggle_member');
+            fd.append('pass', PASSWORD);
+            fd.append('aadhar', aadhar);
+            fd.append('status', status);
+            fetch(SCRIPT_URL, { method:'POST', body:fd }).then(r=>r.json()).then(d=>{
+                if(d.result==='success') fetchData(); else alert(d.message);
+            });
+        }
+
+        function submitOutflow(e) {
             e.preventDefault();
-            const btn = document.getElementById('btn-save');
-            btn.innerText = "Saving..."; btn.disabled = true;
-            const formData = new FormData(e.target);
-            fetch(scriptURL, { method: 'POST', body: formData})
-                .then(r => r.json())
-                .then(res => {
-                    alert(res.message);
-                    btn.innerText = "Save Snapshot to Sheet3"; btn.disabled = false;
-                });
-        }
+            if(!confirm("Deduct money from balance?")) return;
+            const stats = calculateStats();
+            const type = document.getElementById('outflow-type').value;
+            const amt = document.getElementById('out-amount').value;
+            const desc = e.target.Desc.value;
 
-        loadData();
+            const fd = new FormData();
+            fd.append('action', 'admin_log_outflow');
+            fd.append('pass', PASSWORD);
+            fd.append('Balance', stats.balance - amt);
+            fd.append('Reserve', stats.reserve);
+            fd.append('Members', stats.members);
+            fd.append('Description', desc);
+            fd.append('AdminName', 'Admin');
+            
+            if(type === 'claim') { fd.append('Claims', amt); fd.append('OpCost', 0); } 
+            else { fd.append('Claims', 0); fd.append('OpCost', amt); }
+
+            toggleLoader(true);
+            fetch(SCRIPT_URL, { method:'POST', body:fd }).then(r=>r.json()).then(d=>{
+                if(d.result==='success') { e.target.reset(); fetchData(); alert("Saved"); }
+                else alert(d.message);
+            });
+        }
     </script>
 </body>
 </html>

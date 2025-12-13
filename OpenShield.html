@@ -15,7 +15,7 @@
                     colors: {
                         slate: { 850: '#151e2e', 900: '#0f172a', 950: '#020617' },
                         sky: { 450: '#0ea5e9' },
-                        saffron: { 500: '#f97316' } // Added slight Indian accent color
+                        saffron: { 500: '#f97316' }
                     },
                     animation: {
                         'spin-slow': 'spin 3s linear infinite',
@@ -94,26 +94,42 @@
     </div>
 
     <header class="lg:hidden fixed top-0 w-full z-40 glass border-b border-white/5 p-4 flex justify-between items-center">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
                 <i class="fa-solid fa-hands-holding-circle text-sm"></i>
             </div>
             <span class="font-bold text-white tracking-wide text-lg">SAATH<span class="text-orange-500">HUM</span></span>
         </div>
-        <button onclick="app.toggleMenu()" class="text-slate-300 hover:text-white transition p-2"><i class="fa-solid fa-bars text-xl"></i></button>
+        <div class="flex items-center gap-3">
+            <button onclick="app.openModal('donate')" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg shadow-emerald-500/20 active:scale-95 transition flex items-center gap-2">
+                <i class="fa-solid fa-qrcode"></i> <span>Donate</span>
+            </button>
+            <button onclick="app.toggleMenu()" class="text-slate-300 hover:text-white transition p-2 bg-slate-800 rounded-lg border border-slate-700">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+        </div>
     </header>
 
-    <div id="mobile-menu" class="fixed inset-0 z-50 bg-slate-950/98 backdrop-blur-xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col items-center justify-center gap-6">
-        <button onclick="app.toggleMenu()" class="absolute top-6 right-6 text-slate-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-2xl"></i></button>
-        <button onclick="app.nav('home')" class="text-2xl font-bold text-white hover:text-orange-400">Dashboard</button>
-        <button onclick="app.nav('campaigns')" class="text-2xl font-bold text-slate-400 hover:text-red-400">Urgent Needs</button>
-        <button onclick="app.nav('treasury')" class="text-2xl font-bold text-slate-400 hover:text-green-400">Treasury</button>
-        <button onclick="app.nav('members')" class="text-2xl font-bold text-slate-400 hover:text-sky-400">Members</button>
-        <button onclick="app.nav('about')" class="text-2xl font-bold text-slate-400 hover:text-sky-400">Mission</button>
-        <button onclick="app.nav('join')" class="mt-8 px-8 py-3 bg-orange-600 rounded-full text-white font-bold">Join the Movement</button>
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-slate-950/98 backdrop-blur-xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col items-center justify-center gap-6 p-6">
+        <button onclick="app.toggleMenu()" class="absolute top-6 right-6 text-slate-400 hover:text-white p-2 bg-slate-800 rounded-full w-10 h-10 flex items-center justify-center"><i class="fa-solid fa-xmark text-xl"></i></button>
+        
+        <div class="flex flex-col gap-4 text-center w-full max-w-xs">
+            <button onclick="app.nav('home')" class="text-2xl font-bold text-white hover:text-orange-400 py-2">Dashboard</button>
+            <button onclick="app.nav('campaigns')" class="text-2xl font-bold text-slate-400 hover:text-red-400 py-2">Urgent Needs</button>
+            <button onclick="app.nav('treasury')" class="text-2xl font-bold text-slate-400 hover:text-green-400 py-2">Treasury</button>
+            <button onclick="app.nav('members')" class="text-2xl font-bold text-slate-400 hover:text-sky-400 py-2">Members</button>
+            <button onclick="app.nav('about')" class="text-2xl font-bold text-slate-400 hover:text-sky-400 py-2">Mission</button>
+        </div>
+
+        <div class="w-full max-w-xs space-y-3 mt-4">
+            <button onclick="app.nav('join')" class="w-full py-4 bg-orange-600 hover:bg-orange-500 rounded-2xl text-white font-bold shadow-lg shadow-orange-500/20 text-lg">Join Movement</button>
+            <button onclick="app.openModal('donate')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl text-white font-bold shadow-lg shadow-emerald-500/20 text-lg flex items-center justify-center gap-2">
+                <i class="fa-solid fa-qrcode"></i> Donate Now
+            </button>
+        </div>
     </div>
 
-    <div class="flex h-screen pt-16 lg:pt-0">
+    <div class="flex h-screen pt-20 lg:pt-0">
         
         <aside class="hidden lg:flex w-72 glass-strong flex-col h-full z-20 relative border-r border-white/5">
             <div class="p-8">
@@ -138,7 +154,7 @@
             </div>
         </aside>
 
-        <main class="flex-1 h-full overflow-y-auto overflow-x-hidden relative scroll-smooth p-4 lg:p-10">
+        <main class="flex-1 h-full overflow-y-auto overflow-x-hidden relative scroll-smooth p-4 lg:p-10 pb-24 lg:pb-10">
             
             <div id="view-home" class="page-view active max-w-7xl mx-auto space-y-8">
                 <div class="glass-card rounded-3xl p-8 lg:p-12 relative overflow-hidden group border-l-4 border-orange-500">
@@ -148,15 +164,15 @@
                             <span class="h-2 w-2 rounded-full bg-orange-500 animate-pulse"></span>
                             <span class="text-[10px] font-bold uppercase tracking-widest text-orange-400">Community Safety Protocol</span>
                         </div>
-                        <h2 class="text-4xl lg:text-5xl font-extrabold mb-6 leading-tight text-white">
+                        <h2 class="text-3xl lg:text-5xl font-extrabold mb-6 leading-tight text-white">
                             "Jo Government Ko Karna Tha, <br>
                             <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-400">Wo Hum Khud Karenge."</span>
                         </h2>
-                        <p class="text-slate-400 text-lg mb-8 leading-relaxed max-w-lg">
+                        <p class="text-slate-400 text-base lg:text-lg mb-8 leading-relaxed max-w-lg">
                             We don't beg for help. We build it. A decentralized treasury managed by the people, for the people. No forms. No bribes. Just humanity.
                         </p>
                         <div class="flex flex-wrap gap-4">
-                            <button onclick="app.nav('join')" class="px-8 py-3.5 bg-white text-slate-900 font-bold rounded-xl hover:bg-orange-50 transition transform hover:scale-105">Join the Movement</button>
+                            <button onclick="app.nav('join')" class="px-8 py-3.5 bg-white text-slate-900 font-bold rounded-xl hover:bg-orange-50 transition transform hover:scale-105 shadow-lg shadow-white/10">Join the Movement</button>
                             <button onclick="app.nav('treasury')" class="px-8 py-3.5 glass border border-slate-600 text-slate-300 font-bold rounded-xl hover:bg-slate-800 transition">View Open Ledger</button>
                         </div>
                     </div>
@@ -165,19 +181,19 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
                         <div class="absolute top-0 right-0 p-4 opacity-10 text-sky-400"><i class="fa-solid fa-wallet text-6xl"></i></div>
-                        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Community Fund (Liquid)</p>
+                        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Community Fund</p>
                         <div class="mt-2 flex items-baseline gap-1"><span class="text-3xl font-bold text-white tracking-tight">₹</span><span class="text-3xl font-bold text-white tracking-tight skeleton-text" id="stat-spendable">...</span></div>
                         <p class="text-[10px] text-sky-400 mt-1">Available for immediate help</p>
                     </div>
                     <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
                         <div class="absolute top-0 right-0 p-4 opacity-10 text-amber-500"><i class="fa-solid fa-lock text-6xl"></i></div>
-                        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Disaster Reserve (30%)</p>
+                        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Disaster Reserve</p>
                         <div class="mt-2 flex items-baseline gap-1"><span class="text-3xl font-bold text-white tracking-tight">₹</span><span class="text-3xl font-bold text-white tracking-tight skeleton-text" id="stat-reserve">...</span></div>
-                        <p class="text-[10px] text-amber-500 mt-1">Locked for Emergencies</p>
+                        <p class="text-[10px] text-amber-500 mt-1">Locked (30%)</p>
                     </div>
                     <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
                         <div class="absolute top-0 right-0 p-4 opacity-10 text-rose-500"><i class="fa-solid fa-heart-pulse text-6xl"></i></div>
-                        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Lives Helped</p>
+                        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Aid Given</p>
                         <div class="mt-2 flex items-baseline gap-1"><span class="text-3xl font-bold text-white tracking-tight">₹</span><span class="text-3xl font-bold text-white tracking-tight skeleton-text" id="stat-claims">...</span></div>
                     </div>
                     <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
@@ -189,11 +205,11 @@
 
                 <div class="glass-card rounded-2xl overflow-hidden border border-slate-700/50">
                     <div class="px-6 py-5 border-b border-slate-700/50 bg-slate-900/30 flex justify-between items-center">
-                        <h3 class="font-bold text-sm text-slate-300 uppercase tracking-wide">Live Transaction Stream</h3>
-                        <button onclick="app.fetchData()" class="text-xs text-orange-400 hover:text-white transition"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                        <h3 class="font-bold text-sm text-slate-300 uppercase tracking-wide">Live Transactions</h3>
+                        <button onclick="app.fetchData()" class="text-xs text-orange-400 hover:text-white transition bg-orange-500/10 px-3 py-1.5 rounded-lg border border-orange-500/20"><i class="fa-solid fa-rotate"></i> Refresh</button>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
                             <thead class="bg-slate-900/50 text-xs uppercase font-bold text-slate-500">
                                 <tr><th class="px-6 py-4">Date</th><th class="px-6 py-4">Contributor</th><th class="px-6 py-4">Category</th><th class="px-6 py-4">Status</th><th class="px-6 py-4 text-right">Amount</th></tr>
                             </thead>
@@ -225,7 +241,7 @@
             </div>
 
             <div id="view-treasury" class="page-view max-w-6xl mx-auto space-y-8">
-                <div class="flex justify-between items-end border-b border-slate-800 pb-4">
+                <div class="flex flex-col md:flex-row justify-between items-end border-b border-slate-800 pb-4 gap-4">
                     <div>
                         <h2 class="text-3xl font-bold text-white">Transparent Treasury</h2>
                         <p class="text-xs text-slate-500 mt-1">Every rupee accounted for.</p>
@@ -243,7 +259,7 @@
                 <div class="flex justify-between items-end"><h2 class="text-3xl font-bold text-white">Member Registry</h2><button onclick="app.nav('join')" class="hidden md:block px-6 py-2 bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold rounded-lg transition">Add New</button></div>
                 <div class="glass-card rounded-2xl overflow-hidden border border-slate-700/50">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left">
+                        <table class="w-full text-left min-w-[600px]">
                             <thead class="bg-slate-900 text-xs uppercase font-bold text-slate-500 border-b border-slate-800"><tr><th class="px-6 py-4">Status</th><th class="px-6 py-4">Name</th><th class="px-6 py-4">Joined</th><th class="px-6 py-4 text-right">Pledge</th></tr></thead>
                             <tbody id="members-list" class="text-sm divide-y divide-slate-800 text-slate-300"><tr><td colspan="4" class="p-6 text-center">Loading...</td></tr></tbody>
                         </table>
@@ -253,11 +269,11 @@
 
             <div id="view-about" class="page-view max-w-3xl mx-auto space-y-12 py-10">
                 <div class="text-center space-y-6">
-                    <h2 class="text-4xl md:text-5xl font-extrabold text-white">Self-Reliance is Power.</h2>
-                    <blockquote class="text-xl text-orange-400 italic font-serif leading-relaxed">
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white">Self-Reliance is Power.</h2>
+                    <blockquote class="text-lg md:text-xl text-orange-400 italic font-serif leading-relaxed px-4">
                         "Jo sarkar nahi kar payi, wo ab hum khud karenge."
                     </blockquote>
-                    <p class="text-lg text-slate-400 leading-relaxed">
+                    <p class="text-base md:text-lg text-slate-400 leading-relaxed px-4">
                         We waited for help. We filled out forms. We stood in lines. Nothing changed.<br>
                         So we built <strong>Saath Hai Hum</strong>. A system where we save each other.
                     </p>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SAATH HAI HUM | The People's Safety Net</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Manrope', 'sans-serif'] },
+                    colors: {
+                        slate: { 850: '#151e2e', 900: '#0f172a', 950: '#020617' },
+                        sky: { 450: '#0ea5e9' },
+                        saffron: { 400: '#fb923c', 500: '#f97316', 600: '#ea580c' },
+                        void: '#000000'
+                    },
+                    animation: {
+                        'shimmer': 'shimmer 2s infinite linear',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        shimmer: { '0%': { backgroundPosition: '-1000px 0' }, '100%': { backgroundPosition: '1000px 0' } },
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body { font-family: 'Manrope', sans-serif; background-color: #020617; color: #F8FAFC; overflow: hidden; }
+        
+        /* Glassmorphism System */
+        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-strong { background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { 
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.3) 0%, rgba(15, 23, 42, 0.5) 100%); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .glass-card:hover { 
+            border-color: rgba(249, 115, 22, 0.4); 
+            transform: translateY(-4px); 
+            box-shadow: 0 10px 30px -10px rgba(249, 115, 22, 0.15); 
+        }
+        
+        /* Typography */
+        .text-glow { text-shadow: 0 0 20px rgba(249, 115, 22, 0.3); }
+        
+        /* Utilities */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .page-view { display: none; opacity: 0; transform: translateY(10px); transition: all 0.5s ease; }
+        .page-view.active { display: block; opacity: 1; transform: translateY(0); }
+        
+        /* Background Effects */
+        .ambient-light { position: fixed; inset:0; z-index: -1; pointer-events: none; overflow: hidden; }
+        .blob { position: absolute; filter: blur(100px); opacity: 0.25; animation: float 10s ease-in-out infinite; }
+        .blob-1 { top: -10%; left: -10%; width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(249, 115, 22, 0.3), transparent 70%); }
+        .blob-2 { bottom: -20%; right: -20%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(14, 165, 233, 0.2), transparent 70%); animation-delay: -5s; }
+    </style>
+</head>
+<body class="antialiased text-slate-300 selection:bg-saffron-500 selection:text-white">
+
+    <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+
+    <div id="toast" class="fixed top-20 right-6 z-[100] translate-x-[150%] transition-transform duration-300 flex items-center gap-3 bg-slate-900 border border-slate-700 px-5 py-4 rounded-xl shadow-2xl shadow-black/50">
+        <div class="text-saffron-500 text-xl"><i class="fa-solid fa-circle-info"></i></div>
+        <div><h4 id="toast-title" class="text-sm font-bold text-white">Alert</h4><p id="toast-msg" class="text-xs text-slate-400">Message</p></div>
+    </div>
+
+    <header class="lg:hidden fixed top-0 w-full z-50 glass-strong border-b border-white/5 p-3 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-2" onclick="app.nav('home')">
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-orange-600 to-red-700 flex items-center justify-center text-white text-lg shadow-lg">
+                <i class="fa-solid fa-hands-holding-circle"></i>
+            </div>
+            <div class="leading-none">
+                <span class="font-bold text-white tracking-wide text-sm block">SAATH</span>
+                <span class="font-bold text-saffron-500 text-xs tracking-widest">HAI HUM</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="app.openModal('general')" class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white text-xs font-bold px-3 py-2 rounded-full shadow-lg active:scale-95 transition flex items-center gap-1.5 border border-emerald-400/20">
+                <i class="fa-solid fa-heart"></i> <span>Donate</span>
+            </button>
+            <button onclick="app.toggleMenu()" class="text-slate-300 hover:text-white p-2 bg-slate-800/50 rounded-lg border border-white/5 active:bg-slate-800">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col pt-24 px-6 pb-6 overflow-y-auto">
+        <button onclick="app.toggleMenu()" class="absolute top-5 right-4 text-slate-400 hover:text-white p-2 bg-slate-900 rounded-full w-10 h-10 border border-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+        
+        <div class="flex flex-col gap-2 w-full">
+            <button onclick="app.nav('home')" class="text-left text-xl font-bold text-white hover:text-saffron-500 py-3 border-b border-white/5 flex items-center gap-3"><i class="fa-solid fa-house w-6 text-center text-slate-500"></i> Dashboard</button>
+            <button onclick="app.nav('campaigns')" class="text-left text-xl font-bold text-white hover:text-red-400 py-3 border-b border-white/5 flex items-center gap-3"><i class="fa-solid fa-heart-pulse w-6 text-center text-slate-500"></i> Urgent Needs</button>
+            <button onclick="app.nav('treasury')" class="text-left text-xl font-bold text-white hover:text-emerald-400 py-3 border-b border-white/5 flex items-center gap-3"><i class="fa-solid fa-scale-balanced w-6 text-center text-slate-500"></i> Treasury</button>
+            <button onclick="app.nav('members')" class="text-left text-xl font-bold text-white hover:text-sky-400 py-3 border-b border-white/5 flex items-center gap-3"><i class="fa-solid fa-users w-6 text-center text-slate-500"></i> Members</button>
+            <button onclick="app.nav('about')" class="text-left text-xl font-bold text-white hover:text-saffron-500 py-3 border-b border-white/5 flex items-center gap-3"><i class="fa-solid fa-book-open w-6 text-center text-slate-500"></i> Why We Exist</button>
+        </div>
+
+        <div class="mt-8 bg-slate-900 p-4 rounded-xl border border-slate-800">
+            <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 tracking-wider">Claim Assistance</p>
+            <div class="space-y-4">
+                <a href="tel:+918850102255" class="flex items-center gap-3 text-white hover:text-saffron-500 transition group">
+                    <div class="w-8 h-8 rounded-full bg-saffron-500/10 flex items-center justify-center text-saffron-500 group-hover:bg-saffron-500 group-hover:text-white transition"><i class="fa-solid fa-user-tie"></i></div>
+                    <div><p class="text-sm font-bold">Arman Khan</p><p class="text-[10px] text-slate-400">Manager</p></div>
+                </a>
+                <a href="tel:+917021360582" class="flex items-center gap-3 text-white hover:text-sky-500 transition group">
+                    <div class="w-8 h-8 rounded-full bg-sky-500/10 flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white transition"><i class="fa-solid fa-headset"></i></div>
+                    <div><p class="text-sm font-bold">Asim Khan</p><p class="text-[10px] text-slate-400">Support</p></div>
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-auto pt-6 space-y-3">
+            <button onclick="app.nav('join')" class="w-full py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl text-white font-bold text-sm">Join Membership</button>
+            <button onclick="app.openModal('general')" class="w-full py-4 bg-gradient-to-r from-saffron-600 to-red-600 hover:to-red-500 rounded-2xl text-white font-bold shadow-lg shadow-saffron-500/20 text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-hand-holding-heart"></i> Make a Donation
+            </button>
+        </div>
+    </div>
+
+    <div class="flex h-screen pt-[68px] lg:pt-0">
+        
+        <aside class="hidden lg:flex w-72 glass-strong flex-col h-full z-20 relative border-r border-white/5">
+            <div class="p-8 pb-4">
+                <div class="flex items-center gap-3 mb-8 cursor-pointer group" onclick="app.nav('home')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-600 to-red-600 flex items-center justify-center text-white text-lg shadow-lg group-hover:scale-110 transition">
+                        <i class="fa-solid fa-hands-holding-circle"></i>
+                    </div>
+                    <div><h1 class="font-bold text-xl text-white leading-none group-hover:text-saffron-400 transition">SAATH HAI<br><span class="text-saffron-500">HUM</span></h1></div>
+                </div>
+                <div class="space-y-1">
+                    <button onclick="app.nav('home')" id="nav-home" class="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-white bg-white/10 border border-white/5"><i class="fa-solid fa-chart-pie w-5"></i> Dashboard</button>
+                    <button onclick="app.nav('campaigns')" id="nav-campaigns" class="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:bg-white/5 hover:text-white"><i class="fa-solid fa-hand-holding-heart w-5"></i> Campaigns</button>
+                    <button onclick="app.nav('treasury')" id="nav-treasury" class="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:bg-white/5 hover:text-white"><i class="fa-solid fa-landmark w-5"></i> Treasury</button>
+                    <button onclick="app.nav('members')" id="nav-members" class="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:bg-white/5 hover:text-white"><i class="fa-solid fa-users w-5"></i> Members</button>
+                    <button onclick="app.nav('about')" id="nav-about" class="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:bg-white/5 hover:text-white"><i class="fa-solid fa-book-open w-5"></i> Why We Exist</button>
+                </div>
+            </div>
+
+            <div class="px-5 py-4 mx-4 mb-2 bg-slate-900/80 rounded-xl border border-white/5">
+                <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Claim Support</p>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-xs text-slate-300">
+                        <div class="w-6 h-6 rounded bg-saffron-500/20 text-saffron-500 flex items-center justify-center"><i class="fa-solid fa-user-tie"></i></div> 
+                        <div><p class="font-bold text-white">Arman Khan</p><span class="opacity-50">8850102255</span></div>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-300">
+                        <div class="w-6 h-6 rounded bg-sky-500/20 text-sky-500 flex items-center justify-center"><i class="fa-solid fa-headset"></i></div>
+                        <div><p class="font-bold text-white">Asim Khan</p><span class="opacity-50">7021360582</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-auto p-6 border-t border-white/5 bg-slate-900/50">
+                <button onclick="app.openModal('general')" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all transform hover:scale-[1.02]">
+                    <i class="fa-solid fa-qrcode"></i> DONATE NOW
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 h-full overflow-y-auto overflow-x-hidden relative scroll-smooth p-4 lg:p-8 pb-32 lg:pb-10">
+            
+            <div id="view-home" class="page-view active max-w-7xl mx-auto space-y-8">
+                <div class="glass-card rounded-3xl p-6 lg:p-12 relative overflow-hidden group border-l-4 border-saffron-500">
+                    <div class="absolute right-0 top-0 h-full w-2/3 bg-gradient-to-l from-saffron-600/10 via-transparent to-transparent pointer-events-none"></div>
+                    <div class="relative z-10 max-w-3xl">
+                        <div class="inline-flex items-center gap-2 mb-4 px-3 py-1 bg-saffron-500/10 rounded-full border border-saffron-500/20">
+                            <span class="h-2 w-2 rounded-full bg-saffron-500 animate-pulse"></span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-saffron-500">Community Safety Protocol</span>
+                        </div>
+                        <h2 class="text-3xl lg:text-5xl font-extrabold mb-4 leading-tight text-white text-glow">
+                            "Jo Government Ko Karna Tha, <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-saffron-400 to-red-500">Wo Hum Khud Karenge."</span>
+                        </h2>
+                        <p class="text-slate-400 text-sm lg:text-lg mb-8 leading-relaxed max-w-xl">
+                            We don't beg for help. We build it. A decentralized treasury managed by the people, for the people. No forms. No bribes. Just humanity.
+                        </p>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="app.nav('join')" class="px-8 py-3.5 bg-white text-slate-900 text-sm font-bold rounded-xl hover:bg-saffron-50 transition transform hover:scale-105 shadow-lg shadow-white/10">Join the Movement</button>
+                            <button onclick="app.nav('treasury')" class="px-8 py-3.5 glass border border-slate-600 text-slate-300 text-sm font-bold rounded-xl hover:bg-slate-800 transition">View Open Ledger</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
+                    <div class="glass-card p-5 rounded-2xl"><i class="fa-solid fa-wallet text-sky-400 mb-2 text-3xl"></i><p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Community Fund</p><div class="text-2xl lg:text-3xl font-bold text-white mt-1">₹ <span id="stat-spendable">...</span></div></div>
+                    <div class="glass-card p-5 rounded-2xl"><i class="fa-solid fa-lock text-amber-500 mb-2 text-3xl"></i><p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Reserve (30%)</p><div class="text-2xl lg:text-3xl font-bold text-white mt-1">₹ <span id="stat-reserve">...</span></div></div>
+                    <div class="glass-card p-5 rounded-2xl"><i class="fa-solid fa-heart-pulse text-rose-500 mb-2 text-3xl"></i><p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Lives Helped</p><div class="text-2xl lg:text-3xl font-bold text-white mt-1">₹ <span id="stat-claims">...</span></div></div>
+                    <div class="glass-card p-5 rounded-2xl"><i class="fa-solid fa-users text-indigo-500 mb-2 text-3xl"></i><p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider">Strong Members</p><div class="text-2xl lg:text-3xl font-bold text-white mt-1" id="stat-members">...</div></div>
+                </div>
+
+                <div class="glass-card rounded-2xl overflow-hidden border border-slate-700/50">
+                    <div class="px-5 py-4 border-b border-slate-700/50 bg-slate-900/30 flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <h3 class="font-bold text-xs text-slate-300 uppercase tracking-wide">Live Transactions</h3>
+                        </div>
+                        <button onclick="app.fetchData()" class="text-[10px] text-saffron-400 hover:text-white bg-saffron-500/10 px-3 py-1.5 rounded-lg border border-saffron-500/20"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
+                            <thead class="bg-slate-900/50 text-xs uppercase font-bold text-slate-500">
+                                <tr><th class="px-6 py-4">Date</th><th class="px-6 py-4">Contributor</th><th class="px-6 py-4">Category</th><th class="px-6 py-4">Status</th><th class="px-6 py-4 text-right">Amount</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800 text-sm text-slate-400" id="ledger-list">
+                                <tr><td colspan="5" class="p-6 text-center text-xs">Syncing Secure Ledger...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-campaigns" class="page-view max-w-5xl mx-auto space-y-8">
+                <div class="text-center space-y-2">
+                    <span class="px-3 py-1 bg-rose-500/10 text-rose-400 rounded-full text-[10px] font-bold uppercase border border-rose-500/20 tracking-wider">Direct Impact</span>
+                    <h2 class="text-3xl lg:text-4xl font-bold text-white">Active Donation Drives</h2>
+                    <p class="text-slate-400 text-sm">100% of funds raised here go directly to the applicant.</p>
+                </div>
+                <div id="campaign-grid" class="grid md:grid-cols-2 gap-6">
+                    <div class="col-span-2 text-center text-slate-500 py-10"><i class="fa-solid fa-circle-notch fa-spin text-2xl"></i><br>Loading Needs...</div>
+                </div>
+            </div>
+
+            <div id="view-treasury" class="page-view max-w-6xl mx-auto space-y-8">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-800 pb-3">Treasury Analytics</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="glass-card p-6 rounded-2xl border-t-4 border-emerald-500"><h4 class="text-xs font-bold text-slate-500 uppercase">Total Inflow</h4><p class="text-2xl font-bold text-emerald-400 mt-2">₹ <span id="treasury-collected">0</span></p></div>
+                    <div class="glass-card p-6 rounded-2xl border-t-4 border-rose-500"><h4 class="text-xs font-bold text-slate-500 uppercase">Claims Paid</h4><p class="text-2xl font-bold text-rose-400 mt-2">₹ <span id="treasury-disbursed">0</span></p></div>
+                    <div class="glass-card p-6 rounded-2xl border-t-4 border-slate-500"><h4 class="text-xs font-bold text-slate-500 uppercase">Ops Cost</h4><p class="text-2xl font-bold text-slate-300 mt-2">₹ <span id="treasury-opcost">0</span></p></div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl"><div class="h-80 w-full"><canvas id="financeChart"></canvas></div></div>
+            </div>
+
+            <div id="view-members" class="page-view max-w-5xl mx-auto space-y-6">
+                <div class="flex justify-between items-end"><h2 class="text-2xl font-bold text-white">Member Registry</h2><button onclick="app.nav('join')" class="hidden md:block px-6 py-2 bg-saffron-600 hover:bg-saffron-500 text-white text-xs font-bold rounded-lg transition">Add New</button></div>
+                <div class="glass-card rounded-2xl overflow-hidden border border-slate-700/50">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left min-w-[600px]">
+                            <thead class="bg-slate-900 text-xs uppercase font-bold text-slate-500 border-b border-slate-800"><tr><th class="px-6 py-4">Status</th><th class="px-6 py-4">Name</th><th class="px-6 py-4">Joined</th><th class="px-6 py-4 text-right">Pledge</th></tr></thead>
+                            <tbody id="members-list" class="text-sm divide-y divide-slate-800 text-slate-300"><tr><td colspan="4" class="p-6 text-center">Loading...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-about" class="page-view max-w-4xl mx-auto space-y-16 py-8">
+                <div class="text-center space-y-6">
+                    <span class="px-4 py-1.5 rounded-full border border-saffron-500/30 bg-saffron-500/10 text-saffron-400 text-xs font-bold uppercase tracking-widest">Our Manifesto</span>
+                    <h2 class="text-3xl md:text-6xl font-extrabold text-white leading-tight">
+                        We Stop the Fall <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-saffron-400 to-red-500">When the System Fails.</span>
+                    </h2>
+                    <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                        Saath Hai Hum is not an NGO. It is a rebellion against helplessness.
+                    </p>
+                </div>
+
+                <div class="glass-card p-8 md:p-12 rounded-3xl border-l-4 border-saffron-500">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <i class="fa-solid fa-person-falling-burst text-saffron-500"></i> The Fragility of Survival
+                    </h3>
+                    <div class="space-y-4 text-slate-300 leading-relaxed text-sm md:text-base">
+                        <p>In today's India, the line between "survival" and "poverty" is one emergency away. We see people working 14 hours a day, holding their heads high. But one accident, one heart attack, and years of savings vanish. Families fall into debt traps. Generations suffer because of one bad day.</p>
+                        <p class="text-white font-semibold">We have seen hardworking people driven to suicide because they had nowhere to turn.</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="glass p-8 rounded-3xl border border-slate-700 hover:border-sky-500/50 transition duration-300">
+                        <div class="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center text-sky-500 text-2xl mb-6"><i class="fa-solid fa-file-contract"></i></div>
+                        <h4 class="text-xl font-bold text-white mb-3">The Insurance Trap</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">Middle-class families buy insurance believing they are safe. But companies are built for <strong>Profit</strong>, not charity. When you need money, they find loopholes. They reject claims. They make you run while your loved one fights for life.</p>
+                    </div>
+                    <div class="glass p-8 rounded-3xl border border-slate-700 hover:border-red-500/50 transition duration-300">
+                        <div class="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 text-2xl mb-6"><i class="fa-solid fa-landmark-flag"></i></div>
+                        <h4 class="text-xl font-bold text-white mb-3">Government Apathy</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">We pay taxes, we vote. But when disaster hits, the system is silent. Even worse, sometimes the system <strong>is</strong> the disaster. We see homes bulldozed for "silly reasons." Lifetimes destroyed in minutes. Who helps them? No one.</p>
+                    </div>
+                </div>
+
+                <div class="text-center max-w-2xl mx-auto space-y-6 py-8">
+                    <p class="bg-slate-900/80 inline-block px-6 py-2 rounded-full text-xl text-saffron-500 font-serif italic border border-slate-800">"Jo Sarkar Nahi Kar Payi..."</p>
+                    <p class="text-slate-300 text-lg">Everyone is lost in their own struggle. We realized that waiting for help is a death sentence. That is why <strong>Saath Hai Hum</strong> exists. To let you know what your neighbor is facing, and to help us grow together.</p>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="app.nav('join')" class="px-10 py-4 bg-gradient-to-r from-saffron-600 to-red-600 text-white font-bold rounded-full hover:shadow-2xl hover:scale-105 transition duration-300">Become the Shield</button>
+                </div>
+            </div>
+
+            <div id="view-join" class="page-view flex justify-center py-6">
+                <div class="w-full max-w-md glass-card p-8 rounded-3xl border border-saffron-500/20 shadow-2xl">
+                    <h2 class="text-2xl font-bold text-center mb-2 text-white">Join the Movement</h2>
+                    <p class="text-center text-xs text-slate-400 mb-6">Register now to become a part of the family.</p>
+                    <form onsubmit="app.submitForm(event, 'register')" class="space-y-4">
+                        <input type="hidden" name="action" value="register">
+                        <input type="text" name="Name" required placeholder="Full Name" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:border-saffron-500 outline-none transition">
+                        <div class="grid grid-cols-2 gap-3">
+                            <input type="tel" name="Phone" required placeholder="Phone" class="bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white outline-none">
+                             <input type="email" name="Email" required placeholder="Email" class="bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white outline-none">
+                        </div>
+                        <input type="text" name="Aadhar" required placeholder="National ID / Aadhar" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white outline-none">
+                        <div class="pt-2">
+                            <p class="text-[10px] text-slate-400 mb-2 font-bold uppercase">Monthly Pledge</p>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="cursor-pointer"><input type="radio" name="Amount" value="50" class="peer sr-only" checked><div class="p-3 bg-slate-800 rounded-xl border border-slate-700 peer-checked:border-saffron-500 text-center font-bold text-white transition hover:bg-slate-700">₹50</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="Amount" value="100" class="peer sr-only"><div class="p-3 bg-slate-800 rounded-xl border border-slate-700 peer-checked:border-saffron-500 text-center font-bold text-white transition hover:bg-slate-700">₹100</div></label>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full py-4 bg-saffron-600 hover:bg-saffron-500 text-white font-bold rounded-xl mt-4 shadow-lg shadow-saffron-600/20 transition">Confirm Registration</button>
+                    </form>
+                </div>
+            </div>
+
+            <footer class="mt-12 pt-8 border-t border-slate-800 text-center pb-8">
+                <div class="inline-block bg-slate-900/80 rounded-2xl p-6 border border-slate-700 shadow-xl max-w-2xl mx-auto">
+                    <h4 class="text-white font-bold mb-4 flex items-center justify-center gap-2"><i class="fa-solid fa-headset text-saffron-500"></i> Need Immediate Help?</h4>
+                    <div class="grid md:grid-cols-2 gap-8 text-left">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-saffron-500 text-lg"><i class="fa-solid fa-user-tie"></i></div>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase font-bold">Manager</p>
+                                <p class="text-white font-bold">Arman Khan</p>
+                                <a href="tel:+918850102255" class="text-sm text-sky-400 font-mono hover:underline">+91 88501 02255</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-sky-500 text-lg"><i class="fa-solid fa-hand-holding-hand"></i></div>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase font-bold">Customer Support</p>
+                                <p class="text-white font-bold">Asim Khan</p>
+                                <a href="tel:+917021360582" class="text-sm text-sky-400 font-mono hover:underline">+91 70213 60582</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-slate-600 text-xs mt-6">© 2025 Saath Hai Hum Foundation. Built for Humanity.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <div id="modal-overlay" class="fixed inset-0 z-[60] bg-black/90 backdrop-blur-md hidden flex justify-center items-center p-4 opacity-0 transition-opacity duration-300">
+        <div id="modal-content" class="bg-slate-900 border border-slate-700 rounded-3xl p-6 w-full max-w-sm relative shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto">
+            <button onclick="app.closeModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div class="text-center mb-4"><h3 class="text-xl font-bold text-white">Make a Contribution</h3><p class="text-xs text-saffron-400 font-bold uppercase tracking-wider mt-1" id="donate-ref-display">General Fund</p></div>
+            <div class="flex gap-2 mb-4 p-1 bg-slate-800 rounded-xl">
+                <button onclick="app.switchDonateTab('qr')" id="tab-qr" class="flex-1 py-2 text-xs font-bold rounded-lg bg-slate-700 text-white transition">Scan QR</button>
+                <button onclick="app.switchDonateTab('bank')" id="tab-bank" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">Bank Details</button>
+            </div>
+            <div id="content-qr" class="mb-6">
+                <div class="bg-white p-3 rounded-2xl mx-auto w-48 h-48 flex items-center justify-center shadow-inner relative"><img id="donate-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=your-upi-id@bank&pn=SaathHaiHum" class="w-full h-full object-contain mix-blend-multiply"></div>
+                <p class="text-center text-xs text-slate-500 mt-2">Scan with GPay / PhonePe / Paytm</p>
+            </div>
+            <div id="content-bank" class="hidden mb-6">
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-3 text-center">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold">Bank Transfer</p>
+                    <p class="text-sm text-white font-mono font-bold select-all">Saath Hai Hum Fdn.</p>
+                    <p class="text-sm text-white font-mono select-all">Acct: 1234 5678 9012</p>
+                    <p class="text-xs text-slate-400 font-mono select-all">IFSC: HDFC0001234</p>
+                </div>
+            </div>
+            <form onsubmit="app.submitForm(event, 'donate')" class="space-y-3 border-t border-slate-800 pt-4">
+                <input type="hidden" name="action" id="donate-action" value="donate"><input type="hidden" name="Ref" id="donate-ref-input" value="General">
+                <input type="text" name="Name" required placeholder="Your Name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-3 text-sm text-white focus:border-saffron-500 outline-none">
+                <div id="field-phone" class="hidden"><input type="tel" name="Phone" placeholder="Phone (Required)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-3 text-sm text-white focus:border-saffron-500 outline-none"></div>
+                <div id="field-upi" class="hidden"><input type="text" name="UPI" placeholder="Your UPI ID" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-3 text-sm text-white focus:border-saffron-500 outline-none"></div>
+                <div id="field-aadhar" class="relative group"><input type="text" name="Aadhar" placeholder="Member ID (Optional)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-3 pl-9 text-sm text-white focus:border-saffron-500 outline-none"><i class="fa-solid fa-id-card absolute left-3 top-3.5 text-slate-500"></i></div>
+                <div class="flex gap-2"><input type="number" name="Amount" required placeholder="Amount (₹)" class="w-1/3 bg-slate-800 border border-slate-700 rounded-lg px-3 py-3 text-sm text-white focus:border-saffron-500 outline-none"><input type="text" name="TxID" required placeholder="Tx Ref ID" class="w-2/3 bg-slate-800 border border-slate-700 rounded-lg px-3 py-3 text-sm text-white focus:border-saffron-500 outline-none"></div>
+                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg transition flex justify-center items-center gap-2"><i class="fa-solid fa-check"></i> I have Paid</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const app = {
+            // *** PASTE YOUR SCRIPT URL HERE ***
+            scriptURL: 'https://script.google.com/macros/s/AKfycbwpwAsfzSchRcdY7Mn_krlb6IWIGS69oiZzNGXNZnRlwjQbfoPMkeEo7jmwIlEWPKBo/exec', 
+            qrImage: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=your-upi-id@bank&pn=SaathHaiHum',
+            state: { campaigns: [] },
+
+            init: () => { app.fetchData(); app.setupChart(); },
+
+            nav: (viewName) => {
+                document.querySelectorAll('aside button').forEach(b => { b.classList.remove('bg-white/10', 'text-white', 'border-white/5'); b.classList.add('text-slate-400'); });
+                const navBtn = document.getElementById('nav-' + viewName); if(navBtn) { navBtn.classList.remove('text-slate-400'); navBtn.classList.add('bg-white/10', 'text-white', 'border-white/5'); }
+                document.querySelectorAll('.page-view').forEach(el => { el.classList.remove('active'); setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 400); });
+                const target = document.getElementById('view-' + viewName);
+                if(target) { target.style.display = 'block'; requestAnimationFrame(() => target.classList.add('active')); if(viewName === 'treasury') app.renderChart(); }
+                document.getElementById('mobile-menu').classList.add('translate-x-full');
+            },
+            toggleMenu: () => { document.getElementById('mobile-menu').classList.toggle('translate-x-full'); },
+            
+            openModal: (type, refName = "General Fund") => {
+                const overlay = document.getElementById('modal-overlay'); const content = document.getElementById('modal-content');
+                overlay.classList.remove('hidden'); void overlay.offsetWidth; overlay.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100');
+                document.getElementById('donate-ref-display').innerText = refName; document.getElementById('donate-ref-input').value = refName; document.getElementById('donate-qr-img').src = app.qrImage;
+                const act = document.getElementById('donate-action'); const fPh = document.getElementById('field-phone'); const fUPI = document.getElementById('field-upi'); const fAa = document.getElementById('field-aadhar');
+                if (type === 'urgent') { act.value = 'donate_urgent'; fPh.classList.remove('hidden'); fPh.querySelector('input').required = true; fUPI.classList.remove('hidden'); fAa.classList.add('hidden'); } 
+                else { act.value = 'donate'; fPh.classList.add('hidden'); fPh.querySelector('input').required = false; fUPI.classList.add('hidden'); fAa.classList.remove('hidden'); }
+            },
+            closeModal: () => { const o = document.getElementById('modal-overlay'); const c = document.getElementById('modal-content'); o.classList.add('opacity-0'); c.classList.remove('scale-100'); c.classList.add('scale-95'); setTimeout(() => { o.classList.add('hidden'); }, 300); },
+            switchDonateTab: (tab) => {
+                const qB = document.getElementById('tab-qr'); const bB = document.getElementById('tab-bank'); const qD = document.getElementById('content-qr'); const bD = document.getElementById('content-bank');
+                if(tab === 'qr') { qB.classList.add('bg-slate-700','text-white'); qB.classList.remove('text-slate-400'); bB.classList.remove('bg-slate-700','text-white'); bB.classList.add('text-slate-400'); qD.classList.remove('hidden'); bD.classList.add('hidden'); }
+                else { bB.classList.add('bg-slate-700','text-white'); bB.classList.remove('text-slate-400'); qB.classList.remove('bg-slate-700','text-white'); qB.classList.add('text-slate-400'); bD.classList.remove('hidden'); qD.classList.add('hidden'); }
+            },
+
+            showToast: (title, msg) => { const t = document.getElementById('toast'); document.getElementById('toast-title').innerText = title; document.getElementById('toast-msg').innerText = msg; t.classList.remove('translate-x-[150%]'); setTimeout(() => t.classList.add('translate-x-[150%]'), 4000); },
+
+            fetchData: async () => {
+                try {
+                    const response = await fetch(app.scriptURL); const data = await response.json();
+                    app.renderLedgerTable(data.ledger); app.renderMembersTable(data.members); app.renderCampaigns(data.campaigns);
+                    let totalInflow = 0; if(data.ledger) data.ledger.forEach(tx => { if(tx.Status === 'Approved' && tx.Type === 'Credit') totalInflow += tx.Amount; });
+                    const reserve = Math.floor(totalInflow * 0.30); const claims = data.snapshot ? data.snapshot.Claims : 0; const ops = data.snapshot ? data.snapshot.OpCost : 0; const spendable = totalInflow - reserve - claims - ops;
+                    document.getElementById('stat-spendable').innerText = spendable.toLocaleString(); document.getElementById('stat-reserve').innerText = reserve.toLocaleString(); document.getElementById('stat-claims').innerText = claims.toLocaleString(); document.getElementById('stat-members').innerText = data.members.length; document.getElementById('treasury-collected').innerText = totalInflow.toLocaleString(); document.getElementById('treasury-disbursed').innerText = claims.toLocaleString(); document.getElementById('treasury-opcost').innerText = ops.toLocaleString();
+                    app.state.financials = { spendable, reserve, claims, ops }; app.renderChart();
+                } catch (error) { app.showToast("Error", "Could not load data."); }
+            },
+
+            renderCampaigns: (campaigns) => {
+                const grid = document.getElementById('campaign-grid'); grid.innerHTML = '';
+                if(!campaigns || campaigns.length === 0) { grid.innerHTML = '<div class="col-span-2 text-center text-slate-500 py-10">No active urgent needs.</div>'; return; }
+                campaigns.forEach(camp => {
+                    const pct = Math.min(camp.Percentage, 100);
+                    grid.innerHTML += `<div class="glass-card p-0 rounded-3xl overflow-hidden border border-rose-500/30">
+                        <div class="bg-rose-500/10 p-5 border-b border-rose-500/20 flex justify-between items-center"><span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">URGENT</span><span class="text-rose-400 text-xs font-bold">${camp.Hours} Hrs Left</span></div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-1 text-white">${camp.Applicant}</h3><p class="text-xs text-saffron-400 font-bold uppercase mb-2">${camp.Type}</p>
+                            <p class="text-slate-400 text-xs mb-4 leading-relaxed line-clamp-3">${camp.Desc}</p>
+                            <div class="mb-2 flex justify-between text-xs font-bold"><span class="text-white">₹${camp.Raised.toLocaleString()} Raised</span><span class="text-slate-500">Goal: ₹${camp.Target.toLocaleString()}</span></div>
+                            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden mb-6"><div class="h-full bg-gradient-to-r from-rose-500 to-saffron-500" style="width: ${pct}%"></div></div>
+                            <button onclick="app.openModal('urgent', '${camp.Applicant}')" class="w-full py-3 bg-white text-rose-600 font-bold rounded-xl hover:bg-slate-200 transition shadow-lg flex items-center justify-center gap-2"><i class="fa-solid fa-heart"></i> Donate to Refill</button>
+                        </div></div>`;
+                });
+            },
+
+            renderLedgerTable: (ledger) => {
+                const tbody = document.getElementById('ledger-list'); tbody.innerHTML = ''; if(!ledger) return;
+                ledger.slice().reverse().slice(0, 8).forEach(tx => {
+                    const color = tx.Status === 'Approved' ? 'text-emerald-400' : 'text-amber-400';
+                    tbody.innerHTML += `<tr class="hover:bg-white/5 border-b border-slate-800/50"><td class="px-6 py-3 font-mono text-slate-500">${new Date(tx.Date).toLocaleDateString()}</td><td class="px-6 py-3 font-bold text-white">${tx.Name}</td><td class="px-6 py-3 uppercase text-slate-400">${tx.Category}</td><td class="px-6 py-3"><span class="px-2 py-1 rounded text-[10px] font-bold uppercase border border-${tx.Status === 'Approved'?'emerald':'amber'}-500/20 ${color}">${tx.Status}</span></td><td class="px-6 py-3 text-right font-mono font-bold text-emerald-400">+ ₹${tx.Amount}</td></tr>`;
+                });
+            },
+
+            renderMembersTable: (members) => {
+                const tbody = document.getElementById('members-list'); tbody.innerHTML = ''; if(!members) return;
+                members.slice().reverse().slice(0,100).forEach(m => {
+                    tbody.innerHTML += `<tr class="hover:bg-white/5 border-b border-slate-800/50"><td class="px-6 py-4"><span class="px-2 py-1 bg-sky-500/10 text-sky-400 rounded text-[10px] font-bold border border-sky-500/20">VERIFIED</span></td><td class="px-6 py-4 font-bold text-white">${m.Name}</td><td class="px-6 py-4 text-slate-500 font-mono">${new Date(m.Date).toLocaleDateString()}</td><td class="px-6 py-4 text-right font-mono text-emerald-400 font-bold">₹${m.Amount}</td></tr>`;
+                });
+            },
+
+            setupChart: () => { const ctx = document.getElementById('financeChart'); if(!ctx) return; Chart.defaults.font.family = 'Manrope'; Chart.defaults.color = '#94a3b8'; app.state.chartInstance = new Chart(ctx.getContext('2d'), { type: 'bar', data: { labels: ['Liquid', 'Reserve', 'Claims', 'Ops'], datasets: [{ data: [0, 0, 0, 0], backgroundColor: ['#0ea5e9', '#f59e0b', '#f43f5e', '#64748b'], borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, border: { display: false } } } } }); },
+            renderChart: () => { if(!app.state.chartInstance || !app.state.financials) return; const f = app.state.financials; app.state.chartInstance.data.datasets[0].data = [f.spendable, f.reserve, f.claims, f.ops]; app.state.chartInstance.update(); },
+
+            submitForm: (e, action) => {
+                e.preventDefault(); const form = e.target; const btn = form.querySelector('button[type="submit"]'); const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...'; btn.disabled = true;
+                fetch(app.scriptURL, { method: 'POST', body: new FormData(form) }).then(r => r.json()).then(res => {
+                    if(res.result === 'success') { app.showToast("Success", res.message); form.reset(); if(action === 'donate') app.closeModal(); app.fetchData(); } else { app.showToast("Error", res.message); }
+                }).catch(err => { app.showToast("Network Error", "Check connection."); }).finally(() => { btn.innerHTML = originalContent; btn.disabled = false; });
+            }
+        };
+        document.addEventListener('DOMContentLoaded', app.init);
+    </script>
+</body>
+</html>
