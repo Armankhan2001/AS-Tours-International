@@ -14,6 +14,8 @@
         .bg-Pending { background-color: #d97706; color: white; }
         .bg-Banned, .bg-Closed { background-color: #dc2626; color: white; }
         .nav-btn.active { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-right: 3px solid #38bdf8; }
+        /* Special active state for the green sheet button */
+        #btn-sheet.active { background: rgba(16, 185, 129, 0.15); color: #34d399; border-right: 3px solid #34d399; }
         #loader { position: fixed; inset: 0; background: rgba(15,23,42,0.95); z-index: 50; display: none; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
@@ -38,9 +40,14 @@
                 <button onclick="switchTab('members')" id="btn-members" class="nav-btn w-full text-left p-3 rounded-lg text-slate-400 hover:text-white flex items-center gap-4 transition"><i class="fa-solid fa-users w-5 text-center"></i> <span class="hidden lg:inline">Members</span></button>
                 <button onclick="switchTab('ledger')" id="btn-ledger" class="nav-btn w-full text-left p-3 rounded-lg text-slate-400 hover:text-white flex items-center gap-4 transition"><i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i> <span class="hidden lg:inline">Ledger</span></button>
                 <button onclick="switchTab('outflow')" id="btn-outflow" class="nav-btn w-full text-left p-3 rounded-lg text-slate-400 hover:text-white flex items-center gap-4 transition"><i class="fa-solid fa-money-bill-transfer w-5 text-center"></i> <span class="hidden lg:inline">Outflows</span></button>
+                
                 <p class="hidden lg:block text-[10px] uppercase font-bold text-slate-500 px-3 mt-6 mb-2">Urgent Needs</p>
                 <button onclick="switchTab('campaigns')" id="btn-campaigns" class="nav-btn w-full text-left p-3 rounded-lg text-rose-400 hover:text-rose-300 flex items-center gap-4 transition"><i class="fa-solid fa-heart-pulse w-5 text-center"></i> <span class="hidden lg:inline">Campaigns</span></button>
                 <button onclick="switchTab('camp-donations')" id="btn-camp-donations" class="nav-btn w-full text-left p-3 rounded-lg text-slate-400 hover:text-white flex items-center gap-4 transition"><i class="fa-solid fa-hand-holding-heart w-5 text-center"></i> <span class="hidden lg:inline">Camp. Donations</span></button>
+                
+                <div class="mt-6 pt-4 border-t border-slate-800">
+                    <button onclick="switchTab('sheet')" id="btn-sheet" class="nav-btn w-full text-left p-3 rounded-lg text-emerald-400 hover:text-white flex items-center gap-4 transition bg-emerald-500/10 border border-emerald-500/20"><i class="fa-solid fa-table w-5 text-center"></i> <span class="hidden lg:inline">Live Database</span></button>
+                </div>
             </nav>
             <div class="p-4 border-t border-slate-800"><button onclick="fetchData()" class="w-full bg-slate-800 hover:bg-slate-700 text-sky-400 py-2 rounded-lg text-xs font-bold transition"><i class="fa-solid fa-rotate"></i> Refresh</button></div>
         </aside>
@@ -101,6 +108,26 @@
                         <thead class="bg-slate-900 text-xs uppercase font-bold text-slate-300 sticky top-0"><tr><th class="p-4">Date</th><th class="p-4">Donor</th><th class="p-4">Amount</th><th class="p-4">Campaign</th><th class="p-4">TxID</th><th class="p-4">Status</th><th class="p-4">Action</th></tr></thead>
                         <tbody id="tbody-camp-donations" class="divide-y divide-slate-800"></tbody>
                     </table>
+                </div>
+            </div>
+
+            <div id="view-sheet" class="tab-view hidden h-full flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Master Database</h2>
+                        <p class="text-xs text-slate-400">Read-Only Live Preview</p>
+                    </div>
+                    <a href="https://docs.google.com/spreadsheets/d/1BpvO0xFVIBUc_udrZkUI_MU01OUNi-GkGp9v2KWEVNU/edit" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg transition">
+                        <span>Open Google Sheets</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+                <div class="flex-1 bg-slate-900 rounded-xl overflow-hidden border border-slate-700 relative">
+                    <iframe 
+                        src="https://docs.google.com/spreadsheets/d/1BpvO0xFVIBUc_udrZkUI_MU01OUNi-GkGp9v2KWEVNU/preview" 
+                        class="w-full h-full border-0"
+                        allowfullscreen>
+                    </iframe>
                 </div>
             </div>
 
@@ -166,7 +193,6 @@
             const tbody = document.getElementById('tbody-campaigns'); tbody.innerHTML = '';
             if(GLOBAL_DATA.campaigns) {
                 GLOBAL_DATA.campaigns.forEach((row, index) => {
-                    // [0]Applicant, [1]Type, [2]Desc, [3]Target, [4]Hours, [5]Status
                     const status = row[5];
                     const toggle = status === 'Active' 
                         ? `<button onclick="toggleCampaign(${index}, 'Closed')" class="text-xs text-red-400 border border-red-500 rounded px-2 py-1">Close</button>` 
@@ -181,7 +207,6 @@
             if(GLOBAL_DATA.urgent_donations) {
                 GLOBAL_DATA.urgent_donations.slice().reverse().forEach((row, index) => {
                     const realIndex = GLOBAL_DATA.urgent_donations.length - 1 - index;
-                    // [0]Date, [1]Name, [2]Phone, [3]UPI, [4]Amt, [5]Ref, [6]TxID, [7]Status
                     const status = row[7] || 'Pending';
                     const action = status === 'Pending' 
                         ? `<button onclick="approveTx(${realIndex}, 'admin_approve_urgent')" class="text-xs bg-rose-600 text-white px-3 py-1 rounded font-bold">Approve</button>` 
