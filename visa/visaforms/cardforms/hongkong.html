@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hong Kong Visa Questionnaire</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f6f8;
+  padding:15px;
+}
+.container{
+  max-width:780px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+h3{
+  background:#0d6efd;
+  color:#fff;
+  padding:8px;
+  border-radius:4px;
+  font-size:15px;
+  margin-top:25px;
+}
+img.form-image{
+  width:100%;
+  border:1px solid #ccc;
+  border-radius:6px;
+  margin:12px 0;
+}
+button{
+  margin-top:30px;
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  border:none;
+  border-radius:6px;
+  background:#25d366;
+  color:white;
+  cursor:pointer;
+}
+button:hover{
+  background:#1ebe5d;
+}
+.note{
+  font-size:12px;
+  color:#555;
+  margin-top:8px;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h3>🇭🇰 Hong Kong Visa Questionnaire (Reference)</h3>
+
+<p style="font-size:14px;color:#444;">
+Please refer to the official Hong Kong Immigration form sections below.
+Use the button at the end to copy the questionnaire and send it via WhatsApp.
+</p>
+
+<!-- PART C IMAGE -->
+<h3>Part C: Previous travels to the HKSAR</h3>
+<img class="form-image" src="../images/Hongkong2.PNG" alt="Part C and D HK Form">
+
+<!-- PART E + F IMAGE -->
+<h3>Part E & Part F: Occupation and Visit Details</h3>
+<img class="form-image" src="../images/Hongkong1.PNG" alt="Part E and F HK Form">
+
+<button onclick="copyQuestions()">📋 Copy Questionnaire for WhatsApp</button>
+<div class="note">Paste directly into WhatsApp chat</div>
+
+</div>
+
+<script>
+function copyQuestions(){
+const text = `
+🇭🇰 Hong Kong Visa Information
+
+Part C: Previous Hong Kong Travel
+* Travelled in last 3 years: Yes / No
+* Passport(s):
+* Visits (Month / Year): , ,
+
+Part D: Foreign Travel
+* Foreign travel in last 3 years: Yes / No
+* List the Countries visited with Month and Year
+  -
+  -
+  -
+  -
+  -
+
+Part E: Occupation
+* Sector:
+* Company / School:
+* Address:
+* Contact: +   Ext
+
+Part F: Visit Details
+* Purpose:
+* Duration:  days
+* Accommodation:
+* Hotel Ref Name and Address:
+* Fund available for travel to the HKSAR in HK dollars (including cost of accommodation):
+
+Local Contact in Hong Kong
+* Available: Yes / No
+* If yes, details (Name, relationship, address, phone):
+`;
+
+navigator.clipboard.writeText(text.trim());
+alert("WhatsApp questionnaire copied!");
+}
+</script>
+
+</body>
+</html>
